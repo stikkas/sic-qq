@@ -4,6 +4,3 @@
 [submodule "core-model"]
 	path = core-model
 	url = http://buntic.insoft03.lan/git/archive/core-model.git
-[submodule "qq-web/src/main/qqext/packages/ext-commons-js"]
-	path = qq-web/src/main/qqext/packages/ext-commons-js
-	url = http://buntic.insoft03.lan/git/archive/ext-commons-js.git

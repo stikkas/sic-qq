@@ -1,9 +1,0 @@
-/**
- * 
- */
-Ext.define('hawk_common.fix.FixedBaseField',{
-	override:'Ext.form.field.Base',
-	labelSeparator:'',
-	labelWidth:120,
-	width:300
-});

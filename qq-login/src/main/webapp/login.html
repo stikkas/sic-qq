@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>login page</title>
+        <meta charset="windows-1251">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/global_style.css">
+    </head>
+    <body class="mainLoginBg">
+        <form method="POST" action="j_security_check">
+            <h1>Администрация Раменского муниципального района</h1>
+            <img src='images/gerb.png' alt=''>            
+            <h1>Автоматизированная система управления документами</h1>
+            <br>
+            <table class="enter_in">
+                <tr>
+                    <th colspan="2">Введите учетные данные</th>
+                </tr>
+                <tr>
+                    <td>Логин</td>
+                    <td><input type="text" name="j_username"/></td>
+                </tr>
+                <tr>
+                    <td>Пароль</td>
+                    <td><input type="password" name="j_password"/></td>
+                </tr>
+                <tr><td colspan="2"><input type="submit" value="Вход в систему" class='but_cls'/></td></tr>
+            </table>
+            <p>Версия 1.1.3</p>
+        </form>
+
+    </body>
+</html>

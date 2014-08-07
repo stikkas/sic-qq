@@ -1,0 +1,9 @@
+{
+    "name": "qqext",
+
+    "requires": [
+    	"hawk_common"
+    ],
+
+    "id": "ee67089c-f233-4e4c-b648-e4d2f3eb910c"
+}

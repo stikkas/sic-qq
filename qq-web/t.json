@@ -1,0 +1,63 @@
+{
+	"items" : [{
+				"id" : 108,
+				"fioOrg" : "ЗАО ИВЦ \"ИНСОФТ\"",
+				"inboxDocNum" : "12",
+				"regDate" : "05.06.2014"
+			}, {
+				"id" : 86,
+				"fioOrg" : "",
+				"litera" : "СИЦ",
+				"inboxDocNum" : "123",
+				"regDate" : "03.06.2014"
+			}, {
+				"id" : 61,
+				"litera" : "СИЦ",
+				"inboxDocNum" : "12303",
+				"regDate" : "09.11.1988"
+			}, {
+				"execDate" : "03.06.2014",
+				"executor" : "Электронный носитель",
+				"id" : 81,
+				"fioOrg" : "тестовый от кого поступил запрос",
+				"litera" : "СИЦ",
+				"inboxDocNum" : "12",
+				"regDate" : "10.06.2014"
+			}, {
+				"id" : 101,
+				"fioOrg" : "Иванов Иван Иванович ",
+				"inboxDocNum" : "12",
+				"regDate" : "05.06.2014"
+			}, {
+				"id" : 102,
+				"fioOrg" : "Иванов Иван Иванович ",
+				"inboxDocNum" : "12",
+				"regDate" : "05.06.2014"
+			}, {
+				"id" : 103,
+				"fioOrg" : "Иванов Иван Иванович ",
+				"inboxDocNum" : "12",
+				"regDate" : "05.06.2014"
+			}, {
+				"id" : 104,
+				"fioOrg" : "Иванов Иван Иванович ",
+				"inboxDocNum" : "12",
+				"regDate" : "05.06.2014"
+			}, {
+				"id" : 105,
+				"fioOrg" : "Иванов Иван Иванович ",
+				"inboxDocNum" : "12",
+				"regDate" : "05.06.2014"
+			}, {
+				"id" : 106,
+				"fioOrg" : "Иванов Иван Иванович ",
+				"inboxDocNum" : "12",
+				"regDate" : "05.06.2014"
+			}, {
+				"id" : 107,
+				"fioOrg" : "Иванов Иван Иванович ",
+				"inboxDocNum" : "12",
+				"regDate" : "05.06.2014"
+			}],
+	"totalCount" : 11
+}

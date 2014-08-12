@@ -1,2 +1,2 @@
 // @tag full-page
-// @require D:\ws\qq\qq-web\src\main\qqext\app.js
+// @require /home/basa/Projects/sic-qq/qq-web/src/main/qqext/app.js

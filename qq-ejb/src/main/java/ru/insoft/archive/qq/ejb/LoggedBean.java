@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package ru.insoft.archive.qq.ejb;
 
@@ -10,12 +10,11 @@ import java.util.logging.Logger;
  *
  */
 public class LoggedBean {
-	
-	
+
 	protected Logger logger;
-	
-	public LoggedBean(){
+
+	public LoggedBean() {
 		this.logger = Logger.getLogger(this.getClass().getName());
 	}
-	
+
 }

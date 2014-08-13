@@ -149,7 +149,6 @@ Ext.define('qqext.view.journal.VJournalForm', {
 												grid.applyFilter();
 											}
 										}
-										,
 									}
 								}],
 						menuDisabled : true

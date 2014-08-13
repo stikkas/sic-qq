@@ -1,7 +1,6 @@
 package ru.insoft.archive.qq.model;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -29,114 +28,110 @@ import ru.insoft.archive.extcommons.json.JsonOut;
  */
 @Entity
 @Table(name = "qq_question")
-public class Question extends ControlledObject implements HasId,JsonIn,JsonOut{
+public class Question extends ControlledObject implements HasId, JsonIn, JsonOut {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator="QQ_QUESTION_IDGEN")
-    @SequenceGenerator(allocationSize=1,name="QQ_QUESTION_IDGEN",sequenceName="SEQ_QQ_QUESTION")
-    @Column(name = "question_id")
-    //id
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "QQ_QUESTION_IDGEN")
+	@SequenceGenerator(allocationSize = 1, name = "QQ_QUESTION_IDGEN", sequenceName = "SEQ_QQ_QUESTION")
+	@Column(name = "question_id")
+	//id
+	private Long id;
 
-    //клиентский айдишник
-    private transient String cliId;
-    
-    //Входящий документ
-    @Column(name = "inbox_num")
-    private String inboxNum;
+	//клиентский айдишник
+	private transient String cliId;
 
-    @OneToOne
-    @JoinColumn(name="status_id")
-    private DescriptorValue status;
-    
-    @Column(name = "reg_date")
-    private Date regDate;
+	//Входящий документ
+	@Column(name = "inbox_num")
+	private String inboxNum;
 
-    @OneToOne
-    @JoinColumn(name = "litera_id")
-    private DescriptorValue litera;
+	@OneToOne
+	@JoinColumn(name = "status_id")
+	private DescriptorValue status;
 
-    @OneToOne
-    @JoinColumn(name = "transfer_type_id")
-    private DescriptorValue transferType;
+	@Column(name = "reg_date")
+	private Date regDate;
 
+	@OneToOne
+	@JoinColumn(name = "litera_id")
+	private DescriptorValue litera;
 
-    @OneToOne
-    @JoinColumn(name = "execution_organization_id")
-    private DescriptorValue execOrg;
+	@OneToOne
+	@JoinColumn(name = "transfer_type_id")
+	private DescriptorValue transferType;
 
-    @OneToOne
-    @JoinColumn(name = "registrator_id")
-    private AdmUser registrator;
+	@OneToOne
+	@JoinColumn(name = "execution_organization_id")
+	private DescriptorValue execOrg;
+
+	@OneToOne
+	@JoinColumn(name = "registrator_id")
+	private AdmUser registrator;
 
     //Запрос
-    //вид запроса
-    @OneToOne
-    @JoinColumn(name = "question_type_id")
-    private DescriptorValue questionType;
+	//вид запроса
+	@OneToOne
+	@JoinColumn(name = "question_type_id")
+	private DescriptorValue questionType;
 
-    @Column(name = "planned_finish_date")
-    private Date plannedFinishDate;
+	@Column(name = "planned_finish_date")
+	private Date plannedFinishDate;
 
-    @Column(name = "content")
-    private String content;
+	@Column(name = "content")
+	private String content;
 
-    @OneToOne
-    @JoinColumn(name="answer_form_type_id")
-    private DescriptorValue answerFormType;
+	@OneToOne
+	@JoinColumn(name = "answer_form_type_id")
+	private DescriptorValue answerFormType;
 
-    @Column(name = "motivated_refusal")
-    private Boolean motivatedRefusal;
-    
-  //На кого запрос
-    @Column(name = "request_object_surname")
-    private String requestObjectSurname;
+	@Column(name = "motivated_refusal")
+	private Boolean motivatedRefusal;
 
-    @Column(name = "request_object_name")
-    private String requestObjectName;
+	//На кого запрос
+	@Column(name = "request_object_surname")
+	private String requestObjectSurname;
 
-    @Column(name = "request_father_name")
-    private String requestFatherName;
+	@Column(name = "request_object_name")
+	private String requestObjectName;
 
-    @Column(name = "request_object_birthyear")
-    private Integer request_object_birthyear;
+	@Column(name = "request_father_name")
+	private String requestFatherName;
 
+	@Column(name = "request_object_birthyear")
+	private Integer request_object_birthyear;
 
-    @OneToOne(mappedBy="q",cascade={CascadeType.PERSIST,CascadeType.MERGE})
-    private Applicant applicant;
+	@OneToOne(mappedBy = "q", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	private Applicant applicant;
 
-    @OneToOne(mappedBy="q",cascade=CascadeType.ALL)
-    private Transmission transmission;
-    
-    
-    @OneToOne
-    @JoinColumn(name="create_org_id")
-    private DescriptorValue createOrg;
-    
-    @OneToOne(mappedBy="q",cascade=CascadeType.ALL)
-    private Notification notify;
-    
-    
-    @OneToOne(mappedBy="q",cascade=CascadeType.ALL)
-    private ExecutionInfo execInfo;
+	@OneToOne(mappedBy = "q", cascade = CascadeType.ALL)
+	private Transmission transmission;
 
-    @OneToMany(mappedBy="q",cascade=CascadeType.ALL,targetEntity=AttachedFile.class)
-    private Set<AttachedFile> files = new LinkedHashSet<AttachedFile>();
-    
-    @OneToMany(mappedBy="q",cascade=CascadeType.ALL,targetEntity=DeliveryAction.class)
-    private Set<DeliveryAction> delActions = new LinkedHashSet<DeliveryAction>();
+	@OneToOne
+	@JoinColumn(name = "create_org_id")
+	private DescriptorValue createOrg;
 
-    @OneToMany(mappedBy="q",cascade=CascadeType.ALL,targetEntity=UsedMaterial.class)
-    private Set<UsedMaterial> usedMaterials = new LinkedHashSet<UsedMaterial>();
-    
-    @OneToMany(mappedBy="q",cascade=CascadeType.ALL,orphanRemoval=true,targetEntity=Coordination.class)
-    private Set<Coordination> coordinations = new LinkedHashSet<Coordination>();
-    
-    @OneToMany(mappedBy="q",cascade=CascadeType.ALL,orphanRemoval=true,targetEntity=SendAction.class)
-    private Set<SendAction> sendActions = new LinkedHashSet<SendAction>();
-    
-    @OneToOne(mappedBy="q",cascade=CascadeType.ALL)
-    private WayToSend wayToSend;
+	@OneToOne(mappedBy = "q", cascade = CascadeType.ALL)
+	private Notification notify;
+
+	@OneToOne(mappedBy = "q", cascade = CascadeType.ALL)
+	private ExecutionInfo execInfo;
+
+	@OneToMany(mappedBy = "q", cascade = CascadeType.ALL, targetEntity = AttachedFile.class)
+	private Set<AttachedFile> files = new LinkedHashSet<AttachedFile>();
+
+	@OneToMany(mappedBy = "q", cascade = CascadeType.ALL, targetEntity = DeliveryAction.class)
+	private Set<DeliveryAction> delActions = new LinkedHashSet<DeliveryAction>();
+
+	@OneToMany(mappedBy = "q", cascade = CascadeType.ALL, targetEntity = UsedMaterial.class)
+	private Set<UsedMaterial> usedMaterials = new LinkedHashSet<UsedMaterial>();
+
+	@OneToMany(mappedBy = "q", cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = Coordination.class)
+	private Set<Coordination> coordinations = new LinkedHashSet<Coordination>();
+
+	@OneToMany(mappedBy = "q", cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = SendAction.class)
+	private Set<SendAction> sendActions = new LinkedHashSet<SendAction>();
+
+	@OneToOne(mappedBy = "q", cascade = CascadeType.ALL)
+	private WayToSend wayToSend;
 
 	public Long getId() {
 		return id;
@@ -362,7 +357,5 @@ public class Question extends ControlledObject implements HasId,JsonIn,JsonOut{
 	public void setWayToSend(WayToSend wayToSend) {
 		this.wayToSend = wayToSend;
 	}
-    
 
-   
 }

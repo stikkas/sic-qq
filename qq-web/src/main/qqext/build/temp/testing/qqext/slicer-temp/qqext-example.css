@@ -65,20 +65,20 @@
 /* including package hawk_common */
 /* including package ext-theme-neptune */
 /**
- * @var {boolean}
- * True to include the "light" panel UI
- */
-/**
- * @var {boolean}
- * True to include the "light-framed" panel UI
- */
-/**
  * @var {color} $form-field-focus-border-color
  * In the default neptune color scheme this is the same as $base-highlight-color
  * but it does not change automatically when one changes the $base-color.  This is because
  * checkboxes and radio buttons have this focus color hard coded into their background
  * images.  If this color is changed, you should also modify checkbox and radio button
  * background images to match
+ */
+/**
+ * @var {boolean}
+ * True to include the "light" panel UI
+ */
+/**
+ * @var {boolean}
+ * True to include the "light-framed" panel UI
  */
 /* including package ext-theme-neutral */
 /**
@@ -113,19 +113,224 @@
  * Background color to apply to the body element
  */
 /**
- * @class Ext.FocusManager
+ * @class Ext.form.Labelable
  */
 /**
  * @var {color}
- * The border-color of the focusFrame.  See {@link #method-enable}.
+ * The text color of form field labels
+ */
+/**
+ * @var {string}
+ * The font-weight of form field labels
+ */
+/**
+ * @var {number}
+ * The font-size of form field labels
+ */
+/**
+ * @var {string}
+ * The font-family of form field labels
+ */
+/**
+ * @var {number}
+ * The line-height of form field labels
  */
 /**
  * @var {color}
- * The border-style of the focusFrame.  See {@link #method-enable}.
+ * The text color of toolbar field labels
+ */
+/**
+ * @var {string}
+ * The font-weight of toolbar field labels
+ */
+/**
+ * @var {number}
+ * The font-size of toolbar field labels
+ */
+/**
+ * @var {string}
+ * The font-family of toolbar field labels
+ */
+/**
+ * @var {number}
+ * The line-height of toolbar field labels
+ */
+/**
+ * @var {number}
+ * Width for form error icons.
+ */
+/**
+ * @var {number}
+ * Height for form error icons.
+ */
+/**
+ * @var {number/list}
+ * Margin for error icons that are aligned to the side of the field
+ */
+/**
+ * @var {number}
+ * The space between the icon and the message for errors that display under the field
+ */
+/**
+ * @var {number/list}
+ * The padding on errors that display under the form field
  */
 /**
  * @var {color}
- * The border-width of the focusFrame.  See {@link #method-enable}.
+ * The text color of form error messages
+ */
+/**
+ * @var {string}
+ * The font-weight of form error messages
+ */
+/**
+ * @var {number}
+ * The font-size of form error messages
+ */
+/**
+ * @var {string}
+ * The font-family of form error messages
+ */
+/**
+ * @var {number}
+ * The line-height of form error messages
+ */
+/**
+ * @var {measurement} $form-item-margin-bottom
+ * The bottom margin to apply to form items when in auto, anchor, vbox, or table layout
+ */
+/**
+ * @class Ext.form.field.Base
+ */
+/**
+ * @var {number} $form-field-height
+ * Height for form fields.
+ */
+/**
+ * @var {number} $form-toolbar-field-height
+ * Height for form fields in toolbar.
+ */
+/**
+ * @var {number} $form-field-padding
+ * Padding around form fields.
+ */
+/**
+ * @var {number} $form-field-font-size
+ * Font size for form fields.
+ */
+/**
+ * @var {string} $form-field-font-family
+ * Font family for form fields.
+ */
+/**
+ * @var {string} $form-field-font-weight
+ * Font weight for form fields.
+ */
+/**
+ * @var {font} $form-field-font
+ * Font for form fields.
+ */
+/**
+ * @var {number} $form-toolbar-field-font-size
+ * Font size for toolbar form fields.
+ */
+/**
+ * @var {string} $form-toolbar-field-font-family
+ * Font family for toolbar form fields.
+ */
+/**
+ * @var {string} $form-toolbar-field-font-weight
+ * Font weight for toolbar form fields.
+ */
+/**
+ * @var {font} $form-toolbar-field-font
+ * Font for toolbar form fields.
+ */
+/**
+ * @var {color} $form-field-color
+ * Text color for form fields.
+ */
+/**
+ * @var {color} $form-field-empty-color
+ * Text color for empty form fields.
+ */
+/**
+ * @var {color} $form-field-border-color
+ * Border color for form fields.
+ */
+/**
+ * @var {number} $form-field-border-width
+ * Border width for form fields.
+ */
+/**
+ * @var {string} $form-field-border-style
+ * Border style for form fields.
+ */
+/**
+ * @var {color} $form-field-focus-border-color
+ * Border color for focused form fields.
+ */
+/**
+ * @var {color} $form-field-invalid-border-color
+ * Border color for invalid form fields.
+ */
+/**
+ * @var {color} $form-field-background-color
+ * Background color for form fields.
+ */
+/**
+ * @var {string} $form-field-background-image
+ * Background image for form fields.
+ */
+/**
+ * @var {color} $form-field-invalid-background-color
+ * Background color for invalid form fields.
+ */
+/**
+ * @var {string} $form-field-invalid-background-image
+ * Background image for invalid form fields.
+ */
+/**
+ * @var {string} $form-field-invalid-background-repeat
+ * Background repeat for invalid form fields.
+ */
+/**
+ * @var {string/list} $form-field-invalid-background-position
+ * Background position for invalid form fields.
+ */
+/**
+ * @var {number} $form-field-disabled-opacity
+ */
+/**
+ * @class Ext.form.field.Trigger
+ */
+/**
+ * @var {number}
+ * The width of the Trigger field's trigger element
+ */
+/**
+ * @var {number/list}
+ * The width of the trigger's border
+ */
+/**
+ * @var {color}
+ * The color of the trigger's border
+ */
+/**
+ * @var {string}
+ * The style of the trigger's border
+ */
+/**
+ * @var {color}
+ * The color of the trigger's border when hovered
+ */
+/**
+ * @var {color}
+ * The color of the trigger's border when the field is focused
+ */
+/**
+ * @var {color}
+ * The color of the trigger's border when the field is focused and the trigger is hovered
  */
 /**
  * @class Ext.LoadMask
@@ -219,63 +424,6 @@
 /**
  * @var {number}
  * The border-radius of the message element
- */
-/**
- * @class Ext.ProgressBar
- */
-/**
- * @var {number}
- * The height of the ProgressBar
- */
-/**
- * @var {color}
- * The border-color of the ProgressBar
- */
-/**
- * @var {number}
- * The border-width of the ProgressBar
- */
-/**
- * @var {number}
- * The border-radius of the ProgressBar
- */
-/**
- * @var {color}
- * The background-color of the ProgressBar
- */
-/**
- * @var {color}
- * The background-color of the ProgressBar's moving element
- */
-/**
- * @var {string/list}
- * The background-gradient of the ProgressBar's moving element. Can be either the name of
- * a predefined gradient or a list of color stops. Used as the `$type` parameter for
- * {@link Global_CSS#background-gradient}.
- */
-/**
- * @var {color}
- * The color of the ProgressBar's text when in front of the ProgressBar's moving element
- */
-/**
- * @var {color}
- * The color of the ProgressBar's text when the ProgressBar's 'moving element is not under it
- */
-/**
- * @var {string}
- * The text-align of the ProgressBar's text
- */
-/**
- * @var {number}
- * The font-size of the ProgressBar's text
- */
-/**
- * @var {string}
- * The font-weight of the ProgressBar's text
- */
-/**
- * @var {boolean}
- * True to include the "default" ProgressBar UI
  */
 /**
  * @class Ext.button.Button
@@ -1032,6 +1180,80 @@
  * True to include the "default" toolbar UI
  */
 /**
+ * @class Ext.form.field.Spinner
+ */
+/**
+ * @var {number}
+ * The height of the Spinner trigger buttons
+ */
+/**
+ * @var {number}
+ * The height of the Spinner trigger buttons when the Spinner is used on a
+ * {@link Ext.toolbar.Toolbar Toolbar}
+ */
+/**
+ * @class Ext.toolbar.Paging
+ */
+/**
+ * @var {boolean}
+ * True to include different icons when the paging toolbar buttons are disabled.
+ */
+/**
+ * @class Ext.view.BoundList
+ */
+/**
+ * @var {color}
+ * The background-color of the BoundList
+ */
+/**
+ * @var {color}
+ * The border-color of the BoundList
+ */
+/**
+ * @var {number}
+ * The border-width of the BoundList
+ */
+/**
+ * @var {string}
+ * The border-style of the BoundList
+ */
+/**
+ * @var {number}
+ * The height of BoundList items
+ */
+/**
+ * @var {number/list}
+ * The padding of BoundList items
+ */
+/**
+ * @var {number}
+ * The border-width of BoundList items
+ */
+/**
+ * @var {string}
+ * The border-style of BoundList items
+ */
+/**
+ * @var {color}
+ * The border-color of BoundList items
+ */
+/**
+ * @var {color}
+ * The border-color of hovered BoundList items
+ */
+/**
+ * @var {color}
+ * The border-color of selected BoundList items
+ */
+/**
+ * @var {color}
+ * The background-color of hovered BoundList items
+ */
+/**
+ * @var {color}
+ * The background-color of selected BoundList items
+ */
+/**
  * @class Ext.panel.Panel
  */
 /**
@@ -1396,6 +1618,192 @@
  * True to include the "form-invalid" tip UI
  */
 /**
+ * @class Ext.picker.Color
+ */
+/**
+ * @var {color}
+ * The background-color of Color Pickers
+ */
+/**
+ * @var {color}
+ * The border-color of Color Pickers
+ */
+/**
+ * @var {number}
+ * The border-width of Color Pickers
+ */
+/**
+ * @var {string}
+ * The border-style of Color Pickers
+ */
+/**
+ * @var {number}
+ * The number of columns to display in the Color Picker
+ */
+/**
+ * @var {number}
+ * The number of rows to display in the Color Picker
+ */
+/**
+ * @var {number}
+ * The height of each Color Picker item
+ */
+/**
+ * @var {number}
+ * The width of each Color Picker item
+ */
+/**
+ * @var {number}
+ * The padding of each Color Picker item
+ */
+/**
+ * @var {string}
+ * The cursor to display when the mouse is over a Color Picker item
+ */
+/**
+ * @var {color}
+ * The border-color of Color Picker items
+ */
+/**
+ * @var {number}
+ * The border-width of Color Picker items
+ */
+/**
+ * @var {string}
+ * The border-style of Color Picker items
+ */
+/**
+ * @var {color}
+ * The border-color of hovered Color Picker items
+ */
+/**
+ * @var {color}
+ * The background-color of Color Picker items
+ */
+/**
+ * @var {color}
+ * The background-color of hovered Color Picker items
+ */
+/**
+ * @var {color}
+ * The border-color of the selected Color Picker item
+ */
+/**
+ * @var {color}
+ * The background-color of the selected Color Picker item
+ */
+/**
+ * @var {color}
+ * The inner border-color of Color Picker items
+ */
+/**
+ * @var {number}
+ * The inner border-width of Color Picker items
+ */
+/**
+ * @var {string}
+ * The inner border-style of Color Picker items
+ */
+/**
+ * @class Ext.form.field.HtmlEditor
+ */
+/**
+ * @var {number}
+ * The border-width of the HtmlEditor
+ */
+/**
+ * @var {color}
+ * The border-color of the HtmlEditor
+ */
+/**
+ * @var {color}
+ * The background-color of the HtmlEditor
+ */
+/**
+ * @var {number}
+ * The size of the HtmlEditor toolbar icons
+ */
+/**
+ * @var {number}
+ * The font-size of the HtmlEditor's font selection control
+ */
+/**
+ * @var {number}
+ * The font-family of the HtmlEditor's font selection control
+ */
+/**
+ * @class Ext.FocusManager
+ */
+/**
+ * @var {color}
+ * The border-color of the focusFrame.  See {@link #method-enable}.
+ */
+/**
+ * @var {color}
+ * The border-style of the focusFrame.  See {@link #method-enable}.
+ */
+/**
+ * @var {color}
+ * The border-width of the focusFrame.  See {@link #method-enable}.
+ */
+/**
+ * @class Ext.ProgressBar
+ */
+/**
+ * @var {number}
+ * The height of the ProgressBar
+ */
+/**
+ * @var {color}
+ * The border-color of the ProgressBar
+ */
+/**
+ * @var {number}
+ * The border-width of the ProgressBar
+ */
+/**
+ * @var {number}
+ * The border-radius of the ProgressBar
+ */
+/**
+ * @var {color}
+ * The background-color of the ProgressBar
+ */
+/**
+ * @var {color}
+ * The background-color of the ProgressBar's moving element
+ */
+/**
+ * @var {string/list}
+ * The background-gradient of the ProgressBar's moving element. Can be either the name of
+ * a predefined gradient or a list of color stops. Used as the `$type` parameter for
+ * {@link Global_CSS#background-gradient}.
+ */
+/**
+ * @var {color}
+ * The color of the ProgressBar's text when in front of the ProgressBar's moving element
+ */
+/**
+ * @var {color}
+ * The color of the ProgressBar's text when the ProgressBar's 'moving element is not under it
+ */
+/**
+ * @var {string}
+ * The text-align of the ProgressBar's text
+ */
+/**
+ * @var {number}
+ * The font-size of the ProgressBar's text
+ */
+/**
+ * @var {string}
+ * The font-weight of the ProgressBar's text
+ */
+/**
+ * @var {boolean}
+ * True to include the "default" ProgressBar UI
+ */
+/**
  * @class Ext.container.ButtonGroup
  */
 /**
@@ -1651,195 +2059,6 @@
  * True to include the "default" window UI
  */
 /**
- * @class Ext.form.Labelable
- */
-/**
- * @var {color}
- * The text color of form field labels
- */
-/**
- * @var {string}
- * The font-weight of form field labels
- */
-/**
- * @var {number}
- * The font-size of form field labels
- */
-/**
- * @var {string}
- * The font-family of form field labels
- */
-/**
- * @var {number}
- * The line-height of form field labels
- */
-/**
- * @var {color}
- * The text color of toolbar field labels
- */
-/**
- * @var {string}
- * The font-weight of toolbar field labels
- */
-/**
- * @var {number}
- * The font-size of toolbar field labels
- */
-/**
- * @var {string}
- * The font-family of toolbar field labels
- */
-/**
- * @var {number}
- * The line-height of toolbar field labels
- */
-/**
- * @var {number}
- * Width for form error icons.
- */
-/**
- * @var {number}
- * Height for form error icons.
- */
-/**
- * @var {number/list}
- * Margin for error icons that are aligned to the side of the field
- */
-/**
- * @var {number}
- * The space between the icon and the message for errors that display under the field
- */
-/**
- * @var {number/list}
- * The padding on errors that display under the form field
- */
-/**
- * @var {color}
- * The text color of form error messages
- */
-/**
- * @var {string}
- * The font-weight of form error messages
- */
-/**
- * @var {number}
- * The font-size of form error messages
- */
-/**
- * @var {string}
- * The font-family of form error messages
- */
-/**
- * @var {number}
- * The line-height of form error messages
- */
-/**
- * @var {measurement} $form-item-margin-bottom
- * The bottom margin to apply to form items when in auto, anchor, vbox, or table layout
- */
-/**
- * @class Ext.form.field.Base
- */
-/**
- * @var {number} $form-field-height
- * Height for form fields.
- */
-/**
- * @var {number} $form-toolbar-field-height
- * Height for form fields in toolbar.
- */
-/**
- * @var {number} $form-field-padding
- * Padding around form fields.
- */
-/**
- * @var {number} $form-field-font-size
- * Font size for form fields.
- */
-/**
- * @var {string} $form-field-font-family
- * Font family for form fields.
- */
-/**
- * @var {string} $form-field-font-weight
- * Font weight for form fields.
- */
-/**
- * @var {font} $form-field-font
- * Font for form fields.
- */
-/**
- * @var {number} $form-toolbar-field-font-size
- * Font size for toolbar form fields.
- */
-/**
- * @var {string} $form-toolbar-field-font-family
- * Font family for toolbar form fields.
- */
-/**
- * @var {string} $form-toolbar-field-font-weight
- * Font weight for toolbar form fields.
- */
-/**
- * @var {font} $form-toolbar-field-font
- * Font for toolbar form fields.
- */
-/**
- * @var {color} $form-field-color
- * Text color for form fields.
- */
-/**
- * @var {color} $form-field-empty-color
- * Text color for empty form fields.
- */
-/**
- * @var {color} $form-field-border-color
- * Border color for form fields.
- */
-/**
- * @var {number} $form-field-border-width
- * Border width for form fields.
- */
-/**
- * @var {string} $form-field-border-style
- * Border style for form fields.
- */
-/**
- * @var {color} $form-field-focus-border-color
- * Border color for focused form fields.
- */
-/**
- * @var {color} $form-field-invalid-border-color
- * Border color for invalid form fields.
- */
-/**
- * @var {color} $form-field-background-color
- * Background color for form fields.
- */
-/**
- * @var {string} $form-field-background-image
- * Background image for form fields.
- */
-/**
- * @var {color} $form-field-invalid-background-color
- * Background color for invalid form fields.
- */
-/**
- * @var {string} $form-field-invalid-background-image
- * Background image for invalid form fields.
- */
-/**
- * @var {string} $form-field-invalid-background-repeat
- * Background repeat for invalid form fields.
- */
-/**
- * @var {string/list} $form-field-invalid-background-position
- * Background position for invalid form fields.
- */
-/**
- * @var {number} $form-field-disabled-opacity
- */
-/**
  * @class Ext.form.field.TextArea
  */
 /**
@@ -2025,111 +2244,6 @@
 /**
  * @var {number}
  * The size of the radio button
- */
-/**
- * @class Ext.form.field.Trigger
- */
-/**
- * @var {number}
- * The width of the Trigger field's trigger element
- */
-/**
- * @var {number/list}
- * The width of the trigger's border
- */
-/**
- * @var {color}
- * The color of the trigger's border
- */
-/**
- * @var {string}
- * The style of the trigger's border
- */
-/**
- * @var {color}
- * The color of the trigger's border when hovered
- */
-/**
- * @var {color}
- * The color of the trigger's border when the field is focused
- */
-/**
- * @var {color}
- * The color of the trigger's border when the field is focused and the trigger is hovered
- */
-/**
- * @class Ext.form.field.Spinner
- */
-/**
- * @var {number}
- * The height of the Spinner trigger buttons
- */
-/**
- * @var {number}
- * The height of the Spinner trigger buttons when the Spinner is used on a
- * {@link Ext.toolbar.Toolbar Toolbar}
- */
-/**
- * @class Ext.toolbar.Paging
- */
-/**
- * @var {boolean}
- * True to include different icons when the paging toolbar buttons are disabled.
- */
-/**
- * @class Ext.view.BoundList
- */
-/**
- * @var {color}
- * The background-color of the BoundList
- */
-/**
- * @var {color}
- * The border-color of the BoundList
- */
-/**
- * @var {number}
- * The border-width of the BoundList
- */
-/**
- * @var {string}
- * The border-style of the BoundList
- */
-/**
- * @var {number}
- * The height of BoundList items
- */
-/**
- * @var {number/list}
- * The padding of BoundList items
- */
-/**
- * @var {number}
- * The border-width of BoundList items
- */
-/**
- * @var {string}
- * The border-style of BoundList items
- */
-/**
- * @var {color}
- * The border-color of BoundList items
- */
-/**
- * @var {color}
- * The border-color of hovered BoundList items
- */
-/**
- * @var {color}
- * The border-color of selected BoundList items
- */
-/**
- * @var {color}
- * The background-color of hovered BoundList items
- */
-/**
- * @var {color}
- * The background-color of selected BoundList items
  */
 /**
  * @class Ext.picker.Date
@@ -2482,120 +2596,6 @@
 /**
  * @var {number}
  * The height of Month Picker items when the datepicker does not have footer buttons
- */
-/**
- * @class Ext.picker.Color
- */
-/**
- * @var {color}
- * The background-color of Color Pickers
- */
-/**
- * @var {color}
- * The border-color of Color Pickers
- */
-/**
- * @var {number}
- * The border-width of Color Pickers
- */
-/**
- * @var {string}
- * The border-style of Color Pickers
- */
-/**
- * @var {number}
- * The number of columns to display in the Color Picker
- */
-/**
- * @var {number}
- * The number of rows to display in the Color Picker
- */
-/**
- * @var {number}
- * The height of each Color Picker item
- */
-/**
- * @var {number}
- * The width of each Color Picker item
- */
-/**
- * @var {number}
- * The padding of each Color Picker item
- */
-/**
- * @var {string}
- * The cursor to display when the mouse is over a Color Picker item
- */
-/**
- * @var {color}
- * The border-color of Color Picker items
- */
-/**
- * @var {number}
- * The border-width of Color Picker items
- */
-/**
- * @var {string}
- * The border-style of Color Picker items
- */
-/**
- * @var {color}
- * The border-color of hovered Color Picker items
- */
-/**
- * @var {color}
- * The background-color of Color Picker items
- */
-/**
- * @var {color}
- * The background-color of hovered Color Picker items
- */
-/**
- * @var {color}
- * The border-color of the selected Color Picker item
- */
-/**
- * @var {color}
- * The background-color of the selected Color Picker item
- */
-/**
- * @var {color}
- * The inner border-color of Color Picker items
- */
-/**
- * @var {number}
- * The inner border-width of Color Picker items
- */
-/**
- * @var {string}
- * The inner border-style of Color Picker items
- */
-/**
- * @class Ext.form.field.HtmlEditor
- */
-/**
- * @var {number}
- * The border-width of the HtmlEditor
- */
-/**
- * @var {color}
- * The border-color of the HtmlEditor
- */
-/**
- * @var {color}
- * The background-color of the HtmlEditor
- */
-/**
- * @var {number}
- * The size of the HtmlEditor toolbar icons
- */
-/**
- * @var {number}
- * The font-size of the HtmlEditor's font selection control
- */
-/**
- * @var {number}
- * The font-family of the HtmlEditor's font selection control
  */
 /**
  * @class Ext.panel.Table
@@ -4185,29 +4185,51 @@ img {
   cursor: default;
 }
 
-/* line 3, ../../../../../ext/packages/ext-theme-base/sass/src/layout/container/Container.scss */
-.x-box-item {
-  position: absolute !important;
-  left: 0;
-  top: 0;
+/* line 1, ../../../../../ext/packages/ext-theme-base/sass/src/form/Labelable.scss */
+.x-form-item-label {
+  display: block;
 }
 
-/* line 10, ../../../../../ext/packages/ext-theme-base/sass/src/layout/container/Container.scss */
-.x-rtl > .x-box-item {
-  right: 0;
-  left: auto;
+/* line 5, ../../../../../ext/packages/ext-theme-base/sass/src/form/Labelable.scss */
+.x-form-item-label-right {
+  text-align: right;
 }
 
-/* line 20, ../../../../../ext/packages/ext-theme-base/sass/src/layout/container/Container.scss */
-.x-ie6 .x-rtl .x-box-item,
-.x-quirks .x-ie .x-rtl .x-box-item {
-  right: 0;
-  left: auto;
+/* line 9, ../../../../../ext/packages/ext-theme-base/sass/src/form/Labelable.scss */
+.x-form-item-label-top {
+  display: block;
+  zoom: 1;
 }
 
-/* line 4, ../../../../../ext/packages/ext-theme-base/sass/src/Editor.scss */
-div.x-editor {
-  overflow: visible;
+/* line 15, ../../../../../ext/packages/ext-theme-base/sass/src/form/Labelable.scss */
+.x-form-invalid-icon {
+  overflow: hidden;
+}
+/* line 17, ../../../../../ext/packages/ext-theme-base/sass/src/form/Labelable.scss */
+.x-form-invalid-icon ul {
+  display: none;
+}
+
+/* line 1, ../../../../../ext/packages/ext-theme-base/sass/src/form/field/Trigger.scss */
+.x-form-trigger {
+  cursor: pointer;
+  overflow: hidden;
+  background-repeat: no-repeat;
+}
+/* line 5, ../../../../../ext/packages/ext-theme-base/sass/src/form/field/Trigger.scss */
+.x-item-disabled .x-form-trigger {
+  cursor: default;
+}
+
+/* line 10, ../../../../../ext/packages/ext-theme-base/sass/src/form/field/Trigger.scss */
+.x-trigger-noedit {
+  cursor: default;
+}
+
+/* line 14, ../../../../../ext/packages/ext-theme-base/sass/src/form/field/Trigger.scss */
+.x-form-trigger-wrap {
+  vertical-align: top;
+  border-collapse: separate;
 }
 
 /* line 1, ../../../../../ext/packages/ext-theme-base/sass/src/LoadMask.scss */
@@ -4235,25 +4257,24 @@ div.x-editor {
   position: absolute;
 }
 
-/* line 1, ../../../../../ext/packages/ext-theme-base/sass/src/ProgressBar.scss */
-.x-progress {
-  position: relative;
-  border-style: solid;
-  overflow: hidden;
+/* line 3, ../../../../../ext/packages/ext-theme-base/sass/src/layout/container/Container.scss */
+.x-box-item {
+  position: absolute !important;
+  left: 0;
+  top: 0;
 }
 
-/* line 7, ../../../../../ext/packages/ext-theme-base/sass/src/ProgressBar.scss */
-.x-progress-bar {
-  overflow: hidden;
-  position: absolute;
-  width: 0;
-  height: 100%;
+/* line 10, ../../../../../ext/packages/ext-theme-base/sass/src/layout/container/Container.scss */
+.x-rtl > .x-box-item {
+  right: 0;
+  left: auto;
 }
 
-/* line 14, ../../../../../ext/packages/ext-theme-base/sass/src/ProgressBar.scss */
-.x-progress-text {
-  overflow: hidden;
-  position: absolute;
+/* line 20, ../../../../../ext/packages/ext-theme-base/sass/src/layout/container/Container.scss */
+.x-ie6 .x-rtl .x-box-item,
+.x-quirks .x-ie .x-rtl .x-box-item {
+  right: 0;
+  left: auto;
 }
 
 /* line 1, ../../../../../ext/packages/ext-theme-base/sass/src/button/Button.scss */
@@ -4425,6 +4446,12 @@ div.x-editor {
 /* line 29, ../../../../../ext/packages/ext-theme-base/sass/src/toolbar/Toolbar.scss */
 .x-toolbar-plain {
   border: 0;
+}
+
+/* line 2, ../../../../../ext/packages/ext-theme-base/sass/src/form/field/Spinner.scss */
+.x-form-spinner-up,
+.x-form-spinner-down {
+  font-size: 0;
 }
 
 /* line 1, ../../../../../ext/packages/ext-theme-base/sass/src/panel/Header.scss */
@@ -4728,6 +4755,55 @@ div.x-editor {
   border-style: solid;
 }
 
+/* line 1, ../../../../../ext/packages/ext-theme-base/sass/src/picker/Color.scss */
+.x-color-picker-item {
+  float: left;
+  text-decoration: none;
+}
+
+/* line 6, ../../../../../ext/packages/ext-theme-base/sass/src/picker/Color.scss */
+.x-color-picker-item-inner {
+  display: block;
+  font-size: 1px;
+}
+
+/* line 1, ../../../../../ext/packages/ext-theme-base/sass/src/form/field/HtmlEditor.scss */
+.x-html-editor-tb .x-toolbar {
+  position: static !important;
+}
+
+/* line 5, ../../../../../ext/packages/ext-theme-base/sass/src/form/field/HtmlEditor.scss */
+.x-htmleditor-iframe {
+  display: block;
+  overflow: auto;
+}
+
+/* line 4, ../../../../../ext/packages/ext-theme-base/sass/src/Editor.scss */
+div.x-editor {
+  overflow: visible;
+}
+
+/* line 1, ../../../../../ext/packages/ext-theme-base/sass/src/ProgressBar.scss */
+.x-progress {
+  position: relative;
+  border-style: solid;
+  overflow: hidden;
+}
+
+/* line 7, ../../../../../ext/packages/ext-theme-base/sass/src/ProgressBar.scss */
+.x-progress-bar {
+  overflow: hidden;
+  position: absolute;
+  width: 0;
+  height: 100%;
+}
+
+/* line 14, ../../../../../ext/packages/ext-theme-base/sass/src/ProgressBar.scss */
+.x-progress-text {
+  overflow: hidden;
+  position: absolute;
+}
+
 /* line 1, ../../../../../ext/packages/ext-theme-base/sass/src/draw/Component.scss */
 .x-surface {
   display: -moz-inline-stack;
@@ -4857,31 +4933,6 @@ svg, vml {
   background: transparent;
 }
 
-/* line 1, ../../../../../ext/packages/ext-theme-base/sass/src/form/Labelable.scss */
-.x-form-item-label {
-  display: block;
-}
-
-/* line 5, ../../../../../ext/packages/ext-theme-base/sass/src/form/Labelable.scss */
-.x-form-item-label-right {
-  text-align: right;
-}
-
-/* line 9, ../../../../../ext/packages/ext-theme-base/sass/src/form/Labelable.scss */
-.x-form-item-label-top {
-  display: block;
-  zoom: 1;
-}
-
-/* line 15, ../../../../../ext/packages/ext-theme-base/sass/src/form/Labelable.scss */
-.x-form-invalid-icon {
-  overflow: hidden;
-}
-/* line 17, ../../../../../ext/packages/ext-theme-base/sass/src/form/Labelable.scss */
-.x-form-invalid-icon ul {
-  display: none;
-}
-
 /* line 1, ../../../../../ext/packages/ext-theme-base/sass/src/form/field/TextArea.scss */
 .x-form-textarea {
   overflow: auto;
@@ -4984,34 +5035,6 @@ svg, vml {
 /* line 33, ../../../../../ext/packages/ext-theme-base/sass/src/form/Panel.scss */
 .x-form-form-item td {
   border-top: 1px solid transparent;
-}
-
-/* line 1, ../../../../../ext/packages/ext-theme-base/sass/src/form/field/Trigger.scss */
-.x-form-trigger {
-  cursor: pointer;
-  overflow: hidden;
-  background-repeat: no-repeat;
-}
-/* line 5, ../../../../../ext/packages/ext-theme-base/sass/src/form/field/Trigger.scss */
-.x-item-disabled .x-form-trigger {
-  cursor: default;
-}
-
-/* line 10, ../../../../../ext/packages/ext-theme-base/sass/src/form/field/Trigger.scss */
-.x-trigger-noedit {
-  cursor: default;
-}
-
-/* line 14, ../../../../../ext/packages/ext-theme-base/sass/src/form/field/Trigger.scss */
-.x-form-trigger-wrap {
-  vertical-align: top;
-  border-collapse: separate;
-}
-
-/* line 2, ../../../../../ext/packages/ext-theme-base/sass/src/form/field/Spinner.scss */
-.x-form-spinner-up,
-.x-form-spinner-down {
-  font-size: 0;
 }
 
 /* line 1, ../../../../../ext/packages/ext-theme-base/sass/src/picker/Date.scss */
@@ -5145,29 +5168,6 @@ svg, vml {
 /* line 1, ../../../../../ext/packages/ext-theme-base/sass/src/form/field/Hidden.scss */
 .x-form-item-hidden {
   margin: 0;
-}
-
-/* line 1, ../../../../../ext/packages/ext-theme-base/sass/src/picker/Color.scss */
-.x-color-picker-item {
-  float: left;
-  text-decoration: none;
-}
-
-/* line 6, ../../../../../ext/packages/ext-theme-base/sass/src/picker/Color.scss */
-.x-color-picker-item-inner {
-  display: block;
-  font-size: 1px;
-}
-
-/* line 1, ../../../../../ext/packages/ext-theme-base/sass/src/form/field/HtmlEditor.scss */
-.x-html-editor-tb .x-toolbar {
-  position: static !important;
-}
-
-/* line 5, ../../../../../ext/packages/ext-theme-base/sass/src/form/field/HtmlEditor.scss */
-.x-htmleditor-iframe {
-  display: block;
-  overflow: auto;
 }
 
 /* line 2, ../../../../../ext/packages/ext-theme-base/sass/src/panel/Table.scss */
@@ -5822,52 +5822,190 @@ a.x-tab {
   overflow: hidden!important;
 }
 
-/* line 2, ../../../../../ext/packages/ext-theme-neutral/sass/src/Editor.scss */
-.x-editor .x-form-item-body {
-  padding-bottom: 0;
+/* line 1, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/Labelable.scss */
+.x-form-invalid-under {
+  padding: 2px 2px 2px 20px;
+  color: #cf4c35;
+  font: normal 13px helvetica, arial, verdana, sans-serif;
+  line-height: 16px;
+  background: no-repeat 0 2px;
+  background-image: url(images/form/exclamation.png);
 }
 
-/* line 1, ../../../../../ext/packages/ext-theme-neutral/sass/src/FocusManager.scss */
-.x-focus-element {
-  position: absolute;
-  top: -10px;
-  left: -10px;
-  width: 0px;
-  height: 0px;
+/* line 14, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/Labelable.scss */
+div.x-lbl-top-err-icon {
+  margin-bottom: 4px;
 }
 
-/* line 9, ../../../../../ext/packages/ext-theme-neutral/sass/src/FocusManager.scss */
-.x-focus-frame {
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  z-index: 100000000;
-  width: 0px;
-  height: 0px;
+/* line 18, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/Labelable.scss */
+.x-form-invalid-icon {
+  width: 16px;
+  height: 16px;
+  margin: 0 5px;
+  background-image: url(images/form/exclamation.png);
+  background-repeat: no-repeat;
 }
 
-/* line 21, ../../../../../ext/packages/ext-theme-neutral/sass/src/FocusManager.scss */
-.x-focus-frame-top,
-.x-focus-frame-bottom,
-.x-focus-frame-left,
-.x-focus-frame-right {
-  position: absolute;
-  top: 0px;
-  left: 0px;
+/* line 26, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/Labelable.scss */
+.x-form-item-label {
+  color: black;
+  font: normal 13px/17px helvetica, arial, verdana, sans-serif;
+  margin-top: 4px;
 }
 
-/* line 28, ../../../../../ext/packages/ext-theme-neutral/sass/src/FocusManager.scss */
-.x-focus-frame-top,
-.x-focus-frame-bottom {
-  border-top: solid 2px #15428b;
-  height: 2px;
+/* line 45, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/Labelable.scss */
+.x-autocontainer-form-item,
+.x-anchor-form-item,
+.x-vbox-form-item,
+.x-table-form-item {
+  margin-bottom: 5px;
 }
 
-/* line 34, ../../../../../ext/packages/ext-theme-neutral/sass/src/FocusManager.scss */
-.x-focus-frame-left,
-.x-focus-frame-right {
-  border-left: solid 2px #15428b;
-  width: 2px;
+/* line 53, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/Labelable.scss */
+.x-ie6 .x-form-form-item td {
+  border-top-width: 0;
+}
+/* line 59, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/Labelable.scss */
+.x-ie6 td.x-form-item-pad {
+  height: 5px;
+}
+
+/* line 1, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Base.scss */
+.x-form-field {
+  color: black;
+}
+
+/* line 6, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Base.scss */
+.x-form-item,
+.x-form-field {
+  font: normal 13px helvetica, arial, verdana, sans-serif;
+}
+
+/* line 21, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Base.scss */
+.x-form-type-text textarea.x-form-invalid-field, .x-form-type-text input.x-form-invalid-field,
+.x-form-type-password textarea.x-form-invalid-field,
+.x-form-type-password input.x-form-invalid-field,
+.x-form-type-number textarea.x-form-invalid-field,
+.x-form-type-number input.x-form-invalid-field,
+.x-form-type-email textarea.x-form-invalid-field,
+.x-form-type-email input.x-form-invalid-field,
+.x-form-type-search textarea.x-form-invalid-field,
+.x-form-type-search input.x-form-invalid-field,
+.x-form-type-tel textarea.x-form-invalid-field,
+.x-form-type-tel input.x-form-invalid-field {
+  background-color: white;
+  border-color: #cf4c35;
+}
+
+/* line 37, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Base.scss */
+.x-item-disabled .x-form-item-label,
+.x-item-disabled .x-form-field,
+.x-item-disabled .x-form-display-field,
+.x-item-disabled .x-form-cb-label,
+.x-item-disabled .x-form-trigger {
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=30);
+  opacity: 0.3;
+}
+
+/* line 1, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Text.scss */
+.x-form-text {
+  color: black;
+  padding: 4px 6px 3px 6px;
+  background: white repeat-x 0 0;
+  border-width: 1px;
+  border-style: solid;
+  border-color: silver #d9d9d9 #d9d9d9;
+  height: 24px;
+  line-height: 15px;
+}
+/* line 21, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Text.scss */
+.x-content-box .x-form-text {
+  height: 15px;
+}
+
+/* line 34, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Text.scss */
+.x-form-focus {
+  border-color: #3892d3;
+}
+
+/* line 39, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Text.scss */
+.x-form-empty-field,
+textarea.x-form-empty-field {
+  color: gray;
+}
+
+/* line 48, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Text.scss */
+.x-quirks .x-ie .x-form-text,
+.x-ie7m .x-form-text {
+  margin-top: -1px;
+  margin-bottom: -1px;
+}
+
+/* line 1, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
+.x-form-trigger {
+  background: url(images/form/trigger.png);
+  width: 22px;
+}
+
+/* line 13, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
+.x-rtl.x-form-trigger-wrap .x-form-trigger {
+  background-image: url(images/form/trigger-rtl.png);
+}
+
+/* line 18, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
+.x-trigger-cell {
+  background-color: white;
+  width: 22px;
+}
+
+/* line 23, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
+.x-form-trigger-over {
+  background-position: -22px 0;
+}
+
+/* line 30, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
+.x-form-trigger-wrap-focus .x-form-trigger {
+  background-position: -66px 0;
+}
+
+/* line 37, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
+.x-form-trigger-wrap-focus .x-form-trigger-over {
+  background-position: -88px 0;
+}
+
+/* line 42, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
+.x-form-trigger-click,
+.x-form-trigger-wrap-focus .x-form-trigger-click {
+  background-position: -44px 0;
+}
+
+/* line 49, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
+.x-form-clear-trigger {
+  background-image: url(images/form/clear-trigger.png);
+}
+
+/* line 54, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
+.x-rtl.x-form-trigger-wrap .x-form-clear-trigger {
+  background-image: url(images/form/clear-trigger-rtl.png);
+}
+
+/* line 59, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
+.x-form-search-trigger {
+  background-image: url(images/form/search-trigger.png);
+}
+
+/* line 64, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
+.x-rtl.x-form-trigger-wrap .x-form-search-trigger {
+  background-image: url(images/form/search-trigger-rtl.png);
+}
+
+/* line 73, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
+.x-quirks .prefixie6 .x-form-trigger-input-cell {
+  height: 24px;
+}
+/* line 77, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
+.x-quirks .prefixie6 .x-field-toolbar .x-form-trigger-input-cell {
+  height: 24px;
 }
 
 /* line 1, ../../../../../ext/packages/ext-theme-neutral/sass/src/LoadMask.scss */
@@ -5908,83 +6046,6 @@ a.x-tab {
 /* line 52, ../../../../../ext/packages/ext-theme-neutral/sass/src/LoadMask.scss */
 .x-rtl.x-mask-msg-text {
   padding: 21px 0 0 0;
-}
-
-/**
- * Creates a visual theme for an Ext.ProgressBar
- *
- * @param {string} $ui-label
- * The name of the UI being created. Can not included spaces or special punctuation
- * (used in CSS class names).
- *
- * @param {color} [$ui-border-color=$progress-border-color]
- * The border-color of the ProgressBar
- *
- * @param {color} [$ui-background-color=$progress-background-color]
- * The background-color of the ProgressBar
- *
- * @param {color} [$ui-bar-background-color=$progress-bar-background-color]
- * The background-color of the ProgressBar's moving element
- *
- * @param {string/list} [$ui-bar-background-gradient=$progress-bar-background-gradient]
- * The background-gradient of the ProgressBar's moving element. Can be either the name of
- * a predefined gradient or a list of color stops. Used as the `$type` parameter for
- * {@link Global_CSS#background-gradient}.
- *
- * @param {color} [$ui-color-front=$progress-text-color-front]
- * The color of the ProgressBar's text when in front of the ProgressBar's moving element
- *
- * @param {color} [$ui-color-back=$progress-text-color-back]
- * The color of the ProgressBar's text when the ProgressBar's 'moving element is not under it
- *
- * @param {number} [$ui-height=$progress-height]
- * The height of the ProgressBar
- *
- * @param {number} [$ui-border-width=$progress-border-width]
- * The border-width of the ProgressBar
- *
- * @param {number} [$ui-border-radius=$progress-border-radius]
- * The border-radius of the ProgressBar
- *
- * @param {string} [$ui-text-text-align=$progress-text-text-align]
- * The text-align of the ProgressBar's text
- *
- * @param {number} [$ui-text-font-size=$progress-text-font-size]
- * The font-size of the ProgressBar's text
- *
- * @param {string} [$ui-text-font-weight=$progress-text-font-weight]
- * The font-weight of the ProgressBar's text
- *
- * @member Ext.ProgressBar
- */
-/* line 67, ../../../../../ext/packages/ext-theme-neutral/sass/src/ProgressBar.scss */
-.x-progress-default {
-  background-color: #f5f5f5;
-  border-width: 0;
-  height: 20px;
-  border-color: #157fcc;
-}
-/* line 72, ../../../../../ext/packages/ext-theme-neutral/sass/src/ProgressBar.scss */
-.x-content-box .x-progress-default {
-  height: 20px;
-}
-/* line 84, ../../../../../ext/packages/ext-theme-neutral/sass/src/ProgressBar.scss */
-.x-progress-default .x-progress-bar-default {
-  background-image: none;
-  background-color: #c1ddf1;
-}
-/* line 99, ../../../../../ext/packages/ext-theme-neutral/sass/src/ProgressBar.scss */
-.x-progress-default .x-progress-text {
-  color: #666666;
-  font-weight: bold;
-  font-size: 13px;
-  text-align: center;
-  line-height: 20px;
-}
-/* line 107, ../../../../../ext/packages/ext-theme-neutral/sass/src/ProgressBar.scss */
-.x-progress-default .x-progress-text-back {
-  color: #666666;
-  line-height: 20px;
 }
 
 /**
@@ -9667,6 +9728,143 @@ body.x-nbr .x-btn-default-toolbar-large-frameInfo {
   float: none;
 }
 
+/* line 3, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Spinner.scss */
+div.x-form-spinner-up,
+div.x-form-spinner-down {
+  background-image: url(images/form/spinner.png);
+  background-color: white;
+  width: 22px;
+  height: 11px;
+}
+
+/* line 13, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Spinner.scss */
+.x-rtl.x-form-trigger-wrap .x-form-spinner-up,
+.x-rtl.x-form-trigger-wrap .x-form-spinner-down {
+  background-image: url(images/form/spinner-rtl.png);
+}
+
+/* line 19, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Spinner.scss */
+.x-form-spinner-down {
+  background-position: 0 -11px;
+}
+
+/* line 23, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Spinner.scss */
+.x-form-trigger-wrap-focus .x-form-spinner-down {
+  background-position: -66px -11px;
+}
+
+/* line 26, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Spinner.scss */
+.x-form-trigger-wrap .x-form-spinner-down-over {
+  background-position: -22px -11px;
+}
+
+/* line 29, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Spinner.scss */
+.x-form-trigger-wrap-focus .x-form-spinner-down-over {
+  background-position: -88px -11px;
+}
+
+/* line 32, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Spinner.scss */
+.x-form-trigger-wrap .x-form-spinner-down-click {
+  background-position: -44px -11px;
+}
+
+/* line 1, ../../../../../ext/packages/ext-theme-neutral/sass/src/toolbar/Paging.scss */
+.x-tbar-page-number {
+  width: 30px;
+}
+
+/* line 5, ../../../../../ext/packages/ext-theme-neutral/sass/src/toolbar/Paging.scss */
+.x-tbar-page-first {
+  background-image: url(images/grid/page-first.png);
+}
+
+/* line 9, ../../../../../ext/packages/ext-theme-neutral/sass/src/toolbar/Paging.scss */
+.x-tbar-page-prev {
+  background-image: url(images/grid/page-prev.png);
+}
+
+/* line 13, ../../../../../ext/packages/ext-theme-neutral/sass/src/toolbar/Paging.scss */
+.x-tbar-page-next {
+  background-image: url(images/grid/page-next.png);
+}
+
+/* line 17, ../../../../../ext/packages/ext-theme-neutral/sass/src/toolbar/Paging.scss */
+.x-tbar-page-last {
+  background-image: url(images/grid/page-last.png);
+}
+
+/* line 21, ../../../../../ext/packages/ext-theme-neutral/sass/src/toolbar/Paging.scss */
+.x-tbar-loading {
+  background-image: url(images/grid/refresh.png);
+}
+
+/* line 51, ../../../../../ext/packages/ext-theme-neutral/sass/src/toolbar/Paging.scss */
+.x-rtl.x-tbar-page-first {
+  background-image: url(images/grid/page-last.png);
+}
+/* line 55, ../../../../../ext/packages/ext-theme-neutral/sass/src/toolbar/Paging.scss */
+.x-rtl.x-tbar-page-prev {
+  background-image: url(images/grid/page-next.png);
+}
+/* line 59, ../../../../../ext/packages/ext-theme-neutral/sass/src/toolbar/Paging.scss */
+.x-rtl.x-tbar-page-next {
+  background-image: url(images/grid/page-prev.png);
+}
+/* line 63, ../../../../../ext/packages/ext-theme-neutral/sass/src/toolbar/Paging.scss */
+.x-rtl.x-tbar-page-last {
+  background-image: url(images/grid/page-first.png);
+}
+
+/* line 1, ../../../../../ext/packages/ext-theme-neutral/sass/src/view/BoundList.scss */
+.x-boundlist {
+  border-width: 1px;
+  border-style: solid;
+  border-color: #e1e1e1;
+  background: white;
+}
+
+/* line 10, ../../../../../ext/packages/ext-theme-neutral/sass/src/view/BoundList.scss */
+.x-strict .x-ie7m .x-boundlist-list-ct {
+  position: relative;
+}
+
+/* line 15, ../../../../../ext/packages/ext-theme-neutral/sass/src/view/BoundList.scss */
+.x-boundlist-item {
+  padding: 0 6px;
+  line-height: 22px;
+  cursor: pointer;
+  cursor: hand;
+  position: relative;
+  /*allow hover in IE on empty items*/
+  zoom: 1;
+  border-width: 1px;
+  border-style: dotted;
+  border-color: white;
+}
+
+/* line 33, ../../../../../ext/packages/ext-theme-neutral/sass/src/view/BoundList.scss */
+.x-boundlist-selected {
+  background: #c1ddf1;
+  border-color: #c1ddf1;
+}
+
+/* line 38, ../../../../../ext/packages/ext-theme-neutral/sass/src/view/BoundList.scss */
+.x-boundlist-item-over {
+  background: #d6e8f6;
+  border-color: #d6e8f6;
+}
+
+/* line 43, ../../../../../ext/packages/ext-theme-neutral/sass/src/view/BoundList.scss */
+.x-boundlist-floating {
+  border-top-width: 0;
+}
+
+/* line 47, ../../../../../ext/packages/ext-theme-neutral/sass/src/view/BoundList.scss */
+.x-boundlist-above {
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+}
+
 /* line 2, ../../../../../ext/packages/ext-theme-neutral/sass/src/panel/Header.scss */
 .x-header-draggable .x-header-body,
 .x-header-ghost {
@@ -12506,6 +12704,301 @@ body.x-nbr .x-tip-form-invalid-frameInfo {
   margin-bottom: 0;
 }
 
+/* line 1, ../../../../../ext/packages/ext-theme-neutral/sass/src/picker/Color.scss */
+.x-color-picker {
+  width: 192px;
+  height: 120px;
+  background-color: white;
+  border-color: white;
+  border-width: 0;
+  border-style: solid;
+}
+
+/* line 10, ../../../../../ext/packages/ext-theme-neutral/sass/src/picker/Color.scss */
+.x-color-picker-item {
+  width: 24px;
+  height: 24px;
+  border-width: 1px;
+  border-color: white;
+  border-style: solid;
+  background-color: white;
+  cursor: pointer;
+  padding: 2px;
+}
+/* line 20, ../../../../../ext/packages/ext-theme-neutral/sass/src/picker/Color.scss */
+.x-content-box .x-color-picker-item {
+  width: 18px;
+  height: 18px;
+}
+
+/* line 28, ../../../../../ext/packages/ext-theme-neutral/sass/src/picker/Color.scss */
+a.x-color-picker-item:hover {
+  border-color: #8bb8f3;
+  background-color: #e6e6e6;
+}
+
+/* line 33, ../../../../../ext/packages/ext-theme-neutral/sass/src/picker/Color.scss */
+.x-color-picker-selected {
+  border-color: #8bb8f3;
+  background-color: #e6e6e6;
+}
+
+/* line 38, ../../../../../ext/packages/ext-theme-neutral/sass/src/picker/Color.scss */
+.x-color-picker-item-inner {
+  line-height: 16px;
+  border-color: #e1e1e1;
+  border-width: 1px;
+  border-style: solid;
+}
+
+/* line 1, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
+.x-html-editor-tb .x-btn-text {
+  background: transparent no-repeat;
+  background-image: url(images/editor/tb-sprite.png);
+}
+
+/* line 7, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
+.x-html-editor-tb .x-edit-bold,
+.x-menu-item div.x-edit-bold {
+  background-position: 0 0;
+  background-image: url(images/editor/tb-sprite.png);
+}
+
+/* line 13, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
+.x-html-editor-tb .x-edit-italic,
+.x-menu-item div.x-edit-italic {
+  background-position: -16px 0;
+  background-image: url(images/editor/tb-sprite.png);
+}
+
+/* line 19, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
+.x-html-editor-tb .x-edit-underline,
+.x-menu-item div.x-edit-underline {
+  background-position: -32px 0;
+  background-image: url(images/editor/tb-sprite.png);
+}
+
+/* line 25, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
+.x-html-editor-tb .x-edit-forecolor,
+.x-menu-item div.x-edit-forecolor {
+  background-position: -160px 0;
+  background-image: url(images/editor/tb-sprite.png);
+}
+
+/* line 31, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
+.x-html-editor-tb .x-edit-backcolor,
+.x-menu-item div.x-edit-backcolor {
+  background-position: -176px 0;
+  background-image: url(images/editor/tb-sprite.png);
+}
+
+/* line 37, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
+.x-html-editor-tb .x-edit-justifyleft,
+.x-menu-item div.x-edit-justifyleft {
+  background-position: -112px 0;
+  background-image: url(images/editor/tb-sprite.png);
+}
+
+/* line 43, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
+.x-html-editor-tb .x-edit-justifycenter,
+.x-menu-item div.x-edit-justifycenter {
+  background-position: -128px 0;
+  background-image: url(images/editor/tb-sprite.png);
+}
+
+/* line 49, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
+.x-html-editor-tb .x-edit-justifyright,
+.x-menu-item div.x-edit-justifyright {
+  background-position: -144px 0;
+  background-image: url(images/editor/tb-sprite.png);
+}
+
+/* line 55, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
+.x-html-editor-tb .x-edit-insertorderedlist,
+.x-menu-item div.x-edit-insertorderedlist {
+  background-position: -80px 0;
+  background-image: url(images/editor/tb-sprite.png);
+}
+
+/* line 61, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
+.x-html-editor-tb .x-edit-insertunorderedlist,
+.x-menu-item div.x-edit-insertunorderedlist {
+  background-position: -96px 0;
+  background-image: url(images/editor/tb-sprite.png);
+}
+
+/* line 67, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
+.x-html-editor-tb .x-edit-increasefontsize,
+.x-menu-item div.x-edit-increasefontsize {
+  background-position: -48px 0;
+  background-image: url(images/editor/tb-sprite.png);
+}
+
+/* line 73, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
+.x-html-editor-tb .x-edit-decreasefontsize,
+.x-menu-item div.x-edit-decreasefontsize {
+  background-position: -64px 0;
+  background-image: url(images/editor/tb-sprite.png);
+}
+
+/* line 79, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
+.x-html-editor-tb .x-edit-sourceedit,
+.x-menu-item div.x-edit-sourceedit {
+  background-position: -192px 0;
+  background-image: url(images/editor/tb-sprite.png);
+}
+
+/* line 85, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
+.x-html-editor-tb .x-edit-createlink,
+.x-menu-item div.x-edit-createlink {
+  background-position: -208px 0;
+  background-image: url(images/editor/tb-sprite.png);
+}
+
+/* line 90, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
+.x-html-editor-tip .x-tip-bd .x-tip-bd-inner {
+  padding: 5px;
+  padding-bottom: 1px;
+}
+
+/* line 95, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
+.x-html-editor-tb .x-font-select {
+  font-size: 13px;
+  font-family: inherit;
+}
+
+/* line 100, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
+.x-html-editor-wrap textarea {
+  font: normal 13px helvetica, arial, verdana, sans-serif;
+  background-color: white;
+  resize: none;
+}
+
+/* line 2, ../../../../../ext/packages/ext-theme-neutral/sass/src/Editor.scss */
+.x-editor .x-form-item-body {
+  padding-bottom: 0;
+}
+
+/* line 1, ../../../../../ext/packages/ext-theme-neutral/sass/src/FocusManager.scss */
+.x-focus-element {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: 0px;
+  height: 0px;
+}
+
+/* line 9, ../../../../../ext/packages/ext-theme-neutral/sass/src/FocusManager.scss */
+.x-focus-frame {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  z-index: 100000000;
+  width: 0px;
+  height: 0px;
+}
+
+/* line 21, ../../../../../ext/packages/ext-theme-neutral/sass/src/FocusManager.scss */
+.x-focus-frame-top,
+.x-focus-frame-bottom,
+.x-focus-frame-left,
+.x-focus-frame-right {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+/* line 28, ../../../../../ext/packages/ext-theme-neutral/sass/src/FocusManager.scss */
+.x-focus-frame-top,
+.x-focus-frame-bottom {
+  border-top: solid 2px #15428b;
+  height: 2px;
+}
+
+/* line 34, ../../../../../ext/packages/ext-theme-neutral/sass/src/FocusManager.scss */
+.x-focus-frame-left,
+.x-focus-frame-right {
+  border-left: solid 2px #15428b;
+  width: 2px;
+}
+
+/**
+ * Creates a visual theme for an Ext.ProgressBar
+ *
+ * @param {string} $ui-label
+ * The name of the UI being created. Can not included spaces or special punctuation
+ * (used in CSS class names).
+ *
+ * @param {color} [$ui-border-color=$progress-border-color]
+ * The border-color of the ProgressBar
+ *
+ * @param {color} [$ui-background-color=$progress-background-color]
+ * The background-color of the ProgressBar
+ *
+ * @param {color} [$ui-bar-background-color=$progress-bar-background-color]
+ * The background-color of the ProgressBar's moving element
+ *
+ * @param {string/list} [$ui-bar-background-gradient=$progress-bar-background-gradient]
+ * The background-gradient of the ProgressBar's moving element. Can be either the name of
+ * a predefined gradient or a list of color stops. Used as the `$type` parameter for
+ * {@link Global_CSS#background-gradient}.
+ *
+ * @param {color} [$ui-color-front=$progress-text-color-front]
+ * The color of the ProgressBar's text when in front of the ProgressBar's moving element
+ *
+ * @param {color} [$ui-color-back=$progress-text-color-back]
+ * The color of the ProgressBar's text when the ProgressBar's 'moving element is not under it
+ *
+ * @param {number} [$ui-height=$progress-height]
+ * The height of the ProgressBar
+ *
+ * @param {number} [$ui-border-width=$progress-border-width]
+ * The border-width of the ProgressBar
+ *
+ * @param {number} [$ui-border-radius=$progress-border-radius]
+ * The border-radius of the ProgressBar
+ *
+ * @param {string} [$ui-text-text-align=$progress-text-text-align]
+ * The text-align of the ProgressBar's text
+ *
+ * @param {number} [$ui-text-font-size=$progress-text-font-size]
+ * The font-size of the ProgressBar's text
+ *
+ * @param {string} [$ui-text-font-weight=$progress-text-font-weight]
+ * The font-weight of the ProgressBar's text
+ *
+ * @member Ext.ProgressBar
+ */
+/* line 67, ../../../../../ext/packages/ext-theme-neutral/sass/src/ProgressBar.scss */
+.x-progress-default {
+  background-color: #f5f5f5;
+  border-width: 0;
+  height: 20px;
+  border-color: #157fcc;
+}
+/* line 72, ../../../../../ext/packages/ext-theme-neutral/sass/src/ProgressBar.scss */
+.x-content-box .x-progress-default {
+  height: 20px;
+}
+/* line 84, ../../../../../ext/packages/ext-theme-neutral/sass/src/ProgressBar.scss */
+.x-progress-default .x-progress-bar-default {
+  background-image: none;
+  background-color: #c1ddf1;
+}
+/* line 99, ../../../../../ext/packages/ext-theme-neutral/sass/src/ProgressBar.scss */
+.x-progress-default .x-progress-text {
+  color: #666666;
+  font-weight: bold;
+  font-size: 13px;
+  text-align: center;
+  line-height: 20px;
+}
+/* line 107, ../../../../../ext/packages/ext-theme-neutral/sass/src/ProgressBar.scss */
+.x-progress-default .x-progress-text-back {
+  color: #666666;
+  line-height: 20px;
+}
+
 /**
  * Creates a visual theme for a ButtonGroup.
  *
@@ -14700,125 +15193,6 @@ body.x-nbr .x-window-header-default-collapsed-left-frameInfo {
   border-width: 1px !important;
 }
 
-/* line 1, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/Labelable.scss */
-.x-form-invalid-under {
-  padding: 2px 2px 2px 20px;
-  color: #cf4c35;
-  font: normal 13px helvetica, arial, verdana, sans-serif;
-  line-height: 16px;
-  background: no-repeat 0 2px;
-  background-image: url(images/form/exclamation.png);
-}
-
-/* line 14, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/Labelable.scss */
-div.x-lbl-top-err-icon {
-  margin-bottom: 4px;
-}
-
-/* line 18, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/Labelable.scss */
-.x-form-invalid-icon {
-  width: 16px;
-  height: 16px;
-  margin: 0 5px;
-  background-image: url(images/form/exclamation.png);
-  background-repeat: no-repeat;
-}
-
-/* line 26, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/Labelable.scss */
-.x-form-item-label {
-  color: black;
-  font: normal 13px/17px helvetica, arial, verdana, sans-serif;
-  margin-top: 4px;
-}
-
-/* line 45, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/Labelable.scss */
-.x-autocontainer-form-item,
-.x-anchor-form-item,
-.x-vbox-form-item,
-.x-table-form-item {
-  margin-bottom: 5px;
-}
-
-/* line 53, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/Labelable.scss */
-.x-ie6 .x-form-form-item td {
-  border-top-width: 0;
-}
-/* line 59, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/Labelable.scss */
-.x-ie6 td.x-form-item-pad {
-  height: 5px;
-}
-
-/* line 1, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Base.scss */
-.x-form-field {
-  color: black;
-}
-
-/* line 6, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Base.scss */
-.x-form-item,
-.x-form-field {
-  font: normal 13px helvetica, arial, verdana, sans-serif;
-}
-
-/* line 21, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Base.scss */
-.x-form-type-text textarea.x-form-invalid-field, .x-form-type-text input.x-form-invalid-field,
-.x-form-type-password textarea.x-form-invalid-field,
-.x-form-type-password input.x-form-invalid-field,
-.x-form-type-number textarea.x-form-invalid-field,
-.x-form-type-number input.x-form-invalid-field,
-.x-form-type-email textarea.x-form-invalid-field,
-.x-form-type-email input.x-form-invalid-field,
-.x-form-type-search textarea.x-form-invalid-field,
-.x-form-type-search input.x-form-invalid-field,
-.x-form-type-tel textarea.x-form-invalid-field,
-.x-form-type-tel input.x-form-invalid-field {
-  background-color: white;
-  border-color: #cf4c35;
-}
-
-/* line 37, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Base.scss */
-.x-item-disabled .x-form-item-label,
-.x-item-disabled .x-form-field,
-.x-item-disabled .x-form-display-field,
-.x-item-disabled .x-form-cb-label,
-.x-item-disabled .x-form-trigger {
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=30);
-  opacity: 0.3;
-}
-
-/* line 1, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Text.scss */
-.x-form-text {
-  color: black;
-  padding: 4px 6px 3px 6px;
-  background: white repeat-x 0 0;
-  border-width: 1px;
-  border-style: solid;
-  border-color: silver #d9d9d9 #d9d9d9;
-  height: 24px;
-  line-height: 15px;
-}
-/* line 21, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Text.scss */
-.x-content-box .x-form-text {
-  height: 15px;
-}
-
-/* line 34, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Text.scss */
-.x-form-focus {
-  border-color: #3892d3;
-}
-
-/* line 39, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Text.scss */
-.x-form-empty-field,
-textarea.x-form-empty-field {
-  color: gray;
-}
-
-/* line 48, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Text.scss */
-.x-quirks .x-ie .x-form-text,
-.x-ie7m .x-form-text {
-  margin-top: -1px;
-  margin-bottom: -1px;
-}
-
 /* line 1, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/TextArea.scss */
 .x-form-textarea {
   line-height: normal;
@@ -15159,210 +15533,6 @@ textarea.x-form-empty-field {
   background-position: -15px -15px;
 }
 
-/* line 1, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
-.x-form-trigger {
-  background: url(images/form/trigger.png);
-  width: 22px;
-}
-
-/* line 13, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
-.x-rtl.x-form-trigger-wrap .x-form-trigger {
-  background-image: url(images/form/trigger-rtl.png);
-}
-
-/* line 18, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
-.x-trigger-cell {
-  background-color: white;
-  width: 22px;
-}
-
-/* line 23, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
-.x-form-trigger-over {
-  background-position: -22px 0;
-}
-
-/* line 30, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
-.x-form-trigger-wrap-focus .x-form-trigger {
-  background-position: -66px 0;
-}
-
-/* line 37, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
-.x-form-trigger-wrap-focus .x-form-trigger-over {
-  background-position: -88px 0;
-}
-
-/* line 42, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
-.x-form-trigger-click,
-.x-form-trigger-wrap-focus .x-form-trigger-click {
-  background-position: -44px 0;
-}
-
-/* line 49, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
-.x-form-clear-trigger {
-  background-image: url(images/form/clear-trigger.png);
-}
-
-/* line 54, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
-.x-rtl.x-form-trigger-wrap .x-form-clear-trigger {
-  background-image: url(images/form/clear-trigger-rtl.png);
-}
-
-/* line 59, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
-.x-form-search-trigger {
-  background-image: url(images/form/search-trigger.png);
-}
-
-/* line 64, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
-.x-rtl.x-form-trigger-wrap .x-form-search-trigger {
-  background-image: url(images/form/search-trigger-rtl.png);
-}
-
-/* line 73, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
-.x-quirks .prefixie6 .x-form-trigger-input-cell {
-  height: 24px;
-}
-/* line 77, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Trigger.scss */
-.x-quirks .prefixie6 .x-field-toolbar .x-form-trigger-input-cell {
-  height: 24px;
-}
-
-/* line 3, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Spinner.scss */
-div.x-form-spinner-up,
-div.x-form-spinner-down {
-  background-image: url(images/form/spinner.png);
-  background-color: white;
-  width: 22px;
-  height: 11px;
-}
-
-/* line 13, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Spinner.scss */
-.x-rtl.x-form-trigger-wrap .x-form-spinner-up,
-.x-rtl.x-form-trigger-wrap .x-form-spinner-down {
-  background-image: url(images/form/spinner-rtl.png);
-}
-
-/* line 19, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Spinner.scss */
-.x-form-spinner-down {
-  background-position: 0 -11px;
-}
-
-/* line 23, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Spinner.scss */
-.x-form-trigger-wrap-focus .x-form-spinner-down {
-  background-position: -66px -11px;
-}
-
-/* line 26, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Spinner.scss */
-.x-form-trigger-wrap .x-form-spinner-down-over {
-  background-position: -22px -11px;
-}
-
-/* line 29, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Spinner.scss */
-.x-form-trigger-wrap-focus .x-form-spinner-down-over {
-  background-position: -88px -11px;
-}
-
-/* line 32, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/Spinner.scss */
-.x-form-trigger-wrap .x-form-spinner-down-click {
-  background-position: -44px -11px;
-}
-
-/* line 1, ../../../../../ext/packages/ext-theme-neutral/sass/src/toolbar/Paging.scss */
-.x-tbar-page-number {
-  width: 30px;
-}
-
-/* line 5, ../../../../../ext/packages/ext-theme-neutral/sass/src/toolbar/Paging.scss */
-.x-tbar-page-first {
-  background-image: url(images/grid/page-first.png);
-}
-
-/* line 9, ../../../../../ext/packages/ext-theme-neutral/sass/src/toolbar/Paging.scss */
-.x-tbar-page-prev {
-  background-image: url(images/grid/page-prev.png);
-}
-
-/* line 13, ../../../../../ext/packages/ext-theme-neutral/sass/src/toolbar/Paging.scss */
-.x-tbar-page-next {
-  background-image: url(images/grid/page-next.png);
-}
-
-/* line 17, ../../../../../ext/packages/ext-theme-neutral/sass/src/toolbar/Paging.scss */
-.x-tbar-page-last {
-  background-image: url(images/grid/page-last.png);
-}
-
-/* line 21, ../../../../../ext/packages/ext-theme-neutral/sass/src/toolbar/Paging.scss */
-.x-tbar-loading {
-  background-image: url(images/grid/refresh.png);
-}
-
-/* line 51, ../../../../../ext/packages/ext-theme-neutral/sass/src/toolbar/Paging.scss */
-.x-rtl.x-tbar-page-first {
-  background-image: url(images/grid/page-last.png);
-}
-/* line 55, ../../../../../ext/packages/ext-theme-neutral/sass/src/toolbar/Paging.scss */
-.x-rtl.x-tbar-page-prev {
-  background-image: url(images/grid/page-next.png);
-}
-/* line 59, ../../../../../ext/packages/ext-theme-neutral/sass/src/toolbar/Paging.scss */
-.x-rtl.x-tbar-page-next {
-  background-image: url(images/grid/page-prev.png);
-}
-/* line 63, ../../../../../ext/packages/ext-theme-neutral/sass/src/toolbar/Paging.scss */
-.x-rtl.x-tbar-page-last {
-  background-image: url(images/grid/page-first.png);
-}
-
-/* line 1, ../../../../../ext/packages/ext-theme-neutral/sass/src/view/BoundList.scss */
-.x-boundlist {
-  border-width: 1px;
-  border-style: solid;
-  border-color: #e1e1e1;
-  background: white;
-}
-
-/* line 10, ../../../../../ext/packages/ext-theme-neutral/sass/src/view/BoundList.scss */
-.x-strict .x-ie7m .x-boundlist-list-ct {
-  position: relative;
-}
-
-/* line 15, ../../../../../ext/packages/ext-theme-neutral/sass/src/view/BoundList.scss */
-.x-boundlist-item {
-  padding: 0 6px;
-  line-height: 22px;
-  cursor: pointer;
-  cursor: hand;
-  position: relative;
-  /*allow hover in IE on empty items*/
-  zoom: 1;
-  border-width: 1px;
-  border-style: dotted;
-  border-color: white;
-}
-
-/* line 33, ../../../../../ext/packages/ext-theme-neutral/sass/src/view/BoundList.scss */
-.x-boundlist-selected {
-  background: #c1ddf1;
-  border-color: #c1ddf1;
-}
-
-/* line 38, ../../../../../ext/packages/ext-theme-neutral/sass/src/view/BoundList.scss */
-.x-boundlist-item-over {
-  background: #d6e8f6;
-  border-color: #d6e8f6;
-}
-
-/* line 43, ../../../../../ext/packages/ext-theme-neutral/sass/src/view/BoundList.scss */
-.x-boundlist-floating {
-  border-top-width: 0;
-}
-
-/* line 47, ../../../../../ext/packages/ext-theme-neutral/sass/src/view/BoundList.scss */
-.x-boundlist-above {
-  border-top-width: 1px;
-  border-bottom-width: 1px;
-}
-
 /* line 9, ../../../../../ext/packages/ext-theme-neutral/sass/src/picker/Date.scss */
 .x-datepicker {
   border-width: 1px;
@@ -15660,176 +15830,6 @@ a.x-monthpicker-yearnav-button:hover {
 /* line 1, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/File.scss */
 .x-form-file-wrap .x-form-text {
   color: gray;
-}
-
-/* line 1, ../../../../../ext/packages/ext-theme-neutral/sass/src/picker/Color.scss */
-.x-color-picker {
-  width: 192px;
-  height: 120px;
-  background-color: white;
-  border-color: white;
-  border-width: 0;
-  border-style: solid;
-}
-
-/* line 10, ../../../../../ext/packages/ext-theme-neutral/sass/src/picker/Color.scss */
-.x-color-picker-item {
-  width: 24px;
-  height: 24px;
-  border-width: 1px;
-  border-color: white;
-  border-style: solid;
-  background-color: white;
-  cursor: pointer;
-  padding: 2px;
-}
-/* line 20, ../../../../../ext/packages/ext-theme-neutral/sass/src/picker/Color.scss */
-.x-content-box .x-color-picker-item {
-  width: 18px;
-  height: 18px;
-}
-
-/* line 28, ../../../../../ext/packages/ext-theme-neutral/sass/src/picker/Color.scss */
-a.x-color-picker-item:hover {
-  border-color: #8bb8f3;
-  background-color: #e6e6e6;
-}
-
-/* line 33, ../../../../../ext/packages/ext-theme-neutral/sass/src/picker/Color.scss */
-.x-color-picker-selected {
-  border-color: #8bb8f3;
-  background-color: #e6e6e6;
-}
-
-/* line 38, ../../../../../ext/packages/ext-theme-neutral/sass/src/picker/Color.scss */
-.x-color-picker-item-inner {
-  line-height: 16px;
-  border-color: #e1e1e1;
-  border-width: 1px;
-  border-style: solid;
-}
-
-/* line 1, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
-.x-html-editor-tb .x-btn-text {
-  background: transparent no-repeat;
-  background-image: url(images/editor/tb-sprite.png);
-}
-
-/* line 7, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
-.x-html-editor-tb .x-edit-bold,
-.x-menu-item div.x-edit-bold {
-  background-position: 0 0;
-  background-image: url(images/editor/tb-sprite.png);
-}
-
-/* line 13, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
-.x-html-editor-tb .x-edit-italic,
-.x-menu-item div.x-edit-italic {
-  background-position: -16px 0;
-  background-image: url(images/editor/tb-sprite.png);
-}
-
-/* line 19, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
-.x-html-editor-tb .x-edit-underline,
-.x-menu-item div.x-edit-underline {
-  background-position: -32px 0;
-  background-image: url(images/editor/tb-sprite.png);
-}
-
-/* line 25, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
-.x-html-editor-tb .x-edit-forecolor,
-.x-menu-item div.x-edit-forecolor {
-  background-position: -160px 0;
-  background-image: url(images/editor/tb-sprite.png);
-}
-
-/* line 31, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
-.x-html-editor-tb .x-edit-backcolor,
-.x-menu-item div.x-edit-backcolor {
-  background-position: -176px 0;
-  background-image: url(images/editor/tb-sprite.png);
-}
-
-/* line 37, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
-.x-html-editor-tb .x-edit-justifyleft,
-.x-menu-item div.x-edit-justifyleft {
-  background-position: -112px 0;
-  background-image: url(images/editor/tb-sprite.png);
-}
-
-/* line 43, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
-.x-html-editor-tb .x-edit-justifycenter,
-.x-menu-item div.x-edit-justifycenter {
-  background-position: -128px 0;
-  background-image: url(images/editor/tb-sprite.png);
-}
-
-/* line 49, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
-.x-html-editor-tb .x-edit-justifyright,
-.x-menu-item div.x-edit-justifyright {
-  background-position: -144px 0;
-  background-image: url(images/editor/tb-sprite.png);
-}
-
-/* line 55, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
-.x-html-editor-tb .x-edit-insertorderedlist,
-.x-menu-item div.x-edit-insertorderedlist {
-  background-position: -80px 0;
-  background-image: url(images/editor/tb-sprite.png);
-}
-
-/* line 61, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
-.x-html-editor-tb .x-edit-insertunorderedlist,
-.x-menu-item div.x-edit-insertunorderedlist {
-  background-position: -96px 0;
-  background-image: url(images/editor/tb-sprite.png);
-}
-
-/* line 67, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
-.x-html-editor-tb .x-edit-increasefontsize,
-.x-menu-item div.x-edit-increasefontsize {
-  background-position: -48px 0;
-  background-image: url(images/editor/tb-sprite.png);
-}
-
-/* line 73, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
-.x-html-editor-tb .x-edit-decreasefontsize,
-.x-menu-item div.x-edit-decreasefontsize {
-  background-position: -64px 0;
-  background-image: url(images/editor/tb-sprite.png);
-}
-
-/* line 79, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
-.x-html-editor-tb .x-edit-sourceedit,
-.x-menu-item div.x-edit-sourceedit {
-  background-position: -192px 0;
-  background-image: url(images/editor/tb-sprite.png);
-}
-
-/* line 85, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
-.x-html-editor-tb .x-edit-createlink,
-.x-menu-item div.x-edit-createlink {
-  background-position: -208px 0;
-  background-image: url(images/editor/tb-sprite.png);
-}
-
-/* line 90, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
-.x-html-editor-tip .x-tip-bd .x-tip-bd-inner {
-  padding: 5px;
-  padding-bottom: 1px;
-}
-
-/* line 95, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
-.x-html-editor-tb .x-font-select {
-  font-size: 13px;
-  font-family: inherit;
-}
-
-/* line 100, ../../../../../ext/packages/ext-theme-neutral/sass/src/form/field/HtmlEditor.scss */
-.x-html-editor-wrap textarea {
-  font: normal 13px helvetica, arial, verdana, sans-serif;
-  background-color: white;
-  resize: none;
 }
 
 /* line 1, ../../../../../ext/packages/ext-theme-neutral/sass/src/panel/Table.scss */
@@ -19908,6 +19908,34 @@ body {
   background-color: #f5f5f5;
 }
 
+/* line 1, ../../../../../ext/packages/ext-theme-neptune/sass/src/form/field/Trigger.scss */
+.x-form-trigger {
+  height: 22px;
+}
+
+/* line 9, ../../../../../ext/packages/ext-theme-neptune/sass/src/form/field/Trigger.scss */
+.x-form-trigger-wrap {
+  border: 1px solid;
+  border-color: silver #d9d9d9 #d9d9d9;
+}
+/* line 12, ../../../../../ext/packages/ext-theme-neptune/sass/src/form/field/Trigger.scss */
+.x-form-trigger-wrap .x-form-text {
+  border-width: 0;
+  height: 22px;
+}
+/* line 16, ../../../../../ext/packages/ext-theme-neptune/sass/src/form/field/Trigger.scss */
+.x-content-box .x-form-trigger-wrap .x-form-text {
+  height: 15px;
+}
+/* line 22, ../../../../../ext/packages/ext-theme-neptune/sass/src/form/field/Trigger.scss */
+.x-form-trigger-wrap-focus .x-form-trigger-wrap {
+  border-color: #3892d3;
+}
+/* line 26, ../../../../../ext/packages/ext-theme-neptune/sass/src/form/field/Trigger.scss */
+.x-form-invalid .x-form-trigger-wrap {
+  border-color: #cf4c35;
+}
+
 /* line 246, ../../../../../ext/packages/ext-theme-neutral/sass/src/button/Button.scss */
 .x-btn-plain-toolbar-small {
   border-color: transparent;
@@ -22658,32 +22686,10 @@ body.x-nbr .x-panel-header-light-framed-collapsed-left-frameInfo {
   border-width: 1px !important;
 }
 
-/* line 1, ../../../../../ext/packages/ext-theme-neptune/sass/src/form/field/Trigger.scss */
-.x-form-trigger {
-  height: 22px;
-}
-
-/* line 9, ../../../../../ext/packages/ext-theme-neptune/sass/src/form/field/Trigger.scss */
-.x-form-trigger-wrap {
+/* line 1, ../../../../../ext/packages/ext-theme-neptune/sass/src/form/field/HtmlEditor.scss */
+.x-html-editor-container {
   border: 1px solid;
   border-color: silver #d9d9d9 #d9d9d9;
-}
-/* line 12, ../../../../../ext/packages/ext-theme-neptune/sass/src/form/field/Trigger.scss */
-.x-form-trigger-wrap .x-form-text {
-  border-width: 0;
-  height: 22px;
-}
-/* line 16, ../../../../../ext/packages/ext-theme-neptune/sass/src/form/field/Trigger.scss */
-.x-content-box .x-form-trigger-wrap .x-form-text {
-  height: 15px;
-}
-/* line 22, ../../../../../ext/packages/ext-theme-neptune/sass/src/form/field/Trigger.scss */
-.x-form-trigger-wrap-focus .x-form-trigger-wrap {
-  border-color: #3892d3;
-}
-/* line 26, ../../../../../ext/packages/ext-theme-neptune/sass/src/form/field/Trigger.scss */
-.x-form-invalid .x-form-trigger-wrap {
-  border-color: #cf4c35;
 }
 
 /* line 3, ../../../../../ext/packages/ext-theme-neptune/sass/src/form/field/File.scss */
@@ -22700,12 +22706,6 @@ body.x-nbr .x-panel-header-light-framed-collapsed-left-frameInfo {
 /* line 13, ../../../../../ext/packages/ext-theme-neptune/sass/src/form/field/File.scss */
 .x-content-box .x-form-file-wrap .x-form-trigger-wrap .x-form-text {
   height: 15px;
-}
-
-/* line 1, ../../../../../ext/packages/ext-theme-neptune/sass/src/form/field/HtmlEditor.scss */
-.x-html-editor-container {
-  border: 1px solid;
-  border-color: silver #d9d9d9 #d9d9d9;
 }
 
 /* line 1, ../../../../../ext/packages/ext-theme-neptune/sass/src/grid/header/Container.scss */

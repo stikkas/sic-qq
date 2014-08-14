@@ -1223,6 +1223,26 @@ Ext.Loader.addClassPathMappings({
   "Ext.Supports": "../../ext/src/Support.js",
   "Ext.core.DomHelper": "../../ext/src/dom/Helper.js",
   "Ext.core.DomQuery": "../../ext/src/dom/Query.js",
+  "Ext.locale.ru.Component": "../../ext/locale/ext-lang-ru.js",
+  "Ext.locale.ru.form.Basic": "../../ext/locale/ext-lang-ru.js",
+  "Ext.locale.ru.form.field.Base": "../../ext/locale/ext-lang-ru.js",
+  "Ext.locale.ru.form.field.ComboBox": "../../ext/locale/ext-lang-ru.js",
+  "Ext.locale.ru.form.field.Date": "../../ext/locale/ext-lang-ru.js",
+  "Ext.locale.ru.form.field.HtmlEditor": "../../ext/locale/ext-lang-ru.js",
+  "Ext.locale.ru.form.field.Number": "../../ext/locale/ext-lang-ru.js",
+  "Ext.locale.ru.form.field.Text": "../../ext/locale/ext-lang-ru.js",
+  "Ext.locale.ru.form.field.VTypes": "../../ext/locale/ext-lang-ru.js",
+  "Ext.locale.ru.grid.GroupingFeature": "../../ext/locale/ext-lang-ru.js",
+  "Ext.locale.ru.grid.PropertyColumnModel": "../../ext/locale/ext-lang-ru.js",
+  "Ext.locale.ru.grid.header.Container": "../../ext/locale/ext-lang-ru.js",
+  "Ext.locale.ru.grid.plugin.DragDrop": "../../ext/locale/ext-lang-ru.js",
+  "Ext.locale.ru.picker.Date": "../../ext/locale/ext-lang-ru.js",
+  "Ext.locale.ru.picker.Month": "../../ext/locale/ext-lang-ru.js",
+  "Ext.locale.ru.tab.Tab": "../../ext/locale/ext-lang-ru.js",
+  "Ext.locale.ru.toolbar.Paging": "../../ext/locale/ext-lang-ru.js",
+  "Ext.locale.ru.view.AbstractView": "../../ext/locale/ext-lang-ru.js",
+  "Ext.locale.ru.view.View": "../../ext/locale/ext-lang-ru.js",
+  "Ext.locale.ru.window.MessageBox": "../../ext/locale/ext-lang-ru.js",
   "Ext.rtl.EventObjectImpl": "../../ext/src/rtl/EventObject.js",
   "ExtThemeNeptune": "../../ext/packages/ext-theme-neptune/overrides",
   "hawk_common.cmp.CDateInterval": "../../packages/hawk_common/src/cmp/CDateInterval.js",
@@ -1658,6 +1678,7 @@ Ext.ClassManager.addNameAlternateMappings({
   ],
   "Ext.grid.RowEditor": [],
   "Ext.grid.RowEditorButtons": [],
+  "Ext.grid.Scroller": [],
   "Ext.grid.View": [],
   "Ext.grid.ViewDropZone": [],
   "Ext.grid.column.Action": [
@@ -1801,6 +1822,26 @@ Ext.ClassManager.addNameAlternateMappings({
   "Ext.layout.container.boxOverflow.Scroller": [
     "Ext.layout.boxOverflow.Scroller"
   ],
+  "Ext.locale.ru.Component": [],
+  "Ext.locale.ru.form.Basic": [],
+  "Ext.locale.ru.form.field.Base": [],
+  "Ext.locale.ru.form.field.ComboBox": [],
+  "Ext.locale.ru.form.field.Date": [],
+  "Ext.locale.ru.form.field.HtmlEditor": [],
+  "Ext.locale.ru.form.field.Number": [],
+  "Ext.locale.ru.form.field.Text": [],
+  "Ext.locale.ru.form.field.VTypes": [],
+  "Ext.locale.ru.grid.GroupingFeature": [],
+  "Ext.locale.ru.grid.PropertyColumnModel": [],
+  "Ext.locale.ru.grid.header.Container": [],
+  "Ext.locale.ru.grid.plugin.DragDrop": [],
+  "Ext.locale.ru.picker.Date": [],
+  "Ext.locale.ru.picker.Month": [],
+  "Ext.locale.ru.tab.Tab": [],
+  "Ext.locale.ru.toolbar.Paging": [],
+  "Ext.locale.ru.view.AbstractView": [],
+  "Ext.locale.ru.view.View": [],
+  "Ext.locale.ru.window.MessageBox": [],
   "Ext.menu.CheckItem": [],
   "Ext.menu.ColorPicker": [],
   "Ext.menu.DatePicker": [],
@@ -2119,6 +2160,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "hawk_common.sys.Utils": [],
   "qq.model.ControlledObject": [],
   "qqext.Application": [],
+  "qqext.Utils": [],
   "qqext.controller.LeftMenu": [],
   "qqext.controller.Main": [],
   "qqext.controller.ParentController": [],
@@ -2601,6 +2643,7 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.grid.RowEditorButtons": [
     "widget.roweditorbuttons"
   ],
+  "Ext.grid.Scroller": [],
   "Ext.grid.View": [
     "widget.gridview"
   ],
@@ -2801,6 +2844,26 @@ Ext.ClassManager.addNameAliasMappings({
   "Ext.layout.container.boxOverflow.Menu": [],
   "Ext.layout.container.boxOverflow.None": [],
   "Ext.layout.container.boxOverflow.Scroller": [],
+  "Ext.locale.ru.Component": [],
+  "Ext.locale.ru.form.Basic": [],
+  "Ext.locale.ru.form.field.Base": [],
+  "Ext.locale.ru.form.field.ComboBox": [],
+  "Ext.locale.ru.form.field.Date": [],
+  "Ext.locale.ru.form.field.HtmlEditor": [],
+  "Ext.locale.ru.form.field.Number": [],
+  "Ext.locale.ru.form.field.Text": [],
+  "Ext.locale.ru.form.field.VTypes": [],
+  "Ext.locale.ru.grid.GroupingFeature": [],
+  "Ext.locale.ru.grid.PropertyColumnModel": [],
+  "Ext.locale.ru.grid.header.Container": [],
+  "Ext.locale.ru.grid.plugin.DragDrop": [],
+  "Ext.locale.ru.picker.Date": [],
+  "Ext.locale.ru.picker.Month": [],
+  "Ext.locale.ru.tab.Tab": [],
+  "Ext.locale.ru.toolbar.Paging": [],
+  "Ext.locale.ru.view.AbstractView": [],
+  "Ext.locale.ru.view.View": [],
+  "Ext.locale.ru.window.MessageBox": [],
   "Ext.menu.CheckItem": [
     "widget.menucheckitem"
   ],
@@ -3214,6 +3277,7 @@ Ext.ClassManager.addNameAliasMappings({
   "hawk_common.sys.Utils": [],
   "qq.model.ControlledObject": [],
   "qqext.Application": [],
+  "qqext.Utils": [],
   "qqext.controller.LeftMenu": [],
   "qqext.controller.Main": [],
   "qqext.controller.ParentController": [],
@@ -3254,7 +3318,9 @@ Ext.ClassManager.addNameAliasMappings({
   "qqext.view.reg.VQuery": [],
   "qqext.view.reg.VQueryObject": [],
   "qqext.view.reg.VRegForm": [],
-  "qqext.view.search.FioFieldContainer": [],
+  "qqext.view.search.FioFieldContainer": [
+    "widget.fiofieldcontainer"
+  ],
   "qqext.view.search.VSearchForm": [],
   "qqext.view.search.VSearchParams": [],
   "qqext.view.search.VSearchResult": [],
@@ -3274,12 +3340,12 @@ Ext.setVersion("hawk_common", "1.0.0");
 
 Ext.Loader.loadScriptFile('../../ext/packages/ext-theme-neptune/overrides/Component.js', Ext.emptyFn);
 Ext.Loader.loadScriptFile('../../ext/packages/ext-theme-neptune/overrides/toolbar/Toolbar.js', Ext.emptyFn);
+Ext.Loader.loadScriptFile('../../ext/packages/ext-theme-neptune/overrides/toolbar/Paging.js', Ext.emptyFn);
 Ext.Loader.loadScriptFile('../../ext/packages/ext-theme-neptune/overrides/layout/component/Dock.js', Ext.emptyFn);
 Ext.Loader.loadScriptFile('../../ext/packages/ext-theme-neptune/overrides/panel/Panel.js', Ext.emptyFn);
-Ext.Loader.loadScriptFile('../../ext/packages/ext-theme-neptune/overrides/container/ButtonGroup.js', Ext.emptyFn);
-Ext.Loader.loadScriptFile('../../ext/packages/ext-theme-neptune/overrides/toolbar/Paging.js', Ext.emptyFn);
-Ext.Loader.loadScriptFile('../../ext/packages/ext-theme-neptune/overrides/picker/Month.js', Ext.emptyFn);
 Ext.Loader.loadScriptFile('../../ext/packages/ext-theme-neptune/overrides/form/field/HtmlEditor.js', Ext.emptyFn);
+Ext.Loader.loadScriptFile('../../ext/packages/ext-theme-neptune/overrides/container/ButtonGroup.js', Ext.emptyFn);
+Ext.Loader.loadScriptFile('../../ext/packages/ext-theme-neptune/overrides/picker/Month.js', Ext.emptyFn);
 Ext.Loader.loadScriptFile('../../ext/packages/ext-theme-neptune/overrides/panel/Table.js', Ext.emptyFn);
 Ext.Loader.loadScriptFile('../../ext/packages/ext-theme-neptune/overrides/grid/RowEditor.js', Ext.emptyFn);
 Ext.Loader.loadScriptFile('../../ext/packages/ext-theme-neptune/overrides/grid/column/RowNumberer.js', Ext.emptyFn);

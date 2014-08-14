@@ -1,85 +1,106 @@
 /**
- * 
+ * Панель с параметрами поиска
  */
 Ext.define('qqext.view.search.VSearchParams', {
-	extend:'Ext.form.Panel',
-			title : 'Параметры поиска',
-			margin : '0 10 0 0',
-			initComponent : function() {
-				var me = this;
-				var archive = Ext.create('Ext.form.field.ComboBox', {
-							fieldLabel : 'Архив исполнитель',
-							displayField : 'name',
-							valueField : 'id',
-							store : 'inboxDocExecOrg',
-							name:'archiveId'
-						});
-
-				var requestType = Ext.create('Ext.form.field.ComboBox', {
-							fieldLabel : 'Вид запроса',
-							displayField : 'name',
-							valueField : 'id',
-							store : 'queryType',
-							name:'queryTypeId'
-						});
-
-				var content = Ext.create('Ext.form.field.Text', {
-							width : 600,
-							fieldLabel : 'Содержание запроса',
-							name:'queryContent'
-						});
-
-				var applicantType = Ext.create('Ext.form.field.ComboBox', {
-							fieldLabel : 'Тип заявителя',
-							displayField : 'name',
-							valueField : 'id',
-							store : 'applicantType',
-							name:'applicantTypeId'
-						});
-				var applicantCategory = Ext.create('Ext.form.field.ComboBox', {
-							fieldLabel : 'Категория заявителя',
-							displayField : 'name',
-							valueField : 'id',
-							store : 'applicantCategory',
-							name:'applicantCategoryId'
-						});
-				var regDate = Ext.create('Ext.form.field.Date', {
-							fieldLabel : 'Дата регистрации',
-							name:'regDate'
-						});
-				var queryObjectLabel = Ext.create('Ext.form.Label', {
-							text : 'На кого запрос'
-						});
-				var fcQueryObject = Ext
-						.create('qqext.view.search.FioFieldContainer',{
-							nSurname:'reqObjSurname',
-							nName:'reqObjName',
-							nFatherName:'regObjFatherName'
-						});
-				var applicantFioLabel = Ext.create('Ext.form.Label', {
-							text : 'Заявитель'
-						});
-				var fcApplicant = Ext
-						.create('qqext.view.search.FioFieldContainer',{
-							nSurname:'applSurname',
-							nName:'applName',
-							nFatherName:'applFatherName'
-						});
-				var itms = new Array();
-				itms[itms.length] = archive;
-				itms[itms.length] = requestType;
-				itms[itms.length] = content;
-				itms[itms.length] = applicantType;
-				itms[itms.length] = applicantCategory;
-				itms[itms.length] = regDate;
-				itms[itms.length] = queryObjectLabel;
-				itms[itms.length] = fcQueryObject;
-				itms[itms.length] = applicantFioLabel;
-				itms[itms.length] = fcApplicant;
-				Ext.applyIf(me, {
-							items : itms
-						});
-
-				me.callParent(arguments);
-			}
+	extend: 'Ext.form.Panel',
+	requires: ['hawk_common.fix.FixedField'],
+	title: 'Параметры поиска',
+	margin: '0 10 0 0',
+	/**
+	 * Возвращает объект типа fiofieldcontainer
+	 * @private
+	 * @param {String} surname фамилия
+	 * @param {String} name имя
+	 * @param {String} fatherName отчество
+	 * @returns {Object} объект, на основе которого ExtJS сделает FioFieldContainer
+	 */
+	createFioFieldContainer: function(surname, name, fatherName) {
+		return {
+			xtype: 'fiofieldcontainer',
+			nSurname: surname,
+			nName: name,
+			nFatherName: fatherName
+		};
+	},
+	/**
+	 * Возвращает объект типа combobox
+	 * @private
+	 * @param {String} fieldLabel Метка селектора
+	 * @param {String} store алиас хранилища
+	 * @param {String} name имя поля формы
+	 * @param {String} displayedField поле хранилища для отображения (не обязательно)
+	 * @param {String} valueField поле хранилища для значения (не обязательно)
+	 * @returns {Object} объект, на основе которого ExtJS сделает ComboBox
+	 */
+	createComboBox: function(fieldLabel, store, name, displayedField, valueField) {
+		return {
+			xtype: 'combobox',
+			fieldLabel: fieldLabel,
+			displayField: displayedField || 'name',
+			valueField: valueField || 'id',
+			store: store,
+			name: name
+		};
+	},
+	/**
+	 * Возвращает объект типа label
+	 * @private
+	 * @param {String} text надпись
+	 * @returns {Object} объект, на основе которого ExtJS сделает Label
+	 */
+	createLabel: function(text) {
+		return {
+			xtype: 'label',
+			text: text
+		};
+	},
+	/**
+	 * Создает виджет типа textfield
+	 * @private
+	 * @param {String} fieldLabel надпись для поля
+	 * @param {String} name имя (для формы)
+	 * @returns {Object} объект, на основе которого ExtJS сделает Text
+	 */
+	createText: function(fieldLabel, name) {
+		return {
+			xtype: 'textfield',
+			fieldLabel: fieldLabel,
+			name: name
+		}
+	},
+	/**
+	 * Возвращает объект типа datefield
+	 * @private
+	 * @param {String} fieldLabel метка для виджета
+	 * @param {String} name имя (скорее всего для формы)
+	 * @returns {Object} объект, на основе которого ExtJS сделает Date
+	 */
+	createFieldDate: function(fieldLabel, name) {
+		return {
+			xtype: 'datefield',
+			fieldLabel: fieldLabel,
+			name: name
+		};
+	},
+	/**
+	 * @private
+	 */
+	initComponent: function() {
+		var me = this;
+		Ext.applyIf(me, {
+			items: [
+				me.createComboBox('Архив исполнитель', 'inboxDocExecOrg', 'archiveId'),
+				me.createComboBox('Вид запроса', 'queryType', 'queryTypeId'),
+				me.createText('Содержание запроса', 'queryContent'),
+				me.createComboBox('Тип заявителя', 'applicantType', 'applicantTypeId'),
+				me.createComboBox('Категория заявителя', 'applicantCategory', 'applicantCategoryId'),
+				me.createFieldDate('Дата регистрации', 'regDate'),
+				me.createLabel('На кого запрос'),
+				me.createFioFieldContainer('reqObjSurname', 'reqObjName', 'regObjFatherName'),
+				me.createLabel('Заявитель'),
+				me.createFioFieldContainer('applSurname', 'applName', 'applFatherName')
+			]
 		});
+		me.callParent(arguments);
+	}
+});

@@ -1,10 +1,10 @@
-Ext.define('ramlogin.store.UserLocalStorage',
-        {
-            extend: 'Ext.data.Store',
-            model: 'ramlogin.model.User',
-            proxy:
-                    {
-                        type: 'localstorage',
-                        id: 'user'
-                    }
-        });
+Ext.define('qqlogin.store.UserLocalStorage',
+		{
+			extend: 'Ext.data.Store',
+			model: 'qqlogin.model.User',
+			proxy:
+					{
+						type: 'localstorage',
+						id: 'user'
+					}
+		});

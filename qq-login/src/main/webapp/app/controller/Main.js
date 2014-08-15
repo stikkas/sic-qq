@@ -1,3 +1,3 @@
-Ext.define('ramlogin.controller.Main', {
-    extend: 'Ext.app.Controller'
+Ext.define('qqlogin.controller.Main', {
+	extend: 'Ext.app.Controller'
 });

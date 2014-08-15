@@ -14,21 +14,26 @@
 			<version>0.0.1-SNAPSHOT</version>
 			<type>ejb</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>ru.insoft.archive</groupId>
 			<artifactId>qq-web</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 			<type>war</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>ru.insoft.archive</groupId>
 			<artifactId>ext-commons</artifactId>
 			<version>0.0.8</version>
 			<type>ejb</type>
 		</dependency>
-
+		<dependency>
+			<groupId>ru.insoft.archive</groupId>
+			<artifactId>qq-login</artifactId>
+			<version>0.0.1</version>
+			<type>war</type>
+		</dependency>
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -54,14 +59,16 @@
 					<modules>
 						<webModule>
 							<groupId>ru.insoft.archive</groupId>
+							<artifactId>qq-login</artifactId>
+						</webModule>
+						<webModule>
+							<groupId>ru.insoft.archive</groupId>
 							<artifactId>qq-web</artifactId>
 						</webModule>
-
 						<ejbModule>
 							<groupId>ru.insoft.archive</groupId>
 							<artifactId>qq-ejb</artifactId>
 						</ejbModule>
-
 					</modules>
 				</configuration>
 			</plugin>

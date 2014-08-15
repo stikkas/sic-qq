@@ -1,18 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ru.insoft.archive</groupId>
 	<version>0.0.1</version>
 	<artifactId>qq-parent</artifactId>
 	<packaging>pom</packaging>
-	
+
 	<modules>
 		<module>qq-ejb/</module>
+		<module>qq-login/</module>
 		<module>qq-web/</module>
 		<module>qq/</module>
 		<module>ext-commons/</module>
 		<module>core-model/</module>
 	</modules>
-	
+
 	<build>
 		<pluginManagement>
 			<plugins>

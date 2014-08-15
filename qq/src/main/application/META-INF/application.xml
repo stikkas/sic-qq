@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <application xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_6.xsd"
-	version="6">
+			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_6.xsd"
+			 version="6">
 	<display-name>qq</display-name>
 
 	<module>
 		<ejb>qq-ejb-0.0.1-SNAPSHOT.jar</ejb>
 	</module>
 
+	<module>
+		<web>
+			<web-uri>qq-login-0.0.1.war</web-uri>
+			<context-root>/qq-login</context-root>
+		</web>
+	</module>
 	<module>
 		<web>
 			<web-uri>qq-web-0.0.1-SNAPSHOT.war</web-uri>

@@ -1,1 +1,0 @@
-sencha compile page -name=page -in index.html -out build/index.html and restore page and exclude -namespace Ext  and  include -class Ext.data.Store and include -class Ext.app.Application and include -class Ext.data.Model and include -class Ext and concat -yui build/application.js

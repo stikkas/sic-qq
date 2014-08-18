@@ -3,9 +3,7 @@
  */
 Ext.define('qqext.view.search.FioFieldContainer', {
 	extend: 'Ext.form.FieldContainer',
-	layout: {
-		type: 'hbox'
-	},
+	layout: 'hbox',
 	xtype: 'fiofieldcontainer',
 	height: 30,
 	/**

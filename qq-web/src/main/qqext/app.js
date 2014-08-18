@@ -1,3 +1,7 @@
+Ext.Loader.setConfig({
+	enabled: true,
+	paths: {qqext: 'qqext'}
+});
 /**
  * Стандартная точка входя для ExtJS приложения.
  * @param {Object} различные установки для приложения
@@ -7,15 +11,24 @@ Ext.application({
 	appFolder: 'qqext',
 	autoCreateViewport: false,
 	requires: [
-		'qqext.Utils',
-		'hawk_common.cmp.DateField',
+		'Ext.layout.container.Card',
+		'qqext.view.menu.NavigationMenu',
+		'qqext.view.search.VSearchParams',
+		'qqext.view.menu.RequestRegEditMenu',
+		'qqext.view.menu.RequestorNotifyEditMenu',
+		'qqext.view.menu.SearchMenu',
+		'qqext.view.menu.SearchEditMenu',
+		'qqext.view.VTitleBar',
+		'qqext.view.VLeftMenu',
+		'qqext.view.search.VSearchForm',
 		'qqext.view.search.FioFieldContainer',
 		'qqext.view.search.VSearchResult',
+		'qqext.Constants',
+		'hawk_common.cmp.DateField',
 		'qqext.store.DictValuesStore',
 		'qqext.store.CustomStore',
 		'qqext.view.Viewport',
 		'qqext.view.search.VSearchForm',
-		'qqext.view.search.VSearchParams',
 		'hawk_common.fix.FixedTextField',
 		'hawk_common.fix.FixedField',
 		'hawk_common.fix.FixedFormPanel',

@@ -2,96 +2,95 @@
  * Переключение режимов интерфейса по событиям кнопок левого меню.
  */
 Ext.define('qqext.controller.LeftMenu', {
-	extend : 'qqext.controller.ParentController',
-	views : ['qqext.view.VLeftMenuSearch'],
-	currentQueryFormSection : '',
-	init : function() {
+	extend: 'qqext.controller.ParentController',
+	views: ['qqext.view.VLeftMenu'],
+	currentQueryFormSection: '',
+	init: function() {
 		this.control({
-					'button[action=journal]' : {
-						click : this.goJournal
-					},
-					'button[action=search]' : {
-						click : this.goSearch
-					},
-					'button[action=reports]' : {
-						click : this.goReports
-					},
-					'button[action=q_registration]' : {
-						click : this.goRegistration
-					},
-					'button[action=q_notification]' : {
-						click : this.goNotification
-					},
-					'button[action=q_transmission]' : {
-						click : this.goTransmission
-					},
-					'button[action=q_execution]' : {
-						click : this.goExecution
-					}
-				});
+			'button[action=journal]': {
+				click: this.goJournal
+			},
+			'button[action=search]': {
+				click: this.goSearch
+			},
+			'button[action=reports]': {
+				click: this.goReports
+			},
+			'button[action=q_registration]': {
+				click: this.goRegistration
+			},
+			'button[action=q_notification]': {
+				click: this.goNotification
+			},
+			'button[action=q_transmission]': {
+				click: this.goTransmission
+			},
+			'button[action=q_execution]': {
+				click: this.goExecution
+			}
+		});
 	},
-
-	getSearchTitle : function() {
+	getSearchTitle: function() {
 		var btnsSearch = new Array();
 
 		btnsSearch[btnsSearch.length] = {
-			text : 'Добавить',
-			action : 'add_query'
+			text: 'Добавить',
+			action: 'add_query'
 		};
 		btnsSearch[btnsSearch.length] = {
-			text : 'Поиск',
-			action : 'start_search'
+			text: 'Поиск',
+			action: 'start_search'
 		};
 		btnsSearch[btnsSearch.length] = {
-			text : 'Очистить',
-			action : 'clear'
+			text: 'Очистить',
+			action: 'clear'
 		}
 
 		var m = Ext.create('qqext.view.VTitleBar', {
-					region : 'north',
-					buttons : btnsSearch
-				});
+			region: 'north',
+			buttons: btnsSearch
+		});
 		return m;
 	},
-	goJournal : function() {
+	goJournal: function() {
 		var me = this;
 		me.clearVp();
 		var m = me.getSearchTitle();
 		var leftMenu = Ext.create('qqext.view.VLeftMenuSearch', {
-					region : 'west'
-				});
+			region: 'west'
+		});
 		var mainCont = Ext.create('qqext.view.journal.VJournalForm', {
-					region : 'center'
-				});
+			region: 'center'
+		});
 		me.getVp().add(m, leftMenu, mainCont);
-		
+
 		Ext.getStore('journal').load();
 	},
-	goSearch : function() {
+	goSearch: function() {
 		var me = this;
 		me.clearVp();
 		var m = me.getSearchTitle();
 		var leftMenu = Ext.create('qqext.view.VLeftMenuSearch', {
-					region : 'west'
-				});
+			region: 'west'
+		});
 		var paramsModel = me.getSearchParams();
 		var mainCont = Ext.create('qqext.view.search.VSearchForm', {
-					region : 'center'
-				})
+			region: 'center'
+		})
 		mainCont.loadRecord(paramsModel);
 		me.getVp().add(m, leftMenu, mainCont);
 	},
-	goReports : function() {
+	goReports: function() {
 		var me = this;
 		me.clearVp();
 		var m = me.getSearchTitle();
 		var leftMenu = Ext.create('qqext.view.VLeftMenuSearch', {
-					region : 'west'
-				});
+			region: 'west'
+		});
 		me.getVp().add(m, leftMenu);
 	},
 	// левый блок меню переключения данных карточки запроса
-	goRegistration : function() {
+	goRegistration: function() {
 		var me = this;
 		me.syncModel();
 		if (me.currentQueryFormSection == 'REGISTRATION') {
@@ -100,14 +99,14 @@ Ext.define('qqext.controller.LeftMenu', {
 		} else {
 			me.dropMainCont();
 			var mainCont = Ext.create('qqext.view.reg.VRegForm', {
-						region : 'center'
-					});
+				region: 'center'
+			});
 			me.getVp().add(mainCont);
 			mainCont.loadRecord(me.getModel());
 			me.currentQueryFormSection = 'REGISTRATION';
 		}
 	},
-	goNotification : function() {
+	goNotification: function() {
 		var me = this;
 		me.syncModel();
 		if (me.currentQueryFormSection == 'NOTIFICATION') {
@@ -116,8 +115,8 @@ Ext.define('qqext.controller.LeftMenu', {
 		} else {
 			me.dropMainCont();
 			var mainCont = Ext.create('qqext.view.notify.VNotify', {
-						region : 'center'
-					});
+				region: 'center'
+			});
 			me.getVp().add(mainCont);
 			var model = me.getModel();
 			me.currentQueryFormSection = 'NOTIFICATION';
@@ -134,7 +133,7 @@ Ext.define('qqext.controller.LeftMenu', {
 			}
 		}
 	},
-	goTransmission : function() {
+	goTransmission: function() {
 		var me = this;
 		me.syncModel();
 		if (me.currentQueryFormSection == 'TRANSMISSION') {
@@ -144,7 +143,7 @@ Ext.define('qqext.controller.LeftMenu', {
 			me.dropMainCont();
 			var mainCont = Ext.create('qqext.view.transmission.VTransmission',
 					{
-						region : 'center'
+						region: 'center'
 					});
 			me.getVp().add(mainCont);
 			var model = me.getModel();
@@ -153,7 +152,7 @@ Ext.define('qqext.controller.LeftMenu', {
 			me.currentQueryFormSection = 'TRANSMISSION';
 		}
 	},
-	goExecution : function() {
+	goExecution: function() {
 		var me = this;
 		me.syncModel();
 		if (me.currentQueryFormSection == 'EXECUTION') {
@@ -162,12 +161,12 @@ Ext.define('qqext.controller.LeftMenu', {
 		} else {
 			me.dropMainCont();
 			var mainCont = Ext.create('qqext.view.exec.VExecForm', {
-						region : 'center'
-					});
-			
+				region: 'center'
+			});
+
 			me.getVp().add(mainCont);
 
-			
+
 			mainCont.loadRecord(me.getModel());
 			me.currentQueryFormSection = 'EXECUTION';
 		}

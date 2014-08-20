@@ -1,31 +1,31 @@
 /**
- * 
+ * Прародитель контроллеров. Зачем он нужен не понятно. Лишняя ступень в нашем
+ * шатле.
  */
 
 Ext.define('qqext.controller.ParentController', {
-	extend : 'Ext.app.Controller',
-	refs : [{
-				ref : 'vp',
-				selector : 'viewport'
-			}],
-
-	clearSearchParams : function() {
-		this.getApplication().getController('qqext.controller.Main').searchParams = null;
+	extend: 'Ext.app.Controller',
+	requires: [
+		'qqext.model.qq.SearchCritery',
+		'qqext.Constants'
+	],
+	refs: [{
+			ref: 'vp',
+			selector: 'viewport'
+		}],
+	clearSearchParams: function() {
+		qqext.Constants.mainController.searchParams = null;
 	},
-	getSearchParams : function() {
-		var model = this.getApplication()
-				.getController('qqext.controller.Main').searchParams;
-		if (!model) {
-			this.getApplication().getController('qqext.controller.Main').searchParams = Ext
-					.create('qqext.model.qq.SearchCritery');
-			model = this.getApplication()
-					.getController('qqext.controller.Main').searchParams;
-			console.log(model.getData());
-		}
+	getSearchParams: function() {
+		var controller = qqext.Constants.mainController,
+				model = controller.searchParams;
+
+		if (!model)
+			model = controller.searchParams = Ext.create('qqext.model.qq.SearchCritery');
+
 		return model;
 	},
-
-	clearVp : function() {
+	clearVp: function() {
 		var me = this;
 		for (var i = me.getVp().items.length - 1; i >= 0; i--) {
 			var t = me.getVp().items.getAt(i);
@@ -33,60 +33,58 @@ Ext.define('qqext.controller.ParentController', {
 			t.destroy();
 		}
 	},
-	dropMainCont : function() {
+	dropMainCont: function() {
 		var me = this;
 		var vp = me.getVp();
 		var delItems = me.getVp().items.getAt(2);
 		vp.remove(delItems);
 		delItems.destroy();
 	},
-	getMainCont : function() {
-		var me = this;
-
-		var vp = me.getVp();
-
-		var targetItem = me.getVp().items.getAt(2);
+	getMainCont: function() {
+		var me = this,
+				targetItem = me.getVp().items.getAt(2);
 
 		return targetItem;
 	},
 	/**
 	 * Синхронизация данных на форме с моделью
 	 */
-	syncModel : function() {
-		var me = this;
-		var model = this.getApplication()
-				.getController('qqext.controller.Main').currentModel;
-		var currentForm = me.getMainCont();
-		console.log('currentForm class name: ' + currentForm.$className);
-		var className = currentForm.$className;
-		switch (className) {
-			case 'qqext.view.reg.VRegForm' : {
-				currentForm.updateRecord(model);
-				break;
-			}
-			case 'qqext.view.notify.VNotify' : {
-				currentForm.updateRecord(model.getNotification());
-				break;
-			}
-			case 'qqext.view.transmission.VTransmission' : {
-				currentForm.updateRecord(model.getTransmission());
-				break;
-			}
-			case 'qqext.view.exec.VExecForm' : {
-				currentForm.updateRecord(model);
-				break;
-			}
-			default : {
-				console.debug('switch class name: ' + className);
-			}
+	syncModel: function() {
+		var me = this,
+				model = qqext.Constants.mainController.currentModel,
+				currentForm = me.getMainCont();
+
+		switch (currentForm.$className) {
+			case 'qqext.view.reg.VRegForm' :
+				{
+					currentForm.updateRecord(model);
+					break;
+				}
+			case 'qqext.view.notify.VNotify' :
+				{
+					currentForm.updateRecord(model.getNotification());
+					break;
+				}
+			case 'qqext.view.transmission.VTransmission' :
+				{
+					currentForm.updateRecord(model.getTransmission());
+					break;
+				}
+			case 'qqext.view.exec.VExecForm' :
+				{
+					currentForm.updateRecord(model);
+					break;
+				}
+			default :
+				{
+					console.debug('switch class name: ' + currentForm.$className);
+				}
 		}
 	},
-	getModel : function() {
-		var model = this.getApplication()
-				.getController('qqext.controller.Main').currentModel;
-		return model;
+	getModel: function() {
+		return qqext.Constants.mainController.currentModel;
 	},
-	initNewModel : function() {
+	initNewModel: function() {
 		var me = this;
 		var model = Ext.create('qqext.model.qq.Question');
 		var notification = Ext.create('qqext.model.qq.Notification');

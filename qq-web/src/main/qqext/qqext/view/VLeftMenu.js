@@ -8,20 +8,9 @@ Ext.define('qqext.view.VLeftMenu', {
 	region: 'west',
 	layout: 'vbox',
 	initComponent: function() {
-		var me = this, consts = qqext.Constants;
-
-		consts.LEFT_MENUS = Ext.create('Ext.panel.Panel', {
-			layout: 'card',
-			items: [
-				Ext.create('qqext.view.menu.SearchMenu',
-						{itemId: consts.LM_ID_0}),
-				Ext.create('qqext.view.menu.RequestMenu',
-						{itemId: consts.LM_ID_1})
-			]
-		});
-
+		var me = this;
 		Ext.applyIf(me, {
-			items: [consts.LEFT_MENUS]});
+			items: [qqext.Menu.articleMenu]});
 		me.callParent(arguments);
 	}
 });

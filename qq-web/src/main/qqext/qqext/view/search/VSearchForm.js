@@ -5,7 +5,7 @@
 Ext.define('qqext.view.search.VSearchForm', {
 	extend: 'Ext.container.Container',
 	margin: '0 10 0 0',
-	region: 'center',
+	id: 'VSearchForm',
 	loadRecord: function(model) {
 		this.items.getAt(0).loadRecord(model);
 	},

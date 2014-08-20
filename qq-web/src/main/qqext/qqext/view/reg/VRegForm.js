@@ -4,41 +4,52 @@
 
 Ext.define('qqext.view.reg.VRegForm', {
 	extend: 'Ext.container.Container',
+	requires: [
+		'qqext.view.reg.VInboxDoc',
+		'qqext.view.reg.VApplicant',
+		'qqext.view.reg.VQuery',
+		'qqext.view.reg.VQueryObject',
+		'qqext.view.reg.VFiles'
+	],
 	disabledCls: '',
 	maskOnDisable: false,
 	disabled: null,
 	initComponent: function() {
 		var me = this;
-		var b = Ext.create('qqext.view.reg.VInboxDoc', {
-			region: 'center',
-			margin: '0 10 0 0'
-		});
-		var t = Ext.create('qqext.view.reg.VApplicant', {
-			region: 'north',
-			margin: '0 10 0 0'
-		});
-		var k = Ext.create('qqext.view.reg.VQuery', {
-			margin: '0 10 0 0'
-		});
-		var p = Ext.create('qqext.view.reg.VQueryObject', {
-			margin: '0 10 0 0'
-		});
-		var f = Ext.create('qqext.view.reg.VFiles');
-
 		Ext.applyIf(me, {
-			items: [b, t, k, p, f],
 			region: 'center',
-			overflowY: 'auto'
-		})
+			overflowY: 'auto',
+			items: [
+				Ext.create('qqext.view.reg.VInboxDoc', {
+					region: 'center',
+					margin: '0 10 0 0'
+				}),
+				Ext.create('qqext.view.reg.VApplicant', {
+					region: 'north',
+					margin: '0 10 0 0'
+				}),
+				Ext.create('qqext.view.reg.VQuery', {margin: '0 10 0 0'}),
+				Ext.create('qqext.view.reg.VQueryObject', {margin: '0 10 0 0'}),
+				Ext.create('qqext.view.reg.VFiles')
+			]
+		});
 		me.callParent(arguments);
 	},
-	setDisabled: function() {
-		var me = this;
-		me.disabled = arguments[0];
-		for (var i = 0; i < this.items.length; i++) {
-			me.items.getAt(i).setDisabled(me.disabled);
+	/**
+	 * Устанавливает состояние доступности всех своих элементов
+	 * @param {Boolean} disabled
+	 */
+	setDisabled: function(disabled) {
+		var items = this.items, max = items.items.length;
+		for (var i = 0; i < max; i++) {
+			items.getAt(i).setDisabled(disabled);
 		}
+		this.disabled = disabled;
 	},
+	/**
+	 *  Возвращает состояние доступности
+	 * @returns {Boolean}
+	 */
 	isDisabled: function() {
 		return this.disabled;
 	},
@@ -58,7 +69,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 	updateRecord: function(model) {
 		var me = this;
 		for (var i = 0; i < me.items.length; i++) {
-			if (me.items.get(i).$className != 'qqext.view.reg.VApplicant') {
+			if (me.items.get(i).$className !== 'qqext.view.reg.VApplicant') {
 				me.items.getAt(i).updateRecord(model);
 			} else {
 				if (model.getApplicant && model.getApplicant()) {

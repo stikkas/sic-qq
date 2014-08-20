@@ -12,18 +12,13 @@ Ext.application({
 	autoCreateViewport: false,
 	requires: [
 		'Ext.layout.container.Card',
-		'qqext.view.menu.NavigationMenu',
 		'qqext.view.search.VSearchParams',
-		'qqext.view.menu.RequestRegEditMenu',
-		'qqext.view.menu.RequestorNotifyEditMenu',
-		'qqext.view.menu.SearchMenu',
-		'qqext.view.menu.SearchEditMenu',
+		'qqext.Menu',
 		'qqext.view.VTitleBar',
 		'qqext.view.VLeftMenu',
 		'qqext.view.search.VSearchForm',
 		'qqext.view.search.FioFieldContainer',
 		'qqext.view.search.VSearchResult',
-		'qqext.Constants',
 		'hawk_common.cmp.DateField',
 		'qqext.store.DictValuesStore',
 		'qqext.store.CustomStore',
@@ -41,9 +36,7 @@ Ext.application({
 		'Ext.form.field.ComboBox',
 		'Ext.layout.container.Border'
 	],
-	controllers: [
-		'qqext.controller.Main', 'qqext.controller.LeftMenu', 'qqext.controller.TitleMenu'
-	],
+	controllers: ['qqext.controller.Main'],
 	launch: function() {
 		Ext.create('qqext.view.Viewport', {});
 	}

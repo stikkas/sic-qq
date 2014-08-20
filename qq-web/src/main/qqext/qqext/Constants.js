@@ -6,38 +6,75 @@
 
 Ext.define('qqext.Constants', {
 	singleton: true,
-	// идентификаторы для карточного контейнера меню редактирования
 	/**
-	 * идентификатор меню редактирования поиска
+	 *  Основной экран инициализируется в {@link qqext.view.Viewport#initComponent}
 	 */
-	EM_ID_0: 'menu-0',
+	viewport: null,
 	/**
-	 * идентификатор меню редактировани регистрации запроса
+	 * Панель, расположенная по центру экрана (layout 'card'). Иницализируется в
+	 * {@link qqext.view.Viewport#initComponent}.
+	 * Порядок элементов:
+	 * 0 - view.journal.VJournalForm
+	 * 1 - view.search.VSearchForm
+	 * 2 - Отчетные документы
+	 * 3 - qqext.view.reg.VRegForm
+	 * 4 - qqext.view.notify.VNotify
+	 * 5 - qqext.view.transmission.VTransmission
+	 * 6 - qqext.view.exec.VExecForm
 	 */
-	EM_ID_1: 'menu-1',
+	mainPanel: null,
 	/**
-	 * идентификатор меню редактирования уведомления заявителя
+	 * Форма поиска. Инициализируется в {@link qqext.view.Viewport#initComponent}.
 	 */
-	EM_ID_2: 'menu-2',
-	// идентификаторы для карточного контейнера левого меню
+	searchForm: null,
 	/**
-	 * идентификатор меню работы с поиском, ЖВК и Отчетные документы
+	 * Форма регистрации запроса. Инициализируется в {@link qqext.view.Viewport#initComponent}.
 	 */
-	LM_ID_0: 'lmenu-0',
+	regForm: null,
 	/**
-	 * идентификатор меню работы с запросом
+	 * Форма уведомления заявителя. Инициализируется в {@link qqext.view.Viewport#initComponent}.
 	 */
-	LM_ID_1: 'lmenu-1',
-	// Синглетоны что-то не заладились, поэтому я определяю все ссылки на глобальные, неизменяемые
-	// объекты здесь.
-	// иницаилизируется при создании VLeftMenu
-	LEFT_MENUS: null,
-	// иницализируются при создании RequestMenu
-	REQ_BUTTONS: null,
-	// инициализируется при создании SearchMenu
-	SEARCH_BUTTONS: null,
-	// иницализируются при создании VTitleBar
-	EDIT_MENUS: null,
-	NAV_MENU: null
+	notifyForm: null,
+	/**
+	 * Форма передачи на исполнение. Инициализируется в {@link qqext.view.Viewport#initComponent}.
+	 */
+	transForm: null,
+	/**
+	 * Форма исполнение запроса. Инициализируется в {@link qqext.view.Viewport#initComponent}.
+	 */
+	execForm: null,
+	/**
+	 * Основной контроллер приложения. Инициализируется в {@link qqext.controller.Main#init}.
+	 */
+	mainController: null,
+	/**
+	 * Различные кнопки, на которые нужно иметь ссылки по ходу дела. Обращаться к ним
+	 * только через интерфейс getButton и addButton.
+	 */
+	_buttons: [],
+	/**
+	 * Возвращает кнопку из зарегестрированных, по заданному имени.
+	 * @param {String} name имя кнопки
+	 * @returns {Obejct/undefined} если такая кнопка есть, то кнопку, иначе undefined
+	 */
+	getButton: function(name) {
+		var btns = this._buttons,
+				max = btns.length;
+		for (var i = 0; i < max; ++i) {
+			var btn = btns[i];
+			if (name === btn.name)
+				return btn.body;
+		}
+	},
+	/**
+	 * Добавляет кнопку в набор, если такой еще нет
+	 * @param {String} name имя кнопки
+	 * @param {Ext.button.Button} body сама кнопка
+	 */
+	addButton: function(name, body) {
+		if (!this.getButton(name)) {
+			this._buttons.push({name: name, body: body});
+		}
+	}
 });
 

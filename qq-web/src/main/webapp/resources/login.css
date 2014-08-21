@@ -1,0 +1,37 @@
+body {
+	width: 35%;
+	margin: auto;
+	text-align: center;
+}
+
+#zagolovok {
+	font-size: 3em;
+	margin: 15px;
+}
+#subzagolovok {
+	font-size: 1.5em;
+	margin-top: 15px;
+	margin-bottom: 15px;
+	text-align: left;
+	font-style: oblique;
+}
+
+fieldset legend {
+	font-size: 0.8em;
+	font-weight: bold;
+}
+
+fieldset label {
+	display: block;
+	text-align: right;
+	margin: 5px;
+}
+
+fieldset label input {
+	width: 75%;
+	margin-left: 20px;
+}
+#loginbutton {
+	margin-top: 10px;
+	text-align: right;
+}

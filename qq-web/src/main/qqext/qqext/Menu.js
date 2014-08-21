@@ -29,45 +29,48 @@ Ext.define('qqext.Menu', {
 	}
 }, function() {
 
-	var menus = qqext.Menu,
+	var
+			menus = qqext.Menu,
+			consts = qqext.Constants,
+			labels = consts.labels,
+			urls = consts.urls,
 			//меню редактирования при выбранных разделах: 'Уведомления заявителю'
 			requestorNotifyEdit = createHButtonMenu([
-				{text: "Сохранить", action: saveNotify},
-				{text: "Редактировать", action: editNotify}
+				{text: labels.save, action: saveNotify},
+				{text: labels.edit, action: editNotify}
 			]),
 			//меню редактирования при выбранных подразделах:
 			//'Регистрация запросов', 'Передача на исполнение', 'Исполнение запроса'
 			requestEdit = createHButtonMenu([
-				{text: "Вернуться в поиск", action: returnToSearch},
-				{text: "Редактировать", action: edit},
-				{text: "Сохранить", action: save},
-				{text: "Удалить", action: remove},
-				{text: "Регистрировать", action: book}
+				{text: labels.toSearch, action: returnToSearch},
+				{text: labels.edit, action: edit},
+				{text: labels.save, action: save},
+				{text: labels.remove, action: remove},
+				{text: labels.register, action: book}
 			]),
 			// меню редактирования при выбранных подразделах: 'ЖВК', 'Поиск', 'Отчетные документы'
 			searchEdit = createHButtonMenu([
-				{text: "Добавить", action: add},
-				{text: "Поиск", action: find},
-				{text: "Очистить", action: clear}
+				{text: labels.add, action: add},
+				{text: labels.search, action: find},
+				{text: labels.clean, action: clear}
 			]),
 			// меню с подразделами поиска (основное)
 			searchMenu = createVButtonMenu([
-				{text: "ЖВК", action: jvk, name: 'jvk'},
-				{text: "Поиск", action: search},
-				{text: "Отчетные документы", action: documents}
+				{text: labels.jvk, action: jvk, name: 'jvk'},
+				{text: labels.search, action: search},
+				{text: labels.reports, action: documents}
 			]),
 			// меню с подразделами запроса
 			requestMenu = createVButtonMenu([
-				{text: "Регистрация запроса", action: regRequest, name: 'regRequest'},
-				{text: "Уведомление заявителю", action: notifyRequestor},
-				{text: "Передача на исполнение", action: transmitToComplete},
-				{text: "Исполнение запроса", action: toComplete}
-			]),
-			consts = qqext.Constants;
+				{text: labels.reqRegister, action: regRequest, name: 'regRequest'},
+				{text: labels.reqNotify, action: notifyRequestor},
+				{text: labels.transToComplete, action: transmitToComplete},
+				{text: labels.complete, action: toComplete}
+			]);
 
 	menus.navigation = createHButtonMenu([
-		{text: "В начало", action: toStartPage},
-		{text: "Выйти", action: quit}
+		{text: labels.toBegin, action: toStartPage},
+		{text: labels.quit, action: consts.quitAction}
 	]);
 
 	menus.editMenu = createCardMenuPanel([searchEdit, requestEdit, requestorNotifyEdit]);
@@ -204,14 +207,7 @@ Ext.define('qqext.Menu', {
 	 * @returns {undefined}
 	 */
 	function toStartPage() {
-	}
-
-	/**
-	 * Обрабатывает событие 'click' на кнопке "Выйти"
-	 * @private
-	 * @returns {undefined}
-	 */
-	function quit() {
+		consts.viewport.getLayout().setActiveItem(0);
 	}
 
 	/**

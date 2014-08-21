@@ -8,7 +8,6 @@
 
 	<modules>
 		<module>qq-ejb/</module>
-		<module>qq-login/</module>
 		<module>qq-web/</module>
 		<module>qq/</module>
 		<module>ext-commons/</module>

@@ -75,6 +75,45 @@ Ext.define('qqext.Constants', {
 		if (!this.getButton(name)) {
 			this._buttons.push({name: name, body: body});
 		}
+	},
+	/**
+	 * Различные надписи приложения (на кнопках, заголовки и т.д.)
+	 */
+	labels: {
+		save: "Сохранить",
+		edit: "Редактировать",
+		toSearch: "Вернуться в поиск",
+		remove: "Удалить",
+		register: "Регистрировать",
+		add: "Добавить",
+		search: "Поиск",
+		clean: "Очистить",
+		jvk: "ЖВК",
+		reports: "Отчетные документы",
+		reqRegister: "Регистрация запроса",
+		reqNotify: "Уведомление заявителю",
+		transToComplete: "Передача на исполнение",
+		complete: "Исполнение запроса",
+		toBegin: "В начало",
+		quit: "Выйти",
+		app1: "Подсистема 1",
+		app2: "Подсистема 2",
+		asq: "АС Запросы"
+	},
+	/**
+	 * Различные url
+	 */
+	urls: {
+		welcome: "/qq-web/",
+		login: "/qq-web/Auth?action=logout&redirect=1",
+		app1: "#",
+		app2: "#"
+	},
+	/**
+	 * Вызывается когда нажали на кнопку 'Выйти'
+	 */
+	quitAction: function() {
+		window.location = qqext.Constants.urls.login;
 	}
 });
 

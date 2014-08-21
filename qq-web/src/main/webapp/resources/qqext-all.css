@@ -63,9 +63,29 @@
 /* including package ext-theme-neutral */
 /* including package ext-theme-neptune */
 /* including package qqtheme */
-/* line 6, ../../qqext/packages/qqtheme/sass/etc/all.scss */
+/* line 5, ../../qqext/packages/qqtheme/sass/etc/all.scss */
 .article-btn {
   border-radius: 0 !important;
+}
+
+/* line 9, ../../qqext/packages/qqtheme/sass/etc/all.scss */
+.welcomepage {
+  background-color: #d6e8f6;
+}
+
+/* line 13, ../../qqext/packages/qqtheme/sass/etc/all.scss */
+.welcomecontainer {
+  text-align: center !important;
+  vertical-align: middle !important;
+  width: 30% !important;
+  height: 30% !important;
+  margin: auto !important;
+  margin-top: 10% !important;
+}
+
+/* line 22, ../../qqext/packages/qqtheme/sass/etc/all.scss */
+.welcomebutton {
+  margin: 50px 10px !important;
 }
 
 /* including package hawk_common */

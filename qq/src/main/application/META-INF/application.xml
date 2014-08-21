@@ -11,12 +11,6 @@
 
 	<module>
 		<web>
-			<web-uri>qq-login-0.0.1.war</web-uri>
-			<context-root>/qq-login</context-root>
-		</web>
-	</module>
-	<module>
-		<web>
 			<web-uri>qq-web-0.0.1-SNAPSHOT.war</web-uri>
 			<context-root>/qq-web</context-root>
 		</web>

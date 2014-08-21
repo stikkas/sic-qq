@@ -41,16 +41,20 @@ Ext.define('qqext.controller.ParentController', {
 		delItems.destroy();
 	},
 	getMainCont: function() {
-		var me = this,
-				targetItem = me.getVp().items.getAt(2);
+		return qqext.Constants.mainPanel.getLayout().getActiveItem();
+		/*
+		 var me = this,
+		 targetItem = me.getVp().items.getAt(2);
 
-		return targetItem;
+		 return targetItem;
+		 */
 	},
 	/**
 	 * Синхронизация данных на форме с моделью
 	 */
 	syncModel: function() {
-		var me = this,
+		var
+				me = this,
 				model = qqext.Constants.mainController.currentModel,
 				currentForm = me.getMainCont();
 

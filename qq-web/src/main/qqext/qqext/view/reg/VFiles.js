@@ -3,7 +3,7 @@
  */
 
 Ext.define('qqext.view.reg.VFiles', {
-	extend: 'Ext.form.Panel',
+	extend: 'qqext.view.StyledPanel',
 	requires: [
 		'hawk_common.cmp.FileList'
 	],

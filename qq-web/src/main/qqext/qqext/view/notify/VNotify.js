@@ -4,14 +4,13 @@
  * @author М. Сорокин
  */
 Ext.define('qqext.view.notify.VNotify', {
-	extend: 'Ext.form.Panel',
+	extend: 'qqext.view.StyledPanel',
 	requires: [
 		'Ext.form.field.ComboBox',
 		'Ext.form.field.Date'
 	],
 	height: 300,
 	maxHeight: 300,
-	margin: '0 10 0 0',
 	title: 'Уведомление заявителю',
 	initComponent: function() {
 		var me = this;

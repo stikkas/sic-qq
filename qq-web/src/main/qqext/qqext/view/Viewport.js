@@ -10,8 +10,11 @@ Ext.define('qqext.view.Viewport', {
 	],
 	layout: 'card',
 	initComponent: function() {
-		var me = this;
-		qqext.Constants.viewport = me;
+
+		var
+				me = this,
+				layout = me.getLayout(),
+				consts = qqext.Constants;
 		Ext.applyIf(me, {
 			items: [
 				Ext.create('qqext.view.WelcomePage'),
@@ -19,5 +22,15 @@ Ext.define('qqext.view.Viewport', {
 			]
 		});
 		me.callParent();
+
+		/**
+		 * Переключает страницы
+		 * @param {type} idx индекс требуемой страницы
+		 */
+		consts.setActivePage = function(idx) {
+			layout.setActiveItem(idx);
+			if (idx === 1)
+				consts.getButton('jvk').fireEvent('click');
+		}
 	}
 });

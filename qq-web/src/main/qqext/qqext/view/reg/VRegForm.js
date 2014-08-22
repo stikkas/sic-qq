@@ -14,22 +14,17 @@ Ext.define('qqext.view.reg.VRegForm', {
 	disabledCls: '',
 	maskOnDisable: false,
 	disabled: null,
+	region: 'center',
+	overflowY: 'auto',
+	overflowX: 'hidden',
 	initComponent: function() {
 		var me = this;
 		Ext.applyIf(me, {
-			region: 'center',
-			overflowY: 'auto',
 			items: [
-				Ext.create('qqext.view.reg.VInboxDoc', {
-					region: 'center',
-					margin: '0 10 0 0'
-				}),
-				Ext.create('qqext.view.reg.VApplicant', {
-					region: 'north',
-					margin: '0 10 0 0'
-				}),
-				Ext.create('qqext.view.reg.VQuery', {margin: '0 10 0 0'}),
-				Ext.create('qqext.view.reg.VQueryObject', {margin: '0 10 0 0'}),
+				Ext.create('qqext.view.reg.VInboxDoc'),
+				Ext.create('qqext.view.reg.VQuery'),
+				Ext.create('qqext.view.reg.VApplicant'),
+				Ext.create('qqext.view.reg.VQueryObject'),
 				Ext.create('qqext.view.reg.VFiles')
 			]
 		});

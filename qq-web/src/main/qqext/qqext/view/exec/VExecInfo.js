@@ -2,14 +2,13 @@
  * Форма свединия об исполнении запроса
  */
 Ext.define('qqext.view.exec.VExecInfo', {
-	extend: 'Ext.form.Panel',
+	extend: 'qqext.view.StyledPanel',
 	requires: [
 		'Ext.form.field.Date',
 		'Ext.form.field.ComboBox'
 	],
 	title: 'Сведения об исполнении',
 	maxHeight: 205,
-	margin: '0 10 0 0',
 	initComponent: function() {
 		var me = this;
 

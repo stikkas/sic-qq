@@ -56,7 +56,7 @@ Ext.define('qqext.view.WelcomePage', {
 		 * Вызывается когда нажали на кнопку для входа в систему АС Запросы
 		 */
 		function beginAction() {
-			consts.viewport.getLayout().setActiveItem(1);
+			consts.setActivePage(1);
 		}
 	}
 });

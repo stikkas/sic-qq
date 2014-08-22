@@ -41,6 +41,10 @@ Ext.application({
 	],
 	controllers: ['qqext.controller.Main'],
 	launch: function() {
+
+		// Временно для отладки. В рабочей версии убрать
+		Ext.create('qqext.view.Viewport', {});
+		return;
 		Ext.Ajax.request({
 			url: '/qq-web/Rules',
 			success: function(response) {
@@ -66,8 +70,6 @@ Ext.application({
 					cls: 'err_msg',
 					maxWidth: 1000
 				});
-				// Временно для отладки. В рабочей версии убрать
-				Ext.create('qqext.view.Viewport', {});
 			}
 		});
 	}

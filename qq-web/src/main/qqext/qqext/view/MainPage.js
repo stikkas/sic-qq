@@ -20,13 +20,16 @@ Ext.define('qqext.view.MainPage', {
 	layout: 'border',
 	initComponent: function() {
 		var me = this,
-				consts = qqext.Constants;
+				consts = qqext.Constants,
+				mainPanel,
+				mainPanelLayout;
 		consts.searchForm = Ext.create('qqext.view.search.VSearchForm');
 		consts.regForm = Ext.create('qqext.view.reg.VRegForm');
 		consts.notifyForm = Ext.create('qqext.view.notify.VNotify');
 		consts.transForm = Ext.create('qqext.view.transmission.VTransmission');
 		consts.execForm = Ext.create('qqext.view.exec.VExecForm');
-		consts.mainPanel = Ext.create('Ext.panel.Panel', {
+
+		mainPanel = Ext.create('Ext.panel.Panel', {
 			layout: 'card',
 			region: 'center',
 			items: [
@@ -39,17 +42,34 @@ Ext.define('qqext.view.MainPage', {
 				consts.execForm
 			]
 		});
+		mainPanelLayout = mainPanel.getLayout();
+
 
 		Ext.applyIf(me, {
 			items: [
 				Ext.create('qqext.view.VTitleBar'),
 				Ext.create('qqext.view.VLeftMenu'),
-				consts.mainPanel
+				mainPanel
 			]});
 
-		consts.getButton('jvk').fireEvent('click');
-
 		me.callParent(arguments);
+
+		/**
+		 * Показывает форму с заданным индексом
+		 * @param {Number} idx индекс формы (начинается с 0)
+		 * @return {Object/Boolean} в случае если форма поменялась, то возвращается активная форма,
+		 * иначе false
+		 */
+		consts.setCurrentForm = function(idx) {
+			return mainPanelLayout.setActiveItem(idx);
+		};
+		/**
+		 * Возвращает активную форму
+		 * @returns {Object}
+		 */
+		consts.getCurrentForm = function() {
+			return mainPanelLayout.getActiveItem();
+		};
 	}
 });
 

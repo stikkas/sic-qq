@@ -2,8 +2,7 @@
  *
  */
 Ext.define('qqext.view.exec.VCoordination', {
-	extend: 'Ext.form.Panel',
-	margin: '10 10 0 0',
+	extend: 'qqext.view.StyledPanel',
 	title: 'Согласование документа',
 	header: {
 		icon: 'webapp/resources/images/fieldset/collapse-tool.png'

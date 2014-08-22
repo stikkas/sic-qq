@@ -2,7 +2,7 @@
  * Форма для заполнения данных по заявителю
  */
 Ext.define('qqext.view.reg.VApplicant', {
-	extend: 'Ext.form.Panel',
+	extend: 'qqext.view.StyledPanel',
 	requires: [
 		'Ext.form.field.Text',
 		'Ext.form.field.TextArea',

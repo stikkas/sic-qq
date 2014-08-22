@@ -1,5 +1,5 @@
 /**
- * Различные велечины и виджеты, которыми приходится часто пользоваться в приложении.
+ * Различные величины, виджеты, функции, которыми приходится часто пользоваться в приложении.
  *
  * @author С. Благодатских
  */
@@ -7,12 +7,17 @@
 Ext.define('qqext.Constants', {
 	singleton: true,
 	/**
-	 *  Основной экран инициализируется в {@link qqext.view.Viewport#initComponent}
+	 * Метод для установки активной страницы:
+	 * Иницализируется в {@link qqext.view.Viewport#initComponent}.
+	 * 0 - WelcomePage, страница с которой можно поити либо в АС Запросы, либо еще куда
+	 * 1 - MainPage, страница для работы с АС Запросами
+	 * @param {Number} порядковый номер страницы (см. выше)
 	 */
+	setActivePage: null,
 	viewport: null,
 	/**
-	 * Панель, расположенная по центру экрана (layout 'card'). Иницализируется в
-	 * {@link qqext.view.Viewport#initComponent}.
+	 * Метод для установки формы в центре экрана
+	 * Иницализируется в {@link qqext.view.MainPage#initComponent}.
 	 * Порядок элементов:
 	 * 0 - view.journal.VJournalForm
 	 * 1 - view.search.VSearchForm
@@ -21,8 +26,14 @@ Ext.define('qqext.Constants', {
 	 * 4 - qqext.view.notify.VNotify
 	 * 5 - qqext.view.transmission.VTransmission
 	 * 6 - qqext.view.exec.VExecForm
+	 * @param {Number} порядковый номер формы (см. выше)
 	 */
-	mainPanel: null,
+	setCurrentForm: null,
+	/**
+	 * Метод для полечения формы, которая в данный момент показана на экране.
+	 * @return {Object} активную форму
+	 */
+	getCurrentForm: null,
 	/**
 	 * Форма поиска. Инициализируется в {@link qqext.view.Viewport#initComponent}.
 	 */

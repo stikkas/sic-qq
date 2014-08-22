@@ -3,7 +3,7 @@
  */
 
 Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
-	extend: 'Ext.form.Panel',
+	extend: 'qqext.view.StyledPanel',
 	requires: [
 		'qqext.view.exec.cmp.DeliveryTypeCount',
 		'Ext.button.Button',
@@ -17,7 +17,6 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 	title: 'Выдача документов',
 	// height:'auto',
 	minHeight: 60,
-	margin: '10 10 0 0',
 	mOdel: null,
 	grid: null,
 	loadRecord: function(model) {

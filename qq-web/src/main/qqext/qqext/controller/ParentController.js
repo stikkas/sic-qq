@@ -41,7 +41,7 @@ Ext.define('qqext.controller.ParentController', {
 		delItems.destroy();
 	},
 	getMainCont: function() {
-		return qqext.Constants.mainPanel.getLayout().getActiveItem();
+		return qqext.Constants.getCurrentForm();
 		/*
 		 var me = this,
 		 targetItem = me.getVp().items.getAt(2);
@@ -60,29 +60,19 @@ Ext.define('qqext.controller.ParentController', {
 
 		switch (currentForm.$className) {
 			case 'qqext.view.reg.VRegForm' :
-				{
-					currentForm.updateRecord(model);
-					break;
-				}
+				currentForm.updateRecord(model);
+				break;
 			case 'qqext.view.notify.VNotify' :
-				{
-					currentForm.updateRecord(model.getNotification());
-					break;
-				}
+				currentForm.updateRecord(model.getNotification());
+				break;
 			case 'qqext.view.transmission.VTransmission' :
-				{
-					currentForm.updateRecord(model.getTransmission());
-					break;
-				}
+				currentForm.updateRecord(model.getTransmission());
+				break;
 			case 'qqext.view.exec.VExecForm' :
-				{
-					currentForm.updateRecord(model);
-					break;
-				}
+				currentForm.updateRecord(model);
+				break;
 			default :
-				{
-					console.debug('switch class name: ' + currentForm.$className);
-				}
+				console.debug('switch class name: ' + currentForm.$className);
 		}
 	},
 	getModel: function() {

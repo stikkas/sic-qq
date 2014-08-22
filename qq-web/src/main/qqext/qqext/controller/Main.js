@@ -1,11 +1,22 @@
+/**
+ * Основной контроллер (и единственный) нашего приложения.
+ */
 Ext.define('qqext.controller.Main', {
-	extend: 'qqext.controller.ParentController',
+	extend: 'Ext.app.Controller',
 	views: ['qqext.view.VTitleBar'],
 	requires: [
 		'qqext.model.qq.JournalItem',
 		'qqext.model.qq.SearchResultItem',
+		'qqext.model.qq.SearchCritery',
+		'qqext.model.qq.Question',
+		'qqext.store.DictValuesStore',
+		'qqext.store.CustomStore',
 		'qqext.Constants'
 	],
+	/**
+	 * Активная модель, иницилизируется в {@link qqext.Menu} после создания.
+	 * Функция вызывается при нажатии на кнопку 'Добавить' в верхнем меню.
+	 */
 	currentModel: null,
 	searchParams: null,
 	init: function() {
@@ -34,13 +45,11 @@ Ext.define('qqext.controller.Main', {
 				storeId: key,
 				dictCode: kput[key]
 			}));
-
 		Ext.regStore('searchResults', Ext.create('qqext.store.CustomStore', {
 			storeId: 'searchResults',
 			url: 'api/Search',
 			model: 'qqext.model.qq.SearchResultItem'
 		}));
-
 		Ext.regStore('journal', Ext.create('qqext.store.CustomStore', {
 			storeId: 'journal',
 			url: 'api/Journal',
@@ -51,5 +60,55 @@ Ext.define('qqext.controller.Main', {
 		}));
 
 		qqext.Constants.mainController = this;
+	},
+	clearSearchParams: function() {
+		this.searchParams = null;
+	},
+	getSearchParams: function() {
+		var me = this;
+		if (!me.searchParams)
+			me.searchParams = Ext.create('qqext.model.qq.SearchCritery');
+		return me.searchParams;
+	},
+	dropMainCont: function() {
+		var me = this;
+		var vp = me.getVp();
+		var delItems = me.getVp().items.getAt(2);
+		vp.remove(delItems);
+		delItems.destroy();
+	},
+	getMainCont: function() {
+		return qqext.Constants.getCurrentForm();
+	},
+	/**
+	 * Синхронизация данных на форме с моделью
+	 * @return {Object} объект контоллера (нужен для цепочных операций)
+	 */
+	syncModel: function() {
+		var
+				me = this,
+				model = me.currentModel,
+				currentForm = me.getMainCont();
+
+		switch (currentForm.$className) {
+			case 'qqext.view.reg.VRegForm' :
+				currentForm.updateRecord(model);
+				break;
+			case 'qqext.view.notify.VNotify' :
+				currentForm.updateRecord(model.getNotification());
+				break;
+			case 'qqext.view.transmission.VTransmission' :
+				currentForm.updateRecord(model.getTransmission());
+				break;
+			case 'qqext.view.exec.VExecForm' :
+				currentForm.updateRecord(model);
+				break;
+			default :
+				console.debug('switch class name: ' + currentForm.$className);
+		}
+		return me;
+	},
+	getModel: function() {
+		return this.currentModel;
 	}
 });

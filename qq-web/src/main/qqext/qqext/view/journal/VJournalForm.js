@@ -1,5 +1,5 @@
 /**
- *
+ * Форма журнала входящей корреспонденции
  */
 
 Ext.define('qqext.view.journal.VJournalForm', {
@@ -17,7 +17,8 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	overflowY: 'auto',
 	draggable: false,
 	store: 'journal',
-	margin: '0 10 0 0',
+	margin: '0 5 10 5',
+	border: true,
 	clearCriterias: function() {
 		var me = this;
 		for (var i = 0; i < me.columns.length; i++) {

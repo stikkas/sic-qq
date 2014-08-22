@@ -11,7 +11,12 @@ Ext.define('qqext.Menu', {
 		'qqext.view.menu.VButtonMenu',
 		'Ext.panel.Panel',
 		'qqext.button.ToolButton',
-		'qqext.button.ArticleButton'
+		'qqext.button.ArticleButton',
+		'qqext.model.qq.Notification',
+		'qqext.model.qq.Applicant',
+		'qqext.model.qq.Transmission',
+		'qqext.model.qq.ExecutionInfo',
+		'qqext.model.qq.WayToSend'
 	],
 	statics: {
 		/**
@@ -57,7 +62,7 @@ Ext.define('qqext.Menu', {
 			// меню с подразделами поиска (основное)
 			searchMenu = createVButtonMenu([
 				{text: labels.jvk, action: jvk, name: 'jvk'},
-				{text: labels.search, action: search},
+				{text: labels.search, action: search, name: 'search'},
 				{text: labels.reports, action: documents}
 			]),
 			// меню с подразделами запроса
@@ -75,6 +80,9 @@ Ext.define('qqext.Menu', {
 
 	menus.editMenu = createCardMenuPanel([searchEdit, requestEdit, requestorNotifyEdit]);
 	menus.articleMenu = createCardMenuPanel([searchMenu, requestMenu]);
+	var
+			editMenuLayout = menus.editMenu.getLayout(),
+			articleMenuLayout = menus.articleMenu.getLayout();
 
 //----------Вспомогательные функции-----------------
 	/**
@@ -122,8 +130,8 @@ Ext.define('qqext.Menu', {
 	 * @returns {undefined}
 	 */
 	function returnToSearch() {
-		menus.editMenu.getLayout().setActiveItem(0);
-		menus.articleMenu.getLayout().setActiveItem(0);
+		editMenuLayout.setActiveItem(0);
+		articleMenuLayout.setActiveItem(0);
 		consts.getButton('jvk').fireEvent('click');
 	}
 
@@ -133,6 +141,10 @@ Ext.define('qqext.Menu', {
 	 * @returns {undefined}
 	 */
 	function edit() {
+		//TODO: разобраться что эта функция должна делать
+		var form = consts.getCurrentForm();
+		form.setDisabled(!form.isDisabled());
+		form.doLayout();
 	}
 
 	/**
@@ -141,6 +153,10 @@ Ext.define('qqext.Menu', {
 	 * @returns {undefined}
 	 */
 	function save() {
+		consts.mainController.syncModel()
+				.getModel().save(function(rec, op, suc) {
+			console.log('is saving success?: ' + suc);
+		});
 	}
 
 	/**
@@ -149,14 +165,26 @@ Ext.define('qqext.Menu', {
 	 * @returns {undefined}
 	 */
 	function remove() {
+		consts.mainController.syncModel()
+				.getModel().destroy({
+			success: function() {
+				alert('Успешно удалено');
+				consts.getButton('search').fireEvent('click');
+			},
+			failure: function() {
+				alert('Ошибка при удалении');
+			}
+		});
 	}
 
 	/**
-	 * Обрабатывает событие 'click' на кнопке "Регистрировать"
+	 * Обрабатывает событие 'click' на кнопке "Регистрировать".
+	 * TODO реализовать метод
 	 * @private
 	 * @returns {undefined}
 	 */
 	function book() {
+		console.log('Регистрировать');
 	}
 
 	/**
@@ -166,6 +194,7 @@ Ext.define('qqext.Menu', {
 	 * @returns {undefined}
 	 */
 	function saveNotify() {
+		//TODO: реализовать
 	}
 
 	/**
@@ -175,6 +204,7 @@ Ext.define('qqext.Menu', {
 	 * @returns {undefined}
 	 */
 	function editNotify() {
+		//TODO: реализовать
 	}
 	/**
 	 * Обрабатывает событие 'click' на кнопке "Добавить"
@@ -182,8 +212,17 @@ Ext.define('qqext.Menu', {
 	 * @returns {undefined}
 	 */
 	function add() {
-		menus.editMenu.getLayout().setActiveItem(1);
-		menus.articleMenu.getLayout().setActiveItem(1);
+		editMenuLayout.setActiveItem(1);
+		articleMenuLayout.setActiveItem(1);
+		var model = consts.mainController.currentModel = Ext.create('qqext.model.qq.Question');
+
+		model.setNotification(Ext.create('qqext.model.qq.Notification'));
+		model.setApplicant(Ext.create('qqext.model.qq.Applicant'));
+		model.setTransmission(Ext.create('qqext.model.qq.Transmission'));
+		model.setExecutionInfo(Ext.create('qqext.model.qq.ExecutionInfo'));
+		model.setWayToSend(Ext.create('qqext.model.qq.WayToSend'));
+		consts.regForm.loadRecord(model);
+
 		consts.getButton('regRequest').fireEvent('click');
 	}
 	/**
@@ -192,6 +231,30 @@ Ext.define('qqext.Menu', {
 	 * @returns {undefined}
 	 */
 	function find() {
+		var
+				controller = consts.mainController,
+				model = controller.getSearchParams(),
+				mainCont = controller.getMainCont();
+
+		switch (mainCont.$className) {
+			case 'qqext.view.search.VSearchForm' :
+				mainCont.updateRecord(model);
+				var dataWithoutNulls = model.getData();
+				Ext.data.writer.Json
+						.dropNullsAndUndefinedFields(dataWithoutNulls);
+				Ext.getStore('searchResults').load({
+					params: {
+						q: Ext.encode(dataWithoutNulls)
+					}
+				});
+				break;
+			case 'qqext.view.journal.VJournalForm' :
+				Ext.getStore('journal').reload();
+				break;
+			default :
+				break;
+		}
+
 	}
 	/**
 	 * Обрабатывает событие 'click' на кнопке "Очистить"
@@ -199,6 +262,22 @@ Ext.define('qqext.Menu', {
 	 * @returns {undefined}
 	 */
 	function clear() {
+		var controller = consts.mainController;
+
+		switch (controller.getMainCont().$className) {
+			case 'qqext.view.search.VSearchForm' :
+				Ext.getStore('searchResults').removeAll();
+				controller.clearSearchParams();
+				controller.getMainCont().loadRecord(controller.getSearchParams());
+				break;
+			case 'qqext.view.journal.VJournalForm' :
+				Ext.getStore('journal').filters.clear();
+				controller.getMainCont().clearCriterias();
+				Ext.getStore('journal').loadPage(1);
+				break;
+			default :
+				break;
+		}
 	}
 
 	/**
@@ -207,7 +286,7 @@ Ext.define('qqext.Menu', {
 	 * @returns {undefined}
 	 */
 	function toStartPage() {
-		consts.viewport.getLayout().setActiveItem(0);
+		consts.setActivePage(0);
 	}
 
 	/**
@@ -216,7 +295,7 @@ Ext.define('qqext.Menu', {
 	 * @returns {undefined}
 	 */
 	function jvk() {
-		consts.mainPanel.getLayout().setActiveItem(0);
+		consts.setCurrentForm(0);
 		Ext.getStore('journal').load();
 	}
 
@@ -226,7 +305,7 @@ Ext.define('qqext.Menu', {
 	 * @returns {undefined}
 	 */
 	function search() {
-		consts.mainPanel.getLayout().setActiveItem(1);
+		consts.setCurrentForm(1);
 		consts.searchForm.loadRecord(consts.mainController.getSearchParams());
 	}
 
@@ -236,7 +315,7 @@ Ext.define('qqext.Menu', {
 	 * @returns {undefined}
 	 */
 	function documents() {
-		consts.mainPanel.getLayout().setActiveItem(2);
+		consts.setCurrentForm(2);
 	}
 
 	/**
@@ -245,17 +324,12 @@ Ext.define('qqext.Menu', {
 	 * @returns {undefined}
 	 */
 	function regRequest() {
-		menus.editMenu.getLayout().setActiveItem(1);
+		editMenuLayout.setActiveItem(1);
 		var me = consts.mainController;
 		me.syncModel();
-		if (me.currentQueryFormSection === 'REGISTRATION') {
-			console.log('already registration');
-			return;
-		} else {
-			consts.mainPanel.getLayout().setActiveItem(3);
+
+		if (consts.setCurrentForm(3))
 			consts.regForm.loadRecord(me.getModel());
-			me.currentQueryFormSection = 'REGISTRATION';
-		}
 	}
 
 	/**
@@ -264,18 +338,15 @@ Ext.define('qqext.Menu', {
 	 * @returns {undefined}
 	 */
 	function notifyRequestor() {
-		menus.editMenu.getLayout().setActiveItem(2);
+		editMenuLayout.setActiveItem(2);
 		var me = consts.mainController;
 		me.syncModel();
-		if (me.currentQueryFormSection === 'NOTIFICATION') {
-			console.log('already notification');
-			return;
-		} else {
-			consts.mainPanel.getLayout().setActiveItem(4);
+
+		if (consts.setCurrentForm(4)) {
 			var
 					model = me.getModel(),
 					notify = model.getNotification();
-			me.currentQueryFormSection = 'NOTIFICATION';
+
 			if (!notify) {
 				console.debug('model.getNotification undefined, creating new instance');
 				var n = Ext.create('qqext.model.qq.Notification');
@@ -294,17 +365,11 @@ Ext.define('qqext.Menu', {
 	 * @returns {undefined}
 	 */
 	function transmitToComplete() {
-		menus.editMenu.getLayout().setActiveItem(1);
+		editMenuLayout.setActiveItem(1);
 		var me = consts.mainController;
 		me.syncModel();
-		if (me.currentQueryFormSection === 'TRANSMISSION') {
-			console.log('already transmission');
-			return;
-		} else {
-			consts.mainPanel.getLayout().setActiveItem(5);
+		if (consts.setCurrentForm(5))
 			consts.transForm.loadRecord(me.getModel().getTransmission());
-			me.currentQueryFormSection = 'TRANSMISSION';
-		}
 	}
 
 	/**
@@ -313,17 +378,11 @@ Ext.define('qqext.Menu', {
 	 * @returns {undefined}
 	 */
 	function toComplete() {
-		menus.editMenu.getLayout().setActiveItem(1);
+		editMenuLayout.setActiveItem(1);
 		var me = consts.mainController;
 		me.syncModel();
-		if (me.currentQueryFormSection === 'EXECUTION') {
-			console.log('already execution');
-			return;
-		} else {
-			consts.mainPanel.getLayout().setActiveItem(6);
+		if (consts.setCurrentForm(6))
 			consts.execForm.loadRecord(me.getModel());
-			me.currentQueryFormSection = 'EXECUTION';
-		}
 	}
 
 });

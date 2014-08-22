@@ -6,6 +6,7 @@ Ext.define('qqext.view.VTitleBar', {
 	title: 'АС Запросы',
 	region: 'north',
 	layout: 'hbox',
+	margin: '0 0 10 0',
 	initComponent: function() {
 		var me = this,
 				menus = qqext.Menu;

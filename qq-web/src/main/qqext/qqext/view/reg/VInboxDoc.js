@@ -2,7 +2,7 @@
  *
  */
 Ext.define('qqext.view.reg.VInboxDoc', {
-	extend: 'Ext.form.Panel',
+	extend: 'qqext.view.StyledPanel',
 	requires: [
 		'Ext.form.field.ComboBox',
 		'Ext.form.field.Text',

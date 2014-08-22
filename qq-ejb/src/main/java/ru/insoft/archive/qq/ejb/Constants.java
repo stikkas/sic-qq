@@ -2,16 +2,16 @@ package ru.insoft.archive.qq.ejb;
 
 /**
  * @author sorokin
- * 
+ *
  */
 public interface Constants {
-	
+
 	/**
 	 * Код подсистемы
 	 */
-	public static String SUBSYSTEM_QQ="SUBSYSTEM_QQ";
+	public static String SUBSYSTEM_QQ = "SUBSYSTEM_QQ";
 	/**
-	 * Код значения значения в таблице COER_PARAMETER. Наличие значения с этим
+	 * Код значения значения в таблице CORE_PARAMETER. Наличие значения с этим
 	 * кодом является индикатором того, что в бд выполнена инициализация
 	 * справочников и значений, необходимых для работы подсистемы.
 	 */
@@ -91,7 +91,7 @@ public interface Constants {
 
 	/**
 	 * Справочник "Вид запроса"
-	 * 
+	 *
 	 */
 	public static String Q_DICT_QUEST_TYPE = "Q_DICT_QUEST_TYPE";
 
@@ -166,8 +166,8 @@ public interface Constants {
 	public static String Q_VALUE_APP_CAT_ORGAN = "Q_VALUE_APP_CAT_ORGAN";
 
 	/**
-	 * Справочник "Категория заявителя" Значение
-	 * "Органы местного самоуправления"
+	 * Справочник "Категория заявителя" Значение "Органы местного
+	 * самоуправления"
 	 */
 	public static String Q_VALUE_APP_CAT_SELF_GOV = "Q_VALUE_APP_CAT_SELF_GOV";
 
@@ -205,14 +205,14 @@ public interface Constants {
 	public static String Q_VALUE_DOC_TYPE_ARCH_EXTRACT = "Q_VALUE_DOC_TYPE_ARCH_EXTRACT";
 
 	/**
-	 * Справочник "Тип документов" Значение
-	 * "Информационное письмо положительное"
+	 * Справочник "Тип документов" Значение "Информационное письмо
+	 * положительное"
 	 */
 	public static String Q_VALUE_DOC_TYPE_LETTER_PLUS = "Q_VALUE_DOC_TYPE_LETTER_PLUS";
 
 	/**
-	 * Справочник "Тип документов" Значение
-	 * "Информационное письмо отрицательное"
+	 * Справочник "Тип документов" Значение "Информационное письмо
+	 * отрицательное"
 	 */
 	public static String Q_VALUE_DOC_TYPE_LETTER_MINUS = "Q_VALUE_DOC_TYPE_LETTER_MINUS";
 
@@ -242,8 +242,8 @@ public interface Constants {
 	public static String Q_VALUE_ENDORSEMENT_RETURN = "Q_VALUE_ENDORSEMENT_RETURN";
 
 	/**
-	 * Справочник "Этап согласования документа" Значение
-	 * "Повторно сдано на подпись"
+	 * Справочник "Этап согласования документа" Значение "Повторно сдано на
+	 * подпись"
 	 */
 	public static String Q_VALUE_ENDORSEMENT_REPEAT_SIGN = "Q_VALUE_ENDORSEMENT_REPSIGN";
 
@@ -422,70 +422,46 @@ public interface Constants {
 	 * Справочник "Участники проекта" Значение "РГВА"
 	 */
 	public static String Q_VALUE_MEMBER_RGBA = "Q_VALUE_MEMBER_RGBA";
-	
-	
+
 	/**
 	 * Справочник "Тип элемента организационной структуры"
 	 */
-	public static String Q_DICT_ORG_STRUCT_TYPE="ORG_STRUCTURE_TYPE";
+	public static String Q_DICT_ORG_STRUCT_TYPE = "ORG_STRUCTURE_TYPE";
 	/**
-	 * Справочник "Тип элемента организационной структуры"
-	 * Значение "Архив"
+	 * Справочник "Тип элемента организационной структуры" Значение "Архив"
 	 */
-	public static String Q_VALUE_ORG_STRUCT_ARCHIVE="ARCHIVE";
+	public static String Q_VALUE_ORG_STRUCT_ARCHIVE = "ARCHIVE";
 	/**
-	 * Справочник "Тип элемента организационной структуры"
-	 * Значение "Структурное подразделение"
+	 * Справочник "Тип элемента организационной структуры" Значение "Структурное
+	 * подразделение"
 	 */
-	public static String Q_VALUE_ORG_STRUCT_DEP="DEPARTMENT";
+	public static String Q_VALUE_ORG_STRUCT_DEP = "DEPARTMENT";
 	/**
-	 * Справочник "Тип элемента организационной структуры"
-	 * Значение "Вышестоящая организация"
+	 * Справочник "Тип элемента организационной структуры" Значение "Вышестоящая
+	 * организация"
 	 */
-	public static String Q_VALUE_ORG_STRUCT_MASTORG="MASTER_ORG";
-	
-	
-	//РОЛИ ПОДСИСТЕМЫ QQ
-	/**
-	 * Роль "Регистратор"
-	 */
-	public static String Q_RULE_REGISTRATOR="Q_RULE_REGISTRATOR";
-	/**
-	 * Роль "Координатор"
-	 */
-	public static String Q_RULE_COORDINATOR="Q_RULE_COORDINATOR";
-	/**
-	 * Роль "Исполнитель"
-	 */
-	public static String Q_RULE_EXECUTOR="Q_RULE_EXECUTOR";
-	/**
-	 * Роль "Пользователь подсистемы QQ"
-	 * Пользователем не имеющим данную роль запрещен вход в систему
-	 */
-	public static String Q_RULE_USER="Q_RULE_USER";
-	
+	public static String Q_VALUE_ORG_STRUCT_MASTORG = "MASTER_ORG";
+
 	/**
 	 * Справочник: "Тип прикрепленного файла"
 	 */
-	String Q_DICT_FILE_TYPE="Q_DICT_FILE_TYPE";
-	
+	String Q_DICT_FILE_TYPE = "Q_DICT_FILE_TYPE";
+
 	/**
-	 * Справочник: "Тип прикрепленного файла"
-	 * Значение "Ответ"
+	 * Справочник: "Тип прикрепленного файла" Значение "Ответ"
 	 */
-	String Q_VALUE_FILE_TYPE_ANSWER="Q_VALUE_FILE_TYPE_ANSWER";
-	
+	String Q_VALUE_FILE_TYPE_ANSWER = "Q_VALUE_FILE_TYPE_ANSWER";
+
 	/**
-	 * Справочник: "Тип прикрепленного файла"
-	 * Значение: "Документы заявителя"
+	 * Справочник: "Тип прикрепленного файла" Значение: "Документы заявителя"
 	 */
-	String Q_VALUE_FILE_TYPE_APP_DOCS="Q_VALUE_FILE_TYPE_APP_DOCS";
-	
+	String Q_VALUE_FILE_TYPE_APP_DOCS = "Q_VALUE_FILE_TYPE_APP_DOCS";
+
 	/**
 	 * Справочник "Статусы запроса"
 	 */
-	String Q_DICT_QUESTION_STATUSES="Q_DICT_QUESTION_STATUSES";
-	
+	String Q_DICT_QUESTION_STATUSES = "Q_DICT_QUESTION_STATUSES";
+
 	/**
 	 * Регистрация
 	 */
@@ -493,17 +469,17 @@ public interface Constants {
 	/**
 	 * Регистрация (отправлено)
 	 */
-	String Q_VALUE_QSTAT_REGSEND="Q_VALUE_QSTAT_REGSEND";
+	String Q_VALUE_QSTAT_REGSEND = "Q_VALUE_QSTAT_REGSEND";
 	/**
 	 * На исполнении
 	 */
-	String Q_VALUE_QSTAT_ONEXEC="Q_VALUE_QSTAT_ONEXEC";
+	String Q_VALUE_QSTAT_ONEXEC = "Q_VALUE_QSTAT_ONEXEC";
 	/**
 	 * Исполнено
 	 */
-	String Q_VALUE_QSTAT_EXECUTED="Q_VALUE_QSTAT_EXECUTED";
+	String Q_VALUE_QSTAT_EXECUTED = "Q_VALUE_QSTAT_EXECUTED";
 	/**
 	 * Отправлено
 	 */
-	String Q_VALUE_QSTAT_SENDED="Q_VALUE_QSTAT_SENDED";
+	String Q_VALUE_QSTAT_SENDED = "Q_VALUE_QSTAT_SENDED";
 }

@@ -2,7 +2,7 @@
  * Панелька "Запрос" формы регистрации запроса
  */
 Ext.define('qqext.view.reg.VQuery', {
-	extend: 'Ext.form.Panel',
+	extend: 'qqext.view.StyledPanel',
 	requires: [
 		'Ext.form.field.ComboBox',
 		'Ext.form.field.Date',
@@ -42,7 +42,7 @@ Ext.define('qqext.view.reg.VQuery', {
 					name: 'motivatedRefusal'
 				})
 			]
-		})
+		});
 
 		me.callParent(arguments);
 	}

@@ -2,6 +2,7 @@ package ru.insoft.archive.qq.ejb;
 
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
@@ -34,6 +35,17 @@ import ru.insoft.archive.extcommons.ejb.CommonDBHandler;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class Placeholder implements Constants {
 
+	/**
+	 * Роли, которые должны присутсвовать в системе
+	 */
+	private static final String[][] requiredRules = {
+		// Пользователем не имеющим данную роль запрещен вход в систему
+		{"Q_RULE_USER", "Пользователь подсистемы"},
+		{"Q_RULE_REGISTRATOR", "Регистратор"},
+		{"Q_RULE_COORDINATOR", "Координатор"},
+		{"Q_RULE_EXECUTOR", "Исполнитель"}
+	};
+
 	@EJB
 	private CommonDBHandler cdbh;
 
@@ -54,10 +66,9 @@ public class Placeholder implements Constants {
 	/**
 	 * Этот мегаметод выполняет работу по инициализации справочников и их
 	 * значений
-	 * @throws Exception
 	 */
 	@PostConstruct
-	public void init() throws Exception {
+	public void init() {
 		logger.fine("Инициализация справочников подсистемы QQ..");
 		if (!isWorkNeeded()) {
 			logger.fine("Инициализация не требуется, справочники и значения созданы ранее");
@@ -67,10 +78,7 @@ public class Placeholder implements Constants {
 		initSubsystemNumb();
 		logger.fine("Инициализация справочника: Способ передачи");
 		initModeOfTransmission();
-		// не нужен, проще использовать данные из справочника
-		// "Организационная структура"
-		// logger.fine("Инициализация справочника: Исполняющая организация");
-		// initExecOrg();
+
 		logger.fine("Инициализация справочника: Вид запроса");
 		initQuestionType();
 		logger.fine("Инициализация справочника: Форма выдачи ответа");
@@ -105,43 +113,45 @@ public class Placeholder implements Constants {
 		logger.fine("Инициализация ролей подсистемы");
 		initRoles();
 		fixEnd();
-		// }catch (Exception e){
-		// logger.severe("ОШИБКА!! ОШИБКА!!! ОШИБКА!!");
-		// logger.severe("Ошибка при инициализации БД!!!");
-		// e.printStackTrace();
-		// }
+
 	}
 
+	/**
+	 * Создает роль в системе, если ее еще нет. Используется при иницализации
+	 * системы.
+	 *
+	 * @param code код роли
+	 * @param name описание роли
+	 */
 	private void createRuleIfNotExists(String code, String name) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<AdmAccessRule> cq = cb.createQuery(AdmAccessRule.class);
 		Root from = cq.from(AdmAccessRule.class);
-		Predicate p1 = cb.equal(from.get("subsystem"), subsystemNumb);
-		Predicate p2 = cb.equal(from.get("code"), code);
-		Predicate and = cb.and(p1, p2);
-		cq.where(and);
-		Query q = em.createQuery(cq);
-		if (q.getResultList().size() == 0) {
-			logger.fine("Роль " + code + " не существует");
+		cq.where(cb.and(cb.equal(from.get("subsystem"), subsystemNumb),
+			cb.equal(from.get("code"), code)));
+		if (em.createQuery(cq).getResultList().isEmpty()) {
+			logger.log(Level.FINE, "Роль {0} не существует", code);
 			Long id = getMaxId(AdmAccessRule.class);
-			id += 1;
+			++id;
 			AdmAccessRule r = new AdmAccessRule();
 			r.setAccessRuleId(id);
 			r.setCode(code);
 			r.setName(name);
 			r.setSubsystem(subsystemNumb);
 			em.merge(r);
-			logger.fine("Создана роль " + code);
+			logger.log(Level.FINE, "Создана роль {0}", code);
 		} else {
-			logger.fine("Роль " + code + " уже существует в бд");
+			logger.log(Level.FINE, "Роль {0} уже существует в бд", code);
 		}
 	}
 
+	/**
+	 * Создает минимальный набор ролей, без которого работа не возможна
+	 */
 	private void initRoles() {
-		createRuleIfNotExists(Q_RULE_USER, "Пользователь подсистемы");
-		createRuleIfNotExists(Q_RULE_REGISTRATOR, "Регистратор");
-		createRuleIfNotExists(Q_RULE_COORDINATOR, "Координатор");
-		createRuleIfNotExists(Q_RULE_EXECUTOR, "Исполнитель");
+		for (String[] role : requiredRules) {
+			createRuleIfNotExists(role[0], role[1]);
+		}
 	}
 
 	/**
@@ -153,7 +163,7 @@ public class Placeholder implements Constants {
 		Root<CoreSubsystem> root = cq.from(CoreSubsystem.class);
 		cq.where(cb.equal(root.get("code"), SUBSYSTEM_QQ));
 		Query q = em.createQuery(cq);
-		if (q.getResultList().size() != 0) {
+		if (!q.getResultList().isEmpty()) {
 			subsystemNumb = ((CoreSubsystem) q.getResultList().get(0)).getId();
 			logger.fine("Запись найдена в таблице подсистем");
 		} else {
@@ -161,7 +171,7 @@ public class Placeholder implements Constants {
 			CriteriaQuery<Object> criteriaQuery = cb.createQuery();
 			Root from = criteriaQuery.from(CoreSubsystem.class);
 			criteriaQuery.select(cb.max(from.get("id"))).from(
-					CoreSubsystem.class);
+				CoreSubsystem.class);
 			Query qq = em.createQuery(criteriaQuery);
 			Integer maxId = (Integer) qq.getSingleResult();
 			Integer curId = maxId + 1;
@@ -175,7 +185,7 @@ public class Placeholder implements Constants {
 		}
 	}
 
-	private void fixEnd() throws Exception {
+	private void fixEnd() {
 		CoreParameter cp = new CoreParameter();
 		cp.setCode(Q_PARAM_DB_READY_FLAG_CODE);
 		cp.setDescription("Флаг корректной инициализации схемы");
@@ -189,15 +199,13 @@ public class Placeholder implements Constants {
 	/**
 	 * Проверка необходимости выполнения операции по созданию справочников и их
 	 * значений. (По флагу в CORE_PARAMETER).
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean isWorkNeeded() {
-		boolean result = true;
 		String flagParamValue = cdbh
-				.getCoreParameterValue(Constants.Q_PARAM_DB_READY_FLAG_CODE);
-		result = flagParamValue == null;
-		return result;
+			.getCoreParameterValue(Constants.Q_PARAM_DB_READY_FLAG_CODE);
+		return flagParamValue == null;
 	}
 
 	private Integer subsystemNumb;
@@ -219,10 +227,14 @@ public class Placeholder implements Constants {
 	}
 
 	private DescriptorGroup getDescriptorGroup(String code, String name,
-			Boolean shortValueSupported) throws Exception {
+		Boolean shortValueSupported) {
 		Long groupId;
 		DescriptorGroup dg;
-		groupId = cdbh.getDescGroupIdByCode(code);
+		try {
+			groupId = cdbh.getDescGroupIdByCode(code);
+		} catch (Exception e) {
+			groupId = null;
+		}
 		if (groupId != null) {
 			dg = em.find(DescriptorGroup.class, groupId);
 		} else {
@@ -245,7 +257,7 @@ public class Placeholder implements Constants {
 	}
 
 	private void makeDescriptorValues(LinkedHashMap<String, String> codeNames,
-			DescriptorGroup group) {
+		DescriptorGroup group) {
 		int sortIndex = 0;
 		for (String key : codeNames.keySet()) {
 			DescriptorValue v;
@@ -260,8 +272,8 @@ public class Placeholder implements Constants {
 				v.setValue(codeNames.get(key));
 				em.merge(v);
 				logger.fine("Создание значения " + codeNames.get(key)
-						+ " с кодом " + key + " в справочнике "
-						+ group.getCode());
+					+ " с кодом " + key + " в справочнике "
+					+ group.getCode());
 			}
 		}
 	}
@@ -269,10 +281,10 @@ public class Placeholder implements Constants {
 	/**
 	 * Инициализация справочника и значений: "Тип прикрепленного файла"
 	 */
-	private void initAttachedFileTypes() throws Exception {
+	private void initAttachedFileTypes() {
 		DescriptorGroup dg2 = getDescriptorGroup(Q_DICT_FILE_TYPE,
-				"Тип прикрепленного файла", false);
-		LinkedHashMap<String, String> k = new LinkedHashMap<String, String>();
+			"Тип прикрепленного файла", false);
+		LinkedHashMap<String, String> k = new LinkedHashMap<>();
 		k.put(Q_VALUE_FILE_TYPE_ANSWER, "Ответ");
 		k.put(Q_VALUE_FILE_TYPE_APP_DOCS, "Документ заявителя");
 		makeDescriptorValues(k, dg2);
@@ -280,9 +292,10 @@ public class Placeholder implements Constants {
 
 	/**
 	 * Инициализация справочника и значений "Состояния запроса"
+	 *
 	 * @throws Exception
 	 */
-	private void initQuestionStatuses() throws Exception{
+	private void initQuestionStatuses() {
 		DescriptorGroup g = getDescriptorGroup(Q_DICT_QUESTION_STATUSES, "Состояния запроса", false);
 		LinkedHashMap<String, String> kput = new LinkedHashMap<>();
 		kput.put(Q_VALUE_QSTAT_REG, "Регистрация");
@@ -292,20 +305,19 @@ public class Placeholder implements Constants {
 		kput.put(Q_VALUE_QSTAT_SENDED, "Отправлено");
 		makeDescriptorValues(kput, g);
 	}
-	
-	
+
 	/**
 	 * Создание и наполнение справочника "Способ передачи"
-	 * 
+	 *
 	 * @throws Exception
 	 */
-	private void initModeOfTransmission() throws Exception {
+	private void initModeOfTransmission() {
 		DescriptorGroup dg1 = getDescriptorGroup(Q_DICT_TRANSMISSION_MODE,
-				"Способ передачи", false);
-		LinkedHashMap<String, String> codeNameMap = new LinkedHashMap<String, String>();
+			"Способ передачи", false);
+		LinkedHashMap<String, String> codeNameMap = new LinkedHashMap<>();
 		codeNameMap.put(Constants.Q_VALUE_TRANSMISSION_CENTER, "Центр");
 		codeNameMap.put(Constants.Q_VALUE_TRANSMISSION_EMAIL,
-				"Электронная почта");
+			"Электронная почта");
 		codeNameMap.put(Constants.Q_VALUE_TRANSMISSION_FAX, "Факс");
 		codeNameMap.put(Constants.Q_VALUE_TRANSMISSION_RUPOST, "Почта России");
 		codeNameMap.put(Constants.Q_VALUE_TRANSMISSION_WWW, "Интернет");
@@ -313,34 +325,14 @@ public class Placeholder implements Constants {
 	}
 
 	/**
-	 * Создание и наполнение значениями справочника "Исполняющая организация"
-	 * 
-	 * @throws Exception
-	 */
-	private void initExecOrg() throws Exception {
-		DescriptorGroup g = getDescriptorGroup(Q_DICT_EXEC_ORGANIZATION,
-				"Исполняющая организация", true);
-		LinkedHashMap<String, String> k = new LinkedHashMap<String, String>();
-		k.put(Q_VALUE_EXEC_ORG_GARF, "ГАРФ");
-		k.put(Q_VALUE_EXEC_ORG_RGAE, "РГАЭ");
-		k.put(Q_VALUE_EXEC_ORG_RGALI, "РГАЛИ");
-		k.put(Q_VALUE_EXEC_ORG_RGANI, "РГАНИ");
-		k.put(Q_VALUE_EXEC_ORG_RGANTD, "РГАНТД");
-		k.put(Q_VALUE_EXEC_ORG_RGVA, "РГВА");
-		k.put(Q_VALUE_EXEC_ORG_SIC, "СИЦ");
-		k.put(Q_VALUE_EXEC_ORG_RGASPI, "РГАСПИ");
-		makeDescriptorValues(k, g);
-	}
-
-	/**
 	 * Создание и наполнение значениями справочника "вид запроса"
-	 * 
+	 *
 	 * @throws Exception
 	 */
-	private void initQuestionType() throws Exception {
+	private void initQuestionType() {
 		DescriptorGroup group = getDescriptorGroup(Q_DICT_QUEST_TYPE,
-				"Тип запроса", false);
-		LinkedHashMap<String, String> k = new LinkedHashMap<String, String>();
+			"Тип запроса", false);
+		LinkedHashMap<String, String> k = new LinkedHashMap<>();
 		k.put(Q_VALUE_QUEST_TYPE_SOC, "Социально-правовой");
 		k.put(Q_VALUE_QUEST_TYPE_TEMATIC, "Тематический");
 		k.put(Q_VALUE_QUEST_TYPE_GENEALOGICAL, "Генеалогический");
@@ -351,13 +343,13 @@ public class Placeholder implements Constants {
 
 	/**
 	 * Создание и заполнение справочника "Форма выдачи ответа"
-	 * 
+	 *
 	 * @throws Exception
 	 */
-	private void initAnswerForm() throws Exception {
+	private void initAnswerForm() {
 		DescriptorGroup group = getDescriptorGroup(Q_DICT_ANSWER_FORM,
-				"Форма выдачи ответа", false);
-		LinkedHashMap<String, String> k = new LinkedHashMap<String, String>();
+			"Форма выдачи ответа", false);
+		LinkedHashMap<String, String> k = new LinkedHashMap<>();
 		k.put(Q_VALUE_ANSWER_FORM_HAND, "На руки");
 		k.put(Q_VALUE_ANSWER_FORM_POST, "Почтой");
 		makeDescriptorValues(k, group);
@@ -365,22 +357,22 @@ public class Placeholder implements Constants {
 
 	/**
 	 * Инициализация и заполнение значениями справочника "Тип заявителя"
-	 * 
+	 *
 	 * @throws Exception
 	 */
-	private void initApplicantType() throws Exception {
+	private void initApplicantType() {
 		DescriptorGroup group = getDescriptorGroup(Q_DICT_APPLICANT_TYPE,
-				"Тип заявителя", false);
+			"Тип заявителя", false);
 		LinkedHashMap<String, String> k = new LinkedHashMap<String, String>();
 		k.put(Q_VALUE_APPLICANT_TYPE_FFACE, "Физическое лицо");
 		k.put(Q_VALUE_APPLICANT_TYPE_JURFACE, "Юридическое лицо");
 		makeDescriptorValues(k, group);
 	}
 
-	private void initApplicantCategory() throws Exception {
+	private void initApplicantCategory() {
 		DescriptorGroup dg = getDescriptorGroup(Q_DICT_APPLICANT_CAT,
-				"Категория заявителя", false);
-		LinkedHashMap<String, String> k = new LinkedHashMap<String, String>();
+			"Категория заявителя", false);
+		LinkedHashMap<String, String> k = new LinkedHashMap<>();
 		k.put(Q_VALUE_APP_CAT_RUSARCH, "Росархив");
 		k.put(Q_VALUE_APP_CAT_USZN, "УСЗН");
 		k.put(Q_VALUE_APP_CAT_PF, "ПФ");
@@ -393,26 +385,26 @@ public class Placeholder implements Constants {
 		makeDescriptorValues(k, dg);
 	}
 
-	private void initDocTypes() throws Exception {
+	private void initDocTypes() {
 		DescriptorGroup d = getDescriptorGroup(Q_DICT_DOC_TYPE,
-				"Тип документов", false);
-		LinkedHashMap<String, String> k = new LinkedHashMap<String, String>();
+			"Тип документов", false);
+		LinkedHashMap<String, String> k = new LinkedHashMap<>();
 		k.put(Q_VALUE_DOC_TYPE_ARCH_COPY, "Архивные копии");
 		k.put(Q_VALUE_DOC_TYPE_ARCH_EXTRACT, "Архивные выписки");
 		k.put(Q_VALUE_DOC_TYPE_LETTER_PLUS,
-				"Информационное письмо положительное");
+			"Информационное письмо положительное");
 		k.put(Q_VALUE_DOC_TYPE_LETTER_MINUS,
-				"Информационное письмо отрицательное");
+			"Информационное письмо отрицательное");
 		k.put(Q_VALUE_DOC_TYPE_LETTER_RECOM,
-				"Информационное письмо рекомендация");
+			"Информационное письмо рекомендация");
 		k.put(Q_VALUE_DOC_TYPE_LIST, "Перечень документов");
 		makeDescriptorValues(k, d);
 	}
 
-	private void initTheEndorsement() throws Exception {
+	private void initTheEndorsement() {
 		DescriptorGroup g = getDescriptorGroup(Q_DICT_THE_ENDORSEMENT,
-				"Этап согласования документа", false);
-		LinkedHashMap<String, String> k = new LinkedHashMap<String, String>();
+			"Этап согласования документа", false);
+		LinkedHashMap<String, String> k = new LinkedHashMap<>();
 		k.put(Q_VALUE_ENDORSEMENT_SIGNATURE, "Сдано на подпись");
 		k.put(Q_VALUE_ENDORSEMENT_RETURN, "Возврат на доработку");
 		k.put(Q_VALUE_ENDORSEMENT_REPEAT_SIGN, "Повторно сдано на подпись");
@@ -421,13 +413,13 @@ public class Placeholder implements Constants {
 
 	/**
 	 * Создание справочника "Способ отправки" и его значений
-	 * 
+	 *
 	 * @throws Exception
 	 */
-	private void initDeliveryMethod() throws Exception {
+	private void initDeliveryMethod() {
 		DescriptorGroup g = getDescriptorGroup(Q_DICT_DELIVERY_METHOD,
-				"Способ отправки", false);
-		LinkedHashMap<String, String> k = new LinkedHashMap<String, String>();
+			"Способ отправки", false);
+		LinkedHashMap<String, String> k = new LinkedHashMap<>();
 		k.put(Q_VALUE_DEL_METHOD_HAND, "Выдан на руки");
 		k.put(Q_VALUE_DEL_METHOD_POST, "Отправлен почтой");
 		k.put(Q_VALUE_DEL_METHOD_FAX, "Отправлен факсом");
@@ -436,13 +428,13 @@ public class Placeholder implements Constants {
 
 	/**
 	 * Сздание справочника "Территория хранилища" и его значений
-	 * 
+	 *
 	 * @throws Exception
 	 */
-	private void initStorage() throws Exception {
+	private void initStorage() {
 		DescriptorGroup dg = getDescriptorGroup(Q_DICT_STORAGE,
-				"Территория хранилища", false);
-		LinkedHashMap<String, String> k = new LinkedHashMap<String, String>();
+			"Территория хранилища", false);
+		LinkedHashMap<String, String> k = new LinkedHashMap<>();
 		k.put(Q_VALUE_STORAGE_PIROG, "ул. Б. Пироговская");
 		k.put(Q_VALUE_STORAGE_PROFS, "ул. Профсоюзная");
 		k.put(Q_VALUE_STORAGE_BEREZH, "Бережковская наб.");
@@ -452,13 +444,13 @@ public class Placeholder implements Constants {
 
 	/**
 	 * Инициализация справочника "Результат ответа"
-	 * 
+	 *
 	 * @throws Exception
 	 */
-	private void initAnswerResult() throws Exception {
+	private void initAnswerResult() {
 		DescriptorGroup g = getDescriptorGroup(Q_DICT_RESULT_ANSWER,
-				"Результат ответа", false);
-		LinkedHashMap<String, String> k = new LinkedHashMap<String, String>();
+			"Результат ответа", false);
+		LinkedHashMap<String, String> k = new LinkedHashMap<>();
 		k.put(Q_VALUE_RESULT_PLUS, "Положительный");
 		k.put(Q_VALUE_RESULT_PLUS_PAID, "Положительный платный");
 		k.put(Q_VALUE_RESULT_MINUS_PAID, "Отрицательный платный");
@@ -472,13 +464,13 @@ public class Placeholder implements Constants {
 
 	/**
 	 * Инициализация справочника "Тематика ответа" и его значений
-	 * 
+	 *
 	 * @throws Exception
 	 */
-	private void initThematicAnswer() throws Exception {
+	private void initThematicAnswer() {
 		DescriptorGroup g = getDescriptorGroup(Q_DICT_THEMATIC_ANSW,
-				"Тематика ответа", false);
-		LinkedHashMap<String, String> k = new LinkedHashMap<String, String>();
+			"Тематика ответа", false);
+		LinkedHashMap<String, String> k = new LinkedHashMap<>();
 		k.put(Q_VALUE_THEM_ZP, "Зарплата");
 		k.put(Q_VALUE_THEM_EXPERIENCE, "Стаж");
 		k.put(Q_VALUE_THEM_AWARD, "Награда");
@@ -493,14 +485,14 @@ public class Placeholder implements Constants {
 
 	/**
 	 * Инициализация справочника "Категория сложности" и его значений
-	 * 
+	 *
 	 * @throws Exception
 	 */
-	private void initDifficultCategory() throws Exception {
+	private void initDifficultCategory() {
 		logger.fine("Инициализация справочника Категория сложности");
 		DescriptorGroup g = getDescriptorGroup(Q_DICT_DIFF_CATEGORY,
-				"Категория сложности", false);
-		LinkedHashMap<String, String> k = new LinkedHashMap<String, String>();
+			"Категория сложности", false);
+		LinkedHashMap<String, String> k = new LinkedHashMap<>();
 		k.put(Q_VALUE_DIFF_CAT_I, "I");
 		k.put(Q_VALUE_DIFF_CAT_II, "II");
 		k.put(Q_VALUE_DIFF_CAT_III, "III");
@@ -508,11 +500,11 @@ public class Placeholder implements Constants {
 		makeDescriptorValues(k, g);
 	}
 
-	private void initOrgStrucureType() throws Exception {
+	private void initOrgStrucureType() {
 		logger.fine("Инициализация справочника Тип элемента организационной структуры");
 		DescriptorGroup g = getDescriptorGroup(Q_DICT_ORG_STRUCT_TYPE,
-				"Тип элемента организационной структуры", false);
-		LinkedHashMap<String, String> k = new LinkedHashMap<String, String>();
+			"Тип элемента организационной структуры", false);
+		LinkedHashMap<String, String> k = new LinkedHashMap<>();
 		k.put(Q_VALUE_ORG_STRUCT_ARCHIVE, "Архив");
 		k.put(Q_VALUE_ORG_STRUCT_DEP, "Структурное подразделение");
 		k.put(Q_VALUE_ORG_STRUCT_MASTORG, "Вышестоящая организация");
@@ -520,19 +512,19 @@ public class Placeholder implements Constants {
 	}
 
 	private DescriptorGroupAttr createOrGetDescriptorGroupAttr(String code,
-			String dataType, Long groupId, String name, Boolean required,
-			Integer sortIndex) {
+		String dataType, Long groupId, String name, Boolean required,
+		Integer sortIndex) {
 		CriteriaQuery<DescriptorGroupAttr> cq = em.getCriteriaBuilder()
-				.createQuery(DescriptorGroupAttr.class);
+			.createQuery(DescriptorGroupAttr.class);
 		Root<DescriptorGroupAttr> from = cq.from(DescriptorGroupAttr.class);
 		Predicate p1 = em.getCriteriaBuilder().equal(from.get("code"), code);
 		Predicate p2 = em.getCriteriaBuilder().equal(from.get("groupId"),
-				groupId);
+			groupId);
 		Predicate and = em.getCriteriaBuilder().and(p1, p2);
 		cq.where(and);
 		Query q = em.createQuery(cq);
 		DescriptorGroupAttr typeAttr;
-		if (q.getResultList().size() == 0) {
+		if (q.getResultList().isEmpty()) {
 			typeAttr = new DescriptorGroupAttr();
 			Long id = getMaxId(DescriptorGroupAttr.class);
 			id += 1;
@@ -552,23 +544,26 @@ public class Placeholder implements Constants {
 
 	/**
 	 * Создание и инициализация значений справочника "Участник проекта"
-	 * 
-	 * @throws Exception
+	 *
 	 */
-	public void initMembers() throws Exception {
+	public void initMembers() {
 		Long groupId;
 		DescriptorGroup group;
 		DescriptorGroupAttr letterAttr;
 		DescriptorGroupAttr typeAttr;
 
-		groupId = cdbh.getDescGroupIdByCode(Q_DICT_MEMBERS);
+		try {
+			groupId = cdbh.getDescGroupIdByCode(Q_DICT_MEMBERS);
+		} catch (Exception ex) {
+			groupId = null;
+		}
 		if (groupId != null) {
 			group = em.find(DescriptorGroup.class, groupId);
 			letterAttr = createOrGetDescriptorGroupAttr("MEMBER_LETTER",
-					"TEXT", group.getId(), "Литера", false, 0);
+				"TEXT", group.getId(), "Литера", false, 0);
 			typeAttr = createOrGetDescriptorGroupAttr("ORG_STRUCTURE_TYPE",
-					"DESCRIPTOR", group.getId(),
-					"Тип элемента организационной структуры", true, 1);
+				"DESCRIPTOR", group.getId(),
+				"Тип элемента организационной структуры", true, 1);
 		} else {
 			Long id = getMaxId(DescriptorGroup.class);
 			id += 1;
@@ -587,87 +582,80 @@ public class Placeholder implements Constants {
 			group.setSystem(true);
 			em.merge(group);
 			letterAttr = createOrGetDescriptorGroupAttr("MEMBER_LETTER",
-					"TEXT", group.getId(), "Литера", false, 0);
+				"TEXT", group.getId(), "Литера", false, 0);
 			typeAttr = createOrGetDescriptorGroupAttr("ORG_STRUCTURE_TYPE",
-					"DESCRIPTOR", group.getId(),
-					"Тип элемента организационной структуры", true, 1);
+				"DESCRIPTOR", group.getId(),
+				"Тип элемента организационной структуры", true, 1);
 		}
 		int sortIndex = 0;
 		DescriptorValue sic = createMemberValue(group, Q_VALUE_MEMBER_SIC,
-				"СИЦ", "СИЦ", "Справочно-информационный центр", sortIndex,
-				letterAttr.getId(), typeAttr.getId(),
-				Q_VALUE_ORG_STRUCT_MASTORG, null);
+			"СИЦ", "СИЦ", "Справочно-информационный центр", sortIndex,
+			letterAttr.getId(), typeAttr.getId(),
+			Q_VALUE_ORG_STRUCT_MASTORG, null);
 		sortIndex++;
 
 		createMemberValue(group, Q_VALUE_MEMBER_GARF, "ГАРФ", "ГАРФ",
-				"Государственный Архив Российской Федерации", sortIndex,
-				letterAttr.getId(), typeAttr.getId(),
-				Q_VALUE_ORG_STRUCT_ARCHIVE, sic);
+			"Государственный Архив Российской Федерации", sortIndex,
+			letterAttr.getId(), typeAttr.getId(),
+			Q_VALUE_ORG_STRUCT_ARCHIVE, sic);
 		sortIndex++;
 		createMemberValue(group, Q_VALUE_MEMBER_RGAE, "РГАЭ", "РГАЭ",
-				"Российский Государственный Архив Экономики", sortIndex,
-				letterAttr.getId(), typeAttr.getId(),
-				Q_VALUE_ORG_STRUCT_ARCHIVE, sic);
+			"Российский Государственный Архив Экономики", sortIndex,
+			letterAttr.getId(), typeAttr.getId(),
+			Q_VALUE_ORG_STRUCT_ARCHIVE, sic);
 		sortIndex++;
 		createMemberValue(
-				group,
-				Q_VALUE_MEMBER_RGANTD,
-				"РГАНТД",
-				"РГАНТД",
-				"Российский Государственный Архив научно-технической Документации",
-				sortIndex, letterAttr.getId(), typeAttr.getId(),
-				Q_VALUE_ORG_STRUCT_ARCHIVE, sic);
+			group,
+			Q_VALUE_MEMBER_RGANTD,
+			"РГАНТД",
+			"РГАНТД",
+			"Российский Государственный Архив научно-технической Документации",
+			sortIndex, letterAttr.getId(), typeAttr.getId(),
+			Q_VALUE_ORG_STRUCT_ARCHIVE, sic);
 		sortIndex++;
 		createMemberValue(group, Q_VALUE_MEMBER_RGALI, "РГАЛИ", "РГАЛИ",
-				"Российский Государственный Архив Литературы и Искусства",
-				sortIndex, letterAttr.getId(), typeAttr.getId(),
-				Q_VALUE_ORG_STRUCT_ARCHIVE, sic);
+			"Российский Государственный Архив Литературы и Искусства",
+			sortIndex, letterAttr.getId(), typeAttr.getId(),
+			Q_VALUE_ORG_STRUCT_ARCHIVE, sic);
 		sortIndex++;
 		createMemberValue(
-				group,
-				Q_VALUE_MEMBER_RGASPI,
-				"РГАСПИ",
-				"РГАСПИ",
-				"Российский Государственный Архив Социально-Политической Истории",
-				sortIndex, letterAttr.getId(), typeAttr.getId(),
-				Q_VALUE_ORG_STRUCT_ARCHIVE, sic);
+			group,
+			Q_VALUE_MEMBER_RGASPI,
+			"РГАСПИ",
+			"РГАСПИ",
+			"Российский Государственный Архив Социально-Политической Истории",
+			sortIndex, letterAttr.getId(), typeAttr.getId(),
+			Q_VALUE_ORG_STRUCT_ARCHIVE, sic);
 		sortIndex++;
 		createMemberValue(group, Q_VALUE_MEMBER_RGANI, "РГАНИ", "РГАНИ",
-				"Российский Государственный Архив Новейшей Истории", sortIndex,
-				letterAttr.getId(), typeAttr.getId(),
-				Q_VALUE_ORG_STRUCT_ARCHIVE, sic);
+			"Российский Государственный Архив Новейшей Истории", sortIndex,
+			letterAttr.getId(), typeAttr.getId(),
+			Q_VALUE_ORG_STRUCT_ARCHIVE, sic);
 		sortIndex++;
 		createMemberValue(group, Q_VALUE_MEMBER_RGBA, "РГВА", "РГВА",
-				"Российский Государственный Военный Архив", sortIndex,
-				letterAttr.getId(), typeAttr.getId(),
-				Q_VALUE_ORG_STRUCT_ARCHIVE, sic);
+			"Российский Государственный Военный Архив", sortIndex,
+			letterAttr.getId(), typeAttr.getId(),
+			Q_VALUE_ORG_STRUCT_ARCHIVE, sic);
 
 	}
 
 	/**
 	 * Создание значения справочника для справочника "Участник проекта"
-	 * 
-	 * @param group
-	 *            справочник
-	 * @param code
-	 *            код значения
-	 * @param literaName
-	 *            код значения атрибута литера
-	 * @param shortName
-	 *            аббревиатура архива
-	 * @param fullName
-	 *            полное наименование архива
-	 * @param sortIndex
-	 *            порядок при сортировке
-	 * @param attrId
-	 *            айди атрибута "Литера"
+	 *
+	 * @param group справочник
+	 * @param code код значения
+	 * @param literaName код значения атрибута литера
+	 * @param shortName аббревиатура архива
+	 * @param fullName полное наименование архива
+	 * @param sortIndex порядок при сортировке
+	 * @param attrId айди атрибута "Литера"
 	 * @throws Exception
 	 */
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	private DescriptorValue createMemberValue(DescriptorGroup group,
-			String code, String literaName, String shortName, String fullName,
-			int sortIndex, Long attrId, Long attrOrgTypeId,
-			String orgStructType, DescriptorValue parent) throws Exception {
+		String code, String literaName, String shortName, String fullName,
+		int sortIndex, Long attrId, Long attrOrgTypeId,
+		String orgStructType, DescriptorValue parent) {
 		DescriptorValue v;
 		v = cdbh.getDescValueByCodes(group.getCode(), code);
 		if (v == null) {
@@ -675,7 +663,7 @@ public class Placeholder implements Constants {
 			logger.fine("Значение не найдено по коду. Ищу по полю shortValue");
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<DescriptorValue> cq = cb
-					.createQuery(DescriptorValue.class);
+				.createQuery(DescriptorValue.class);
 			Root<DescriptorValue> from = cq.from(DescriptorValue.class);
 
 			Predicate p1 = cb.equal(from.get("groupId"), group.getId());
@@ -683,7 +671,7 @@ public class Placeholder implements Constants {
 			Predicate and = cb.and(p1, p2);
 			cq.where(and);
 			Query q = em.createQuery(cq);
-			if (q.getResultList().size() != 0) {
+			if (!q.getResultList().isEmpty()) {
 				logger.fine("Найдено соответствующее значение по полю shortValue");
 				v = (DescriptorValue) q.getResultList().get(0);
 				if (v.getCode() == null) {
@@ -699,7 +687,6 @@ public class Placeholder implements Constants {
 		}
 
 		if (v == null) {
-
 			v = new DescriptorValue();
 			v.setCode(code);
 			v.setGroupId(group.getId());
@@ -711,7 +698,7 @@ public class Placeholder implements Constants {
 			}
 			em.persist(v);
 			logger.fine("Создание значения справочника " + fullName
-					+ " c кодом " + code + " в справочнике " + group.getCode());
+				+ " c кодом " + code + " в справочнике " + group.getCode());
 			createMemberValueLetter(v, attrId, literaName);
 			createOrgStructType(v, attrOrgTypeId, orgStructType);
 		}
@@ -720,17 +707,17 @@ public class Placeholder implements Constants {
 
 	private boolean isDescValueAttrExist(DescriptorValue valueId, Long attrId) {
 		logger.fine("Поиск значения атрибута значения справочника значения "
-				+ valueId.getCode());
+			+ valueId.getCode());
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<DescriptorValueAttr> cq = cb
-				.createQuery(DescriptorValueAttr.class);
+			.createQuery(DescriptorValueAttr.class);
 		Root from = cq.from(DescriptorValueAttr.class);
 		Predicate p1 = cb.equal(from.get("valueId"), valueId.getId());
 		Predicate p2 = cb.equal(from.get("attrId"), attrId);
 		Predicate and = cb.and(p1, p2);
 		cq.where(and);
 		Query q = em.createQuery(cq);
-		boolean result = q.getResultList().size() != 0;
+		boolean result = q.getResultList().isEmpty();
 		if (result) {
 			logger.fine("Значение найдено");
 		} else {
@@ -741,24 +728,29 @@ public class Placeholder implements Constants {
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	private void createOrgStructType(DescriptorValue valueId, Long attrId,
-			String orgStructCode) throws Exception {
+		String orgStructCode) {
 		if (!isDescValueAttrExist(valueId, attrId)) {
 			logger.fine("Создание значения атрибута Тип элемента организационной структуры для значения справочника "
-					+ valueId.getCode());
+				+ valueId.getCode());
 			DescriptorValueAttr a = new DescriptorValueAttr();
 			a.setAttrId(attrId);
 			a.setValueId(valueId.getId());
-			a.setRefValueId(cdbh.getDescValueIdByCode(orgStructCode));
+			try {
+				// FIXME: что-то надо делать
+				a.setRefValueId(cdbh.getDescValueIdByCode(orgStructCode));
+			} catch (Exception ex) {
+				Logger.getLogger(Placeholder.class.getName()).log(Level.SEVERE, null, ex);
+			}
 			em.merge(a);
 		}
 	}
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	private void createMemberValueLetter(DescriptorValue valueId, Long attrId,
-			String litera) {
+		String litera) {
 		if (!isDescValueAttrExist(valueId, attrId)) {
 			logger.fine("Создание значения атрибута Литера для значения справочника "
-					+ valueId.getCode());
+				+ valueId.getCode());
 			DescriptorValueAttr a = new DescriptorValueAttr();
 			a.setAttrId(attrId);
 			a.setValueId(valueId.getId());

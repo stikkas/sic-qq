@@ -6,8 +6,8 @@ Ext.define('qqext.view.reg.VRegForm', {
 	extend: 'Ext.container.Container',
 	requires: [
 		'qqext.view.reg.VInboxDoc',
-		'qqext.view.reg.VApplicant',
 		'qqext.view.reg.VQuery',
+		'qqext.view.reg.VApplicant',
 		'qqext.view.reg.VQueryObject',
 		'qqext.view.reg.VFiles'
 	],

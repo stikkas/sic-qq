@@ -11,47 +11,31 @@ Ext.application({
 	appFolder: 'qqext',
 	autoCreateViewport: false,
 	requires: [
-		'Ext.layout.container.Card',
-		'Ext.data.proxy.LocalStorage',
-		'qqext.view.search.VSearchParams',
-		'qqext.Menu',
-		'qqext.view.VTitleBar',
-		'qqext.view.VLeftMenu',
-		'qqext.view.search.VSearchForm',
-		'qqext.view.search.FioFieldContainer',
-		'qqext.view.search.VSearchResult',
-		'hawk_common.cmp.DateField',
-		'qqext.store.DictValuesStore',
-		'qqext.store.CustomStore',
-		'qqext.view.Viewport',
-		'qqext.view.search.VSearchForm',
-		'hawk_common.fix.FixedTextField',
-		'hawk_common.fix.FixedField',
-		'hawk_common.fix.FixedFormPanel',
-		'hawk_common.fix.FixedNumberField',
-		'hawk_common.fix.FixedFieldContainer',
-		'hawk_common.fix.FixedBaseField',
-		'hawk_common.fix.FixedFieldSet',
-		'hawk_common.fix.FixedDateField',
-		'Ext.form.Label',
-		'Ext.form.field.ComboBox',
-		'Ext.layout.container.Border',
 		'hawk_common.model.User',
-		'hawk_common.store.UserLocalStorage'
+		'hawk_common.store.UserLocalStorage',
+		'qqext.view.Viewport'
 	],
 	controllers: ['qqext.controller.Main'],
 	launch: function() {
 
 		// Временно для отладки. В рабочей версии убрать
+		var user = Ext.create('hawk_common.model.User'),
+				userStore = qqext.Constants.userStore = Ext.create('hawk_common.store.UserLocalStorage');
+
+		user.set('id', 'current');
+		user.set('name', 'fake');
+		user.set('access', 'allowall');
+		userStore.add(user);
+		userStore.sync();
 		Ext.create('qqext.view.Viewport', {});
 		return;
+		//-------------------------
 		Ext.Ajax.request({
 			url: '/qq-web/Rules',
 			success: function(response) {
-				var
-						authRes = Ext.decode(response.responseText),
+				var authRes = Ext.decode(response.responseText),
 						user = Ext.create('hawk_common.model.User'),
-						userStore = Ext.create('hawk_common.store.UserLocalStorage');
+						userStore = qqext.Constants.userStore = Ext.create('hawk_common.store.UserLocalStorage');
 
 				user.set('id', 'current');
 				user.set('name', authRes.msg);

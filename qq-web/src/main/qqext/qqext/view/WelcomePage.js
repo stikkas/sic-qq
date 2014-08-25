@@ -6,6 +6,11 @@
  */
 Ext.define('qqext.view.WelcomePage', {
 	extend: 'Ext.panel.Panel',
+	requires: [
+		'qqext.Constants',
+		'qqext.factory.HandlerButton',
+		'qqext.factory.HrefButton'
+	],
 	layout: 'hbox',
 	bodyCls: 'welcomecontainer',
 	cls: 'welcomepage',
@@ -14,49 +19,22 @@ Ext.define('qqext.view.WelcomePage', {
 				me = this,
 				consts = qqext.Constants,
 				labels = consts.labels,
-				urls = consts.urls;
+				urls = consts.urls,
+				HrefButton = qqext.factory.HrefButton,
+				HandlerButton = qqext.factory.HandlerButton;
 
 		Ext.applyIf(me, {
-			items: createButtons([
-				[labels.app1, urls.app1],
-				[labels.app2, urls.app2],
-				[labels.asq, beginAction]
-			]),
-			buttons: [
-				{text: labels.quit,
-					handler: consts.quitAction}
-			]
+			items: Ext.each([
+				new HrefButton(labels.app1, urls.app1),
+				new HrefButton(labels.app2, urls.app2),
+				new HandlerButton(labels.asq, function() {
+					consts.setActivePage(1);
+				})
+			], function(btn) {
+				btn.cfg({cls: 'welcomebutton'});
+			}),
+			buttons: [new HandlerButton(labels.quit, consts.quitAction)]
 		});
 		me.callParent();
-
-		/**
-		 * Создает массив кнопок
-		 * @param {Array} buttons массив массивов из двух элементов
-		 * @returns {Array} массив объектов для кнопок
-		 */
-		function createButtons(buttons) {
-			var result = [];
-			for (var i = 0, max = buttons.length; i < max; ++i) {
-				var
-						props = buttons[i],
-						hrefOrHandler = props[1],
-						btn = {xtype: 'button',
-							text: props[0],
-							cls: 'welcomebutton'};
-
-				if (hrefOrHandler instanceof Function)
-					btn.handler = hrefOrHandler;
-				else
-					btn.href = hrefOrHandler;
-				result.push(btn);
-			}
-			return result;
-		}
-		/**
-		 * Вызывается когда нажали на кнопку для входа в систему АС Запросы
-		 */
-		function beginAction() {
-			consts.setActivePage(1);
-		}
 	}
 });

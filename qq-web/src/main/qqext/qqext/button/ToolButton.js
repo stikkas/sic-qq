@@ -9,5 +9,6 @@ Ext.define('qqext.button.ToolButton', {
 	xtype: 'toolbutton',
 	cls: 'tool-btn',
 	ui: 'plain-toolbar-small'
-})
+});
+
 

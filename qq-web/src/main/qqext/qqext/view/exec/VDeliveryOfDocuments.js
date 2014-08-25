@@ -6,13 +6,14 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 	extend: 'qqext.view.StyledPanel',
 	requires: [
 		'qqext.view.exec.cmp.DeliveryTypeCount',
-		'Ext.button.Button',
+		'qqext.factory.HandlerButton',
 		'qqext.model.qq.DeliveryAction',
+		'qqext.model.qq.UsedMaterial',
 		'Ext.grid.Panel',
 		'Ext.grid.plugin.CellEditing',
 		'Ext.form.FieldContainer',
-		'qqext.model.qq.DeliveryAction',
-		'Ext.form.FieldSet'
+		'Ext.form.FieldSet',
+		'hawk_common.fix.FixedTextField'
 	],
 	title: 'Выдача документов',
 	// height:'auto',
@@ -20,12 +21,15 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 	mOdel: null,
 	grid: null,
 	loadRecord: function(model) {
-		this.mOdel = model;
-		this.grid.reconfigure(this.mOdel.usedMaterials());
-		for (var i = 0; i < this.mOdel.delActions().getCount(); i++) {
+		var me = this,
+				actions = model.delActions(),
+				max = actions.getCount();
+		me.mOdel = model;
+		me.grid.reconfigure(model.usedMaterials());
+		for (var i = 0; i < max; ++i) {
 			var t = Ext.create('qqext.view.exec.cmp.DeliveryTypeCount');
-			t.loadRecord(this.mOdel.delActions().getAt(i));
-			this.insert(this.items.length - 1, t);
+			t.loadRecord(actions.getAt(i));
+			me.insert(me.items.length - 1, t);
 		}
 	},
 	updateRecord: function(model) {
@@ -41,89 +45,78 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 		me.callParent(arguments);
 	},
 	initComponent: function() {
-		var me = this;
-		var addButton = Ext.create('Ext.button.Button', {
-			text: 'add',
-			handler: function() {
-				var old = me.getHeight();
-				var addComp = Ext
-						.create('qqext.view.exec.cmp.DeliveryTypeCount');
-				this.ownerCt.insert(this.ownerCt.items.length - 1,
-						addComp);
-				var tm = Ext.create('qqext.model.qq.DeliveryAction');
-				me.mOdel.delActions().add(tm);
-			}
-		});
+		var me = this,
+				HandlerButton = qqext.factory.HandlerButton;
+		var addButton = new HandlerButton('add',
+				function() {
+					var old = me.getHeight();
+					var addComp = Ext.create('qqext.view.exec.cmp.DeliveryTypeCount');
+					this.ownerCt.insert(this.ownerCt.items.length - 1, addComp);
+					var tm = Ext.create('qqext.model.qq.DeliveryAction');
+					me.mOdel.delActions().add(tm);
+				}
+		);
 
+		console.log("Hello");
 		var usedMaterialGrid = Ext.create('Ext.grid.Panel', {
 			minHeight: 120,
-			plugins: [Ext.create('Ext.grid.plugin.CellEditing', {
+			plugins: [
+				Ext.create('Ext.grid.plugin.CellEditing', {
 					clicksToEdit: 1
-				})],
+				})
+			],
 			// forceFit : true,
-			dockedItems: [Ext.create('Ext.form.FieldContainer', {
-					layout: {
-						type: 'hbox'
-					},
-					items: [{
-							xtype: 'button',
-							text: 'add',
-							handler: function() {
-								var um = Ext.create('qqext.model.qq.UsedMaterial');
-								usedMaterialGrid.getStore().add(um);
-							}
-						}, {
-							xtype: 'button',
-							text: 'del',
-							handler: function() {
-								var sm = usedMaterialGrid
-										.getSelectionModel();
-								if (sm.hasSelection()) {
-									var selectedUsedMaterial = sm
-											.getSelection()[0];
-									var selectedIndex = usedMaterialGrid
-											.getStore()
-											.indexOf(selectedUsedMaterial);
-									console.log('selected index: '
-											+ selectedIndex);
+			dockedItems: [
+				Ext.create('Ext.form.FieldContainer', {
+					layout: 'hbox',
+					items: [
+						HandlerButton('add', function() {
+							var um = Ext.create('qqext.model.qq.UsedMaterial');
+							usedMaterialGrid.getStore().add(um);
+						}),
+						HandlerButton('del', function() {
+							var sm = usedMaterialGrid
+									.getSelectionModel();
+							if (sm.hasSelection()) {
+								var selectedUsedMaterial = sm
+										.getSelection()[0];
+								var selectedIndex = usedMaterialGrid
+										.getStore()
+										.indexOf(selectedUsedMaterial);
+								usedMaterialGrid
+										.getStore()
+										.remove(selectedUsedMaterial);
 
-									usedMaterialGrid
-											.getStore()
-											.remove(selectedUsedMaterial);
-
-									if (selectedIndex > 0) {
-										selectedIndex--;
-									}
-									sm.select(selectedIndex);
+								if (selectedIndex > 0) {
+									selectedIndex--;
 								}
+								sm.select(selectedIndex);
 							}
-						}]
+						})
+					]
 				})],
-			columns: [{
+			columns: [
+				{
 					text: '№ фонда',
 					dataIndex: 'fundNum',
-					editor: {
-						xtype: 'textfield'
-					}
-				}, {
+					editor: {xtype: 'textfield'}
+				},
+				{
 					text: '№ описи',
 					dataIndex: 'seriesNum',
-					editor: {
-						xtype: 'textfield'
-					}
-				}, {
+					editor: {xtype: 'textfield'}
+				},
+				{
 					text: '№ ед. хранения',
 					dataIndex: 'storageUnitNum',
-					editor: {
-						xtype: 'textfield'
-					}
-				}, {
+					editor: {xtype: 'textfield'}
+				},
+				{
 					text: '№ листов',
 					dataIndex: 'listNum',
-					editor: {
-						xtype: 'textfield'
-					}
-				}]
+					editor: {xtype: 'textfield'}
+				}
+			]
 		});
 
 		me.grid = usedMaterialGrid;

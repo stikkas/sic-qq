@@ -59,6 +59,10 @@ Ext.define('qqext.Constants', {
 	 */
 	mainController: null,
 	/**
+	 * Хранилище с правами пользователей
+	 */
+	userStore: null,
+	/**
 	 * Различные кнопки, на которые нужно иметь ссылки по ходу дела. Обращаться к ним
 	 * только через интерфейс getButton и addButton.
 	 */
@@ -122,6 +126,8 @@ Ext.define('qqext.Constants', {
 	},
 	/**
 	 * Вызывается когда нажали на кнопку 'Выйти'
+	 * TODO: может быть следуте очистить локальное хранилище, в котором
+	 * сохранены данные пользователя
 	 */
 	quitAction: function() {
 		window.location = qqext.Constants.urls.login;

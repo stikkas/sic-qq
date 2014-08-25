@@ -4,11 +4,11 @@
 Ext.define('qqext.view.reg.VApplicant', {
 	extend: 'qqext.view.StyledPanel',
 	requires: [
-		'Ext.form.field.Text',
-		'Ext.form.field.TextArea',
-		'Ext.form.field.ComboBox',
-		'Ext.form.FieldSet',
-		'Ext.form.field.Date'
+		'qqext.factory.TextField',
+		'qqext.factory.TextArea',
+		'qqext.factory.ComboBox',
+		'hawk_common.fix.FixedFieldSet',
+		'qqext.factory.DateField'
 	],
 	title: 'Заявитель',
 	disabledCls: '',
@@ -17,41 +17,26 @@ Ext.define('qqext.view.reg.VApplicant', {
 	initComponent: function() {
 		var
 				me = this,
-				surname = Ext.create('Ext.form.field.Text', {
-					name: 'surname',
-					fieldLabel: 'Фамилия'
-				}),
-				name = Ext.create('Ext.form.field.Text', {
-					name: 'name',
-					fieldLabel: 'Имя'
-				}),
-				fatherName = Ext.create('Ext.form.field.Text', {
-					name: 'fatherName',
-					fieldLabel: 'Отчество'
-				}),
-				org = Ext.create('Ext.form.field.TextArea', {
-					name: 'applicantObject',
-					fieldLabel: 'Организация'
-				});
+				factory = qqext.factory,
+				TextField = factory.TextField,
+				ComboBox = factory.ComboBox,
+				surname = new TextField('Фамилия', 'surname'),
+				name = new TextField('Имя', 'name'),
+				fatherName = new TextField('Отчество', 'fatherName'),
+				org = new factory.TextArea('Организация', 'applicantObject');
 
 		Ext.applyIf(me, {
 			items: [
-				Ext.create('Ext.form.field.ComboBox', {
-					fieldLabel: 'Тип заявителя',
-					name: 'applicantType',
-					store: Ext.getStore('applicantType'),
-					displayField: 'name',
-					valueField: 'id',
+				new ComboBox('Тип заявителя', Ext.getStore('applicantType'), 'applicantType').cfg({
 					listeners: {
-						select: function(combo, selected) {
+						select: function(cb, selected) {
 							var code = selected[0].data.code;
 							switch (selected[0].data.code) {
 								case 'Q_VALUE_APP_TYPE_FFACE' :
 									if (me.curCode === 'Q_VALUE_APP_TYPE_JURFACE') {
 										me.remove(org, false);
 									}
-									if (!me.curCode ||
-											me.curCode === 'Q_VALUE_APP_TYPE_JURFACE') {
+									if (!me.curCode || me.curCode === 'Q_VALUE_APP_TYPE_JURFACE') {
 										me.insert(1, surname);
 										me.insert(2, name);
 										me.insert(3, fatherName);
@@ -77,44 +62,24 @@ Ext.define('qqext.view.reg.VApplicant', {
 						}
 					}
 				}),
-				Ext.create('Ext.form.field.ComboBox', {
-					name: 'applicantCategory',
-					store: Ext.getStore('applicantCategory'),
-					displayField: 'name',
-					valueField: 'id',
-					fieldLabel: 'Категория заявителя'
-				}),
-				Ext.create('Ext.form.field.Text', {
-					name: 'country',
-					fieldLabel: 'Страна'
-				}),
-				Ext.create('Ext.form.field.Text', {
-					name: 'address',
-					fieldLabel: 'Адрес'
-				}),
-				Ext.create('Ext.form.field.Text', {
-					name: 'phone',
-					fieldLabel: 'Телефон'
-				}),
+				new ComboBox('Категория заявителя', Ext.getStore('applicantCategory'), 'applicantCategory'),
+				new TextField('Страна', 'country'),
+				new TextField('Адрес', 'address'),
+				new TextField('Телефон', 'phone'),
 				Ext.create('Ext.form.FieldSet', {
 					title: 'Дополнительные сведения',
 					collapsible: true,
 					items: [
-						Ext.create('Ext.form.field.Text', {
-							fieldLabel: '№ входящего документа',
-							name: 'inboxDocNum',
+						new TextField('№ входящего документа', 'inboxDocNum').cfg({
 							width: 200
-						}), Ext.create('Ext.form.field.Date', {
-							name: 'inboxDocDate',
-							fieldLabel: 'Дата',
+						}),
+						new factory.DateField('Дата', 'inboxDocDate').cfg({
 							width: 200
-						}), Ext.create('Ext.form.field.Text', {
-							fieldLabel: 'ФИО юр. лица (кто подписал)',
-							name: 'nameOfJurPerson',
+						}),
+						new TextField('ФИО юр. лица (кто подписал)', 'nameOfJurPerson').cfg({
 							width: 300
-						}), Ext.create('Ext.form.field.Text', {
-							fieldLabel: 'Приложения',
-							name: 'addendum',
+						}),
+						new TextField('Приложения', 'addendum').cfg({
 							width: 350
 						})
 					]

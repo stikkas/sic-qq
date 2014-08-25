@@ -4,7 +4,6 @@
 Ext.define('qqext.view.exec.VExecForm', {
 	extend: 'Ext.container.Container',
 	requires: [
-		'qqext.model.qq.ExecutionInfo',
 		'qqext.view.exec.VExecInfo',
 		'qqext.view.exec.VDeliveryOfDocuments',
 		'qqext.view.exec.VCoordination',
@@ -26,30 +25,31 @@ Ext.define('qqext.view.exec.VExecForm', {
 		});
 		me.callParent(arguments);
 	},
-	setDisabled: function() {
-		var me = this;
-		me.disabled = arguments[0];
-		for (var i = 0; i < this.items.length; i++) {
-			me.items.getAt(i).setDisabled(me.disabled);
+	setDisabled: function(disabled) {
+		var me = this,
+				items = me.items.items,
+				max = items.length;
+		for (var i = 0; i < max; ++i) {
+			items[i].setDisabled(disabled);
 		}
+		me.disabled = disabled;
 	},
 	isDisabled: function() {
 		return this.disabled;
 	},
 	loadRecord: function(model) {
-		var me = this;
-		var execInfo = model.getExecutionInfo();
-		me.items.getAt(0).loadRecord(execInfo);
-		me.items.getAt(1).loadRecord(model);
-		me.items.getAt(2).loadRecord(model);
-		me.items.getAt(3).loadRecord(model);
+		var items = this.items.items,
+				max = items.length;
+		items[0].loadRecord(model.getExecutionInfo());
+		for (var i = 1; i < max; ++i)
+			items[i].loadRecord(model);
 	},
 	updateRecord: function(model) {
-		var me = this;
-		me.items.getAt(0).updateRecord(model.getExecutionInfo());
-		me.items.getAt(1).updateRecord(model);
-		me.items.getAt(2).updateRecord(model);
-		me.items.getAt(3).updateRecord(model);
+		var items = this.items.items,
+				max = items.length;
+		items[0].updateRecord(model.getExecutionInfo());
+		for (var i = 1; i < max; ++i)
+			items[i].updateRecord(model);
 		return model;
 	}
 });

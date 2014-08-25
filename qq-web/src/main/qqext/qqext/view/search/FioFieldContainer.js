@@ -3,31 +3,20 @@
  */
 Ext.define('qqext.view.search.FioFieldContainer', {
 	extend: 'Ext.form.FieldContainer',
+	requires: [
+		'qqext.factory.TextField'
+	],
 	layout: 'hbox',
 	xtype: 'fiofieldcontainer',
 	height: 30,
-	/**
-	 * Создает виджет типа textfield
-	 * @param {String} fieldLabel надпись для поля
-	 * @param {String} name имя (для формы)
-	 * @param {String} [align='left'] align выравнивание надписи
-	 * @returns {Object} объект, на основе которого ExtJS сделает Text
-	 */
-	createText: function(fieldLabel, name, align) {
-		return {
-			xtype: 'textfield',
-			fieldLabel: fieldLabel,
-			labelAlign: align || 'left',
-			name: name
-		}
-	},
 	initComponent: function() {
-		var me = this;
+		var me = this,
+				TextField = qqext.factory.TextField;
 		Ext.applyIf(me, {
 			items: [
-				me.createText('Фамилия', me.nSurname),
-				me.createText('Имя', me.nName, 'right'),
-				me.createText('Отчество', me.nFatherName, 'right')
+				new TextField('Фамилия', me.nSurname),
+				new TextField('Имя', me.nName).cfg({labelAlign: 'right'}),
+				new TextField('Отчество', me.nFatherName).cfg({labelAlign: 'right'})
 			]
 		});
 		me.callParent(arguments);

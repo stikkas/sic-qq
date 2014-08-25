@@ -1,8 +1,19 @@
 /**
- *
+ * Панель формы "Способ отправки"
  */
 Ext.define('qqext.view.exec.VDeliveryMethod', {
 	extend: 'qqext.view.StyledPanel',
+	requires: [
+		'qqext.view.exec.cmp.ComboDateTrash',
+		'qqext.factory.HandlerButton',
+		'qqext.model.qq.SendAction',
+		'qqext.factory.TextArea',
+		'qqext.factory.TextField',
+		'qqext.factory.DateField',
+		'Ext.Component',
+		'Ext.form.FieldSet',
+		'hawk_common.cmp.FileList'
+	],
 	title: 'Способ отправки',
 	mOdel: null,
 	minHeight: 60,
@@ -49,51 +60,33 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 		me.callParent(arguments);
 	},
 	initComponent: function() {
-		var me = this;
-		var addBtn = Ext.create('Ext.Button', {
-			text: 'add',
-			handler: function() {
-				var t = Ext.create(
-						'qqext.view.exec.cmp.ComboDateTrash',
-						me.comboTrashConfig);
-				me.insert(me.items.length - 5, t);
-				me.mOdel.sendActions().add(Ext
-						.create('qqext.model.qq.SendAction'));
-			}
-		});
-
-		var sep = Ext.create('Ext.Component', {
-			autoEl: 'hr'
-		});
-
-		var postponemenNotify = Ext.create('Ext.form.field.Date', {
-			fieldLabel: 'Уведомление о переносе сроков',
-			name: 'renewalNotice'
-		})
-
-		var outboxNum = Ext.create('Ext.form.field.Text', {
-			fieldLabel: 'Исходящий №',
-			name: 'ref_num'
-		});
-
-		var addendum = Ext.create('Ext.form.field.TextArea', {
-			fieldLabel: 'Примечание',
-			name: 'note',
-			width: 600,
-			labelWidth: 100
-		})
-
-		var fs = Ext.create('Ext.form.FieldSet', {
-			title: 'Ответ',
-			collapsible: true,
-			items: [Ext.create('hawk_common.cmp.FileList')]
-		})
+		var me = this,
+				factory = qqext.factory;
 
 		Ext.apply(me, {
-			items: [addBtn, sep, postponemenNotify, outboxNum,
-				addendum, fs]
+			items: [
+				new factory.HandlerButton('add', function() {
+					var t = Ext.create('qqext.view.exec.cmp.ComboDateTrash',
+							me.comboTrashConfig);
+					me.insert(me.items.length - 5, t);
+					me.mOdel.sendActions().add(Ext
+							.create('qqext.model.qq.SendAction'));
+				}),
+				Ext.create('Ext.Component', {autoEl: 'hr'}),
+				new factory.DateField('Уведомление о переносе сроков', 'renewalNotice'),
+				new factory.TextField('Исходящий №', 'ref_num'),
+				new factory.TextArea('Примечание', 'note').cfg({
+					width: 600,
+					labelWidth: 100
+				}),
+				Ext.create('Ext.form.FieldSet', {
+					title: 'Ответ',
+					collapsible: true,
+					items: [Ext.create('hawk_common.cmp.FileList')]
+				})
+			]
 		});
 
 		me.callParent(arguments);
 	}
-})
+});

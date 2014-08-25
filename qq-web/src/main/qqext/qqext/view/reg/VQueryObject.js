@@ -4,32 +4,23 @@
 Ext.define('qqext.view.reg.VQueryObject', {
 	extend: 'qqext.view.StyledPanel',
 	requires: [
-		'Ext.form.field.Text',
-		'Ext.form.field.Number'
+		'qqext.factory.TextField',
+		'qqext.factory.NumberField'
 	],
 	title: 'На кого запрос',
 	disabledCls: '',
 	formBind: true,
 	initComponent: function() {
-		var me = this;
+		var me = this,
+				factory = qqext.factory,
+				TextField = factory.TextField;
 
 		Ext.applyIf(me, {
 			items: [
-				Ext.create('Ext.form.field.Text', {
-					fieldLabel: 'Фамилия',
-					name: 'requestObjectSurname'
-				}),
-				Ext.create('Ext.form.field.Text', {
-					fieldLabel: 'Имя',
-					name: 'requestObjectName'
-				}),
-				Ext.create('Ext.form.field.Text', {
-					fieldLabel: 'Отчество',
-					name: 'requestFatherName'
-				}),
-				Ext.create('Ext.form.field.Number', {
-					name: 'request_object_birthyear',
-					fieldLabel: 'Год рождения',
+				new TextField('Фамилия', 'requestObjectSurname'),
+				new TextField('Имя', 'requestObjectName'),
+				new TextField('Отчество', 'requestFatherName'),
+				new factory.NumberField('Год рождения', 'request_object_birthyear').cfg({
 					width: 200
 				})
 			]

@@ -7,7 +7,10 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	requires: [
 		'Ext.grid.column.Date',
 		'Ext.util.Filter',
-		'Ext.form.field.ComboBox'
+		'qqext.factory.ComboBox',
+		'qqext.factory.Label',
+		'qqext.factory.TextField',
+		'Ext.toolbar.Paging'
 	],
 	width: '100%',
 	forceFit: true,
@@ -62,36 +65,36 @@ Ext.define('qqext.view.journal.VJournalForm', {
 		event.stopPropagation();
 	},
 	initComponent: function() {
-		var me = this;
+		var me = this,
+				factory = qqext.factory,
+				ComboBox = factory.ComboBox;
 		Ext.applyIf(me, {
-			columns: [{
+			columns: [
+				{
 					text: 'Литера',
 					itemId: 'literaCount',
 					dataIndex: 'litera',
 					layout: 'vbox',
 					menuDisabled: true,
-					items: [{
+					items: [
+						new ComboBox('', 'literas', 'filterLiteraCombo').cfg({
 							itemId: 'filterLiteraCombo',
-							xtype: 'combobox',
-							name: 'filterLiteraCombo',
 							width: '100%',
-							store: 'literas',
-							displayField: 'name',
-							valueField: 'id',
 							listeners: {
 								select: me._filterComboSelected,
 								render: me._render,
 								specialkey: me._specialKeyStop
 							}
-						}]
-				}, {
+						})
+					]
+				},
+				{
 					text: '№ вх. документа',
 					dataIndex: 'inboxDocNum',
 					layout: 'vbox',
-					items: [{
-							xtype: 'textfield',
+					items: [
+						new factory.TextField('', 'docNumberTextField').cfg({
 							width: '100%',
-							name: 'docNumberTextField',
 							listeners: {
 								specialkey: function(tf, event, eopts) {
 									event.stopPropagation();
@@ -102,9 +105,11 @@ Ext.define('qqext.view.journal.VJournalForm', {
 								},
 								render: me._render
 							}
-						}],
+						})
+					],
 					menuDisabled: true
-				}, {
+				},
+				{
 					text: 'Дата регистрации',
 					width: 100,
 					layout: 'vbox',
@@ -113,7 +118,8 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					itemId: 'regDate',
 					format: 'd.m.Y',
 					focusOnToFront: false,
-					items: [{
+					items: [
+						{
 							width: '100%',
 							xtype: 'hawkDateField',
 							name: 'regDateField',
@@ -128,16 +134,19 @@ Ext.define('qqext.view.journal.VJournalForm', {
 									}
 								}
 							}
-						}],
+						}
+					],
 					menuDisabled: true
-				}, {
+				},
+				{
 					layout: 'vbox',
 					xtype: 'datecolumn',
 					text: 'Дата исполнения контрольная',
 					dataIndex: 'execDate',
 					itemId: 'execDateControl',
 					format: 'd.m.Y',
-					items: [{
+					items: [
+						{
 							width: '100%',
 							xtype: 'hawkDateField',
 							focusOnToFront: false,
@@ -147,7 +156,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 								render: me._render,
 								specialkey: function(tf, event, eopts) {
 									event.stopPropagation();
-									if (event.getKey() == event.ENTER) {
+									if (event.getKey() === event.ENTER) {
 										var grid = tf.ownerCt.ownerCt.ownerCt;
 										grid.applyFilter();
 									}
@@ -155,72 +164,68 @@ Ext.define('qqext.view.journal.VJournalForm', {
 							}
 						}],
 					menuDisabled: true
-				}, {
+				},
+				{
 					text: 'От кого поступил',
 					dataIndex: 'fioOrg',
 					layout: 'vbox',
-					items: [{
-							xtype: 'combobox',
+					items: [
+						new ComboBox('', 'journalApplicantFilterStore', 'requestFromCombo').cfg({
 							width: '100%',
-							displayField: 'name',
-							name: 'requestFromCombo',
 							queryMode: 'local',
-							valueField: 'id',
-							store: 'journalApplicantFilterStore',
 							listeners: {
 								select: me._filterComboSelected,
 								render: me._render,
 								specialkey: me._specialKeyStop
 							}
-						}],
+						})
+					],
 					menuDisabled: true
-				}, {
+				},
+				{
 					text: 'Состояние запроса',
 					dataIndex: 'status',
-					items: [{
+					items: [
+						new ComboBox('', 'Q_DICT_QUESTION_STATUSES', 'requestStatusCombo').cfg({
 							width: '100%',
-							xtype: 'combobox',
-							name: 'requestStatusCombo',
-							displayField: 'name',
-							valueField: 'id',
-							store: 'Q_DICT_QUESTION_STATUSES',
 							listeners: {
 								select: me._filterComboSelected,
 								render: me._render,
 								specialkey: me._specialKeyStop
 							}
-						}],
+						})
+					],
 					menuDisabled: true
-				}, {
+				},
+				{
 					text: 'Исполнитель',
 					dataIndex: 'executor',
-					items: [{
+					items: [
+						new ComboBox('', 'journalExecutors').cfg({
 							width: '100%',
-							xtype: 'combobox',
 							select: me._filterComboSelected,
 							render: me._render,
-							displayField: 'name',
-							valueField: 'id',
 							queryMode: 'local',
-							store: 'journalExecutors',
 							listeners: {
 								specialkey: me._specialKeyStop,
 								select: me._filterComboSelected
 							}
-						}],
+						})
+					],
 					menuDisabled: true
 				}],
-			dockedItems: [{
+			dockedItems: [
+				{
 					xtype: 'pagingtoolbar',
 					dock: 'bottom',
 					displayInfo: false,
 					store: 'journal'
-				}, {
-					xtype: 'label',
-					text: 'СИЦ/Архив',
+				},
+				new factory.Label('СИЦ/Архив').cfg({
 					dock: 'top',
 					cls: 'journal_title_label'
-				}]
+				})
+			]
 		});
 		me.callParent(arguments);
 	}

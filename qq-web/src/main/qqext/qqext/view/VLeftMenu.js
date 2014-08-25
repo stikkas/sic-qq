@@ -4,6 +4,9 @@
 
 Ext.define('qqext.view.VLeftMenu', {
 	extend: 'Ext.container.Container',
+	requires: [
+		'qqext.Menu'
+	],
 	margin: '0 10 0 0',
 	region: 'west',
 	layout: 'vbox',

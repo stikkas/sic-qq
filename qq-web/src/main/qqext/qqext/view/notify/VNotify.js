@@ -6,42 +6,23 @@
 Ext.define('qqext.view.notify.VNotify', {
 	extend: 'qqext.view.StyledPanel',
 	requires: [
-		'Ext.form.field.ComboBox',
-		'Ext.form.field.Date'
+		'qqext.factory.ComboBox',
+		'qqext.factory.DateField'
 	],
 	height: 300,
 	maxHeight: 300,
 	title: 'Уведомление заявителю',
 	initComponent: function() {
-		var me = this;
+		var me = this,
+				factory = qqext.factory,
+				ComboBox = factory.ComboBox;
 
 		Ext.applyIf(me, {
 			items: [
-				Ext.create('Ext.form.field.ComboBox', {
-					fieldLabel: 'ФИО исполнителя',
-					displayField: 'name',
-					valueField: 'id',
-					name: 'executor',
-					store: 'allUsers'
-				}),
-				Ext.create('Ext.form.field.ComboBox', {
-					fieldLabel: 'Тип документов',
-					displayField: 'name',
-					valueField: 'id',
-					name: 'docType',
-					store: Ext.getStore('docType')
-				}),
-				Ext.create('Ext.form.field.ComboBox', {
-					fieldLabel: 'Способ передачи',
-					displayField: 'name',
-					valueField: 'id',
-					store: Ext.getStore('answerForm'),
-					name: 'deliveryType'
-				}),
-				Ext.create('Ext.form.field.Date', {
-					fieldLabel: 'Дата уведомления',
-					name: 'notificationDate'
-				})
+				new ComboBox('ФИО исполнителя', 'allUsers', 'executor'),
+				new ComboBox('Тип документов', 'docType', 'docType'),
+				new ComboBox('Способ передачи', 'answerForm', 'deliveryType'),
+				new factory.DateField('Дата уведомления', 'notificationDate')
 			]
 		});
 

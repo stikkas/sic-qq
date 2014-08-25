@@ -7,15 +7,19 @@
 Ext.define('qqext.view.MainPage', {
 	extend: 'Ext.container.Container',
 	requires: [
-		'qqext.view.VTitleBar',
-		'qqext.view.VLeftMenu',
+		'Ext.layout.container.Border',
 		'qqext.Constants',
 		'qqext.view.search.VSearchForm',
-		'qqext.view.journal.VJournalForm',
 		'qqext.view.reg.VRegForm',
 		'qqext.view.notify.VNotify',
 		'qqext.view.transmission.VTransmission',
-		'qqext.view.exec.VExecForm'
+		'qqext.view.exec.VExecForm',
+		'Ext.panel.Panel',
+		'Ext.layout.container.Card',
+		'qqext.view.journal.VJournalForm',
+		'Ext.container.Container',
+		'qqext.view.VTitleBar',
+		'qqext.view.VLeftMenu'
 	],
 	layout: 'border',
 	initComponent: function() {
@@ -23,6 +27,7 @@ Ext.define('qqext.view.MainPage', {
 				consts = qqext.Constants,
 				mainPanel,
 				mainPanelLayout;
+
 		consts.searchForm = Ext.create('qqext.view.search.VSearchForm');
 		consts.regForm = Ext.create('qqext.view.reg.VRegForm');
 		consts.notifyForm = Ext.create('qqext.view.notify.VNotify');

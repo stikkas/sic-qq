@@ -5,6 +5,10 @@
  */
 
 Ext.define('qqext.factory.FioField', {
+	extend: 'qqext.factory.Base',
+	requires: [
+		'qqext.view.search.FioFieldContainer'
+	],
 	/**
 	 * Возвращает объект типа fiofieldcontainer
 	 * @param {String} surname фамилия
@@ -14,6 +18,7 @@ Ext.define('qqext.factory.FioField', {
 	 */
 	constructor: function(surname, name, fatherName) {
 		return {
+			cfg: this._cfg,
 			xtype: 'fiofieldcontainer',
 			nSurname: surname,
 			nName: name,

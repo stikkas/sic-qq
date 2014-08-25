@@ -4,6 +4,10 @@
 
 Ext.define('qqext.view.search.VSearchForm', {
 	extend: 'Ext.container.Container',
+	requires: [
+		'qqext.view.search.VSearchParams',
+		'qqext.view.search.VSearchResult'
+	],
 	id: 'VSearchForm',
 	loadRecord: function(model) {
 		this.items.getAt(0).loadRecord(model);
@@ -21,4 +25,4 @@ Ext.define('qqext.view.search.VSearchForm', {
 		});
 		me.callParent(arguments);
 	}
-})
+});

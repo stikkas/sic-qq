@@ -4,6 +4,7 @@
 Ext.define('qqext.view.Viewport', {
 	extend: 'Ext.container.Viewport',
 	requires: [
+		'Ext.layout.container.Card',
 		'qqext.view.WelcomePage',
 		'qqext.view.MainPage',
 		'qqext.Constants'

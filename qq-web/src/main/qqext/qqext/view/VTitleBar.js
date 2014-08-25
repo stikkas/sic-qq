@@ -3,6 +3,9 @@
  */
 Ext.define('qqext.view.VTitleBar', {
 	extend: 'Ext.panel.Panel',
+	requires: [
+		'qqext.Menu'
+	],
 	title: 'АС Запросы',
 	region: 'north',
 	layout: 'hbox',

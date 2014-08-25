@@ -4,94 +4,58 @@
 
 Ext.define('qqext.view.transmission.VTransmission', {
 	extend: 'qqext.view.StyledPanel',
+	requires: [
+		'qqext.factory.ComboBox',
+		'qqext.factory.DateField',
+		'qqext.factory.Checkbox',
+		'qqext.factory.TextField',
+		'Ext.form.FieldContainer',
+		'Ext.form.FieldSet'
+	],
 	title: 'Передача на исполнение',
 	height: 400,
 	maxHeight: 400,
 	initComponent: function() {
-		var me = this;
-		var execMgr = Ext.create('Ext.form.field.ComboBox', {
-			fieldLabel: 'Ответственный за исполнение',
-			name: 'responsibleForExecution',
-			store: 'allUsers',
-			displayField: 'name',
-			valueField: 'id'
-		});
-
-		var d1 = Ext.create('Ext.form.field.Date', {
-			fieldLabel: 'Дата',
+		var configForDate = {
 			labelAlign: 'right',
-			margin: '6 0 0 0',
-			name: 'responsibleForExecutionDate'
-		});
-
-		var fc1 = Ext.create('Ext.form.FieldContainer', {
-			layout: {
-				type: 'hbox'
-			},
-			items: [execMgr, d1]
-		});
-
-		var executorFio = Ext.create('Ext.form.field.ComboBox', {
-			fieldLabel: 'ФИО исполнителя',
-			name: 'executorName',
-			store: 'allUsers',
-			displayField: 'name',
-			valueField: 'id'
-		});
-
-		var d2 = Ext.create('Ext.form.field.Date', {
-			fieldLabel: 'Дата',
-			labelAlign: 'right',
-			name: 'executorDate',
 			margin: '6 0 0 0'
-		});
-
-		var fc2 = Ext.create('Ext.form.FieldContainer', {
-			layout: {
-				type: 'hbox'
-			},
-			items: [executorFio, d2]
-		});
-
-		var cbControl = Ext.create('Ext.form.field.Checkbox', {
-			fieldLabel: 'Контроль',
-			name: 'control'
-		});
-
-		var controlDate = Ext.create('Ext.form.field.Date', {
-			fieldLabel: 'Контрольная дата исполнения',
-			name: 'controlDateOfExecution'
-		});
-
-		var resolutionAuthor = Ext.create('Ext.form.field.Text', {
-			fieldLabel: 'Автор резолюции',
-			name: 'resolutionAuthor'
-		});
-
-		var storageTerritory = Ext.create('Ext.form.field.ComboBox', {
-			fieldLabel: 'Территория хранилища',
-			store: Ext.getStore('storageTerritory'),
-			displayField: 'name',
-			name: 'storageTerritory',
-			valueField: 'id'
-		});
-
-		var storageName = Ext.create('Ext.form.field.Text', {
-			fieldLabel: 'Название хранилища',
-			name: 'storageName'
-		});
-
-		var dopInfo = Ext.create('Ext.form.FieldSet', {
-			collapsible: true,
-			title: 'Дополнительная информация',
-			layout: {
-				type: 'vbox'
-			},
-			items: [resolutionAuthor, storageTerritory, storageName]
-		});
+		},
+		me = this,
+				factory = qqext.factory,
+				ComboBox = factory.ComboBox,
+				DateField = factory.DateField,
+				TextField = factory.TextField;
 
 		Ext.applyIf(me, {
-			items: [fc1, fc2, cbControl, controlDate, dopInfo]
+			items: [
+				Ext.create('Ext.form.FieldContainer', {
+					layout: 'hbox',
+					items: [
+						new ComboBox('Ответственный за исполнение', 'allUsers',
+								'responsibleForExecution'),
+						new DateField('Дата', 'responsibleForExecutionDate').cfg(configForDate)
+					]
+				}),
+				Ext.create('Ext.form.FieldContainer', {
+					layout: 'hbox',
+					items: [
+						new ComboBox('ФИО исполнителя', 'allUsers', 'executorName'),
+						new DateField('Дата', 'executorDate').cfg(configForDate)
+					]
+				}),
+				new factory.Checkbox('Контроль', 'control'),
+				new DateField('Контрольная дата исполнения', 'controlDateOfExecution'),
+				Ext.create('Ext.form.FieldSet', {
+					collapsible: true,
+					title: 'Дополнительная информация',
+					layout: 'vbox',
+					items: [
+						new TextField('Автор резолюции', 'resolutionAuthor'),
+						new ComboBox('Территория хранилища', 'storageTerritory', 'storageTerritory'),
+						new TextField('Название хранилища', 'storageName')
+					]
+				})
+			]
 		});
 		me.callParent(arguments);
 	}

@@ -11,6 +11,7 @@ Ext.define('qqext.controller.Main', {
 		'qqext.model.qq.Question',
 		'qqext.store.DictValuesStore',
 		'qqext.store.CustomStore',
+		'hawk_common.store.UserLocalStorage',
 		'qqext.Constants'
 	],
 	/**
@@ -38,7 +39,8 @@ Ext.define('qqext.controller.Main', {
 			journalApplicantFilterStore: 'QQ_JOURNAL_APPLICANT_FILTER',
 			journalExecutors: 'QQ_JOURNAL_EXECUTOR',
 			Q_DICT_QUESTION_STATUSES: 'Q_DICT_QUESTION_STATUSES'
-		}
+		},
+		constants = qqext.Constants;
 
 		for (var key in kput)
 			Ext.regStore(key, Ext.create('qqext.store.DictValuesStore', {
@@ -59,7 +61,25 @@ Ext.define('qqext.controller.Main', {
 			remoteFilter: true
 		}));
 
-		qqext.Constants.mainController = this;
+		constants.mainController = this;
+		this.control({
+			'toolbutton': {
+				afterrender: activateComponent
+			}
+		});
+
+		/**
+		 * Если у пользователя нет прав, то компонент делается недоступным
+		 * @param {Ext.Component} target в основном кнопки
+		 */
+		function activateComponent(target) {
+			// TODO: реализовать проверку прав
+			/*
+			 console.log(target.getText());
+			 console.log(constants.userStore.getById('current').get('access'));
+			 target.setDisabled(true);
+			 */
+		}
 	},
 	clearSearchParams: function() {
 		this.searchParams = null;

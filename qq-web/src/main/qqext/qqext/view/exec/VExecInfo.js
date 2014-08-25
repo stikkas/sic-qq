@@ -4,45 +4,26 @@
 Ext.define('qqext.view.exec.VExecInfo', {
 	extend: 'qqext.view.StyledPanel',
 	requires: [
-		'Ext.form.field.Date',
-		'Ext.form.field.ComboBox'
+		'qqext.factory.ComboBox',
+		'qqext.factory.DateField'
 	],
 	title: 'Сведения об исполнении',
 	maxHeight: 205,
 	initComponent: function() {
-		var me = this;
+		var
+				me = this,
+				factory = qqext.factory,
+				ComboBox = factory.ComboBox;
 
 		Ext.applyIf(me, {
 			items: [
-				Ext.create('Ext.form.field.Date', {
-					fieldLabel: 'Дата исполнения',
-					name: 'execDate'
-				}),
-				Ext.create('Ext.form.field.ComboBox', {
-					fieldLabel: 'Результат ответа',
-					displayField: 'name',
-					valueField: 'id',
-					store: Ext.getStore('resultOfAnswer'),
-					editable: false,
-					name: 'answerResult'
-				}),
-				Ext.create('Ext.form.field.ComboBox', {
-					fieldLabel: 'Тематика ответа',
-					displayField: 'name',
-					valueField: 'id',
-					store: Ext.getStore('tematicOfAnswer'),
-					editable: false,
-					name: 'usageAnswer'
-				}),
-				Ext.create('Ext.form.field.ComboBox', {
-					fieldLabel: 'Категория сложности',
-					displayField: 'name',
-					valueField: 'id',
-					store: Ext.getStore('diffCategory'),
-					width: 175,
-					editable: false,
-					name: 'categoryComplexity'
-				})
+				new factory.DateField('Дата исполнения', 'execDate'),
+				new ComboBox('Результат ответа', 'resultOfAnswer', 'answerResult')
+						.cfg({editable: false}),
+				new ComboBox('Тематика ответа', 'tematicOfAnswer', 'usageAnswer')
+						.cfg({editable: false}),
+				new ComboBox('Категория сложности', 'diffCategory', 'categoryComplexity')
+						.cfg({width: 175, editable: false})
 			]
 		});
 		me.callParent(arguments);

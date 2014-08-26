@@ -46,23 +46,20 @@ Ext.application({
 	launch: function() {
 		Ext.define('Gender', {
 			extend: 'Ext.data.Model',
-			fields: [
-				{name: 'id', type: 'int'},
-				{name: 'name', type: 'string'}
-			]
+			fields: ['value', 'name']
 		});
 		var data = {
 			genders: [
 				{
-					id: 1,
+					value: 1,
 					name: 'Female'
 				},
 				{
-					id: 2,
+					value: 2,
 					name: 'Male'
 				},
 				{
-					id: 3,
+					value: 3,
 					name: 'Unknown'
 				}
 			]
@@ -83,12 +80,15 @@ Ext.application({
 				'hawk_common.cmp.ComboWithEmpty', {
 					emptyItemText: 'All mans',
 					displayField: 'name',
-					store: store,
-				}),
-				modeswitch = Ext.create('hawk_common.cmp.ModeSwitch', {
-					editMode: true,
-					component: cb
+					valueField: 'value',
+					store: store
 				});
+		/*
+		 modeswitch = Ext.create('hawk_common.cmp.ModeSwitch', {
+		 editMode: true,
+		 component: cb
+		 });
+		 */
 
 		Ext.create('Ext.panel.Panel', {
 			title: 'Examples',
@@ -102,7 +102,13 @@ Ext.application({
 			height: 400,
 			bodyPadding: 10,
 			items: [
-				Ext.create('hawk_common.cmp.PLoginForm', {
+				Ext.create('hawk_common.cmp.FilesList', {
+					editMode: true,
+					sectionName: 'Документы заявителя',
+					namePrefix: 'applicant_doc',
+					html: '<hr style="width:calc(97% - 160px);"></hr>',
+					cls: 'subsect',
+					margin: '3px 10px 10px 10px'
 				})
 			],
 			renderTo: Ext.getBody()

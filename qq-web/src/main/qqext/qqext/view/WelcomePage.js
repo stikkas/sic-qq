@@ -1,6 +1,9 @@
 /**
  * Страница показывается когда прошел успешно авторизацию, или когда пользователь
- * нажал на кнопку 'В начало'.
+ * нажал на кнопку 'В начало'. Определены следующие стилевые классы для элементов:
+ * .welcomebutton - кнопки на панели
+ * .welcomecontainer - тело панели
+ * .welcomepage - панель
  *
  * @author С. Благодатских
  */
@@ -24,14 +27,14 @@ Ext.define('qqext.view.WelcomePage', {
 				HandlerButton = qqext.factory.HandlerButton;
 
 		Ext.applyIf(me, {
-			items: Ext.each([
+			items: [
 				new HrefButton(labels.app1, urls.app1),
 				new HrefButton(labels.app2, urls.app2),
 				new HandlerButton(labels.asq, function() {
 					consts.setActivePage(1);
 				})
-			], function(btn) {
-				btn.cfg({cls: 'welcomebutton'});
+			].map(function(btn) {
+				return btn.cfg({cls: 'welcomebutton'});
 			}),
 			buttons: [new HandlerButton(labels.quit, consts.quitAction)]
 		});

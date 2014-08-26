@@ -6,18 +6,19 @@
  * @author С. Благодатских
  */
 Ext.define('qqext.factory.Base', {
-	/**
-	 * Добавляет в объект новые свойства, или обновляет, если такие свойства в
-	 * объекте уже есть
-	 * @private
-	 * @param {Object} obj набор нужных свойств
-	 * @returns {Object} целевой объект, для цепочных операций
-	 */
-	_cfg: function(obj) {
-		var m = this;
-		for (var o in obj)
-			m[o] = obj[o];
-		return m;
+	_config: function(obj) {
+		/**
+		 * Добавляет в объект новые свойства, или обновляет, если такие свойства в
+		 * объекте уже есть
+		 * @param {Object} confobj набор нужных свойств
+		 * @returns {Object} целевой объект, для цепочных операций
+		 */
+		obj.cfg = function(conf) {
+			for (var o in conf)
+				obj[o] = conf[o];
+			return obj;
+		}
+		return obj;
 	}
 });
 

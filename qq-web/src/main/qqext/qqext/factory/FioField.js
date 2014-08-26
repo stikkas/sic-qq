@@ -17,12 +17,11 @@ Ext.define('qqext.factory.FioField', {
 	 * @returns {Object} объект, на основе которого ExtJS сделает FioFieldContainer
 	 */
 	constructor: function(surname, name, fatherName) {
-		return {
-			cfg: this._cfg,
+		return this._config({
 			xtype: 'fiofieldcontainer',
 			nSurname: surname,
 			nName: name,
 			nFatherName: fatherName
-		};
+		});
 	}
 });

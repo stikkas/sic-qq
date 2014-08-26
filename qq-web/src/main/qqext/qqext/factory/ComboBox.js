@@ -20,7 +20,6 @@ Ext.define('qqext.factory.ComboBox', {
 	 */
 	constructor: function(fieldLabel, store, name, displayedField, valueField) {
 		var obj = {
-			cfg: this._cfg,
 			xtype: 'combobox',
 			fieldLabel: fieldLabel,
 			displayField: displayedField || 'name',
@@ -29,7 +28,7 @@ Ext.define('qqext.factory.ComboBox', {
 		};
 		if (name)
 			obj.name = name;
-		return obj;
+		return this._config(obj);
 	}
 });
 

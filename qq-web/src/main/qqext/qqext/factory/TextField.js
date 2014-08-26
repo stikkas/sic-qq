@@ -15,12 +15,11 @@ Ext.define('qqext.factory.TextField', {
 	 * @returns {Object} объект, на основе которого ExtJS сделает Text
 	 */
 	constructor: function(fieldLabel, name) {
-		return {
-			cfg: this._cfg,
+		return this._config({
 			xtype: 'textfield',
 			fieldLabel: fieldLabel,
 			name: name
-		};
+		});
 	}
 });
 

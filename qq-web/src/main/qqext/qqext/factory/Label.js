@@ -14,11 +14,10 @@ Ext.define('qqext.factory.Label', {
 	 * @returns {Object} объект, на основе которого ExtJS сделает Label
 	 */
 	constructor: function(text) {
-		return {
-			cfg: this._cfg,
+		return this._config({
 			xtype: 'label',
 			text: text
-		};
+		});
 	}
 });
 

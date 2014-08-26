@@ -13,7 +13,8 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 		'Ext.grid.plugin.CellEditing',
 		'Ext.form.FieldContainer',
 		'Ext.form.FieldSet',
-		'hawk_common.fix.FixedTextField'
+		'hawk_common.fix.FixedTextField',
+		'hawk_common.cmp.DateField'
 	],
 	title: 'Выдача документов',
 	// height:'auto',
@@ -57,7 +58,6 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 				}
 		);
 
-		console.log("Hello");
 		var usedMaterialGrid = Ext.create('Ext.grid.Panel', {
 			minHeight: 120,
 			plugins: [
@@ -70,11 +70,11 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 				Ext.create('Ext.form.FieldContainer', {
 					layout: 'hbox',
 					items: [
-						HandlerButton('add', function() {
+						new HandlerButton('add', function() {
 							var um = Ext.create('qqext.model.qq.UsedMaterial');
 							usedMaterialGrid.getStore().add(um);
 						}),
-						HandlerButton('del', function() {
+						new HandlerButton('del', function() {
 							var sm = usedMaterialGrid
 									.getSelectionModel();
 							if (sm.hasSelection()) {

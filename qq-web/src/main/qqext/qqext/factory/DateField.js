@@ -16,12 +16,11 @@ Ext.define('qqext.factory.DateField', {
 	 * @returns {Object} объект, на основе которого ExtJS сделает Date
 	 */
 	constructor: function(fieldLabel, name) {
-		return {
-			cfg: this._cfg,
+		return this._config({
 			xtype: 'datefield',
 			fieldLabel: fieldLabel,
 			name: name
-		};
+		});
 	}
 });
 

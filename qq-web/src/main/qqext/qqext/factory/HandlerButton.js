@@ -16,11 +16,10 @@ Ext.define('qqext.factory.HandlerButton', {
 	 * @returns {Object} объект, на основе которого ExtJS сделает Button
 	 */
 	constructor: function(text, handler) {
-		return  {
-			cfg: this._cfg,
+		return  this._config({
 			xtype: 'button',
 			text: text,
 			handler: handler
-		};
+		});
 	}
 });

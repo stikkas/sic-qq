@@ -16,12 +16,11 @@ Ext.define('qqext.factory.HrefButton', {
 	 * @returns {Object} объект, на основе которого ExtJS сделает Button
 	 */
 	constructor: function(text, href) {
-		return  {
-			cfg: this._cfg,
+		return  this._config({
 			xtype: 'button',
 			text: text,
 			href: href
-		};
+		});
 	}
 });
 

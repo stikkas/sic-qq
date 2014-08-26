@@ -15,12 +15,11 @@ Ext.define('qqext.factory.NumberField', {
 	 * @returns {Object} объект, на основе которого ExtJS сделает Number
 	 */
 	constructor: function(fieldLabel, name) {
-		return {
-			cfg: this._cfg,
+		return this._config({
 			xtype: 'numberfield',
 			fieldLabel: fieldLabel,
 			name: name
-		};
+		});
 	}
 });
 

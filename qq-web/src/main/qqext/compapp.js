@@ -90,26 +90,76 @@ Ext.application({
 		 });
 		 */
 
-		Ext.create('Ext.panel.Panel', {
-			title: 'Examples',
-			layout: 'vbox',
-			style: {
-				marginLeft: 'auto',
-				marginRight: 'auto',
-				marginTop: '20px'
-			},
-			width: 600,
-			height: 400,
-			bodyPadding: 10,
+//		Ext.create('Ext.panel.Panel', {
+//			title: 'Examples',
+//			layout: 'vbox',
+//			style: {
+//				marginLeft: 'auto',
+//				marginRight: 'auto',
+//				marginTop: '20px'
+//			},
+//			width: 600,
+//			height: 400,
+//			bodyPadding: 10,
+//			items: [
+//				Ext.create('hawk_common.cmp.FilesList', {
+//					editMode: true,
+//					sectionName: 'Документы заявителя',
+//					namePrefix: 'applicant_doc',
+//					html: '<hr style="width:calc(97% - 160px);"></hr>',
+//					cls: 'subsect',
+//					margin: '3px 10px 10px 10px'
+//				})
+//			],
+//			renderTo: Ext.getBody()
+//		});
+//		Ext.create('hawk_common.cmp.PLoginForm', {
+//			width: 400,
+//			height: 200,
+//			buttonAlign: 'right',
+//			renderTo: Ext.getBody()
+//		});
+//		Ext.create('hawk_common.cmp.SysChaptersBar', {
+//			width: 200,
+//			selectedCls: 'selectedChapter',
+//			selectedItemId: 0,
+//			items: [{
+//					xtype: 'button',
+//					text: 'Документы',
+//					action: 'getDocs',
+//					id: 'docsBtn'
+//				}, {
+//					xtype: 'button',
+//					text: 'Печать отчетов',
+//					action: 'getPrint',
+//					id: 'printBtn'
+//				}],
+//			cls: 'regimes pad_l_10',
+//			height: 34,
+//		});
+		var form = Ext.create('hawk_common.cmp.Form', {
 			items: [
-				Ext.create('hawk_common.cmp.FilesList', {
-					editMode: true,
-					sectionName: 'Документы заявителя',
-					namePrefix: 'applicant_doc',
-					html: '<hr style="width:calc(97% - 160px);"></hr>',
-					cls: 'subsect',
-					margin: '3px 10px 10px 10px'
-				})
+				{
+					xtype: 'textfield',
+					allowBlank: false,
+					minLength: 4,
+					fieldLabel: "Text Field"
+				},
+				{
+					xtype: 'datefield',
+					allowBlank: false,
+					fieldLabel: "Date Field"
+				}
+			],
+			width: 500,
+			buttons: [
+				{
+					xtype: 'button',
+					handler: function() {
+						form.validate();
+					},
+					text: 'Validate'
+				}
 			],
 			renderTo: Ext.getBody()
 		});

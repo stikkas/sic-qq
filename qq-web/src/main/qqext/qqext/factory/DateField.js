@@ -16,7 +16,7 @@ Ext.define('qqext.factory.DateField', {
 	 * @returns {Object} объект, на основе которого ExtJS сделает Date
 	 */
 	constructor: function(fieldLabel, name) {
-		return this._config({
+		return this.c({
 			xtype: 'datefield',
 			fieldLabel: fieldLabel,
 			name: name

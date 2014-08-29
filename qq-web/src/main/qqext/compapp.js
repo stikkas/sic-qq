@@ -36,6 +36,7 @@ Ext.application({
 		'hawk_common.fix.FixedBaseField',
 		'hawk_common.fix.FixedFieldSet',
 		'hawk_common.fix.FixedDateField',
+		'qqext.cmp.ComboBox',
 		'Ext.form.Label',
 		'Ext.form.field.ComboBox',
 		'Ext.layout.container.Border',
@@ -82,37 +83,54 @@ Ext.application({
 					displayField: 'name',
 					valueField: 'value',
 					store: store
+				}),
+				/*
+				 modeswitch = Ext.create('hawk_common.cmp.ModeSwitch', {
+				 editMode: true,
+				 component: cb
+				 });
+				 */
+				extbox = Ext.create('Ext.form.field.ComboBox', {
+					fieldLabel: "Ext ComboBox",
+					store: store,
+					queryMode: 'local',
+					displayField: 'name',
+					valueField: 'value'
+				}),
+				mybox = Ext.create('qqext.cmp.ComboBox', {
+					fieldLabel: "My ComboBox",
+					store: store,
+					queryMode: 'local',
+					displayField: 'name',
+					valueField: 'value'
+				}),
+				forextbtn = Ext.create('Ext.button.Button', {
+					text: "switchExt",
+					handler: function() {
+						extbox.setDisabled(!extbox.isDisabled());
+					}
+				}),
+				formybtn = Ext.create('Ext.button.Button', {
+					text: "switchMy",
+					handler: function() {
+						mybox.setDisabled(!mybox.isDisabled());
+					}
 				});
-		/*
-		 modeswitch = Ext.create('hawk_common.cmp.ModeSwitch', {
-		 editMode: true,
-		 component: cb
-		 });
-		 */
-
-//		Ext.create('Ext.panel.Panel', {
-//			title: 'Examples',
-//			layout: 'vbox',
-//			style: {
-//				marginLeft: 'auto',
-//				marginRight: 'auto',
-//				marginTop: '20px'
-//			},
-//			width: 600,
-//			height: 400,
-//			bodyPadding: 10,
-//			items: [
-//				Ext.create('hawk_common.cmp.FilesList', {
-//					editMode: true,
-//					sectionName: 'Документы заявителя',
-//					namePrefix: 'applicant_doc',
-//					html: '<hr style="width:calc(97% - 160px);"></hr>',
-//					cls: 'subsect',
-//					margin: '3px 10px 10px 10px'
-//				})
-//			],
-//			renderTo: Ext.getBody()
-//		});
+		Ext.create('Ext.panel.Panel', {
+			title: 'Examples',
+			layout: 'vbox',
+			style: {
+				marginLeft: 'auto',
+				marginRight: 'auto',
+				marginTop: '20px'
+			},
+			width: 600,
+			height: 400,
+			bodyPadding: 10,
+			renderTo: Ext.getBody(),
+			items: [extbox, mybox],
+			buttons: [forextbtn, formybtn]
+		});
 //		Ext.create('hawk_common.cmp.PLoginForm', {
 //			width: 400,
 //			height: 200,
@@ -137,31 +155,31 @@ Ext.application({
 //			cls: 'regimes pad_l_10',
 //			height: 34,
 //		});
-		var form = Ext.create('hawk_common.cmp.Form', {
-			items: [
-				{
-					xtype: 'textfield',
-					allowBlank: false,
-					minLength: 4,
-					fieldLabel: "Text Field"
-				},
-				{
-					xtype: 'datefield',
-					allowBlank: false,
-					fieldLabel: "Date Field"
-				}
-			],
-			width: 500,
-			buttons: [
-				{
-					xtype: 'button',
-					handler: function() {
-						form.validate();
-					},
-					text: 'Validate'
-				}
-			],
-			renderTo: Ext.getBody()
-		});
+//		var form = Ext.create('hawk_common.cmp.Form', {
+//			items: [
+//				{
+//					xtype: 'textfield',
+//					allowBlank: false,
+//					minLength: 4,
+//					fieldLabel: "Text Field"
+//				},
+//				{
+//					xtype: 'datefield',
+//					allowBlank: false,
+//					fieldLabel: "Date Field"
+//				}
+//			],
+//			width: 500,
+//			buttons: [
+//				{
+//					xtype: 'button',
+//					handler: function() {
+//						form.validate();
+//					},
+//					text: 'Validate'
+//				}
+//			],
+//			renderTo: Ext.getBody()
+//		});
 	}
 });

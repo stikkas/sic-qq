@@ -15,7 +15,7 @@ Ext.define('qqext.factory.TextField', {
 	 * @returns {Object} объект, на основе которого ExtJS сделает Text
 	 */
 	constructor: function(fieldLabel, name) {
-		return this._config({
+		return this.c({
 			xtype: 'textfield',
 			fieldLabel: fieldLabel,
 			name: name

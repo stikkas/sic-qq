@@ -28,7 +28,7 @@ Ext.define('qqext.factory.ComboBox', {
 		};
 		if (name)
 			obj.name = name;
-		return this._config(obj);
+		return this.c(obj);
 	}
 });
 

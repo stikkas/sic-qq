@@ -19,16 +19,16 @@ Ext.application({
 	launch: function() {
 
 		// Временно для отладки. В рабочей версии убрать
-//		var user = Ext.create('hawk_common.model.User'),
-//				userStore = qqext.Constants.userStore = Ext.create('hawk_common.store.UserLocalStorage');
-//
-//		user.set('id', 'current');
-//		user.set('name', 'fake');
-//		user.set('access', 'allowall');
-//		userStore.add(user);
-//		userStore.sync();
-//		Ext.create('qqext.view.Viewport', {});
-//		return;
+		var user = Ext.create('hawk_common.model.User'),
+				userStore = qqext.Constants.userStore = Ext.create('hawk_common.store.UserLocalStorage');
+
+		user.set('id', 'current');
+		user.set('name', 'fake');
+		user.set('access', 'allowall');
+		userStore.add(user);
+		userStore.sync();
+		Ext.create('qqext.view.Viewport', {});
+		return;
 		//-------------------------
 		Ext.Ajax.request({
 			url: '/qq-web/Rules',

@@ -14,7 +14,7 @@ Ext.define('qqext.factory.Label', {
 	 * @returns {Object} объект, на основе которого ExtJS сделает Label
 	 */
 	constructor: function(text) {
-		return this._config({
+		return this.c({
 			xtype: 'label',
 			text: text
 		});

@@ -6,11 +6,11 @@
  * @author С. Благодатских
  */
 Ext.define('qqext.factory.Base', {
-	_config: function(obj) {
+	c: function(obj) {
 		/**
 		 * Добавляет в объект новые свойства, или обновляет, если такие свойства в
 		 * объекте уже есть
-		 * @param {Object} confobj набор нужных свойств
+		 * @param {Object} conf набор нужных свойств
 		 * @returns {Object} целевой объект, для цепочных операций
 		 */
 		obj.cfg = function(conf) {

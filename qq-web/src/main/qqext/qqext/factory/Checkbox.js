@@ -15,7 +15,7 @@ Ext.define('qqext.factory.Checkbox', {
 	 * @returns {Object} объект, на основе которого ExtJS сделает Checkbox
 	 */
 	constructor: function(fieldLabel, name) {
-		return this._config({
+		return this.c({
 			xtype: 'checkboxfield',
 			fieldLabel: fieldLabel,
 			name: name

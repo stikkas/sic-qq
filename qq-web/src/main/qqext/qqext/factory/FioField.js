@@ -17,7 +17,7 @@ Ext.define('qqext.factory.FioField', {
 	 * @returns {Object} объект, на основе которого ExtJS сделает FioFieldContainer
 	 */
 	constructor: function(surname, name, fatherName) {
-		return this._config({
+		return this.c({
 			xtype: 'fiofieldcontainer',
 			nSurname: surname,
 			nName: name,

@@ -15,7 +15,7 @@ Ext.define('qqext.factory.TextArea', {
 	 * @returns {Object} объект, на основе которого ExtJS сделает TextArea
 	 */
 	constructor: function(fieldLabel, name) {
-		return this._config({
+		return this.c({
 			xtype: 'textareafield',
 			fieldLabel: fieldLabel,
 			name: name

@@ -16,7 +16,7 @@ Ext.define('qqext.factory.HrefButton', {
 	 * @returns {Object} объект, на основе которого ExtJS сделает Button
 	 */
 	constructor: function(text, href) {
-		return  this._config({
+		return  this.c({
 			xtype: 'button',
 			text: text,
 			href: href

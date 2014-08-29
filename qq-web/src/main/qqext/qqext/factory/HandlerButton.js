@@ -16,7 +16,7 @@ Ext.define('qqext.factory.HandlerButton', {
 	 * @returns {Object} объект, на основе которого ExtJS сделает Button
 	 */
 	constructor: function(text, handler) {
-		return  this._config({
+		return  this.c({
 			xtype: 'button',
 			text: text,
 			handler: handler

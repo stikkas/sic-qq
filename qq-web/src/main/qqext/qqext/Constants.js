@@ -1,5 +1,5 @@
 /**
- * Различные величины, виджеты, функции, которыми приходится часто пользоваться в приложении.
+ * Различные величины, компоненты, функции, которыми приходится часто пользоваться в приложении.
  *
  * @author С. Благодатских
  */
@@ -11,9 +11,12 @@ Ext.define('qqext.Constants', {
 	 * Иницализируется в {@link qqext.view.Viewport#initComponent}.
 	 * 0 - WelcomePage, страница с которой можно поити либо в АС Запросы, либо еще куда
 	 * 1 - MainPage, страница для работы с АС Запросами
-	 * @param {Number} порядковый номер страницы (см. выше)
+	 * @param {Number} idx порядковый номер страницы (см. выше)
 	 */
 	setActivePage: null,
+	/**
+	 * Основной вьюпорт, пока нигде не используется, кандидат на удаление отсюда
+	 */
 	viewport: null,
 	/**
 	 * Метод для установки формы в центре экрана
@@ -26,7 +29,7 @@ Ext.define('qqext.Constants', {
 	 * 4 - qqext.view.notify.VNotify
 	 * 5 - qqext.view.transmission.VTransmission
 	 * 6 - qqext.view.exec.VExecForm
-	 * @param {Number} порядковый номер формы (см. выше)
+	 * @param {Number} idx порядковый номер формы (см. выше)
 	 */
 	setCurrentForm: null,
 	/**

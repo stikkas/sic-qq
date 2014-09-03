@@ -2,7 +2,7 @@
  * Форма для отображения в горизонтальном порядке ФИО
  */
 Ext.define('qqext.view.search.FioFieldContainer', {
-	extend: 'Ext.form.FieldContainer',
+	extend: 'qqext.cmp.FieldContainer',
 	requires: [
 		'qqext.factory.TextField'
 	],

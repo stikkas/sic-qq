@@ -6,7 +6,7 @@
 Ext.define('qqext.factory.TextField', {
 	extend: 'qqext.factory.Base',
 	requires: [
-		'hawk_common.fix.FixedTextField'
+		'qqext.cmp.Text'
 	],
 	/**
 	 * Создает виджет типа textfield
@@ -16,7 +16,7 @@ Ext.define('qqext.factory.TextField', {
 	 */
 	constructor: function(fieldLabel, name) {
 		return this.c({
-			xtype: 'textfield',
+			xtype: 'textfieldcmp',
 			fieldLabel: fieldLabel,
 			name: name
 		});

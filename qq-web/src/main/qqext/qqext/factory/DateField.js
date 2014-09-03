@@ -6,8 +6,7 @@
 Ext.define('qqext.factory.DateField', {
 	extend: 'qqext.factory.Base',
 	requires: [
-		'Ext.form.field.Date',
-		'hawk_common.fix.FixedDateField'
+		'qqext.cmp.Date'
 	],
 	/**
 	 * Возвращает объект типа datefield
@@ -17,7 +16,7 @@ Ext.define('qqext.factory.DateField', {
 	 */
 	constructor: function(fieldLabel, name) {
 		return this.c({
-			xtype: 'datefield',
+			xtype: 'datefieldcmp',
 			fieldLabel: fieldLabel,
 			name: name
 		});

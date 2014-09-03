@@ -6,7 +6,7 @@
 Ext.define('qqext.factory.Checkbox', {
 	extend: 'qqext.factory.Base',
 	requires: [
-		'Ext.form.field.Checkbox'
+		'qqext.cmp.Checkbox'
 	],
 	/**
 	 * Возвращает объект типа checkboxfield
@@ -16,7 +16,7 @@ Ext.define('qqext.factory.Checkbox', {
 	 */
 	constructor: function(fieldLabel, name) {
 		return this.c({
-			xtype: 'checkboxfield',
+			xtype: 'checkboxfieldcmp',
 			fieldLabel: fieldLabel,
 			name: name
 		});

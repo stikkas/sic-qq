@@ -6,8 +6,7 @@
 Ext.define('qqext.factory.ComboBox', {
 	extend: 'qqext.factory.Base',
 	requires: [
-		'Ext.form.field.ComboBox',
-		'hawk_common.fix.FixedField'
+		'qqext.cmp.ComboBox'
 	],
 	/**
 	 * Создает объект типа combobox
@@ -20,7 +19,7 @@ Ext.define('qqext.factory.ComboBox', {
 	 */
 	constructor: function(fieldLabel, store, name, displayedField, valueField) {
 		var obj = {
-			xtype: 'combobox',
+			xtype: 'comboboxcmp',
 			fieldLabel: fieldLabel,
 			displayField: displayedField || 'name',
 			valueField: valueField || 'id',

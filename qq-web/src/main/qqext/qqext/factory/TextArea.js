@@ -16,7 +16,7 @@ Ext.define('qqext.factory.TextArea', {
 	 */
 	constructor: function(fieldLabel, name) {
 		return this.c({
-			xtype: 'textareafield',
+			xtype: 'textareafieldcmp',
 			fieldLabel: fieldLabel,
 			name: name
 		});

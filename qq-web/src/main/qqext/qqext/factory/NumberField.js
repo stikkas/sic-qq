@@ -6,7 +6,7 @@
 Ext.define('qqext.factory.NumberField', {
 	extend: 'qqext.factory.Base',
 	requires: [
-		'hawk_common.fix.FixedNumberField'
+		'qqext.cmp.Number'
 	],
 	/**
 	 * Возвращает объект типа numberfield
@@ -16,7 +16,7 @@ Ext.define('qqext.factory.NumberField', {
 	 */
 	constructor: function(fieldLabel, name) {
 		return this.c({
-			xtype: 'numberfield',
+			xtype: 'numberfieldcmp',
 			fieldLabel: fieldLabel,
 			name: name
 		});

@@ -6,7 +6,7 @@
 Ext.define('qqext.factory.TextArea', {
 	extend: 'qqext.factory.Base',
 	requires: [
-		'Ext.form.field.TextArea'
+		'qqext.cmp.TextArea'
 	],
 	/**
 	 * Возвращает объект типа textareafield

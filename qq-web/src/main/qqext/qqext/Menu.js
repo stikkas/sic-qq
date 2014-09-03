@@ -16,7 +16,8 @@ Ext.define('qqext.Menu', {
 		'qqext.model.qq.Applicant',
 		'qqext.model.qq.Transmission',
 		'qqext.model.qq.ExecutionInfo',
-		'qqext.model.qq.WayToSend'
+		'qqext.model.qq.WayToSend',
+		'qqext.model.qq.SearchCritery'
 	],
 	statics: {
 		/**
@@ -232,13 +233,12 @@ Ext.define('qqext.Menu', {
 	 */
 	function find() {
 		var
-				controller = consts.mainController,
-				model = controller.getSearchParams(),
-				mainCont = controller.getMainCont();
+				model = qqext.model.qq.SearchCritery,
+				form = consts.getCurrentForm();
 
-		switch (mainCont.$className) {
-			case 'qqext.view.search.VSearchForm' :
-				mainCont.updateRecord(model);
+		switch (form.$className) {
+			case 'qqext.view.search.VSearchForm':
+				form.updateRecord(model);
 				var dataWithoutNulls = model.getData();
 				Ext.data.writer.Json
 						.dropNullsAndUndefinedFields(dataWithoutNulls);
@@ -248,13 +248,9 @@ Ext.define('qqext.Menu', {
 					}
 				});
 				break;
-			case 'qqext.view.journal.VJournalForm' :
+			case 'qqext.view.journal.VJournalForm':
 				Ext.getStore('journal').reload();
-				break;
-			default :
-				break;
 		}
-
 	}
 	/**
 	 * Обрабатывает событие 'click' на кнопке "Очистить"
@@ -306,7 +302,7 @@ Ext.define('qqext.Menu', {
 	 */
 	function search() {
 		consts.setCurrentForm(1);
-		consts.searchForm.loadRecord(consts.mainController.getSearchParams());
+//		consts.searchForm.loadRecord(consts.mainController.getSearchParams());
 	}
 
 	/**

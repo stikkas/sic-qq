@@ -3,6 +3,7 @@
  */
 Ext.define('qqext.model.qq.SearchCritery', {
 	extend: 'Ext.data.Model',
+	singleton: true,
 	fields: [{
 			name: 'archiveId',
 			type: 'int',
@@ -64,5 +65,10 @@ Ext.define('qqext.model.qq.SearchCritery', {
 			defaultValue: null,
 			convert: null
 		}
-	]
+	],
+	clear: function() {
+		var data = this.getData();
+		for (var o in data)
+			this.set(o, null);
+	}
 });

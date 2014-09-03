@@ -34,6 +34,7 @@ Ext.define('qqext.Constants', {
 	setCurrentForm: null,
 	/**
 	 * Метод для полечения формы, которая в данный момент показана на экране.
+	 * Иницализируется в {@link qqext.view.MainPage#initComponent}.
 	 * @return {Object} активную форму
 	 */
 	getCurrentForm: null,

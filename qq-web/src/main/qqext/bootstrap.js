@@ -904,11 +904,21 @@ Ext.ClassManager.addNameAlternateMappings({
   "hawk_common.sys.Consts": [],
   "hawk_common.sys.Utils": [],
   "qq.model.ControlledObject": [],
-  "qqext.Application": [],
   "qqext.Constants": [],
   "qqext.Menu": [],
   "qqext.button.ArticleButton": [],
   "qqext.button.ToolButton": [],
+  "qqext.cmp.Checkbox": [],
+  "qqext.cmp.ComboBox": [],
+  "qqext.cmp.Date": [],
+  "qqext.cmp.EditViewMode": [],
+  "qqext.cmp.FieldContainer": [],
+  "qqext.cmp.FieldSet": [],
+  "qqext.cmp.Number": [],
+  "qqext.cmp.Panel": [],
+  "qqext.cmp.PanelEditViewMode": [],
+  "qqext.cmp.Text": [],
+  "qqext.cmp.TextArea": [],
   "qqext.controller.LeftMenu": [],
   "qqext.controller.Main": [],
   "qqext.controller.ParentController": [],
@@ -1929,7 +1939,6 @@ Ext.ClassManager.addNameAliasMappings({
   "hawk_common.sys.Consts": [],
   "hawk_common.sys.Utils": [],
   "qq.model.ControlledObject": [],
-  "qqext.Application": [],
   "qqext.Constants": [],
   "qqext.Menu": [],
   "qqext.button.ArticleButton": [
@@ -1937,6 +1946,35 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "qqext.button.ToolButton": [
     "widget.toolbutton"
+  ],
+  "qqext.cmp.Checkbox": [
+    "widget.checkboxfieldcmp"
+  ],
+  "qqext.cmp.ComboBox": [
+    "widget.comboboxcmp"
+  ],
+  "qqext.cmp.Date": [
+    "widget.datefieldcmp"
+  ],
+  "qqext.cmp.EditViewMode": [],
+  "qqext.cmp.FieldContainer": [
+    "widget.fieldcontainercmp"
+  ],
+  "qqext.cmp.FieldSet": [
+    "widget.fieldsetcmp"
+  ],
+  "qqext.cmp.Number": [
+    "widget.numberfieldcmp"
+  ],
+  "qqext.cmp.Panel": [
+    "widget.formcmp"
+  ],
+  "qqext.cmp.PanelEditViewMode": [],
+  "qqext.cmp.Text": [
+    "widget.textfieldcmp"
+  ],
+  "qqext.cmp.TextArea": [
+    "widget.textareafieldcmp"
   ],
   "qqext.controller.LeftMenu": [],
   "qqext.controller.Main": [],

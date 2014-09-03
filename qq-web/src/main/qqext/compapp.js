@@ -28,15 +28,23 @@ Ext.application({
 		'qqext.store.CustomStore',
 		'qqext.view.Viewport',
 		'qqext.view.search.VSearchForm',
-		'hawk_common.fix.FixedTextField',
-		'hawk_common.fix.FixedField',
-		'hawk_common.fix.FixedFormPanel',
-		'hawk_common.fix.FixedNumberField',
-		'hawk_common.fix.FixedFieldContainer',
-		'hawk_common.fix.FixedBaseField',
-		'hawk_common.fix.FixedFieldSet',
-		'hawk_common.fix.FixedDateField',
+		/*		'hawk_common.fix.FixedTextField',
+		 'hawk_common.fix.FixedField',
+		 'hawk_common.fix.FixedFormPanel',
+		 'hawk_common.fix.FixedNumberField',
+		 'hawk_common.fix.FixedFieldContainer',
+		 'hawk_common.fix.FixedBaseField',
+		 'hawk_common.fix.FixedFieldSet',
+		 'hawk_common.fix.FixedDateField',*/
+		'qqext.cmp.Text',
+		'qqext.cmp.Date',
+		'qqext.cmp.Number',
 		'qqext.cmp.ComboBox',
+		'qqext.cmp.Checkbox',
+		'qqext.cmp.FieldSet',
+		'qqext.cmp.Panel',
+		'qqext.cmp.FieldContainer',
+		'qqext.cmp.TextArea',
 		'Ext.form.Label',
 		'Ext.form.field.ComboBox',
 		'Ext.layout.container.Border',
@@ -105,20 +113,46 @@ Ext.application({
 					valueField: 'value'
 				}),
 				forextbtn = Ext.create('Ext.button.Button', {
-					text: "switchExt",
-					handler: function() {
-						extbox.setDisabled(!extbox.isDisabled());
+					text: "Switch Mode",
+					handler: function(btn) {
+						btn.mode = !btn.mode;
+						Ext.ComponentQuery.query('#MainPanel')[0].setViewOnly(btn.mode);
 					}
 				}),
 				formybtn = Ext.create('Ext.button.Button', {
 					text: "switchMy",
 					handler: function() {
-						mybox.setDisabled(!mybox.isDisabled());
 					}
+				}),
+				txtfield = Ext.create('qqext.cmp.Text', {
+					fieldLabel: "Text Field"
+				}),
+				dtfield = Ext.create('qqext.cmp.Date', {
+					fieldLabel: "Date Field"
+				}),
+				cmbbox = Ext.create('qqext.cmp.ComboBox', {
+					fieldLabel: "Combo Field",
+					store: store,
+					queryMode: 'local',
+					displayField: 'name',
+					valueField: 'value'
+				}),
+				number = Ext.create('qqext.cmp.Number', {
+					fieldLabel: "Number Field",
+					value: 5,
+					minValue: 0,
+					maxValue: 10
+				}),
+				checkbx = Ext.create('qqext.cmp.Checkbox', {
+					boxLabel: 'Check Box'
+				}),
+				tarea = Ext.create('qqext.cmp.TextArea', {
+					fieldLabel: "Text Area"
 				});
-		Ext.create('Ext.panel.Panel', {
+		Ext.create('qqext.cmp.Panel', {
 			title: 'Examples',
 			layout: 'vbox',
+			id: 'MainPanel',
 			style: {
 				marginLeft: 'auto',
 				marginRight: 'auto',
@@ -128,8 +162,8 @@ Ext.application({
 			height: 400,
 			bodyPadding: 10,
 			renderTo: Ext.getBody(),
-			items: [extbox, mybox],
-			buttons: [forextbtn, formybtn]
+			items: [txtfield, dtfield, cmbbox, number, checkbx, tarea],
+			buttons: [forextbtn]
 		});
 //		Ext.create('hawk_common.cmp.PLoginForm', {
 //			width: 400,

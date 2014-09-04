@@ -227,53 +227,20 @@ Ext.define('qqext.Menu', {
 		consts.getButton('regRequest').fireEvent('click');
 	}
 	/**
-	 * Обрабатывает событие 'click' на кнопке "Поиск"
+	 * Обрабатывает событие 'click' на кнопке "Поиск",  вызывается
+	 * только для подразделов 'Поиск' и 'ЖВК'
 	 * @private
-	 * @returns {undefined}
 	 */
 	function find() {
-		var
-				model = qqext.model.qq.SearchCritery,
-				form = consts.getCurrentForm();
-
-		switch (form.$className) {
-			case 'qqext.view.search.VSearchForm':
-				form.updateRecord(model);
-				var dataWithoutNulls = model.getData();
-				Ext.data.writer.Json
-						.dropNullsAndUndefinedFields(dataWithoutNulls);
-				Ext.getStore('searchResults').load({
-					params: {
-						q: Ext.encode(dataWithoutNulls)
-					}
-				});
-				break;
-			case 'qqext.view.journal.VJournalForm':
-				Ext.getStore('journal').reload();
-		}
+		consts.getCurrentForm().exec();
 	}
 	/**
-	 * Обрабатывает событие 'click' на кнопке "Очистить"
+	 * Обрабатывает событие 'click' на кнопке "Очистить", вызывается
+	 * только для подразделов 'Поиск' и 'ЖВК'
 	 * @private
-	 * @returns {undefined}
 	 */
 	function clear() {
-		var controller = consts.mainController;
-
-		switch (controller.getMainCont().$className) {
-			case 'qqext.view.search.VSearchForm' :
-				Ext.getStore('searchResults').removeAll();
-				controller.clearSearchParams();
-				controller.getMainCont().loadRecord(controller.getSearchParams());
-				break;
-			case 'qqext.view.journal.VJournalForm' :
-				Ext.getStore('journal').filters.clear();
-				controller.getMainCont().clearCriterias();
-				Ext.getStore('journal').loadPage(1);
-				break;
-			default :
-				break;
-		}
+		consts.getCurrentForm().reset();
 	}
 
 	/**
@@ -302,7 +269,6 @@ Ext.define('qqext.Menu', {
 	 */
 	function search() {
 		consts.setCurrentForm(1);
-//		consts.searchForm.loadRecord(consts.mainController.getSearchParams());
 	}
 
 	/**

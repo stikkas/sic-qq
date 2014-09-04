@@ -1,5 +1,5 @@
 /**
- *  Критерии поиска
+ * Критерии поиска
  */
 package ru.insoft.archive.qq.model;
 
@@ -13,54 +13,54 @@ import ru.insoft.archive.extcommons.json.JsonIn;
 public class SearchCritery implements JsonIn {
 
 	private Long archiveId;
-	
+
 	private Long queryTypeId;
-	
+
 	private String queryContent;
-	
+
 	private Long applicantTypeId;
-	
+
 	private Long applicantCategoryId;
-	
+
 	private Date regDate;
-	
+
 	private String reqObjName;
-	
+
 	private String reqObjSurname;
-	
+
 	private String reqObjFatherName;
-	
+
 	private String applName;
-	
+
 	private String applSurname;
-	
+
 	private String applFatherName;
-	
+
 	/**
-	 * Позволяет определить, содержатся ли в критериях поиска атрибуты 
-	 * из связанной модели Applicant. Если содержатся, для поиска нужно 
-	 * join ить Applicants
+	 * Позволяет определить, содержатся ли в критериях поиска атрибуты из
+	 * связанной модели Applicant. Если содержатся, для поиска нужно join ить
+	 * Applicants
+	 *
 	 * @return
 	 */
-	public Boolean isApplicantJoinNeeds(){
-		if (applicantTypeId!=null){
+	public Boolean isApplicantJoinNeeds() {
+		if (applicantTypeId != null) {
 			return true;
 		}
-		if (applicantCategoryId!=null){
+		if (applicantCategoryId != null) {
 			return true;
 		}
-		if (applName!=null){
+		if (applName != null) {
 			return true;
 		}
-		if (applSurname!=null){
+		if (applSurname != null) {
 			return true;
 		}
-		if (applFatherName!=null){
+		if (applFatherName != null) {
 			return true;
 		}
 		return false;
 	}
-	
 
 	public Long getArchiveId() {
 		return archiveId;
@@ -157,10 +157,4 @@ public class SearchCritery implements JsonIn {
 	public void setApplFatherName(String applFatherName) {
 		this.applFatherName = applFatherName;
 	}
-	
-	
-	
-	
-	
-	
 }

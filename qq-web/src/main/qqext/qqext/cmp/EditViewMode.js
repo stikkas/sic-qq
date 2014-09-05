@@ -8,15 +8,15 @@
  *
  * Переопределенные компоненты:
  *
- * 	- Ext.form.field.Text
- * 	- Ext.form.field.Date
- * 	- Ext.form.field.ComboBox
- * 	- Ext.form.field.Number
- * 	- Ext.form.field.Checkbox
+ * - Ext.form.field.Text
+ * - Ext.form.field.Date
+ * - Ext.form.field.ComboBox
+ * - Ext.form.field.Number
+ * - Ext.form.field.Checkbox
  *
  * подходят под это определение.
  *
- *  # Пример использования:
+ * # Пример использования:
  *
  *  	Ext.define('EditableViewClass', {
  *  		extend: 'Ext.form.field.Text',
@@ -30,8 +30,9 @@
  *  	comp.setViewOnly(true);
  *  	// Включаем режим редактирования
  *  	comp.setViewOnly(false);
+ *
+ * @author С. Благодатских
  */
-
 Ext.define('qqext.cmp.EditViewMode', {
 	/**
 	 * Включает или выключает режим просмотра

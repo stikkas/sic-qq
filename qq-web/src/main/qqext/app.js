@@ -127,6 +127,10 @@ Ext.application({
 		 * @property {hawk_common.store.UserLocalStorage} userStore
 		 * Хранилище с правами пользователей. Иницализируется при старте приложения.
 		 */
+		/**
+		 * @property {Ext.data.Model} request
+		 * Текущий запрос
+		 */
 		/*
 		 * Различные кнопки, на которые нужно иметь ссылки по ходу дела. Обращаться к ним
 		 * только через интерфейс getButton и addButton.
@@ -202,8 +206,19 @@ Ext.application({
 			qqext.userStore.removeAll(true);
 			window.location = qqext.urls.login;
 		};
+		/**
+		 * @property {Obejct} applicants
+		 * Поля для модели и формы Заявителя. Каждое свойство объекта
+		 * представляет собой массив из двуз значений:
+		 *
+		 *  - 0 - наименование поля формы (оно же и поля модели, и поля сущности)
+		 *  - 1 - метка для поля формы
+		 *
+		 *  Иницализируется в qqext.model.qq.Applicant.
+		 */
 
-		// Создаем все меню
+
+		// создаем все меню
 		qqext.Menu.init();
 	}
 });

@@ -68,7 +68,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 				me.items.getAt(i).updateRecord(model);
 			} else {
 				if (model.getApplicant && model.getApplicant()) {
-					console.log('обновление модели Applicant');
 					me.items.getAt(i).updateRecord(model.getApplicant());
 				}
 			}

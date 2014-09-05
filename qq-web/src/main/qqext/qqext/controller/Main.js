@@ -11,8 +11,7 @@ Ext.define('qqext.controller.Main', {
 		'qqext.model.qq.Question',
 		'qqext.store.DictValuesStore',
 		'qqext.store.CustomStore',
-		'hawk_common.store.UserLocalStorage',
-		'qqext.Constants'
+		'hawk_common.store.UserLocalStorage'
 	],
 	/**
 	 * Активная модель, иницилизируется в {@link qqext.Menu} после создания.
@@ -39,8 +38,7 @@ Ext.define('qqext.controller.Main', {
 			journalApplicantFilterStore: 'QQ_JOURNAL_APPLICANT_FILTER',
 			journalExecutors: 'QQ_JOURNAL_EXECUTOR',
 			Q_DICT_QUESTION_STATUSES: 'Q_DICT_QUESTION_STATUSES'
-		},
-		constants = qqext.Constants;
+		};
 
 		for (var key in kput)
 			Ext.regStore(key, Ext.create('qqext.store.DictValuesStore', {
@@ -61,7 +59,7 @@ Ext.define('qqext.controller.Main', {
 			remoteFilter: true
 		}));
 
-		constants.mainController = this;
+		qqext.mainController = this;
 		this.control({
 			'toolbutton': {
 				afterrender: activateComponent
@@ -76,7 +74,7 @@ Ext.define('qqext.controller.Main', {
 			// TODO: реализовать проверку прав
 			/*
 			 console.log(target.getText());
-			 console.log(constants.userStore.getById('current').get('access'));
+			 console.log(qqext.userStore.getById('current').get('access'));
 			 target.setDisabled(true);
 			 */
 		}
@@ -98,7 +96,7 @@ Ext.define('qqext.controller.Main', {
 		delItems.destroy();
 	},
 	getMainCont: function() {
-		return qqext.Constants.getCurrentForm();
+		return qqext.getCurrentForm();
 	},
 	/**
 	 * Синхронизация данных на форме с моделью

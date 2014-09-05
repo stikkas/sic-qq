@@ -6,19 +6,16 @@
  */
 Ext.define('qqext.view.menu.ButtonMenu', {
 	extend: 'Ext.container.Container',
-	requires: [
-		'qqext.Constants'
-	],
 	/**
+	 * @property {Array} _buttons
+	 * Набор кнопок меню. Задается в потомке.
 	 * @private
-	 * Набор кнопок меню
 	 */
-	_buttons: null,
 	/**
+	 * @property {String} _type
+	 * Класс создаваемых кнопок. Задается в потомке.
 	 * @private
-	 * Класс создаваемых кнопок
 	 */
-	_type: null,
 	initComponent: function() {
 		var me = this;
 
@@ -31,8 +28,10 @@ Ext.define('qqext.view.menu.ButtonMenu', {
 					}
 				});
 
+				// Если кнопка понадобится дальше, то заносим ее в глобальный
+				// список кнопок
 				if (btn.name)
-					qqext.Constants.addButton(btn.name, button)
+					qqext.addButton(btn.name, button);
 
 				if (btn.cfg)
 					Ext.applyIf(button, btn.cfg);

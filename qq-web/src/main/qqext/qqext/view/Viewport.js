@@ -6,8 +6,7 @@ Ext.define('qqext.view.Viewport', {
 	requires: [
 		'Ext.layout.container.Card',
 		'qqext.view.WelcomePage',
-		'qqext.view.MainPage',
-		'qqext.Constants'
+		'qqext.view.MainPage'
 	],
 	layout: 'card',
 	initComponent: function() {
@@ -15,7 +14,7 @@ Ext.define('qqext.view.Viewport', {
 		var
 				me = this,
 				layout = me.getLayout(),
-				consts = qqext.Constants;
+				ns = qqext;
 		Ext.applyIf(me, {items: [Ext.create('qqext.view.WelcomePage')]});
 		me.callParent();
 
@@ -23,20 +22,18 @@ Ext.define('qqext.view.Viewport', {
 		 * Переключает страницы
 		 * @param {type} idx индекс требуемой страницы
 		 */
-		consts.setActivePage = function(idx) {
+		ns.setActivePage = function(idx) {
 			// Вызываем первый раз. При первом вызове idx всегда равен 1.
 			// Если это где-то получится не так то надо переделать метод.
 			me.add(Ext.create('qqext.view.MainPage'));
 			layout.setActiveItem(idx);
-			consts.getButton('jvk').fireEvent('click');
-			console.log("first switch");
+			ns.getButton('jvk').fireEvent('click');
 
 			// Для последующих вызовов
-			consts.setActivePage = function(idx) {
-				console.log("switch for great then 1 more")
+			ns.setActivePage = function(idx) {
 				layout.setActiveItem(idx);
 				if (idx === 1)
-					consts.getButton('jvk').fireEvent('click');
+					ns.getButton('jvk').fireEvent('click');
 			}
 		}
 	}

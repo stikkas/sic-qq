@@ -8,7 +8,6 @@ Ext.define('qqext.view.MainPage', {
 	extend: 'Ext.container.Container',
 	requires: [
 		'Ext.layout.container.Border',
-		'qqext.Constants',
 		'qqext.view.search.VSearchForm',
 		'qqext.view.reg.VRegForm',
 		'qqext.view.notify.VNotify',
@@ -24,27 +23,27 @@ Ext.define('qqext.view.MainPage', {
 	layout: 'border',
 	initComponent: function() {
 		var me = this,
-				consts = qqext.Constants,
+				ns = qqext,
 				mainPanel,
 				mainPanelLayout;
 
-		consts.searchForm = Ext.create('qqext.view.search.VSearchForm');
-		consts.regForm = Ext.create('qqext.view.reg.VRegForm');
-		consts.notifyForm = Ext.create('qqext.view.notify.VNotify');
-		consts.transForm = Ext.create('qqext.view.transmission.VTransmission');
-		consts.execForm = Ext.create('qqext.view.exec.VExecForm');
+		ns.searchForm = Ext.create('qqext.view.search.VSearchForm');
+		ns.regForm = Ext.create('qqext.view.reg.VRegForm');
+		ns.notifyForm = Ext.create('qqext.view.notify.VNotify');
+		ns.transForm = Ext.create('qqext.view.transmission.VTransmission');
+		ns.execForm = Ext.create('qqext.view.exec.VExecForm');
 
 		mainPanel = Ext.create('Ext.panel.Panel', {
 			layout: 'card',
 			region: 'center',
 			items: [
 				Ext.create('qqext.view.journal.VJournalForm'),
-				consts.searchForm,
+				ns.searchForm,
 				Ext.create('Ext.container.Container', {html: '<h1>Отчетные документы</h1>'}),
-				consts.regForm,
-				consts.notifyForm,
-				consts.transForm,
-				consts.execForm
+				ns.regForm,
+				ns.notifyForm,
+				ns.transForm,
+				ns.execForm
 			]
 		});
 		mainPanelLayout = mainPanel.getLayout();
@@ -59,20 +58,20 @@ Ext.define('qqext.view.MainPage', {
 
 		me.callParent(arguments);
 
-		/**
+		/*
 		 * Показывает форму с заданным индексом
 		 * @param {Number} idx индекс формы (начинается с 0)
 		 * @return {Object/Boolean} в случае если форма поменялась, то возвращается активная форма,
 		 * иначе false
 		 */
-		consts.setCurrentForm = function(idx) {
+		ns.setCurrentForm = function(idx) {
 			return mainPanelLayout.setActiveItem(idx);
 		};
-		/**
+		/*
 		 * Возвращает активную форму
-		 * @returns {Object}
+		 * @return {Object}
 		 */
-		consts.getCurrentForm = function() {
+		ns.getCurrentForm = function() {
 			return mainPanelLayout.getActiveItem();
 		};
 	}

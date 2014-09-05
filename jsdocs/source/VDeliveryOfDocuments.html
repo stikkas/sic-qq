@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-view-exec-VDeliveryOfDocuments'>/**
+</span> * Панелька &quot;Выдача документа&quot; формы &quot;Исполнение запроса&quot;
+ */
+
+Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
+	extend: 'qqext.view.StyledPanel',
+	requires: [
+		'qqext.view.exec.cmp.DeliveryTypeCount',
+		'qqext.factory.HandlerButton',
+		'qqext.model.qq.DeliveryAction',
+		'qqext.model.qq.UsedMaterial',
+		'Ext.grid.Panel',
+		'Ext.grid.plugin.CellEditing',
+		'Ext.form.FieldContainer',
+		'Ext.form.FieldSet',
+		'hawk_common.fix.FixedTextField',
+		'hawk_common.cmp.DateField'
+	],
+<span id='qqext-view-exec-VDeliveryOfDocuments-property-title'>	title: 'Выдача документов',
+</span><span id='qqext-view-exec-VDeliveryOfDocuments-property-minHeight'>	// height:'auto',
+</span>	minHeight: 60,
+<span id='qqext-view-exec-VDeliveryOfDocuments-property-mOdel'>	mOdel: null,
+</span><span id='qqext-view-exec-VDeliveryOfDocuments-property-grid'>	grid: null,
+</span><span id='qqext-view-exec-VDeliveryOfDocuments-method-loadRecord'>	loadRecord: function(model) {
+</span>		var me = this,
+				actions = model.delActions(),
+				max = actions.getCount();
+		me.mOdel = model;
+		me.grid.reconfigure(model.usedMaterials());
+		for (var i = 0; i &lt; max; ++i) {
+			var t = Ext.create('qqext.view.exec.cmp.DeliveryTypeCount');
+			t.loadRecord(actions.getAt(i));
+			me.insert(me.items.length - 1, t);
+		}
+	},
+<span id='qqext-view-exec-VDeliveryOfDocuments-method-updateRecord'>	updateRecord: function(model) {
+</span>		for (var i = 0; i &lt; model.delActions().getCount(); i++) {
+			this.items.getAt(i + 1).updateRecord(model.delActions().getAt(i));
+		}
+	},
+<span id='qqext-view-exec-VDeliveryOfDocuments-method-remove'>	remove: function() {
+</span>		var me = this;
+		var index = me.items.indexOf(arguments[0]);
+		var delDeliveryAction = me.mOdel.delActions().getAt(index - 1);
+		me.mOdel.delActions().remove(delDeliveryAction);
+		me.callParent(arguments);
+	},
+<span id='qqext-view-exec-VDeliveryOfDocuments-method-initComponent'>	initComponent: function() {
+</span>		var me = this,
+				HandlerButton = qqext.factory.HandlerButton;
+		var addButton = new HandlerButton('add',
+				function() {
+					var old = me.getHeight();
+					var addComp = Ext.create('qqext.view.exec.cmp.DeliveryTypeCount');
+					this.ownerCt.insert(this.ownerCt.items.length - 1, addComp);
+					var tm = Ext.create('qqext.model.qq.DeliveryAction');
+					me.mOdel.delActions().add(tm);
+				}
+		);
+
+		var usedMaterialGrid = Ext.create('Ext.grid.Panel', {
+			minHeight: 120,
+			plugins: [
+				Ext.create('Ext.grid.plugin.CellEditing', {
+					clicksToEdit: 1
+				})
+			],
+			// forceFit : true,
+			dockedItems: [
+				Ext.create('Ext.form.FieldContainer', {
+					layout: 'hbox',
+					items: [
+						new HandlerButton('add', function() {
+							var um = Ext.create('qqext.model.qq.UsedMaterial');
+							usedMaterialGrid.getStore().add(um);
+						}),
+						new HandlerButton('del', function() {
+							var sm = usedMaterialGrid
+									.getSelectionModel();
+							if (sm.hasSelection()) {
+								var selectedUsedMaterial = sm
+										.getSelection()[0];
+								var selectedIndex = usedMaterialGrid
+										.getStore()
+										.indexOf(selectedUsedMaterial);
+								usedMaterialGrid
+										.getStore()
+										.remove(selectedUsedMaterial);
+
+								if (selectedIndex &gt; 0) {
+									selectedIndex--;
+								}
+								sm.select(selectedIndex);
+							}
+						})
+					]
+				})],
+			columns: [
+				{
+					text: '№ фонда',
+					dataIndex: 'fundNum',
+					editor: {xtype: 'textfield'}
+				},
+				{
+					text: '№ описи',
+					dataIndex: 'seriesNum',
+					editor: {xtype: 'textfield'}
+				},
+				{
+					text: '№ ед. хранения',
+					dataIndex: 'storageUnitNum',
+					editor: {xtype: 'textfield'}
+				},
+				{
+					text: '№ листов',
+					dataIndex: 'listNum',
+					editor: {xtype: 'textfield'}
+				}
+			]
+		});
+
+		me.grid = usedMaterialGrid;
+		var fieldSet = Ext.create('Ext.form.FieldSet', {
+			title: 'Используемые материалы',
+			items: [usedMaterialGrid],
+			collapsible: true
+		});
+
+		Ext.applyIf(me, {
+			items: [addButton, fieldSet]
+		});
+		me.callParent(arguments);
+	}
+});
+</pre>
+</body>
+</html>

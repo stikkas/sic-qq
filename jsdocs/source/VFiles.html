@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-view-reg-VFiles'>/**
+</span> * Панелька &quot;Документы заявителя&quot; формы &quot;Регистрация запроса&quot;
+ */
+
+Ext.define('qqext.view.reg.VFiles', {
+	extend: 'qqext.view.StyledPanel',
+	requires: [
+		'hawk_common.cmp.FileList'
+	],
+<span id='qqext-view-reg-VFiles-property-title'>	title: 'Документы заявителя',
+</span><span id='qqext-view-reg-VFiles-property-height'>	height: 130,
+</span><span id='qqext-view-reg-VFiles-property-collapsible'>	collapsible: true,
+</span><span id='qqext-view-reg-VFiles-property-titleCollapse'>	titleCollapse: true,
+</span><span id='qqext-view-reg-VFiles-property-animCollapse'>	animCollapse: true,
+</span><span id='qqext-view-reg-VFiles-property-hideCollapseTool'>	hideCollapseTool: true,
+</span><span id='qqext-view-reg-VFiles-property-disabledCls'>	disabledCls: '',
+</span><span id='qqext-view-reg-VFiles-property-header'>	header: {
+</span>		icon: 'webapp/resources/images/fieldset/collapse-tool.png'
+	},
+<span id='qqext-view-reg-VFiles-method-initComponent'>	initComponent: function() {
+</span>		var me = this;
+		Ext.apply(me, {
+			items: [Ext.create('hawk_common.cmp.FileList')]
+		});
+		me.callParent(arguments);
+	}
+});
+</pre>
+</body>
+</html>

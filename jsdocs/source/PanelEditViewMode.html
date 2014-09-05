@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">/*
+ * Возможность переключения режима просмотра/редактирования для компонентов,
+ * которые содержат более простые компоненты (вроде checkbox, textfield и т.д.).
+ * Необходимо чтобы все элементы, которые находятся на данном компоненте, реализовывали
+ * интерфейс {@link #qqext.cmp.EditViewMode}.
+ */
+
+Ext.define('qqext.cmp.PanelEditViewMode', {
+<span id='global-method-setViewOnly'>	/**
+</span>	 * Включает или выключает режим просмотра
+	 * @param {Boolean} mode true - режим просмотра , false - обычный режим (редактирование)
+	 */
+	setViewOnly: function(mode) {
+		var items = this.items,
+				max = items.length,
+				i = 0;
+		for (; i &lt; max; i++) {
+			try {
+				items.getAt(i).setViewOnly(mode);
+			} catch (e) {
+				// Контейнер может содержать и другие элементы не нуждающиеся в режиме редактирования,
+				// Вроде Label, можно конечно и их переопределить с пустыми методами.
+			}
+		}
+	}
+});
+</pre>
+</body>
+</html>

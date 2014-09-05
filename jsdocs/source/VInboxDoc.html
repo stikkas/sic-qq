@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-view-reg-VInboxDoc'>/**
+</span> * Форма &quot;Входящий документ&quot;
+ */
+Ext.define('qqext.view.reg.VInboxDoc', {
+	extend: 'qqext.view.StyledPanel',
+	requires: [
+		'qqext.factory.ComboBox',
+		'qqext.factory.TextField',
+		'qqext.factory.DateField',
+		'Ext.form.FieldContainer'
+	],
+<span id='qqext-view-reg-VInboxDoc-property-disabledCls'>	disabledCls: '',
+</span><span id='qqext-view-reg-VInboxDoc-property-maskOnDisable'>	maskOnDisable: false,
+</span><span id='qqext-view-reg-VInboxDoc-property-title'>	title: 'Входящий документ',
+</span><span id='qqext-view-reg-VInboxDoc-method-initComponent'>	initComponent: function() {
+</span>		var me = this,
+				factory = qqext.factory,
+				ComboBox = factory.ComboBox,
+				TextField = factory.TextField,
+				DateField = factory.DateField;
+
+		Ext.applyIf(me, {
+			items: [
+				Ext.create('Ext.form.FieldContainer', {
+					layout: 'hbox',
+					items: [
+						new ComboBox('Литера', 'literas', 'litera').cfg({width: 190}),
+						new TextField('№ Входящего документа', 'inboxNum').cfg({
+							labelAlign: 'right',
+							labelWidth: 200,
+							width: 245
+						}),
+						new TextField('/').cfg({
+							labelWidth: 5,
+							width: 50
+						})
+					]
+				}),
+				new DateField('Дата регистрации', 'regDate'),
+				new ComboBox('Способ передачи', Ext.getStore('inboxDocDeliveryType'), 'transferType'),
+				new ComboBox('Исполняющая организация', Ext.getStore('inboxDocExecOrg'), 'execOrg'),
+				new TextField('ФИО регистратора', 'registrator').cfg({
+					disabled: true,
+					value: 'Только для чтения',
+					setDisabled: function() {
+						return this;
+					}
+				})
+			]
+		});
+		me.callParent(arguments);
+	}
+});
+</pre>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-factory-ComboBox'>/**
+</span> * Фабрика для создания обобщенного ComboBox.
+ *
+ * @author С. Благодатских
+ */
+Ext.define('qqext.factory.ComboBox', {
+	extend: 'qqext.factory.Base',
+	requires: [
+		'qqext.cmp.ComboBox'
+	],
+<span id='qqext-factory-ComboBox-method-constructor'>	/**
+</span>	 * Создает объект типа combobox
+	 * @param {String} fieldLabel Метка селектора
+	 * @param {String} store алиас хранилища
+	 * @param {String} name имя поля формы (не обязательно)
+	 * @param {String} displayedField поле хранилища для отображения (не обязательно)
+	 * @param {String} valueField поле хранилища для значения (не обязательно)
+	 * @returns {Object} объект, на основе которого ExtJS сделает ComboBox
+	 */
+	constructor: function(fieldLabel, store, name, displayedField, valueField) {
+		var obj = {
+			xtype: 'comboboxcmp',
+			fieldLabel: fieldLabel,
+			displayField: displayedField || 'name',
+			valueField: valueField || 'id',
+			store: store
+		};
+		if (name)
+			obj.name = name;
+		return this.c(obj);
+	}
+});
+
+
+</pre>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-view-notify-VNotify'>/**
+</span> * Форма &quot;Уведомление заявителю&quot;
+ *
+ * @author М. Сорокин
+ */
+Ext.define('qqext.view.notify.VNotify', {
+	extend: 'qqext.view.StyledPanel',
+	requires: [
+		'qqext.factory.ComboBox',
+		'qqext.factory.DateField'
+	],
+<span id='qqext-view-notify-VNotify-property-height'>	height: 300,
+</span><span id='qqext-view-notify-VNotify-property-maxHeight'>	maxHeight: 300,
+</span><span id='qqext-view-notify-VNotify-property-title'>	title: 'Уведомление заявителю',
+</span><span id='qqext-view-notify-VNotify-method-initComponent'>	initComponent: function() {
+</span>		var me = this,
+				factory = qqext.factory,
+				ComboBox = factory.ComboBox;
+
+		Ext.applyIf(me, {
+			items: [
+				new ComboBox('ФИО исполнителя', 'allUsers', 'executor'),
+				new ComboBox('Тип документов', 'docType', 'docType'),
+				new ComboBox('Способ передачи', 'answerForm', 'deliveryType'),
+				new factory.DateField('Дата уведомления', 'notificationDate')
+			]
+		});
+
+		me.callParent(arguments);
+	}
+});</pre>
+</body>
+</html>

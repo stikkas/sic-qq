@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-factory-FioField'>/**
+</span> * Фабрика для создания FioFieldContainer
+ *
+ * @author С. Благодатских
+ */
+
+Ext.define('qqext.factory.FioField', {
+	extend: 'qqext.factory.Base',
+	requires: [
+		'qqext.view.search.FioFieldContainer'
+	],
+<span id='qqext-factory-FioField-method-constructor'>	/**
+</span>	 * Возвращает объект типа fiofieldcontainer
+	 * @param {String} surname фамилия
+	 * @param {String} name имя
+	 * @param {String} fatherName отчество
+	 * @returns {Object} объект, на основе которого ExtJS сделает FioFieldContainer
+	 */
+	constructor: function(surname, name, fatherName) {
+		return this.c({
+			xtype: 'fiofieldcontainer',
+			nSurname: surname,
+			nName: name,
+			nFatherName: fatherName
+		});
+	}
+});
+</pre>
+</body>
+</html>

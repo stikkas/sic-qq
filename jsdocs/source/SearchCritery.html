@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-model-qq-SearchCritery'>/**
+</span> *  Модель для формы поиска {@link qqext.view.search.VSearchParams}
+ */
+Ext.define('qqext.model.qq.SearchCritery', {
+	extend: 'Ext.data.Model',
+	singleton: true,
+<span id='qqext-model-qq-SearchCritery-property-fields'>	fields: [{
+</span>			name: 'archiveId',
+			type: 'int',
+			defaultValue: null,
+			convert: null
+		}, {
+			name: 'queryTypeId',
+			type: 'int',
+			defaultValue: null,
+			convert: null
+		}, {
+			name: 'queryContent',
+			type: 'string',
+			defaultValue: null,
+			convert: null
+		}, {
+			name: 'applicantTypeId',
+			type: 'int',
+			defaultValue: null,
+			convert: null
+		}, {
+			name: 'applicantCategoryId',
+			type: 'int',
+			defaultValue: null,
+			convert: null
+		}, {
+			name: 'regDate',
+			type: 'date',
+			defaultValue: null,
+			convert: null
+		}, {
+			name: 'reqObjName',
+			type: 'string',
+			defaultValue: null,
+			convert: null
+		}, {
+			name: 'reqObjSurname',
+			type: 'string',
+			defaultValue: null,
+			convert: null
+		}, {
+			name: 'reqObjFatherName',
+			type: 'string',
+			defaultValue: null,
+			convert: null
+		}, {
+			name: 'applName',
+			type: 'string',
+			defaultValue: null,
+			convert: null
+		}, {
+			name: 'applSurname',
+			type: 'string',
+			defaultValue: null,
+			convert: null
+		}, {
+			name: 'applFatherName',
+			type: 'string',
+			defaultValue: null,
+			convert: null
+		}
+	],
+<span id='qqext-model-qq-SearchCritery-method-clear'>	clear: function() {
+</span>		var data = this.getData();
+		for (var o in data)
+			this.set(o, null);
+	}
+});</pre>
+</body>
+</html>

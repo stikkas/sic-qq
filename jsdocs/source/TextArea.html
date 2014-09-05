@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-factory-TextArea'>/**
+</span> * Фабрика для создания обобщенного TextArea.
+ *
+ * @author С. Благодатских
+ */
+Ext.define('qqext.factory.TextArea', {
+	extend: 'qqext.factory.Base',
+	requires: [
+		'qqext.cmp.TextArea'
+	],
+<span id='qqext-factory-TextArea-method-constructor'>	/**
+</span>	 * Возвращает объект типа textareafield
+	 * @param {String} fieldLabel Заголовок
+	 * @param {String} name наименование элемента формы
+	 * @returns {Object} объект, на основе которого ExtJS сделает TextArea
+	 */
+	constructor: function(fieldLabel, name) {
+		return this.c({
+			xtype: 'textareafieldcmp',
+			fieldLabel: fieldLabel,
+			name: name
+		});
+	}
+});
+</pre>
+</body>
+</html>

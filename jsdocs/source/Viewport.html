@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-view-Viewport'>/**
+</span> * Основной экран главной страницы
+ */
+Ext.define('qqext.view.Viewport', {
+	extend: 'Ext.container.Viewport',
+	requires: [
+		'Ext.layout.container.Card',
+		'qqext.view.WelcomePage',
+		'qqext.view.MainPage'
+	],
+<span id='qqext-view-Viewport-property-layout'>	layout: 'card',
+</span><span id='qqext-view-Viewport-method-initComponent'>	initComponent: function() {
+</span>
+		var
+				me = this,
+				layout = me.getLayout(),
+				ns = qqext;
+		Ext.applyIf(me, {items: [Ext.create('qqext.view.WelcomePage')]});
+		me.callParent();
+
+<span id='qqext-view-Viewport-method-setActivePage'>		/**
+</span>		 * Переключает страницы
+		 * @param {type} idx индекс требуемой страницы
+		 */
+		ns.setActivePage = function(idx) {
+			// Вызываем первый раз. При первом вызове idx всегда равен 1.
+			// Если это где-то получится не так то надо переделать метод.
+			me.add(Ext.create('qqext.view.MainPage'));
+			layout.setActiveItem(idx);
+			ns.getButton('jvk').fireEvent('click');
+
+			// Для последующих вызовов
+			ns.setActivePage = function(idx) {
+				layout.setActiveItem(idx);
+				if (idx === 1)
+					ns.getButton('jvk').fireEvent('click');
+			}
+		}
+	}
+});
+</pre>
+</body>
+</html>

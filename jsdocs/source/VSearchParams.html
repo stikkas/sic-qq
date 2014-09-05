@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-view-search-VSearchParams'>/**
+</span> * Панель с параметрами поиска
+ */
+Ext.define('qqext.view.search.VSearchParams', {
+	extend: 'qqext.view.StyledPanel',
+	requires: [
+		'qqext.factory.ComboBox',
+		'qqext.factory.FioField',
+		'qqext.factory.TextField',
+		'qqext.factory.DateField',
+		'qqext.factory.Label'
+	],
+<span id='qqext-view-search-VSearchParams-property-title'>	title: 'Параметры поиска',
+</span><span id='qqext-view-search-VSearchParams-method-initComponent'>	initComponent: function() {
+</span>		var
+				me = this,
+				factory = qqext.factory,
+				ComboBox = factory.ComboBox,
+				FioFieldContainer = factory.FioField,
+				Label = factory.Label;
+		Ext.applyIf(me, {
+			items: [
+				new ComboBox('Архив исполнитель', 'inboxDocExecOrg', 'archiveId'),
+				new ComboBox('Вид запроса', 'queryType', 'queryTypeId'),
+				new factory.TextField('Содержание запроса', 'queryContent'),
+				new ComboBox('Тип заявителя', 'applicantType', 'applicantTypeId'),
+				new ComboBox('Категория заявителя', 'applicantCategory', 'applicantCategoryId'),
+				new factory.DateField('Дата регистрации', 'regDate'),
+				new Label('На кого запрос'),
+				new FioFieldContainer('reqObjSurname', 'reqObjName', 'regObjFatherName'),
+				new Label('Заявитель'),
+				new FioFieldContainer('applSurname', 'applName', 'applFatherName')
+			]
+		});
+		me.callParent(arguments);
+	}
+});</pre>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-view-reg-VQuery'>/**
+</span> * Панелька &quot;Запрос&quot; формы регистрации запроса
+ */
+Ext.define('qqext.view.reg.VQuery', {
+	extend: 'qqext.view.StyledPanel',
+	requires: [
+		'qqext.factory.ComboBox',
+		'qqext.factory.DateField',
+		'qqext.factory.TextArea',
+		'qqext.factory.Checkbox'
+	],
+<span id='qqext-view-reg-VQuery-property-title'>	title: 'Запрос',
+</span><span id='qqext-view-reg-VQuery-property-disabledCls'>	disabledCls: '',
+</span><span id='qqext-view-reg-VQuery-method-initComponent'>	initComponent: function() {
+</span>		var me = this,
+				factory = qqext.factory,
+				ComboBox = factory.ComboBox;
+		Ext.applyIf(me, {
+			items: [
+				new ComboBox('Вид запроса', Ext.getStore('queryType'), 'questionType'),
+				new factory.DateField('Плановая дата исполнения запроса', 'plannedFinishDate'),
+				new factory.TextArea('Содержание запроса', 'content'),
+				new ComboBox('Форма выдачи ответа', Ext.getStore('answerForm'), 'answerFormType'),
+				new factory.Checkbox('Мотивированный отказ', 'motivatedRefusal')
+			]
+		});
+		me.callParent(arguments);
+	}
+});
+</pre>
+</body>
+</html>

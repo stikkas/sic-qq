@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-controller-ParentController'>/**
+</span> * Прародитель контроллеров. Зачем он нужен не понятно. Лишняя ступень в нашем
+ * шатле.
+ */
+
+Ext.define('qqext.controller.ParentController', {
+	extend: 'Ext.app.Controller',
+	requires: [
+		'qqext.model.qq.SearchCritery',
+		'qqext.Constants'
+	],
+<span id='qqext-controller-ParentController-property-refs'>	refs: [{
+</span>			ref: 'vp',
+			selector: 'viewport'
+		}],
+<span id='qqext-controller-ParentController-method-clearSearchParams'>	clearSearchParams: function() {
+</span>		qqext.Constants.mainController.searchParams = null;
+	},
+<span id='qqext-controller-ParentController-method-getSearchParams'>	getSearchParams: function() {
+</span>		var controller = qqext.Constants.mainController,
+				model = controller.searchParams;
+
+		if (!model)
+			model = controller.searchParams = Ext.create('qqext.model.qq.SearchCritery');
+
+		return model;
+	},
+<span id='qqext-controller-ParentController-method-clearVp'>	clearVp: function() {
+</span>		var me = this;
+		for (var i = me.getVp().items.length - 1; i &gt;= 0; i--) {
+			var t = me.getVp().items.getAt(i);
+			me.getVp().remove(t);
+			t.destroy();
+		}
+	},
+<span id='qqext-controller-ParentController-method-dropMainCont'>	dropMainCont: function() {
+</span>		var me = this;
+		var vp = me.getVp();
+		var delItems = me.getVp().items.getAt(2);
+		vp.remove(delItems);
+		delItems.destroy();
+	},
+<span id='qqext-controller-ParentController-method-getMainCont'>	getMainCont: function() {
+</span>		return qqext.Constants.getCurrentForm();
+		/*
+		 var me = this,
+		 targetItem = me.getVp().items.getAt(2);
+
+		 return targetItem;
+		 */
+	},
+<span id='qqext-controller-ParentController-method-syncModel'>	/**
+</span>	 * Синхронизация данных на форме с моделью
+	 */
+	syncModel: function() {
+		var
+				me = this,
+				model = qqext.Constants.mainController.currentModel,
+				currentForm = me.getMainCont();
+
+		switch (currentForm.$className) {
+			case 'qqext.view.reg.VRegForm' :
+				currentForm.updateRecord(model);
+				break;
+			case 'qqext.view.notify.VNotify' :
+				currentForm.updateRecord(model.getNotification());
+				break;
+			case 'qqext.view.transmission.VTransmission' :
+				currentForm.updateRecord(model.getTransmission());
+				break;
+			case 'qqext.view.exec.VExecForm' :
+				currentForm.updateRecord(model);
+				break;
+			default :
+				console.debug('switch class name: ' + currentForm.$className);
+		}
+	},
+<span id='qqext-controller-ParentController-method-getModel'>	getModel: function() {
+</span>		return qqext.Constants.mainController.currentModel;
+	},
+<span id='qqext-controller-ParentController-method-initNewModel'>	initNewModel: function() {
+</span>		var me = this;
+		var model = Ext.create('qqext.model.qq.Question');
+		var notification = Ext.create('qqext.model.qq.Notification');
+		model.setNotification(notification);
+
+		var applicant = Ext.create('qqext.model.qq.Applicant');
+		model.setApplicant(applicant);
+
+		var transmission = Ext.create('qqext.model.qq.Transmission');
+		model.setTransmission(transmission);
+
+		var execInfo = Ext.create('qqext.model.qq.ExecutionInfo');
+		model.setExecutionInfo(execInfo);
+
+		var wayToSend = Ext.create('qqext.model.qq.WayToSend');
+		model.setWayToSend(wayToSend);
+
+		this.getApplication().getController('qqext.controller.Main').currentModel = model;
+		me.getMainCont().loadRecord(model);
+	}
+
+});
+</pre>
+</body>
+</html>

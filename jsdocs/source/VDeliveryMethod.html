@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-view-exec-VDeliveryMethod'>/**
+</span> * Панель формы &quot;Способ отправки&quot;
+ */
+Ext.define('qqext.view.exec.VDeliveryMethod', {
+	extend: 'qqext.view.StyledPanel',
+	requires: [
+		'qqext.view.exec.cmp.ComboDateTrash',
+		'qqext.factory.HandlerButton',
+		'qqext.model.qq.SendAction',
+		'qqext.factory.TextArea',
+		'qqext.factory.TextField',
+		'qqext.factory.DateField',
+		'Ext.Component',
+		'Ext.form.FieldSet',
+		'hawk_common.cmp.FileList'
+	],
+<span id='qqext-view-exec-VDeliveryMethod-property-title'>	title: 'Способ отправки',
+</span><span id='qqext-view-exec-VDeliveryMethod-property-mOdel'>	mOdel: null,
+</span><span id='qqext-view-exec-VDeliveryMethod-property-minHeight'>	minHeight: 60,
+</span><span id='qqext-view-exec-VDeliveryMethod-property-comboTrashConfig'>	comboTrashConfig: {
+</span>		store: 'answerForm',
+		comboLabel: 'Способ отправки',
+		dateLabel: 'Дата'
+	},
+<span id='qqext-view-exec-VDeliveryMethod-method-remove'>	remove: function() {
+</span>		var me = this;
+		var index = me.items.indexOf(arguments[0]);
+		var delSendMethod = me.mOdel.sendActions().getAt(index - 1);
+		me.mOdel.sendActions().remove(delSendMethod);
+		me.callParent(arguments);
+	},
+<span id='qqext-view-exec-VDeliveryMethod-method-loadRecord'>	loadRecord: function(model) {
+</span>		var me = this;
+		me.mOdel = model;
+		for (var i = 0; i &lt; me.mOdel.sendActions().getCount(); i++) {
+			var t = Ext.create('qqext.view.exec.cmp.ComboDateTrash',
+					me.comboTrashConfig);
+			me.insert(me.items.length - 5, t);
+			t.setComboValue(me.mOdel.sendActions().getAt(i)
+					.get('sendAction'));
+			t.setDateValue(me.mOdel.sendActions().getAt(i)
+					.get('sendDate'));
+		}
+		var wayToSend = model.getWayToSend();
+		arguments[0] = wayToSend;
+		me.callParent(arguments);
+	},
+<span id='qqext-view-exec-VDeliveryMethod-method-updateRecord'>	updateRecord: function() {
+</span>		var me = this;
+		for (var i = 0; i &lt; me.mOdel.sendActions().getCount(); i++) {
+			var curComboTrashDate = me.items.getAt(i + 1);
+			var curSendAction = me.mOdel.sendActions().getAt(i);
+			curSendAction.set('sendAction', curComboTrashDate
+					.getComboValue());
+			curSendAction.set('sendDate', curComboTrashDate
+					.getDateValue());
+		}
+		var wayToSend = arguments[0].getWayToSend();
+		arguments[0] = wayToSend;
+		me.callParent(arguments);
+	},
+<span id='qqext-view-exec-VDeliveryMethod-method-initComponent'>	initComponent: function() {
+</span>		var me = this,
+				factory = qqext.factory;
+
+		Ext.apply(me, {
+			items: [
+				new factory.HandlerButton('add', function() {
+					var t = Ext.create('qqext.view.exec.cmp.ComboDateTrash',
+							me.comboTrashConfig);
+					me.insert(me.items.length - 5, t);
+					me.mOdel.sendActions().add(Ext
+							.create('qqext.model.qq.SendAction'));
+				}),
+				Ext.create('Ext.Component', {autoEl: 'hr'}),
+				new factory.DateField('Уведомление о переносе сроков', 'renewalNotice'),
+				new factory.TextField('Исходящий №', 'ref_num'),
+				new factory.TextArea('Примечание', 'note').cfg({
+					width: 600,
+					labelWidth: 100
+				}),
+				Ext.create('Ext.form.FieldSet', {
+					title: 'Ответ',
+					collapsible: true,
+					items: [Ext.create('hawk_common.cmp.FileList')]
+				})
+			]
+		});
+
+		me.callParent(arguments);
+	}
+});
+</pre>
+</body>
+</html>

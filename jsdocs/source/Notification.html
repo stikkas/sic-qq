@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">Ext.define('qqext.model.qq.Notification', {
+    extend : 'Ext.data.Model',
+    idProperty:'id',
+    clientIdProperty:'cliId',
+    fields : [ {
+    	name:'cliId',
+    	type:'string'
+    }, {
+        name : 'id',
+        type : 'int',
+        convert:null,
+        defaultValue:null
+    }, {
+        name : 'q',
+        type : 'int',
+        convert:null,
+        defaultValue:null
+    }, {
+        name : 'executor',
+        type : 'int',
+        convert:null,
+        defaultValue:null
+    }, {
+        name : 'docType',
+        type : 'int',
+        convert:null,
+        defaultValue:null
+    }, {
+        name : 'deliveryType',
+        type : 'int',
+        convert : null,
+        defaultValue: null
+    }, {
+        name : 'notificationDate',
+        type : 'date'
+    } ],
+        proxy : {
+        type : 'ajax',
+        url : 'api/Notification',
+        api : {
+            create : 'api/Notification?action=create',
+            read : 'api/Notification?action=read',
+            update : 'api/Notification?action=update',
+            destroy : 'api/Notification?action=destroy'
+        },
+        reader : {
+            type : 'json',
+            root : 'data',
+            messageProperty : 'msg',
+            successProperty : 'success'
+        },
+        writer : {
+	        type : 'json'
+        }
+    }
+});</pre>
+</body>
+</html>

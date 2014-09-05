@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-view-menu-ButtonMenu'>/**
+</span> * Прародитель для всех меню, которые представляют из себя набор кнопок.
+ *
+ * @abstract
+ * @author С. Благодатских
+ */
+Ext.define('qqext.view.menu.ButtonMenu', {
+	extend: 'Ext.container.Container',
+<span id='qqext-view-menu-ButtonMenu-property-_buttons'>	/**
+</span>	 * @property {Array} _buttons
+	 * Набор кнопок меню. Задается в потомке.
+	 * @private
+	 */
+<span id='qqext-view-menu-ButtonMenu-property-_type'>	/**
+</span>	 * @property {String} _type
+	 * Класс создаваемых кнопок. Задается в потомке.
+	 * @private
+	 */
+	initComponent: function() {
+		var me = this;
+
+		Ext.applyIf(me, {
+			items: me._buttons.map(function(btn) {
+				var button = Ext.create(me._type, {
+					text: btn.text,
+					listeners: {
+						click: btn.action
+					}
+				});
+
+				// Если кнопка понадобится дальше, то заносим ее в глобальный
+				// список кнопок
+				if (btn.name)
+					qqext.addButton(btn.name, button);
+
+				if (btn.cfg)
+					Ext.applyIf(button, btn.cfg);
+				return button;
+			})
+		});
+
+		me.callParent(arguments);
+	}
+});
+</pre>
+</body>
+</html>

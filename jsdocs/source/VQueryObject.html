@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-view-reg-VQueryObject'>/**
+</span> * Панелька &quot;На кого запрос&quot; формы регистрации запроса
+ */
+Ext.define('qqext.view.reg.VQueryObject', {
+	extend: 'qqext.view.StyledPanel',
+	requires: [
+		'qqext.factory.TextField',
+		'qqext.factory.NumberField'
+	],
+<span id='qqext-view-reg-VQueryObject-property-title'>	title: 'На кого запрос',
+</span><span id='qqext-view-reg-VQueryObject-property-disabledCls'>	disabledCls: '',
+</span><span id='qqext-view-reg-VQueryObject-property-formBind'>	formBind: true,
+</span><span id='qqext-view-reg-VQueryObject-method-initComponent'>	initComponent: function() {
+</span>		var me = this,
+				factory = qqext.factory,
+				TextField = factory.TextField;
+
+		Ext.applyIf(me, {
+			items: [
+				new TextField('Фамилия', 'requestObjectSurname'),
+				new TextField('Имя', 'requestObjectName'),
+				new TextField('Отчество', 'requestFatherName'),
+				new factory.NumberField('Год рождения', 'request_object_birthyear').cfg({
+					width: 200
+				})
+			]
+		});
+
+		me.callParent(arguments);
+	}
+});
+</pre>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-view-VTitleBar'>/**
+</span> * Заголовочная панель с кнопками управления.
+ */
+Ext.define('qqext.view.VTitleBar', {
+	extend: 'Ext.panel.Panel',
+	requires: [
+		'qqext.Menu'
+	],
+<span id='qqext-view-VTitleBar-property-title'>	title: 'АС Запросы',
+</span><span id='qqext-view-VTitleBar-property-region'>	region: 'north',
+</span><span id='qqext-view-VTitleBar-property-layout'>	layout: 'hbox',
+</span><span id='qqext-view-VTitleBar-property-margin'>	margin: '0 0 10 0',
+</span><span id='qqext-view-VTitleBar-method-initComponent'>	initComponent: function() {
+</span>		var me = this,
+				menus = qqext.Menu;
+		Ext.applyIf(me, {
+			items: [menus.editMenu, menus.navigation]});
+		me.callParent(arguments);
+	}
+});
+</pre>
+</body>
+</html>

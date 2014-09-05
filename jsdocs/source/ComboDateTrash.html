@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-view-exec-cmp-ComboDateTrash'>/**
+</span> *
+ */
+Ext.define('qqext.view.exec.cmp.ComboDateTrash', {
+	extend: 'Ext.form.FieldContainer',
+<span id='qqext-view-exec-cmp-ComboDateTrash-property-required'>	required: [
+</span>		'qqext.factory.ComboBox',
+		'qqext.factory.DateField',
+		'qqext.factory.HandlerButton'
+	],
+<span id='qqext-view-exec-cmp-ComboDateTrash-property-layout'>	layout: {
+</span>		type: 'hbox',
+		align: 'middle'
+	},
+<span id='qqext-view-exec-cmp-ComboDateTrash-method-constructor'>	/**
+</span>	 *
+	 * @param {store:
+	 *            &lt;storeId of store for combobox&gt;, comboLabel: &lt;text for
+	 *            combo's label&gt;, dateLabel: &lt;text for datefield's
+	 *            label&gt;, } config
+	 */
+	constructor: function(config) {
+		var me = this,
+				factory = qqext.factory;
+
+		Ext.applyIf(me, {
+			items: [
+				new factory.ComboBox(config.comboLabel, config.store),
+				new factory.DateField(config.dateLabel).cfg({
+					labelAlign: 'right',
+					width: 180,
+					labelWidth: 70
+				}),
+				new factory.HandlerButton('trash', function() {
+					me.ownerCt.remove(me);
+					me.destroy();
+				}).cfg({margin: '0 0 0 15'})
+			]
+		});
+		me.callParent(arguments);
+	},
+<span id='qqext-view-exec-cmp-ComboDateTrash-method-getComboValue'>	getComboValue: function() {
+</span>		var me = this;
+		return me.items.getAt(0).getValue();
+	},
+<span id='qqext-view-exec-cmp-ComboDateTrash-method-getDateValue'>	getDateValue: function() {
+</span>		var me = this;
+		return me.items.getAt(1).getValue();
+	},
+<span id='qqext-view-exec-cmp-ComboDateTrash-method-setComboValue'>	setComboValue: function(value) {
+</span>		this.items.getAt(0).setValue(value);
+	},
+<span id='qqext-view-exec-cmp-ComboDateTrash-method-setDateValue'>	setDateValue: function(value) {
+</span>		this.items.getAt(1).setValue(value);
+	}
+});
+</pre>
+</body>
+</html>

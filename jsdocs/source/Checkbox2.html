@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-cmp-Checkbox'>/**
+</span> *  Компонент Checkbox, позволяющий отмечать или снимать отметку на определенных полях
+ *  и может находится как в режиме редактирования, так и в режиме просмотра.
+ *
+ */
+Ext.define('qqext.cmp.Checkbox', {
+	extend: 'Ext.form.field.Checkbox',
+<span id='qqext-cmp-Checkbox-property-_before'>	_before: 'inputEl',
+</span>	mixins: ['qqext.cmp.EditViewMode'],
+	xtype: 'checkboxfieldcmp',
+<span id='qqext-cmp-Checkbox-method-_getValue'>	_getValue: function() {
+</span>		return this.getValue() ? &quot;да&quot; : &quot;нет&quot;;
+	},
+<span id='qqext-cmp-Checkbox-method-_initLabel'>	/**
+</span>	 * Создает метку для отображения значения в режиме просмотра.
+	 * Вызывается только один раз и перед всеми манипуляциями с режимами,
+	 * поэтому в этом методе можно назначить поля для часто используемых объектов.
+	 * Потом, сейчас не буду.
+	 * @private
+	 */
+	_initLabel: function() {
+		var me = this,
+				label = document.createElement('span');
+		label.style.display = 'none';
+		me.bodyEl.dom.insertBefore(label, me[me._before].dom);
+		me._label = label;
+	},
+<span id='qqext-cmp-Checkbox-method-_hideInput'>	/**
+</span>	 * Скрывает поле ввода
+	 * @private
+	 */
+	_hideInput: function() {
+		var me = this;
+		me[me._before].dom.style.display = 'none';
+		me.boxLabelEl.dom.onclick = me._onClick;
+	},
+<span id='qqext-cmp-Checkbox-method-_showInput'>	/**
+</span>	 * Показывает поле ввода
+	 * @private
+	 */
+	_showInput: function() {
+		this[this._before].dom.style.display = '';
+		this.boxLabelEl.dom.onclick = null;
+	},
+<span id='qqext-cmp-Checkbox-method-_onClick'>	/**
+</span>	 * Отменяет обычное действие на событие для DOM. Нужно для отмены
+	 * переключения checkbox в невидимом режиме по щелчку на метку.
+	 * @private
+	 */
+	_onClick: function(ev) {
+		ev.preventDefault();
+	}
+});
+</pre>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">Ext.define('qqext.model.qq.Applicant', {
+    extend : 'Ext.data.Model',
+    idProperty:'id',
+    clientIdProperty:'cliId',
+    fields : [ {
+        name : 'id',
+        type : 'int',
+        defaultValue:null,
+        convert:null
+    }, {
+    	name:'cliId',
+    	type:'string'
+    },{
+        name : 'applicantType',
+        type : 'int',
+        defaultValue:null,
+        convert:null
+    }, {
+        name : 'applicantObject',
+        type : 'string'
+    }, {
+        name : 'name',
+        type : 'string'
+    }, {
+        name : 'surname',
+        type : 'string'
+    }, {
+        name : 'fatherName',
+        type : 'string'
+    }, {
+        name : 'birthYear',
+        type : 'int',
+        defaultValue:null,
+        convert:null
+    }, {
+        name : 'applicantCategory',
+        type : 'int',
+        defaultValue:null,
+        convert:null
+    }, {
+        name : 'country',
+        type : 'string',
+        defaultValue:null,
+        convert:null
+    }, {
+        name : 'address',
+        type : 'string',
+        defaultValue:null,
+        convert:null
+    }, {
+        name : 'phone',
+        type : 'string',
+        defaultValue:null,
+        convert:null
+    }, {
+        name : 'inboxDocNum',
+        type : 'string',
+        defaultValue:null,
+        convert:null
+    }, {
+        name : 'inboxDocDate',
+        type : 'date'
+        
+    }, {
+        name : 'nameOfJurPerson',
+        type : 'string',
+        defaultValue:null,
+        convert:null
+    }, {
+        name : 'addendum',
+        type : 'string',
+        defaultValue:null,
+        convert:null
+    } ]
+});</pre>
+</body>
+</html>

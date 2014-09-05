@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-view-search-VSearchForm'>/**
+</span> *  Форма поиска
+ */
+
+Ext.define('qqext.view.search.VSearchForm', {
+	extend: 'Ext.container.Container',
+	requires: [
+		'qqext.view.search.VSearchParams',
+		'qqext.view.search.VSearchResult'
+	],
+<span id='qqext-view-search-VSearchForm-property-id'>	id: 'VSearchForm',
+</span><span id='qqext-view-search-VSearchForm-method-initComponent'>	initComponent: function() {
+</span>		var me = this;
+		Ext.applyIf(me, {
+			items: [
+				me._form = Ext.create('qqext.view.search.VSearchParams'),
+				Ext.create('qqext.view.search.VSearchResult')
+			]
+		});
+		me.callParent(arguments);
+	},
+<span id='qqext-view-search-VSearchForm-method-reset'>	/**
+</span>	 * Очищает все поля формы
+	 * и результаты поиска. Приводит форму в первоначальное состояние.
+	 */
+	reset: function() {
+		Ext.getStore('searchResults').removeAll();
+		this._form.getForm().reset();
+	},
+<span id='qqext-view-search-VSearchForm-method-exec'>	/**
+</span>	 * Запускает поиск по параметрам первого элемента контейнера
+	 * 'searchResult' store связан с сеткой для поиска {@link #qqext.view.search.VSearchResult},
+	 * так что при обновлении данных в хранилище (по вызову load) будут обновляться данные и
+	 * в сетке.
+	 */
+	exec: function() {
+		Ext.getStore('searchResults').load({
+			params: {q: Ext.encode(this._form.getValues(false, true))}
+		});
+	}
+});
+</pre>
+</body>
+</html>

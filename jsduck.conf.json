@@ -1,0 +1,11 @@
+{
+    "--title": "Пакет hawk_common",
+    "--warnings": [
+        "-all:/home/basa/Projects/sic-qq/qq-web/src/main/qqext/ext/src"
+    ],
+    "--output": "jsdocs",
+    "--": [
+        "qq-web/src/main/qqext/qqext",
+        "qq-web/src/main/qqext/app.js"
+    ]
+}

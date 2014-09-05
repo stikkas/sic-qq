@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-view-transmission-VTransmission'>/**
+</span> * Панелька &quot;Передача на исполнение&quot; одноименной формы
+ */
+
+Ext.define('qqext.view.transmission.VTransmission', {
+	extend: 'qqext.view.StyledPanel',
+	requires: [
+		'qqext.factory.ComboBox',
+		'qqext.factory.DateField',
+		'qqext.factory.Checkbox',
+		'qqext.factory.TextField',
+		'Ext.form.FieldContainer',
+		'Ext.form.FieldSet'
+	],
+<span id='qqext-view-transmission-VTransmission-property-title'>	title: 'Передача на исполнение',
+</span><span id='qqext-view-transmission-VTransmission-property-height'>	height: 400,
+</span><span id='qqext-view-transmission-VTransmission-property-maxHeight'>	maxHeight: 400,
+</span><span id='qqext-view-transmission-VTransmission-method-initComponent'>	initComponent: function() {
+</span>		var configForDate = {
+			labelAlign: 'right',
+			margin: '6 0 0 0'
+		},
+		me = this,
+				factory = qqext.factory,
+				ComboBox = factory.ComboBox,
+				DateField = factory.DateField,
+				TextField = factory.TextField;
+
+		Ext.applyIf(me, {
+			items: [
+				Ext.create('Ext.form.FieldContainer', {
+					layout: 'hbox',
+					items: [
+						new ComboBox('Ответственный за исполнение', 'allUsers',
+								'responsibleForExecution'),
+						new DateField('Дата', 'responsibleForExecutionDate').cfg(configForDate)
+					]
+				}),
+				Ext.create('Ext.form.FieldContainer', {
+					layout: 'hbox',
+					items: [
+						new ComboBox('ФИО исполнителя', 'allUsers', 'executorName'),
+						new DateField('Дата', 'executorDate').cfg(configForDate)
+					]
+				}),
+				new factory.Checkbox('Контроль', 'control'),
+				new DateField('Контрольная дата исполнения', 'controlDateOfExecution'),
+				Ext.create('Ext.form.FieldSet', {
+					collapsible: true,
+					title: 'Дополнительная информация',
+					layout: 'vbox',
+					items: [
+						new TextField('Автор резолюции', 'resolutionAuthor'),
+						new ComboBox('Территория хранилища', 'storageTerritory', 'storageTerritory'),
+						new TextField('Название хранилища', 'storageName')
+					]
+				})
+			]
+		});
+		me.callParent(arguments);
+	}
+});
+</pre>
+</body>
+</html>

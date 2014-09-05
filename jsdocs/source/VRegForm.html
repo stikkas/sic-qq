@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-view-reg-VRegForm'>/**
+</span> * Форма &quot;Регистрация запроса&quot; карточки запроса
+ */
+
+Ext.define('qqext.view.reg.VRegForm', {
+	extend: 'Ext.container.Container',
+	requires: [
+		'qqext.view.reg.VInboxDoc',
+		'qqext.view.reg.VQuery',
+		'qqext.view.reg.VApplicant',
+		'qqext.view.reg.VQueryObject',
+		'qqext.view.reg.VFiles'
+	],
+<span id='qqext-view-reg-VRegForm-property-disabledCls'>	disabledCls: '',
+</span><span id='qqext-view-reg-VRegForm-property-maskOnDisable'>	maskOnDisable: false,
+</span><span id='qqext-view-reg-VRegForm-property-disabled'>	disabled: null,
+</span><span id='qqext-view-reg-VRegForm-property-region'>	region: 'center',
+</span><span id='qqext-view-reg-VRegForm-property-overflowY'>	overflowY: 'auto',
+</span><span id='qqext-view-reg-VRegForm-property-overflowX'>	overflowX: 'hidden',
+</span><span id='qqext-view-reg-VRegForm-method-initComponent'>	initComponent: function() {
+</span>		var me = this;
+		Ext.applyIf(me, {
+			items: [
+				Ext.create('qqext.view.reg.VInboxDoc'),
+				Ext.create('qqext.view.reg.VQuery'),
+				Ext.create('qqext.view.reg.VApplicant'),
+				Ext.create('qqext.view.reg.VQueryObject'),
+				Ext.create('qqext.view.reg.VFiles')
+			]
+		});
+		me.callParent(arguments);
+	},
+<span id='qqext-view-reg-VRegForm-method-setDisabled'>	/**
+</span>	 * Устанавливает состояние доступности всех своих элементов
+	 * @param {Boolean} disabled
+	 */
+	setDisabled: function(disabled) {
+		var items = this.items, max = items.items.length;
+		for (var i = 0; i &lt; max; i++) {
+			items.getAt(i).setDisabled(disabled);
+		}
+		this.disabled = disabled;
+	},
+<span id='qqext-view-reg-VRegForm-method-isDisabled'>	/**
+</span>	 *  Возвращает состояние доступности
+	 * @returns {Boolean}
+	 */
+	isDisabled: function() {
+		return this.disabled;
+	},
+<span id='qqext-view-reg-VRegForm-method-loadRecord'>	loadRecord: function(model) {
+</span>		var me = this;
+		me.items.getAt(0).loadRecord(model); //load model into qqext.view.reg.VInboxDoc
+		var applicant;
+
+		applicant = model.getApplicant();
+
+		me.items.getAt(1).loadRecord(applicant);
+
+		me.items.getAt(2).loadRecord(model);
+		me.items.getAt(3).loadRecord(model);
+		me.items.getAt(4).loadRecord(model);
+	},
+<span id='qqext-view-reg-VRegForm-method-updateRecord'>	updateRecord: function(model) {
+</span>		var me = this;
+		for (var i = 0; i &lt; me.items.length; i++) {
+			if (me.items.get(i).$className !== 'qqext.view.reg.VApplicant') {
+				me.items.getAt(i).updateRecord(model);
+			} else {
+				if (model.getApplicant &amp;&amp; model.getApplicant()) {
+					console.log('обновление модели Applicant');
+					me.items.getAt(i).updateRecord(model.getApplicant());
+				}
+			}
+		}
+	}
+});
+</pre>
+</body>
+</html>

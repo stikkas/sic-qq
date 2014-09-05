@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-controller-Main'>/**
+</span> * Основной контроллер (и единственный) нашего приложения.
+ */
+Ext.define('qqext.controller.Main', {
+	extend: 'Ext.app.Controller',
+<span id='qqext-controller-Main-property-views'>	views: ['qqext.view.VTitleBar'],
+</span>	requires: [
+		'qqext.model.qq.JournalItem',
+		'qqext.model.qq.SearchResultItem',
+		'qqext.model.qq.SearchCritery',
+		'qqext.model.qq.Question',
+		'qqext.store.DictValuesStore',
+		'qqext.store.CustomStore',
+		'hawk_common.store.UserLocalStorage'
+	],
+<span id='qqext-controller-Main-property-currentModel'>	/**
+</span>	 * Активная модель, иницилизируется в {@link qqext.Menu} после создания.
+	 * Функция вызывается при нажатии на кнопку 'Добавить' в верхнем меню.
+	 */
+	currentModel: null,
+<span id='qqext-controller-Main-property-searchParams'>	searchParams: null,
+</span><span id='qqext-controller-Main-method-init'>	init: function() {
+</span>		var kput = {
+			resultOfAnswer: 'Q_DICT_RESULT_ANSER',
+			applicantCategory: 'Q_DICT_APP_CATEGORY',
+			applicantType: 'Q_DICT_APPLICANT_TYPE',
+			inboxDocDeliveryType: 'QQ_TRANSMISSION_MODE',
+			inboxDocExecOrg: 'ORG_STRUCTURE',
+			answerForm: 'Q_DICT_ANSWER_FORM',
+			docType: 'Q_DICT_DOC_TYPES',
+			queryType: 'Q_DICT_QUEST_TYPE',
+			storageTerritory: 'Q_DICT_STORAGE',
+			tematicOfAnswer: 'Q_DICT_THEMATIC_ANSW',
+			diffCategory: 'Q_DICT_DIFF_CATEGORY',
+			coordinationStage: 'Q_DICT_THE_EHDORSEMENT',
+			literas: 'QQ_ORG_STRUCT_LITERAS',
+			allUsers: 'QQ_USERS',
+			journalApplicantFilterStore: 'QQ_JOURNAL_APPLICANT_FILTER',
+			journalExecutors: 'QQ_JOURNAL_EXECUTOR',
+			Q_DICT_QUESTION_STATUSES: 'Q_DICT_QUESTION_STATUSES'
+		};
+
+		for (var key in kput)
+			Ext.regStore(key, Ext.create('qqext.store.DictValuesStore', {
+				storeId: key,
+				dictCode: kput[key]
+			}));
+		Ext.regStore('searchResults', Ext.create('qqext.store.CustomStore', {
+			storeId: 'searchResults',
+			url: 'api/Search',
+			model: 'qqext.model.qq.SearchResultItem'
+		}));
+		Ext.regStore('journal', Ext.create('qqext.store.CustomStore', {
+			storeId: 'journal',
+			url: 'api/Journal',
+			pageSize: 10,
+			remoteSort: true,
+			model: 'qqext.model.qq.JournalItem',
+			remoteFilter: true
+		}));
+
+		qqext.mainController = this;
+		this.control({
+			'toolbutton': {
+				afterrender: activateComponent
+			}
+		});
+
+<span id='qqext-controller-Main-method-activateComponent'>		/**
+</span>		 * Если у пользователя нет прав, то компонент делается недоступным
+		 * @param {Ext.Component} target в основном кнопки
+		 */
+		function activateComponent(target) {
+			// TODO: реализовать проверку прав
+			/*
+			 console.log(target.getText());
+			 console.log(qqext.userStore.getById('current').get('access'));
+			 target.setDisabled(true);
+			 */
+		}
+	},
+<span id='qqext-controller-Main-method-clearSearchParams'>	clearSearchParams: function() {
+</span>		this.searchParams = null;
+	},
+<span id='qqext-controller-Main-method-getSearchParams'>	getSearchParams: function() {
+</span>		var me = this;
+		if (!me.searchParams)
+			me.searchParams = Ext.create('qqext.model.qq.SearchCritery');
+		return me.searchParams;
+	},
+<span id='qqext-controller-Main-method-dropMainCont'>	dropMainCont: function() {
+</span>		var me = this;
+		var vp = me.getVp();
+		var delItems = me.getVp().items.getAt(2);
+		vp.remove(delItems);
+		delItems.destroy();
+	},
+<span id='qqext-controller-Main-method-getMainCont'>	getMainCont: function() {
+</span>		return qqext.getCurrentForm();
+	},
+<span id='qqext-controller-Main-method-syncModel'>	/**
+</span>	 * Синхронизация данных на форме с моделью
+	 * @return {Object} объект контоллера (нужен для цепочных операций)
+	 */
+	syncModel: function() {
+		var
+				me = this,
+				model = me.currentModel,
+				currentForm = me.getMainCont();
+
+		switch (currentForm.$className) {
+			case 'qqext.view.reg.VRegForm' :
+				currentForm.updateRecord(model);
+				break;
+			case 'qqext.view.notify.VNotify' :
+				currentForm.updateRecord(model.getNotification());
+				break;
+			case 'qqext.view.transmission.VTransmission' :
+				currentForm.updateRecord(model.getTransmission());
+				break;
+			case 'qqext.view.exec.VExecForm' :
+				currentForm.updateRecord(model);
+				break;
+			default :
+				console.debug('switch class name: ' + currentForm.$className);
+		}
+		return me;
+	},
+<span id='qqext-controller-Main-method-getModel'>	getModel: function() {
+</span>		return this.currentModel;
+	}
+});
+</pre>
+</body>
+</html>

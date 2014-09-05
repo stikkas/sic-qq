@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js">Ext.Loader.setConfig({
+	enabled: true,
+	paths: {qqext: 'qqext'}
+});
+/*
+ * Стандартная точка входя для ExtJS приложения.
+ * @param {Object} различные установки для приложения
+ */
+Ext.application({
+	name: 'qqext',
+	appFolder: 'qqext',
+	autoCreateViewport: false,
+	requires: [
+		'hawk_common.model.User',
+		'hawk_common.store.UserLocalStorage',
+		'qqext.view.Viewport',
+		'qqext.Menu'
+	],
+	controllers: ['qqext.controller.Main'],
+	launch: function() {
+		// Временно для отладки. В рабочей версии убрать
+		// Настраиваем глобальные переменные
+		this.initQQ();
+		var user = Ext.create('hawk_common.model.User'),
+				userStore = qqext.userStore = Ext.create('hawk_common.store.UserLocalStorage');
+
+		user.set('id', 'current');
+		user.set('name', 'fake');
+		user.set('access', 'allowall');
+		userStore.add(user);
+		userStore.sync();
+		Ext.create('qqext.view.Viewport', {});
+		return;
+		//-------------------------
+		Ext.Ajax.request({
+			url: '/qq-web/Rules',
+			success: function(response) {
+				// Настраиваем глобальные переменные
+				this.initQQ();
+				var authRes = Ext.decode(response.responseText),
+						user = Ext.create('hawk_common.model.User'),
+						userStore = qqext.userStore = Ext.create('hawk_common.store.UserLocalStorage');
+
+				user.set('id', 'current');
+				user.set('name', authRes.msg);
+				user.set('access', authRes.access);
+				userStore.add(user);
+				userStore.sync();
+
+				Ext.create('qqext.view.Viewport', {});
+			},
+			failure: function(response) {
+				Ext.Msg.show({
+					title: 'Ошибка',
+					msg: response.responseText,
+					buttons: Ext.Msg.OK,
+					icon: Ext.Msg.ERROR,
+					cls: 'err_msg',
+					maxWidth: 1000
+				});
+			}
+		});
+	},
+	initQQ: function() {
+		// Глобальные переменные и константы для namespace qqext.
+		// Названо классом для того, чтобы jsduck задокументировал это.
+<span id='qqext'>		/**
+</span>		 * @class qqext
+		 */
+<span id='qqext-method-setActivePage'>		/**
+</span>		 * Устанавливает активную страницу (иницализируется в {@link qqext.view.Viewport#initComponent}).
+		 * Страницы приложения:
+		 *
+		 * - 0 - qqext.view.WelcomePage, с нее можно поити либо в &quot;АС Запросы&quot;, либо еще куда
+		 * - 1 - qqext.view.MainPage, страница для работы с &quot;АС Запросами&quot;
+		 *
+		 * @param {Number} idx порядковый номер страницы (см. выше)
+		 * @method 	setActivePage
+		 */
+<span id='qqext-method-setCurrentForm'>		/**
+</span>		 * Переключает формы в центре экрана.
+		 * Иницализируется в {@link qqext.view.MainPage#initComponent}.
+		 * Возможные формы:
+		 *
+		 * - 0 - qqext.view.journal.VJournalForm журнал входящей корреспонденции
+		 * - 1 - qqext.view.search.VSearchForm форма поиска заявок
+		 * - 2 - Отчетные документы
+		 * - 3 - qqext.view.reg.VRegForm форма регистрации заявки
+		 * - 4 - qqext.view.notify.VNotify форма уведомления заявителю
+		 * - 5 - qqext.view.transmission.VTransmission форма передачи на исполнение
+		 * - 6 - qqext.view.exec.VExecForm форма исполнения запроса
+		 *
+		 * @param {Number} idx порядковый номер формы (см. выше)
+		 * @method setCurrentForm
+		 */
+<span id='qqext-method-getCurrentForm'>		/**
+</span>		 * Метод для полечения формы, которая в данный момент показана на экране.
+		 * Иницализируется в {@link qqext.view.MainPage#initComponent}.
+		 * @return {Ext.grid.Panel/Ext.container.Container/qqext.view.StyledPanel} форма
+		 * @method getCurrentForm
+		 */
+<span id='qqext-property-searchForm'>		/**
+</span>		 * @property {Ext.container.Container} searchForm
+		 * Форма поиска. Инициализируется в {@link qqext.view.MainPage#initComponent}.
+		 */
+<span id='qqext-property-regForm'>		/**
+</span>		 * @property {Ext.container.Container} regForm
+		 * Форма регистрации запроса. Инициализируется в {@link qqext.view.MainPage#initComponent}.
+		 */
+<span id='qqext-property-notifyForm'>		/**
+</span>		 * @property {qqext.view.StyledPanel} notifyForm
+		 * Форма уведомления заявителя. Инициализируется в {@link qqext.view.MainPage#initComponent}.
+		 */
+<span id='qqext-property-transForm'>		/**
+</span>		 * @property {qqext.view.StyledPanel} transForm
+		 * Форма передачи на исполнение. Инициализируется в {@link qqext.view.MainPage#initComponent}.
+		 */
+<span id='qqext-property-execForm'>		/**
+</span>		 * @property {Ext.container.Container} execForm
+		 * Форма исполнение запроса. Инициализируется в {@link qqext.view.MainPage#initComponent}.
+		 */
+<span id='qqext-property-mainController'>		/**
+</span>		 * @property {qqext.controller.Main} mainController
+		 * Основной контроллер приложения. Инициализируется в {@link qqext.controller.Main#init}.
+		 */
+<span id='qqext-property-userStore'>		/**
+</span>		 * @property {hawk_common.store.UserLocalStorage} userStore
+		 * Хранилище с правами пользователей. Иницализируется при старте приложения.
+		 */
+		/*
+		 * Различные кнопки, на которые нужно иметь ссылки по ходу дела. Обращаться к ним
+		 * только через интерфейс getButton и addButton.
+		 */
+		var buttons = [];
+<span id='qqext-method-getButton'>		/**
+</span>		 * Возвращает кнопку из зарегестрированных, по заданному имени. Необходим для
+		 * программного нажатия на кнопку.
+		 * @param {String} name имя кнопки
+		 * @returns {Obejct/undefined} если такая кнопка есть, то кнопку, иначе undefined
+		 * @method getButton
+		 */
+		qqext.getButton = function(name) {
+			var max = buttons.length,
+					i = 0,
+					btn;
+			for (; i &lt; max; ++i) {
+				btn = buttons[i];
+				if (name === btn.name)
+					return btn.body;
+			}
+		};
+<span id='qqext-method-addButton'>		/**
+</span>		 * Добавляет кнопку в набор, если такой еще нет
+		 * @param {String} name имя кнопки
+		 * @param {Ext.button.Button} button сама кнопка
+		 * @method addButton
+		 */
+		qqext.addButton = function(name, button) {
+			if (!qqext.getButton(name))
+				buttons.push({name: name, body: button});
+		};
+<span id='qqext-property-labels'>		/**
+</span>		 * @property {Object} labels
+		 * Текстовые надписи приложения (на кнопках, заголовки и т.д.)
+		 */
+		qqext.labels = {
+			save: &quot;Сохранить&quot;,
+			edit: &quot;Редактировать&quot;,
+			toSearch: &quot;Вернуться в поиск&quot;,
+			remove: &quot;Удалить&quot;,
+			register: &quot;Регистрировать&quot;,
+			add: &quot;Добавить&quot;,
+			search: &quot;Поиск&quot;,
+			clean: &quot;Очистить&quot;,
+			jvk: &quot;ЖВК&quot;,
+			reports: &quot;Отчетные документы&quot;,
+			reqRegister: &quot;Регистрация запроса&quot;,
+			reqNotify: &quot;Уведомление заявителю&quot;,
+			transToComplete: &quot;Передача на исполнение&quot;,
+			complete: &quot;Исполнение запроса&quot;,
+			toBegin: &quot;В начало&quot;,
+			quit: &quot;Выйти&quot;,
+			app1: &quot;Подсистема 1&quot;,
+			app2: &quot;Подсистема 2&quot;,
+			asq: &quot;АС Запросы&quot;
+		};
+<span id='qqext-property-urls'>		/**
+</span>		 * @property {Object} urls URLs для доступа к серверу
+		 */
+		qqext.urls = {
+			welcome: &quot;/qq-web/&quot;,
+			login: &quot;/qq-web/Auth?action=logout&amp;redirect=1&quot;,
+			app1: &quot;#&quot;,
+			app2: &quot;#&quot;
+		};
+<span id='qqext-method-quitAction'>		/**
+</span>		 * Вызывается когда нажали на кнопку 'Выйти'
+		 * @method quitAction
+		 */
+		qqext.quitAction = function() {
+			// молча, без выстерла событий, удаляем все данные из хранилища
+			qqext.userStore.removeAll(true);
+			window.location = qqext.urls.login;
+		};
+
+		// Создаем все меню
+		qqext.Menu.init();
+	}
+});
+
+</pre>
+</body>
+</html>

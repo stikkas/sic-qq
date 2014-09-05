@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-view-exec-cmp-DeliveryTypeCount'>/**
+</span> * Панель корзина для мусора.
+ */
+Ext.define('qqext.view.exec.cmp.DeliveryTypeCount', {
+	extend: 'Ext.form.FieldContainer',
+	requires: [
+		'qqext.factory.ComboBox',
+		'qqext.factory.NumberField',
+		'qqext.factory.HandlerButton'
+	],
+<span id='qqext-view-exec-cmp-DeliveryTypeCount-property-layout'>	layout: {
+</span>		type: 'hbox',
+		align: 'middle'
+	},
+<span id='qqext-view-exec-cmp-DeliveryTypeCount-property-height'>	height: 40,
+</span><span id='qqext-view-exec-cmp-DeliveryTypeCount-property-width'>	width: 600,
+</span><span id='qqext-view-exec-cmp-DeliveryTypeCount-method-loadRecord'>	loadRecord: function(model) {
+</span>		this.items.getAt(0).setValue(model.get('docType'));
+		this.items.getAt(1).setValue(model.get('numOfDocs'));
+	},
+<span id='qqext-view-exec-cmp-DeliveryTypeCount-method-updateRecord'>	updateRecord: function(model) {
+</span>		model.set('docType', this.items.getAt(0).getValue());
+		model.set('numOfDocs', this.items.getAt(1).getValue())
+	},
+<span id='qqext-view-exec-cmp-DeliveryTypeCount-method-initComponent'>	initComponent: function() {
+</span>		var me = this, factory = qqext.factory;
+		Ext.applyIf(me, {
+			items: [
+				new factory.ComboBox('Тип документов', 'docType').cfg({
+					editable: false,
+					labelWidth: 100,
+					width: 250,
+					height: 22
+				}),
+				new factory.NumberField('Количество документов').cfg({
+					labelAlign: 'right',
+					hideTrigger: true,
+					width: 230,
+					labelWidth: 150
+				}),
+				new factory.HandlerButton('Trash', function() {
+					this.ownerCt.ownerCt.remove(this.ownerCt);
+				}).cfg({
+					action: 'drop',
+					height: 25,
+					margin: '0 0 0 15'
+				})
+			]
+		});
+		me.callParent(arguments);
+	}
+});
+</pre>
+</body>
+</html>

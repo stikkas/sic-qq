@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-view-exec-VExecInfo'>/**
+</span> * Форма свединия об исполнении запроса
+ */
+Ext.define('qqext.view.exec.VExecInfo', {
+	extend: 'qqext.view.StyledPanel',
+	requires: [
+		'qqext.factory.ComboBox',
+		'qqext.factory.DateField'
+	],
+<span id='qqext-view-exec-VExecInfo-property-title'>	title: 'Сведения об исполнении',
+</span><span id='qqext-view-exec-VExecInfo-property-maxHeight'>	maxHeight: 205,
+</span><span id='qqext-view-exec-VExecInfo-method-initComponent'>	initComponent: function() {
+</span>		var
+				me = this,
+				factory = qqext.factory,
+				ComboBox = factory.ComboBox;
+
+		Ext.applyIf(me, {
+			items: [
+				new factory.DateField('Дата исполнения', 'execDate'),
+				new ComboBox('Результат ответа', 'resultOfAnswer', 'answerResult')
+						.cfg({editable: false}),
+				new ComboBox('Тематика ответа', 'tematicOfAnswer', 'usageAnswer')
+						.cfg({editable: false}),
+				new ComboBox('Категория сложности', 'diffCategory', 'categoryComplexity')
+						.cfg({width: 175, editable: false})
+			]
+		});
+		me.callParent(arguments);
+	}
+});
+</pre>
+</body>
+</html>

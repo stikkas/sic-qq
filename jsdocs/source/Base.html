@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>The source code</title>
+  <link href="../resources/prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="../resources/prettify/prettify.js"></script>
+  <style type="text/css">
+    .highlight { display: block; background-color: #ddd; }
+  </style>
+  <script type="text/javascript">
+    function highlight() {
+      document.getElementById(location.hash.replace(/#/, "")).className = "highlight";
+    }
+  </script>
+</head>
+<body onload="prettyPrint(); highlight();">
+  <pre class="prettyprint lang-js"><span id='qqext-factory-Base'>/**
+</span> * Предок всех фабрик. Нужен для обеспечения всех фабрик общей функциональностью.
+ * На данный момент это только метод cfg, который добавляет в результирующий объект
+ * различные свойства.
+ *
+ * @author С. Благодатских
+ */
+Ext.define('qqext.factory.Base', {
+<span id='qqext-factory-Base-method-c'>	c: function(obj) {
+</span><span id='qqext-factory-Base-method-cfg'>		/**
+</span>		 * Добавляет в объект новые свойства, или обновляет, если такие свойства в
+		 * объекте уже есть
+		 * @param {Object} conf набор нужных свойств
+		 * @returns {Object} целевой объект, для цепочных операций
+		 */
+		obj.cfg = function(conf) {
+			for (var o in conf)
+				obj[o] = conf[o];
+			return obj;
+		}
+		return obj;
+	}
+});
+
+
+</pre>
+</body>
+</html>

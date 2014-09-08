@@ -20,14 +20,54 @@ Ext.define('qqext.Menu', {
 	],
 	statics: {
 		/**
+		 * @property {Object} navigation
 		 * Меню для перехода между подсистемами и завершения сеанса.
 		 */
 		navigation: null,
+		/*
+		 * Горизонтальные верхние меню представляют из себя панель следующего вида:
+		 * -------------------------
+		 * | editMenu | navigation |
+		 * -------------------------
+		 * где editMenu в свою очеред представляет из себя панель со слоем 'card'.
+		 * т.е. в один момент времени может отображаться только один элемент панели.
+		 * Элементами этой панели являются:
+		 * --------------
+		 * | searchEdit | - панель с горизонтальным расположением кнопок для меню поиск и жвк. Закрытая
+		 * --------------   доступа из вне нет, т.к. не представляет пока интереса.
+		 * -----------
+		 * | reqEdit | - панель для работы в режиме работы с запросом, тоже закрыта для доступа напрямую.
+		 * -----------
+		 * regEdit представляет собой простую панель с layout = 'hbox' и содержащей элементы:
+		 * ------------------------------
+		 * | backToSearch | editReqMenu |
+		 * ------------------------------
+		 * backToSearch - кнопка, открытого доступа нет.
+		 * editReqMenu - панель с layout = 'card'. Содержит кнопки для работы с запросом на разных этапах.
+		 */
 		/**
-		 * Набор меню редактирования (горизонтальные верхние меню)
+		 * @property {Ext.panel.Panel} editMenu
+		 * Набор меню редактирования (горизонтальные верхние меню):
+		 *
+		 *  - 0 - меню для форм поиска и жвк ["добавить" "поиск" "очистить"]
+		 *  - 1 - меню для форм работы с запросом
 		 */
 		editMenu: null,
 		/**
+		 * @property {Ext.panel.Panel} editReqMenu
+		 * меню для редактирования при работе с запросом
+		 *
+		 * - 0 - меню для формы регистрации запроса ["редактировать" "сохранить" "удалить" "регистрировать"]
+		 * - 1 - меню для формы уведомления заявителю ["сохранить" "редактировать"]
+		 * - 2 - меню для формы передачи на исполнение ["редактировать" "сохранить" "удалить" "регистрировать"]
+		 * - 3 - меню для формы исполнение запроса ["редактировать" "сохранить" "удалить" "регистрировать"]
+		 *
+		 * Для каждой формы берется свое меню из расчета что для разных форм
+		 * кнопки могут иметь различное отображение (где-то недоступны, где-то - доступны).
+		 */
+		editReqMenu: null,
+		/**
+		 * @property {Object} articleMenu
 		 * Набор меню подразделов (вертикальные левые меню)
 		 */
 		articleMenu: null,
@@ -36,25 +76,14 @@ Ext.define('qqext.Menu', {
 		 */
 		init: function() {
 			var
-					menus = qqext.Menu,
-					labels = qqext.labels,
+					ns = qqext,
+					menus = ns.Menu,
+					labels = ns.labels,
 					//меню редактирования при выбранных разделах: 'Уведомления заявителю'
-					requestorNotifyEdit = createHButtonMenu([
-						{text: labels.save, action: saveNotify},
-						{text: labels.edit, action: editNotify}
-					]),
-					//меню редактирования при выбранных подразделах:
-					//'Регистрация запросов', 'Передача на исполнение', 'Исполнение запроса'
-					requestEdit = createHButtonMenu([
-						{text: labels.toSearch, action: returnToSearch},
-						{text: labels.edit, action: edit},
-						{text: labels.save, action: save},
-						{text: labels.remove, action: remove},
-						{text: labels.register, action: book}
-					]),
+
 					// меню редактирования при выбранных подразделах: 'ЖВК', 'Поиск', 'Отчетные документы'
-					searchEdit = createHButtonMenu([
-						{text: labels.add, action: add},
+					searchEdit = ns.createHButtonMenu([
+						{text: labels.add, action: add, name: 'add'},
 						{text: labels.search, action: find},
 						{text: labels.clean, action: clear}
 					]),
@@ -72,15 +101,24 @@ Ext.define('qqext.Menu', {
 						{text: labels.complete, action: toComplete}
 					]);
 
-			menus.navigation = createHButtonMenu([
+			menus.navigation = ns.createHButtonMenu([
 				{text: labels.toBegin, action: toStartPage},
-				{text: labels.quit, action: qqext.quitAction}
+				{text: labels.quit, action: ns.quitAction}
 			]);
-
-			menus.editMenu = createCardMenuPanel([searchEdit, requestEdit, requestorNotifyEdit]);
+			// Инициализация пустого меню для редактирвания в режиме работы с запросом
+			menus.editReqMenu = createCardMenuPanel([]);
+			menus.editMenu = createCardMenuPanel([searchEdit,
+				// Меню с кнопкой "Вернуться в поиск" и различными меню для редактирования
+				Ext.create('Ext.panel.Panel', {
+					layout: 'hbox',
+					items: [ns.createHButtonMenu([{text: labels.toSearch, action: returnToSearch}]),
+						menus.editReqMenu]
+				})]);
 			menus.articleMenu = createCardMenuPanel([searchMenu, requestMenu]);
+			// Слои для переключения активных элементов картбоксов.
 			var
 					editMenuLayout = menus.editMenu.getLayout(),
+					editReqMenuLayout = menus.editReqMenu.getLayout(),
 					articleMenuLayout = menus.articleMenu.getLayout();
 
 //----------Вспомогательные функции-----------------
@@ -100,27 +138,14 @@ Ext.define('qqext.Menu', {
 			}
 
 			/**
-			 * Создает меню с горизонтально расположенными кнопками
-			 * @private
-			 * @param {Array} buttons набор кнопок
-			 * @returns {qqext.view.menu.HButtonMenu} меню
-			 */
-			function createHButtonMenu(buttons) {
-				return Ext.create('qqext.view.menu.HButtonMenu', {
-					_buttons: buttons, _type: 'qqext.button.ToolButton'
-				});
-			}
-
-			/**
 			 * Создает меню с вертикально расположенными кнопками
 			 * @private
 			 * @param {Array} buttons набор кнопок
 			 * @returns {qqext.view.menu.VButtonMenu} меню
 			 */
 			function createVButtonMenu(buttons) {
-				return Ext.create('qqext.view.menu.VButtonMenu', {
-					_buttons: buttons, _type: 'qqext.button.ArticleButton'
-				});
+				return Ext.create('qqext.view.menu.VButtonMenu',
+						buttons, 'qqext.button.ArticleButton');
 			}
 
 			/**
@@ -131,80 +156,9 @@ Ext.define('qqext.Menu', {
 			function returnToSearch() {
 				editMenuLayout.setActiveItem(0);
 				articleMenuLayout.setActiveItem(0);
-				qqext.getButton('jvk').fireEvent('click');
+				ns.getButton('jvk').fireEvent('click');
 			}
 
-			/**
-			 * Обрабатывает событие 'click' на кнопке "Редактировать"
-			 * @private
-			 * @returns {undefined}
-			 */
-			function edit() {
-				//TODO: разобраться что эта функция должна делать
-				var form = qqext.getCurrentForm();
-				form.setDisabled(!form.isDisabled());
-				form.doLayout();
-			}
-
-			/**
-			 * Обрабатывает событие 'click' на кнопке "Сохранить"
-			 * @private
-			 * @returns {undefined}
-			 */
-			function save() {
-				qqext.mainController.syncModel()
-						.getModel().save(function(rec, op, suc) {
-					console.log('is saving success?: ' + suc);
-				});
-			}
-
-			/**
-			 * Обрабатывает событие 'click' на кнопке "Удалить"
-			 * @private
-			 * @returns {undefined}
-			 */
-			function remove() {
-				qqext.mainController.syncModel()
-						.getModel().destroy({
-					success: function() {
-						alert('Успешно удалено');
-						qqext.getButton('search').fireEvent('click');
-					},
-					failure: function() {
-						alert('Ошибка при удалении');
-					}
-				});
-			}
-
-			/**
-			 * Обрабатывает событие 'click' на кнопке "Регистрировать".
-			 * TODO реализовать метод
-			 * @private
-			 * @returns {undefined}
-			 */
-			function book() {
-				console.log('Регистрировать');
-			}
-
-			/**
-			 * Обрабатывает событие 'click' на кнопке "Сохранить" при выбранном разделе
-			 * "Уведомление заявителю"
-			 * @private
-			 * @returns {undefined}
-			 */
-			function saveNotify() {
-				//TODO: реализовать
-			}
-
-			/**
-			 * Обрабатывает событие 'click' на кнопке "Редактировать"  при выбранном разделе
-			 * "Уведомление заявителю"
-			 * @private
-			 * @returns {undefined}
-			 */
-			function editNotify() {
-				//TODO: реализовать
-			}
 			/**
 			 * Обрабатывает событие 'click' на кнопке "Добавить"
 			 * @private
@@ -213,16 +167,7 @@ Ext.define('qqext.Menu', {
 			function add() {
 				editMenuLayout.setActiveItem(1);
 				articleMenuLayout.setActiveItem(1);
-				var model = qqext.mainController.currentModel = Ext.create('qqext.model.qq.Question');
-
-				model.setNotification(Ext.create('qqext.model.qq.Notification'));
-				model.setApplicant(Ext.create('qqext.model.qq.Applicant'));
-				model.setTransmission(Ext.create('qqext.model.qq.Transmission'));
-				model.setExecutionInfo(Ext.create('qqext.model.qq.ExecutionInfo'));
-				model.setWayToSend(Ext.create('qqext.model.qq.WayToSend'));
-				qqext.regForm.loadRecord(model);
-
-				qqext.getButton('regRequest').fireEvent('click');
+				ns.getButton('regRequest').fireEvent('click');
 			}
 			/**
 			 * Обрабатывает событие 'click' на кнопке "Поиск",  вызывается
@@ -230,7 +175,7 @@ Ext.define('qqext.Menu', {
 			 * @private
 			 */
 			function find() {
-				qqext.getCurrentForm().exec();
+				ns.getCurrentForm().exec();
 			}
 			/**
 			 * Обрабатывает событие 'click' на кнопке "Очистить", вызывается
@@ -238,7 +183,7 @@ Ext.define('qqext.Menu', {
 			 * @private
 			 */
 			function clear() {
-				qqext.getCurrentForm().reset();
+				ns.getCurrentForm().reset();
 			}
 
 			/**
@@ -247,7 +192,7 @@ Ext.define('qqext.Menu', {
 			 * @returns {undefined}
 			 */
 			function toStartPage() {
-				qqext.setActivePage(0);
+				ns.setActivePage(0);
 			}
 
 			/**
@@ -256,7 +201,7 @@ Ext.define('qqext.Menu', {
 			 * @returns {undefined}
 			 */
 			function jvk() {
-				qqext.setCurrentForm(0);
+				ns.setCurrentForm(0);
 				Ext.getStore('journal').load();
 			}
 
@@ -266,7 +211,7 @@ Ext.define('qqext.Menu', {
 			 * @returns {undefined}
 			 */
 			function search() {
-				qqext.setCurrentForm(1);
+				ns.setCurrentForm(1);
 			}
 
 			/**
@@ -275,7 +220,7 @@ Ext.define('qqext.Menu', {
 			 * @returns {undefined}
 			 */
 			function documents() {
-				qqext.setCurrentForm(2);
+				ns.setCurrentForm(2);
 			}
 
 			/**
@@ -284,12 +229,14 @@ Ext.define('qqext.Menu', {
 			 * @returns {undefined}
 			 */
 			function regRequest() {
-				editMenuLayout.setActiveItem(1);
-				var me = qqext.mainController;
-				me.syncModel();
-
-				if (qqext.setCurrentForm(3))
-					qqext.regForm.loadRecord(me.getModel());
+				var model = ns.regForm.getModel();
+				// загружаем данные только при смене вкладки
+				if (ns.setCurrentForm(3)) {
+					editReqMenuLayout.setActiveItem(0);
+					if (ns.currentRequest)
+						model.set('id', ns.currentRequest);
+					ns.regForm.loadRecord(model);
+				}
 			}
 
 			/**
@@ -298,11 +245,11 @@ Ext.define('qqext.Menu', {
 			 * @returns {undefined}
 			 */
 			function notifyRequestor() {
-				editMenuLayout.setActiveItem(2);
-				var me = qqext.mainController;
+				editReqMenuLayout.setActiveItem(1);
+				var me = ns.mainController;
 				me.syncModel();
 
-				if (qqext.setCurrentForm(4)) {
+				if (ns.setCurrentForm(4)) {
 					var
 							model = me.getModel(),
 							notify = model.getNotification();
@@ -311,10 +258,10 @@ Ext.define('qqext.Menu', {
 						console.debug('model.getNotification undefined, creating new instance');
 						var n = Ext.create('qqext.model.qq.Notification');
 						model.setNotification(n);
-						qqext.notifyForm.loadRecord(n);
+						ns.notifyForm.loadRecord(n);
 					} else {
 						console.log('notification: ' + notify.getData());
-						qqext.notifyForm.loadRecord(notify);
+						ns.notifyForm.loadRecord(notify);
 					}
 				}
 			}
@@ -325,11 +272,11 @@ Ext.define('qqext.Menu', {
 			 * @returns {undefined}
 			 */
 			function transmitToComplete() {
-				editMenuLayout.setActiveItem(1);
-				var me = qqext.mainController;
+				editReqMenuLayout.setActiveItem(2);
+				var me = ns.mainController;
 				me.syncModel();
-				if (qqext.setCurrentForm(5))
-					qqext.transForm.loadRecord(me.getModel().getTransmission());
+				if (ns.setCurrentForm(5))
+					ns.transForm.loadRecord(me.getModel().getTransmission());
 			}
 
 			/**
@@ -338,11 +285,11 @@ Ext.define('qqext.Menu', {
 			 * @returns {undefined}
 			 */
 			function toComplete() {
-				editMenuLayout.setActiveItem(1);
-				var me = qqext.mainController;
+				editReqMenuLayout.setActiveItem(3);
+				var me = ns.mainController;
 				me.syncModel();
-				if (qqext.setCurrentForm(6))
-					qqext.execForm.loadRecord(me.getModel());
+				if (ns.setCurrentForm(6))
+					ns.execForm.loadRecord(me.getModel());
 			}
 
 		}

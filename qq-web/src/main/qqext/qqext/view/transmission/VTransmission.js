@@ -10,21 +10,74 @@ Ext.define('qqext.view.transmission.VTransmission', {
 		'qqext.factory.Checkbox',
 		'qqext.factory.TextField',
 		'Ext.form.FieldContainer',
-		'Ext.form.FieldSet'
+		'Ext.form.FieldSet',
+		'qqext.Menu'
 	],
 	title: 'Передача на исполнение',
 	height: 400,
 	maxHeight: 400,
 	initComponent: function() {
-		var configForDate = {
-			labelAlign: 'right',
-			margin: '6 0 0 0'
-		},
-		me = this,
-				factory = qqext.factory,
+		//----------обработчики для кнопок меню---------
+		//sc - контекст для обработчика
+		/**
+		 * Обрабатывает событие 'click' на кнопке "Редактировать"
+		 * @private
+		 * @returns {undefined}
+		 */
+		function edit() {
+			//TODO: разобраться что эта функция должна делать
+			this.setDisabled(!this.isDisabled());
+			this.doLayout();
+		}
+
+		/**
+		 * Обрабатывает событие 'click' на кнопке "Сохранить"
+		 * @private
+		 * @returns {undefined}
+		 */
+		function save() {
+			ns.mainController.syncModel()
+					.getModel().save(function(rec, op, suc) {
+				console.log('is saving success?: ' + suc);
+			});
+		}
+		/**
+		 * Обрабатывает событие 'click' на кнопке "Удалить"
+		 * @private
+		 * @returns {undefined}
+		 */
+		function remove() {
+			ns.mainController.syncModel()
+					.getModel().destroy({
+				success: function() {
+					ns.getButton('search').fireEvent('click');
+				},
+				failure: function() {
+					alert('Ошибка при удалении');
+				}
+			});
+		}
+		/**
+		 * Обрабатывает событие 'click' на кнопке "Регистрировать".
+		 * TODO реализовать метод
+		 * @private
+		 * @returns {undefined}
+		 */
+		function book() {
+			console.log(this);
+		}
+		//----------------------------------------------
+		var me = edit.sc = save.sc = remove.sc = book.sc = this,
+				ns = qqext,
+				labels = ns.labels,
+				factory = ns.factory,
 				ComboBox = factory.ComboBox,
 				DateField = factory.DateField,
-				TextField = factory.TextField;
+				TextField = factory.TextField,
+				configForDate = {
+					labelAlign: 'right',
+					margin: '6 0 0 0'
+				};
 
 		Ext.applyIf(me, {
 			items: [
@@ -55,8 +108,14 @@ Ext.define('qqext.view.transmission.VTransmission', {
 						new TextField('Название хранилища', 'storageName')
 					]
 				})
-			]
+			],
+			menus: ns.createHButtonMenu([
+				{text: labels.edit, action: edit},
+				{text: labels.save, action: save},
+				{text: labels.remove, action: remove},
+				{text: labels.register, action: book}])
 		});
 		me.callParent(arguments);
+		ns.Menu.editReqMenu.insert(2, me.menus);
 	}
 });

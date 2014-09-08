@@ -17,7 +17,16 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 				factory = qqext.factory,
 				ComboBox = factory.ComboBox,
 				TextField = factory.TextField,
-				DateField = factory.DateField;
+				DateField = factory.DateField,
+				reg = Ext.create('qqext.cmp.Text',
+						new TextField('ФИО регистратора', 'registrator').cfg({
+					listeners: {
+						afterrender: function() {
+							this.setValue(qqext.user.get('name'));
+							this.setViewOnly(true);
+						}
+					}
+				}));
 
 		Ext.applyIf(me, {
 			items: [
@@ -39,13 +48,7 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 				new DateField('Дата регистрации', 'regDate'),
 				new ComboBox('Способ передачи', Ext.getStore('inboxDocDeliveryType'), 'transferType'),
 				new ComboBox('Исполняющая организация', Ext.getStore('inboxDocExecOrg'), 'execOrg'),
-				new TextField('ФИО регистратора', 'registrator').cfg({
-					disabled: true,
-					value: 'Только для чтения',
-					setDisabled: function() {
-						return this;
-					}
-				})
+				reg
 			]
 		});
 		me.callParent(arguments);

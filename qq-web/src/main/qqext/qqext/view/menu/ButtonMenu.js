@@ -24,7 +24,8 @@ Ext.define('qqext.view.menu.ButtonMenu', {
 				var button = Ext.create(me._type, {
 					text: btn.text,
 					listeners: {
-						click: btn.action
+						click: btn.action,
+						scope: btn.action.sc
 					}
 				});
 
@@ -40,5 +41,14 @@ Ext.define('qqext.view.menu.ButtonMenu', {
 		});
 
 		me.callParent(arguments);
+	},
+	/**
+	 * @param {Array} buttons кнопки для меню
+	 * @param {String} type тип кнопок
+	 */
+	constructor: function(buttons, type) {
+		this._buttons = buttons;
+		this._type = type;
+		this.callParent();
 	}
 });

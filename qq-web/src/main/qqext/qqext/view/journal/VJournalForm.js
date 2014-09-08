@@ -47,6 +47,12 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	exec: function() {
 		this.getStore().reload();
 	},
+	listeners: {
+		itemdblclick: function(view, record) {
+			qqext.currentRequest = record.get('id');
+			qqext.getButton('add').fireEvent('click');
+		}
+	},
 	applyFilter: function() {
 		var me = this,
 				filters = [],
@@ -73,8 +79,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 		store.addFilter(filters, true);
 	},
 	_filterDateSelected: function(field, value, eopts) {
-		var grid = field.ownerCt.ownerCt.ownerCt;
-		grid.applyFilter();
+		field.ownerCt.ownerCt.ownerCt.applyFilter();
 	},
 	_filterComboSelected: function(combo, records, eopts) {
 		var grid = combo.ownerCt.ownerCt.ownerCt;

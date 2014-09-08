@@ -29,6 +29,7 @@ Ext.application({
 		user.set('access', 'allowall');
 		userStore.add(user);
 		userStore.sync();
+		qqext.user = user;
 		Ext.create('qqext.view.Viewport', {});
 		return;
 		//-------------------------
@@ -38,7 +39,7 @@ Ext.application({
 				// Настраиваем глобальные переменные
 				this.initQQ();
 				var authRes = Ext.decode(response.responseText),
-						user = Ext.create('hawk_common.model.User'),
+						user = qqext.user = Ext.create('hawk_common.model.User'),
 						userStore = qqext.userStore = Ext.create('hawk_common.store.UserLocalStorage');
 
 				user.set('id', 'current');
@@ -100,6 +101,10 @@ Ext.application({
 		 * @method getCurrentForm
 		 */
 		/**
+		 * @property {hawk_common.model.User} user
+		 * Модель активного пользователя системы
+		 */
+		/**
 		 * @property {Ext.container.Container} searchForm
 		 * Форма поиска. Инициализируется в {@link qqext.view.MainPage#initComponent}.
 		 */
@@ -130,6 +135,10 @@ Ext.application({
 		/**
 		 * @property {Ext.data.Model} request
 		 * Текущий запрос
+		 */
+		/**
+		 * @property {String} currentRequest
+		 * id выбранного запроса, в данный момент с ним ведется работа
 		 */
 		/*
 		 * Различные кнопки, на которые нужно иметь ссылки по ходу дела. Обращаться к ним
@@ -216,7 +225,15 @@ Ext.application({
 		 *
 		 *  Иницализируется в qqext.model.qq.Applicant.
 		 */
-
+		/**
+		 * Создает меню с горизонтально расположенными кнопками
+		 * @param {Array} buttons набор кнопок
+		 * @returns {qqext.view.menu.HButtonMenu} меню
+		 */
+		qqext.createHButtonMenu = function(buttons) {
+			return Ext.create('qqext.view.menu.HButtonMenu', buttons,
+					'qqext.button.ToolButton');
+		};
 
 		// создаем все меню
 		qqext.Menu.init();

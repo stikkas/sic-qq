@@ -15,15 +15,16 @@
   </script>
 </head>
 <body onload="prettyPrint(); highlight();">
-  <pre class="prettyprint lang-js">/*
- * Возможность переключения режима просмотра/редактирования для компонентов,
+  <pre class="prettyprint lang-js"><span id='qqext-cmp-PanelEditViewMode'>/**
+</span> * Возможность переключения режима просмотра/редактирования для компонентов,
  * которые содержат более простые компоненты (вроде checkbox, textfield и т.д.).
  * Необходимо чтобы все элементы, которые находятся на данном компоненте, реализовывали
- * интерфейс {@link #qqext.cmp.EditViewMode}.
+ * интерфейс qqext.cmp.EditViewMode.
+ *
+ * @author С. Благодатских
  */
-
 Ext.define('qqext.cmp.PanelEditViewMode', {
-<span id='global-method-setViewOnly'>	/**
+<span id='qqext-cmp-PanelEditViewMode-method-setViewOnly'>	/**
 </span>	 * Включает или выключает режим просмотра
 	 * @param {Boolean} mode true - режим просмотра , false - обычный режим (редактирование)
 	 */

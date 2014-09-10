@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package ru.insoft.archive.qq.ejb;
 
@@ -30,10 +30,11 @@ import ru.insoft.archive.qq.model.Transmission;
 
 /**
  * @author sorokin
- * 
+ *
  */
 @Stateless
 public class QQDictValues {
+
 	@PersistenceContext
 	EntityManager em;
 
@@ -51,13 +52,13 @@ public class QQDictValues {
 
 	public JsonArray getLiteras() throws Exception {
 		Long descriptorGroupAttrId = cdbh
-				.getDescriptorGroupAttrIdByCode("MEMBER_LETTER");
+			.getDescriptorGroupAttrIdByCode("MEMBER_LETTER");
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<DescriptorValueAttr> cq = cb
-				.createQuery(DescriptorValueAttr.class);
+			.createQuery(DescriptorValueAttr.class);
 		Root<DescriptorValueAttr> rt = cq.from(DescriptorValueAttr.class);
-		cq.where(cb.equal(rt.<Long> get("attrId"), descriptorGroupAttrId));
-		cq.orderBy(cb.asc(rt.<String> get("value")));
+		cq.where(cb.equal(rt.<Long>get("attrId"), descriptorGroupAttrId));
+		cq.orderBy(cb.asc(rt.<String>get("value")));
 		Query q = em.createQuery(cq);
 		ArrayList<ScalarItem> items = new ArrayList<>();
 		List<DescriptorValueAttr> result = q.getResultList();
@@ -71,7 +72,7 @@ public class QQDictValues {
 		return r;
 	}
 
-	public JsonArray getExecutorsForJournal() throws Exception{
+	public JsonArray getExecutorsForJournal() throws Exception {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<AdmUser> cq = cb.createQuery(AdmUser.class);
 		Root<Transmission> from = cq.from(Transmission.class);
@@ -80,7 +81,7 @@ public class QQDictValues {
 		Query q = em.createQuery(cq);
 		List<AdmUser> result = q.getResultList();
 		ArrayList<ScalarItem> items = new ArrayList<>();
-		for (AdmUser au: result){
+		for (AdmUser au : result) {
 			ScalarItem si = new ScalarItem();
 			si.setId(au.getId());
 			si.setName(au.getName());
@@ -89,52 +90,29 @@ public class QQDictValues {
 		JsonArray itemsJson = jsonTools.getJsonEntitiesList(items);
 		return itemsJson;
 	}
-	
-	
-	
-	
-	
+
 	public JsonArray getApplicantsForJournal() throws Exception {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
-		/*
-		 * CriteriaQuery<Applicant> cq = cb.createQuery(Applicant.class);
-		 * Root<Applicant> from = cq.from(Applicant.class); Query q =
-		 * em.createQuery(cq);
-		 * 
-		 * List<Applicant> result = q.getResultList(); ArrayList<Order> orders =
-		 * new ArrayList<>(); orders.add(cb.asc(from.<String>get("surname")));
-		 * orders.add(cb.asc(from.<String>get("name")));
-		 * orders.add(cb.asc(from.<String>get("fatherName")));
-		 * orders.add(cb.asc(from.<String>get("applicantObject")));
-		 * cq.orderBy(orders); ArrayList<ScalarItem> items = new ArrayList<>();
-		 * for (Applicant a: result){ String applicantString = ""; switch
-		 * (a.getApplicantType().getCode()) { case
-		 * Constants.Q_VALUE_APPLICANT_TYPE_FFACE: applicantString =
-		 * a.getPhyzicalApplicantFio(); break; case
-		 * Constants.Q_VALUE_APPLICANT_TYPE_JURFACE: applicantString =
-		 * a.getApplicantObject(); default: break; } ScalarItem i = new
-		 * ScalarItem(); i.setId(a.getId()); i.setName(applicantString);
-		 * items.add(i); } JsonArray arr = jsonTools.getJsonEntitiesList(items);
-		 */
+
 		CriteriaQuery<String> cq = cb.createQuery(String.class);
 		Root<Applicant> root = cq.from(Applicant.class);
 
-		Expression<String> sn = cb.concat(root.<String> get("surname"), " ");
+		Expression<String> sn = cb.concat(root.<String>get("surname"), " ");
 
-		Expression<String> fn = cb.concat(root.<String> get("name"), " ");
+		Expression<String> fn = cb.concat(root.<String>get("name"), " ");
 
 		Expression<String> snfn = cb.concat(sn, fn);
 
 		Expression<String> snfnfan = cb.concat(snfn,
-				root.<String> get("fatherName"));
+			root.<String>get("fatherName"));
 
-		Expression<Long> id = root.<Long> get("id");
+		Expression<Long> id = root.<Long>get("id");
 		// cq.multiselect(id,snfnfan);
 		cq.select(snfnfan);
 		cq.distinct(true);
 		Expression<Boolean> whExp = cb.equal(
-				root.get("applicantType").get("code"),
-				Constants.Q_VALUE_APPLICANT_TYPE_FFACE);
+			root.get("applicantType").get("code"),
+			Constants.Q_VALUE_APPLICANT_TYPE_FFACE);
 		cq.where(whExp);
 		Query q = em.createQuery(cq);
 		List<String> resultList = q.getResultList();
@@ -146,13 +124,13 @@ public class QQDictValues {
 		cqJur.orderBy(cb.asc(selectColumn));
 		cqJur.distinct(true);
 		Expression<Boolean> whEx = cb.equal(
-				jurRoot.get("applicantType").get("code"),
-				Constants.Q_VALUE_APPLICANT_TYPE_JURFACE);
+			jurRoot.get("applicantType").get("code"),
+			Constants.Q_VALUE_APPLICANT_TYPE_JURFACE);
 		Query q2 = em.createQuery(cqJur);
 		List result2List = q2.getResultList();
 		resultList.addAll(result2List);
 		ArrayList<ScalarItem> items = new ArrayList<>();
-		long i = 0 ; 
+		long i = 0;
 		for (String s : resultList) {
 			if (s != null && !"".equals(s.trim())) {
 				i++;
@@ -173,12 +151,12 @@ public class QQDictValues {
 		cq.select(root);
 		Subquery<Long> subQuery = cq.subquery(Long.class);
 		Root<DescriptorValue> subQueryRoot = subQuery
-				.from(DescriptorValue.class);
-		subQuery.select(subQueryRoot.<Long> get("id"));
+			.from(DescriptorValue.class);
+		subQuery.select(subQueryRoot.<Long>get("id"));
 		subQuery.where(cb.equal(subQueryRoot.get("code"), "EMPLOYEE"));
-		cq.where(cb.equal(root.<Long> get("userTypeId"), subQuery));
+		cq.where(cb.equal(root.<Long>get("userTypeId"), subQuery));
 		Query q = em.createQuery(cq);
-		@SuppressWarnings("unchecked")
+
 		List<AdmUser> auList = q.getResultList();
 		List<ScalarItem> items = new ArrayList<>();
 		for (AdmUser u : auList) {

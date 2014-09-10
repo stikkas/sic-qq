@@ -2,6 +2,7 @@
  * Панель "Согласование документа"
  */
 Ext.define('qqext.view.exec.VCoordination', {
+	alias: 'VCoordination',
 	extend: 'qqext.view.StyledPanel',
 	requires: [
 		'qqext.factory.HandlerButton',

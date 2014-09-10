@@ -2,6 +2,7 @@
  * Панелька "На кого запрос" формы регистрации запроса
  */
 Ext.define('qqext.view.reg.VQueryObject', {
+	alias: 'VQueryObject',
 	extend: 'qqext.view.StyledPanel',
 	requires: [
 		'qqext.factory.TextField',

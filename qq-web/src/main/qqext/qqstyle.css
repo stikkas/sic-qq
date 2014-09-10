@@ -2,6 +2,9 @@
 
 }
 
+.x-btn-icon-el {
+
+}
 .article-btn {
 	border-radius: 0 !important;
 }
@@ -21,4 +24,7 @@
 
 .welcomebutton {
 	margin: 50px 10px !important;
+}
+.x-btn-icon-el {
+	position: static;
 }

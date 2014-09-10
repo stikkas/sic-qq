@@ -2,6 +2,7 @@
  * Основной экран главной страницы
  */
 Ext.define('qqext.view.Viewport', {
+	alias: 'Viewport',
 	extend: 'Ext.container.Viewport',
 	requires: [
 		'Ext.layout.container.Card',
@@ -15,7 +16,7 @@ Ext.define('qqext.view.Viewport', {
 				me = this,
 				layout = me.getLayout(),
 				ns = qqext;
-		Ext.applyIf(me, {items: [Ext.create('qqext.view.WelcomePage')]});
+		Ext.applyIf(me, {items: [Ext.create('WelcomePage')]});
 		me.callParent();
 
 		/**
@@ -25,15 +26,16 @@ Ext.define('qqext.view.Viewport', {
 		ns.setActivePage = function(idx) {
 			// Вызываем первый раз. При первом вызове idx всегда равен 1.
 			// Если это где-то получится не так то надо переделать метод.
-			me.add(Ext.create('qqext.view.MainPage'));
+			var jvk = ns.btns.jvk;
+			me.add(Ext.create('MainPage'));
 			layout.setActiveItem(idx);
-			ns.getButton('jvk').fireEvent('click');
+			ns.getButton(jvk).fireEvent('click');
 
 			// Для последующих вызовов
 			ns.setActivePage = function(idx) {
 				layout.setActiveItem(idx);
 				if (idx === 1)
-					ns.getButton('jvk').fireEvent('click');
+					ns.getButton(jvk).fireEvent('click');
 			}
 		}
 	}

@@ -2,13 +2,15 @@
  * Форма для заполнения данных по заявителю
  */
 Ext.define('qqext.view.reg.VApplicant', {
+	alias: 'VApplicant',
 	extend: 'qqext.view.StyledPanel',
 	requires: [
 		'qqext.factory.TextField',
 		'qqext.factory.TextArea',
 		'qqext.factory.ComboBox',
 		'hawk_common.fix.FixedFieldSet',
-		'qqext.factory.DateField'
+		'qqext.factory.DateField',
+		'qqext.cmp.FieldSet'
 	],
 	title: 'Заявитель',
 	disabledCls: '',
@@ -29,12 +31,13 @@ Ext.define('qqext.view.reg.VApplicant', {
 				fatherName = Ext.create('qqext.cmp.Text',
 						new TextField(applicants.fatherName[1], applicants.fatherName[0])),
 				org = Ext.create('qqext.cmp.TextArea',
-						new factory.TextArea(applicants.applicantObject[1], applicants.applicantObject[0]));
+						new factory.TextArea(applicants.applicantObject[1], applicants.applicantObject[0]).
+						cfg({width: 400}));
 
 		Ext.applyIf(me, {
 			items: [
 				new ComboBox(applicants.applicantType[1],
-						Ext.getStore(applicants.applicantType[0]), applicants.applicantType[0]).cfg({
+						applicants.applicantType[0], applicants.applicantType[0]).cfg({
 					listeners: {
 						select: function change(cb, selected) {
 							if (!change.remove) {
@@ -62,11 +65,11 @@ Ext.define('qqext.view.reg.VApplicant', {
 					}
 				}),
 				new ComboBox(applicants.applicantCategory[1],
-						Ext.getStore(applicants.applicantCategory[0]), applicants.applicantCategory[0]),
+						applicants.applicantCategory[0], applicants.applicantCategory[0]),
 				new TextField(applicants.country[1], applicants.country[0]),
 				new TextField(applicants.address[1], applicants.address[0]),
 				new TextField(applicants.phone[1], applicants.phone[0]),
-				Ext.create('Ext.form.FieldSet', {
+				Ext.create('FieldSet', {
 					title: 'Дополнительные сведения',
 					collapsible: true,
 					items: [

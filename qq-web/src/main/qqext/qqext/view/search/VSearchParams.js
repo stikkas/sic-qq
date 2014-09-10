@@ -2,6 +2,7 @@
  * Панель с параметрами поиска
  */
 Ext.define('qqext.view.search.VSearchParams', {
+	alias: 'VSearchParams',
 	extend: 'qqext.view.StyledPanel',
 	requires: [
 		'qqext.factory.ComboBox',

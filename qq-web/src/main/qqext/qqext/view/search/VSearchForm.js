@@ -3,18 +3,24 @@
  */
 
 Ext.define('qqext.view.search.VSearchForm', {
+	alias: 'VSearchForm',
 	extend: 'Ext.container.Container',
 	requires: [
 		'qqext.view.search.VSearchParams',
 		'qqext.view.search.VSearchResult'
 	],
+	/**
+	 * Индекс, в соответствии с которым сопоставляется верхнее меню (см. qqext.Menu)
+	 * @private
+	 */
+	_idx: 1,
 	id: 'VSearchForm',
 	initComponent: function() {
 		var me = this;
 		Ext.applyIf(me, {
 			items: [
-				me._form = Ext.create('qqext.view.search.VSearchParams'),
-				Ext.create('qqext.view.search.VSearchResult')
+				me._form = Ext.create('VSearchParams'),
+				Ext.create('VSearchResult')
 			]
 		});
 		me.callParent(arguments);

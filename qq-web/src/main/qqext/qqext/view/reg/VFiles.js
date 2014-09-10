@@ -3,6 +3,7 @@
  */
 
 Ext.define('qqext.view.reg.VFiles', {
+	alias: 'VFiles',
 	extend: 'qqext.view.StyledPanel',
 	requires: [
 		'hawk_common.cmp.FileList'
@@ -10,6 +11,7 @@ Ext.define('qqext.view.reg.VFiles', {
 	title: 'Документы заявителя',
 	height: 130,
 	collapsible: true,
+	collapsed: true,
 	titleCollapse: true,
 	animCollapse: true,
 	hideCollapseTool: true,

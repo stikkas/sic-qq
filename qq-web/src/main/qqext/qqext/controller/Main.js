@@ -25,7 +25,6 @@ Ext.define('qqext.controller.Main', {
 			applicantCategory: 'Q_DICT_APP_CATEGORY',
 			applicantType: 'Q_DICT_APPLICANT_TYPE',
 			inboxDocDeliveryType: 'QQ_TRANSMISSION_MODE',
-			inboxDocExecOrg: 'ORG_STRUCTURE',
 			answerForm: 'Q_DICT_ANSWER_FORM',
 			docType: 'Q_DICT_DOC_TYPES',
 			queryType: 'Q_DICT_QUEST_TYPE',
@@ -41,23 +40,21 @@ Ext.define('qqext.controller.Main', {
 		};
 
 		for (var key in kput)
-			Ext.regStore(key, Ext.create('qqext.store.DictValuesStore', {
-				storeId: key,
-				dictCode: kput[key]
-			}));
-		Ext.regStore('searchResults', Ext.create('qqext.store.CustomStore', {
+			Ext.create('DictValuesStore', key, kput[key]);
+
+		Ext.create('qqext.store.CustomStore', {
 			storeId: 'searchResults',
 			url: 'api/Search',
 			model: 'qqext.model.qq.SearchResultItem'
-		}));
-		Ext.regStore('journal', Ext.create('qqext.store.CustomStore', {
+		});
+		Ext.create('qqext.store.CustomStore', {
 			storeId: 'journal',
 			url: 'api/Journal',
 			pageSize: 10,
 			remoteSort: true,
 			model: 'qqext.model.qq.JournalItem',
 			remoteFilter: true
-		}));
+		});
 
 		qqext.mainController = this;
 		this.control({

@@ -21,6 +21,7 @@
 			<groupId>ru.insoft.archive</groupId>
 			<artifactId>qq-ejb</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 	<build>

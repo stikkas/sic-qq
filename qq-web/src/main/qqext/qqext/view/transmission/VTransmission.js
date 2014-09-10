@@ -3,6 +3,7 @@
  */
 
 Ext.define('qqext.view.transmission.VTransmission', {
+	alias: 'VTransmission',
 	extend: 'qqext.view.StyledPanel',
 	requires: [
 		'qqext.factory.ComboBox',
@@ -16,6 +17,11 @@ Ext.define('qqext.view.transmission.VTransmission', {
 	title: 'Передача на исполнение',
 	height: 400,
 	maxHeight: 400,
+	/**
+	 * Индекс, в соответствии с которым сопоставляется верхнее меню (см. qqext.Menu)
+	 * @private
+	 */
+	_idx: 5,
 	initComponent: function() {
 		//----------обработчики для кнопок меню---------
 		//sc - контекст для обработчика
@@ -50,7 +56,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 			ns.mainController.syncModel()
 					.getModel().destroy({
 				success: function() {
-					ns.getButton('search').fireEvent('click');
+					ns.getButton(ns.btns.search).fireEvent('click');
 				},
 				failure: function() {
 					alert('Ошибка при удалении');

@@ -2,6 +2,7 @@
  * Панель формы "Способ отправки"
  */
 Ext.define('qqext.view.exec.VDeliveryMethod', {
+	alias: 'VDeliveryMethod',
 	extend: 'qqext.view.StyledPanel',
 	requires: [
 		'qqext.view.exec.cmp.ComboDateTrash',
@@ -66,8 +67,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 		Ext.apply(me, {
 			items: [
 				new factory.HandlerButton('add', function() {
-					var t = Ext.create('qqext.view.exec.cmp.ComboDateTrash',
-							me.comboTrashConfig);
+					var t = Ext.create('ComboDateTrash', me.comboTrashConfig);
 					me.insert(me.items.length - 5, t);
 					me.mOdel.sendActions().add(Ext
 							.create('qqext.model.qq.SendAction'));

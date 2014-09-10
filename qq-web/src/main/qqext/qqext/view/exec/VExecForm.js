@@ -2,6 +2,7 @@
  * Форма исполнения запроса
  */
 Ext.define('qqext.view.exec.VExecForm', {
+	alias: 'VExecForm',
 	extend: 'Ext.container.Container',
 	requires: [
 		'qqext.view.exec.VExecInfo',
@@ -14,6 +15,11 @@ Ext.define('qqext.view.exec.VExecForm', {
 	disabled: false,
 	maskOnDisable: false,
 	height: 300,
+	/**
+	 * Индекс, в соответствии с которым сопоставляется верхнее меню (см. qqext.Menu)
+	 * @private
+	 */
+	_idx: 6,
 	initComponent: function() {
 		//----------обработчики для кнопок меню---------
 		//sc - контекст для обработчика
@@ -48,7 +54,7 @@ Ext.define('qqext.view.exec.VExecForm', {
 			ns.mainController.syncModel()
 					.getModel().destroy({
 				success: function() {
-					ns.getButton('search').fireEvent('click');
+					ns.getButton(ns.btns.search).fireEvent('click');
 				},
 				failure: function() {
 					alert('Ошибка при удалении');
@@ -75,10 +81,10 @@ Ext.define('qqext.view.exec.VExecForm', {
 					{text: labels.register, action: book}]);
 		Ext.applyIf(me, {
 			items: [
-				Ext.create('qqext.view.exec.VExecInfo'),
-				Ext.create('qqext.view.exec.VDeliveryOfDocuments'),
-				Ext.create('qqext.view.exec.VCoordination'),
-				Ext.create('qqext.view.exec.VDeliveryMethod')
+				Ext.create('VExecInfo'),
+				Ext.create('VDeliveryOfDocuments'),
+				Ext.create('VCoordination'),
+				Ext.create('VDeliveryMethod')
 			],
 			menus: menus
 		});

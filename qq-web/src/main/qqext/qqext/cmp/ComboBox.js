@@ -4,6 +4,7 @@
  *
  */
 Ext.define('qqext.cmp.ComboBox', {
+	alias: 'ComboBox',
 	extend: 'Ext.form.field.ComboBox',
 	mixins: ['qqext.cmp.EditViewMode'],
 	xtype: 'comboboxcmp',

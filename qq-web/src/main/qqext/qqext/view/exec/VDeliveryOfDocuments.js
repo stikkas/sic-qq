@@ -3,6 +3,7 @@
  */
 
 Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
+	alias: 'VDeliveryOfDocuments',
 	extend: 'qqext.view.StyledPanel',
 	requires: [
 		'qqext.view.exec.cmp.DeliveryTypeCount',

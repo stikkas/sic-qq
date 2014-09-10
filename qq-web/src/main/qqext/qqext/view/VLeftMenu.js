@@ -3,6 +3,7 @@
  */
 
 Ext.define('qqext.view.VLeftMenu', {
+	alias: 'VLeftMenu',
 	extend: 'Ext.container.Container',
 	requires: [
 		'qqext.Menu'

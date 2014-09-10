@@ -3,6 +3,7 @@
  */
 
 Ext.define('qqext.view.journal.VJournalForm', {
+	alias: 'VJournalForm',
 	extend: 'Ext.grid.Panel',
 	requires: [
 		'Ext.grid.column.Date',
@@ -22,6 +23,11 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	store: 'journal',
 	margin: '0 5 10 5',
 	border: true,
+	/**
+	 * Индекс, в соответствии с которым сопоставляется верхнее меню (см. qqext.Menu)
+	 * @private
+	 */
+	_idx: 0,
 	/**
 	 * Очищает поля поиска
 	 */
@@ -49,8 +55,9 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	},
 	listeners: {
 		itemdblclick: function(view, record) {
-			qqext.currentRequest = record.get('id');
-			qqext.getButton('add').fireEvent('click');
+			var ns = qqext;
+			ns.currentRequest = record.get('id');
+			ns.getButton(ns.btns.add).fireEvent('click');
 		}
 	},
 	applyFilter: function() {

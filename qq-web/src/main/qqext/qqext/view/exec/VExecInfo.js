@@ -2,6 +2,7 @@
  * Форма свединия об исполнении запроса
  */
 Ext.define('qqext.view.exec.VExecInfo', {
+	alias: 'VExecInfo',
 	extend: 'qqext.view.StyledPanel',
 	requires: [
 		'qqext.factory.ComboBox',

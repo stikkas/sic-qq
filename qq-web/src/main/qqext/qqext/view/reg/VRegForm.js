@@ -4,6 +4,7 @@
  */
 
 Ext.define('qqext.view.reg.VRegForm', {
+	alias: 'VRegForm',
 	extend: 'Ext.container.Container',
 	requires: [
 		'qqext.view.reg.VInboxDoc',
@@ -20,6 +21,54 @@ Ext.define('qqext.view.reg.VRegForm', {
 	region: 'center',
 	overflowY: 'auto',
 	overflowX: 'hidden',
+	/**
+	 * Индекс, в соответствии с которым сопоставляется верхнее меню (см. qqext.Menu)
+	 * @private
+	 */
+	_idx: 3,
+	listeners: {
+		activate: function(me, prev) {
+			var ns = qqext;
+			ns.Menu.setEditMenu(me._idx);
+			if (ns.request === null) {
+				// Значит событие случилось по нажатию на кнопку "Добавить"
+				var buttons = me.menu.items,
+						model = me.getModel(true),
+						inbox = me.inbox,
+						user = ns.user,
+						orgId = user.get('organization'),
+						btns = ns.btns;
+
+				//Кнопка "Редактировать"
+				buttons.getAt(0).setDisabled(true);
+				//Кнопка "Удалить"
+				buttons.getAt(2).setDisabled(true);
+				me._disableArticles(btns.notify, btns.trans, btns.exec);
+				// Литера
+				model.set('litera', orgId);
+				model.set('registrator', user.get('userId'));
+				if (!ns.isSIC) {
+					var executor = inbox.executor;
+					executor.setViewOnly(true);
+					executor.viewOnly = true;
+					model.set('execOrg', orgId);
+				}
+			} else if (prev === ns.searchForm || prev === ns.jvkForm) {
+				// Значит пришли по двойному клику на существуещем запросе
+			} else {
+				// Переключаемся между вкладками одного запроса
+			}
+			me.loadRecord();
+		}
+	},
+	/**
+	 * Выключает кнопки левого меню
+	 * @private
+	 */
+	_disableArticles: function() {
+		for (var i = 0; i < arguments.length; ++i)
+			qqext.getButton(arguments[i]).setDisabled(true);
+	},
 	initComponent: function() {
 		//----------обработчики для кнопок меню---------
 		//sc - контекст для обработчика
@@ -75,7 +124,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 		var me = edit.sc = save.sc = remove.sc = book.sc = this,
 				ns = qqext,
 				labels = ns.labels,
-				menus = ns.createHButtonMenu([
+				menu = ns.createHButtonMenu([
 					{text: labels.edit, action: edit},
 					{text: labels.save, action: save},
 					{text: labels.remove, action: remove},
@@ -83,16 +132,16 @@ Ext.define('qqext.view.reg.VRegForm', {
 
 		Ext.applyIf(me, {
 			items: [
-				Ext.create('qqext.view.reg.VInboxDoc'),
-				Ext.create('qqext.view.reg.VQuery'),
-				me.applicant = Ext.create('qqext.view.reg.VApplicant'),
-				Ext.create('qqext.view.reg.VQueryObject'),
-				Ext.create('qqext.view.reg.VFiles')
+				me.inbox = Ext.create('VInboxDoc'),
+				Ext.create('VQuery'),
+				me.applicant = Ext.create('VApplicant'),
+				me.target = Ext.create('VQueryObject', {hidden: true}),
+				Ext.create('VFiles')
 			],
-			menus: menus
+			menu: menu
 		});
 		me.callParent(arguments);
-		ns.Menu.editReqMenu.insert(0, me.menus);
+		ns.Menu.editReqMenu.insert(0, me.menu);
 
 		var execModelAction = function(action) {
 			var max = me.items.length, i = 0, item,
@@ -115,24 +164,26 @@ Ext.define('qqext.view.reg.VRegForm', {
 		this.updateRecord = function() {
 			execModelAction('updateRecord');
 		};
-
-		me.setModel();
 	},
 	/**
-	 * Настраивает модель для формы
+	 * Инициализируем модель
 	 */
-	setModel: function() {
+	initModel: function() {
 		var model = this.model = Ext.create('qqext.model.qq.Question');
 		model.setNotification(Ext.create('qqext.model.qq.Notification'));
 		model.setApplicant(Ext.create('qqext.model.qq.Applicant'));
 		model.setTransmission(Ext.create('qqext.model.qq.Transmission'));
 		model.setExecutionInfo(Ext.create('qqext.model.qq.ExecutionInfo'));
 		model.setWayToSend(Ext.create('qqext.model.qq.WayToSend'));
-		this.loadRecord();
 	},
-	getModel: function() {
-		if (this.model)
-			this.setModel();
+	/**
+	 * Отдает модель привязанную к форме
+	 * @param {Boolean} create Создавать ли новую модель?
+	 * @returns {qqext.model.qq.Question} модель
+	 */
+	getModel: function(create) {
+		if (create || !this.model)
+			this.initModel();
 		return this.model;
 	}
 });

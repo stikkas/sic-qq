@@ -7,21 +7,15 @@
 Ext.define('qqext.view.menu.ButtonMenu', {
 	extend: 'Ext.container.Container',
 	/**
-	 * @property {Array} _buttons
-	 * Набор кнопок меню. Задается в потомке.
-	 * @private
+	 * @param {Array} buttons кнопки для меню
+	 * @param {String} type тип кнопок
 	 */
-	/**
-	 * @property {String} _type
-	 * Класс создаваемых кнопок. Задается в потомке.
-	 * @private
-	 */
-	initComponent: function() {
+	constructor: function(buttons, type) {
 		var me = this;
 
 		Ext.applyIf(me, {
-			items: me._buttons.map(function(btn) {
-				var button = Ext.create(me._type, {
+			items: buttons.map(function(btn) {
+				var button = Ext.create(type, {
 					text: btn.text,
 					listeners: {
 						click: btn.action,
@@ -34,21 +28,10 @@ Ext.define('qqext.view.menu.ButtonMenu', {
 				if (btn.name)
 					qqext.addButton(btn.name, button);
 
-				if (btn.cfg)
-					Ext.applyIf(button, btn.cfg);
 				return button;
 			})
 		});
 
-		me.callParent(arguments);
-	},
-	/**
-	 * @param {Array} buttons кнопки для меню
-	 * @param {String} type тип кнопок
-	 */
-	constructor: function(buttons, type) {
-		this._buttons = buttons;
-		this._type = type;
-		this.callParent();
+		me.callParent();
 	}
 });

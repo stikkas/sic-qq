@@ -5,6 +5,7 @@
  * @author М. Сорокин
  */
 Ext.define('qqext.view.notify.VNotify', {
+	alias: 'VNotify',
 	extend: 'qqext.view.StyledPanel',
 	requires: [
 		'qqext.factory.ComboBox',
@@ -14,6 +15,11 @@ Ext.define('qqext.view.notify.VNotify', {
 	height: 300,
 	maxHeight: 300,
 	title: 'Уведомление заявителю',
+	/**
+	 * Индекс, в соответствии с которым сопоставляется верхнее меню (см. qqext.Menu)
+	 * @private
+	 */
+	_idx: 4,
 	initComponent: function() {
 		//----------Обработчики кнопок меню----------
 		function saveNotify() {

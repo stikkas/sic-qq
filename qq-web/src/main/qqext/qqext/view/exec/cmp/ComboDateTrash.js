@@ -2,6 +2,7 @@
  *
  */
 Ext.define('qqext.view.exec.cmp.ComboDateTrash', {
+	alias: 'ComboDateTrash',
 	extend: 'Ext.form.FieldContainer',
 	required: [
 		'qqext.factory.ComboBox',

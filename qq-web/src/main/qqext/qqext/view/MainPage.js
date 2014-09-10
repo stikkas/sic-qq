@@ -5,6 +5,7 @@
  * @author С. Благодатских
  */
 Ext.define('qqext.view.MainPage', {
+	alias: 'MainPage',
 	extend: 'Ext.container.Container',
 	requires: [
 		'Ext.layout.container.Border',
@@ -27,23 +28,17 @@ Ext.define('qqext.view.MainPage', {
 				mainPanel,
 				mainPanelLayout;
 
-		ns.searchForm = Ext.create('qqext.view.search.VSearchForm');
-		ns.regForm = Ext.create('qqext.view.reg.VRegForm');
-		ns.notifyForm = Ext.create('qqext.view.notify.VNotify');
-		ns.transForm = Ext.create('qqext.view.transmission.VTransmission');
-		ns.execForm = Ext.create('qqext.view.exec.VExecForm');
-
 		mainPanel = Ext.create('Ext.panel.Panel', {
 			layout: 'card',
 			region: 'center',
 			items: [
-				Ext.create('qqext.view.journal.VJournalForm'),
-				ns.searchForm,
+				ns.jvkForm = Ext.create('VJournalForm'),
+				ns.searchForm = Ext.create('VSearchForm'),
 				Ext.create('Ext.container.Container', {html: '<h1>Отчетные документы</h1>'}),
-				ns.regForm,
-				ns.notifyForm,
-				ns.transForm,
-				ns.execForm
+				ns.regForm = Ext.create('VRegForm'),
+				ns.notifyForm = Ext.create('VNotify'),
+				ns.transForm = Ext.create('VTransmission'),
+				ns.execForm = Ext.create('VExecForm')
 			]
 		});
 		mainPanelLayout = mainPanel.getLayout();
@@ -51,8 +46,8 @@ Ext.define('qqext.view.MainPage', {
 
 		Ext.applyIf(me, {
 			items: [
-				Ext.create('qqext.view.VTitleBar'),
-				Ext.create('qqext.view.VLeftMenu'),
+				Ext.create('VTitleBar'),
+				Ext.create('VLeftMenu'),
 				mainPanel
 			]});
 

@@ -2,6 +2,7 @@
  * Заголовочная панель с кнопками управления.
  */
 Ext.define('qqext.view.VTitleBar', {
+	alias: 'VTitleBar',
 	extend: 'Ext.panel.Panel',
 	requires: [
 		'qqext.Menu'

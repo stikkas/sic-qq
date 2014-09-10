@@ -2,6 +2,7 @@
  * Панель с результаты поиска
  */
 Ext.define('qqext.view.search.VSearchResult', {
+	alias: 'VSearchResult',
 	extend: 'Ext.grid.Panel',
 	title: 'Результаты поиска',
 	requires: ['Ext.util.Point'],

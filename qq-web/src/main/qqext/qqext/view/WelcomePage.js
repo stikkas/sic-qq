@@ -8,6 +8,7 @@
  * @author С. Благодатских
  */
 Ext.define('qqext.view.WelcomePage', {
+	alias: 'WelcomePage',
 	extend: 'Ext.panel.Panel',
 	requires: [
 		'qqext.factory.HandlerButton',

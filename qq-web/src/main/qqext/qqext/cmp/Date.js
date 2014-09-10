@@ -4,6 +4,7 @@
  *
  */
 Ext.define('qqext.cmp.Date', {
+	alias: 'DateField',
 	extend: 'Ext.form.field.Date',
 	mixins: ['qqext.cmp.EditViewMode'],
 	xtype: 'datefieldcmp',

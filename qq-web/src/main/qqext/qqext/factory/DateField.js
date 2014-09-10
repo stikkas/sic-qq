@@ -11,15 +11,16 @@ Ext.define('qqext.factory.DateField', {
 	/**
 	 * Возвращает объект типа datefield
 	 * @param {String} fieldLabel метка для виджета
-	 * @param {String} name имя (скорее всего для формы)
+	 * @param {String} name имя для поля формы
+	 * @param {Boolean} viewmode режим просмотра (опционально, по умолчанию - редактирование)
 	 * @returns {Object} объект, на основе которого ExtJS сделает Date
 	 */
-	constructor: function(fieldLabel, name) {
+	constructor: function(fieldLabel, name, viewmode) {
 		return this.c({
 			xtype: 'datefieldcmp',
 			fieldLabel: fieldLabel,
 			name: name
-		});
+		}, viewmode);
 	}
 });
 

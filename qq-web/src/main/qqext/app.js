@@ -14,41 +14,46 @@ Ext.application({
 		'hawk_common.model.User',
 		'hawk_common.store.UserLocalStorage',
 		'qqext.view.Viewport',
-		'qqext.Menu'
+		'qqext.Menu',
+		'qqext.store.DictValuesStore'
 	],
 	controllers: ['qqext.controller.Main'],
 	launch: function() {
-		// Временно для отладки. В рабочей версии убрать
-		// Настраиваем глобальные переменные
-		this.initQQ();
-		var user = Ext.create('hawk_common.model.User'),
-				userStore = qqext.userStore = Ext.create('hawk_common.store.UserLocalStorage');
+		var me = this;
 
-		user.set('id', 'current');
-		user.set('name', 'fake');
-		user.set('access', 'allowall');
-		userStore.add(user);
-		userStore.sync();
-		qqext.user = user;
-		Ext.create('qqext.view.Viewport', {});
-		return;
-		//-------------------------
 		Ext.Ajax.request({
 			url: '/qq-web/Rules',
+			// Используется только в целях тестирования, в обход реальной аутентификации
+			params: {username: 'ARCHIVE_USER'},
 			success: function(response) {
 				// Настраиваем глобальные переменные
-				this.initQQ();
+				me.initQQ();
 				var authRes = Ext.decode(response.responseText),
-						user = qqext.user = Ext.create('hawk_common.model.User'),
-						userStore = qqext.userStore = Ext.create('hawk_common.store.UserLocalStorage');
+						ns = qqext,
+						user = ns.user = Ext.create('hawk_common.model.User'),
+						userStore = ns.userStore = Ext.create('hawk_common.store.UserLocalStorage');
+				// нужно инициализировать хранилище для информации об организациях
+				// и установить принадлежность пользователся к СИЦ
+				Ext.create('DictValuesStore',
+						'inboxDocExecOrg', 'ORG_STRUCTURE', {
+							listeners: {
+								load: function(st) {
+									ns.isSIC =
+											st.getById(authRes.organization).get('code')
+											=== 'Q_VALUE_MEMBER_SIC';
+								}
+							}
+						});
 
 				user.set('id', 'current');
 				user.set('name', authRes.msg);
 				user.set('access', authRes.access);
+				user.set('userId', authRes.userId);
+				user.set('organization', authRes.organization);
 				userStore.add(user);
 				userStore.sync();
 
-				Ext.create('qqext.view.Viewport', {});
+				Ext.create('Viewport', {});
 			},
 			failure: function(response) {
 				Ext.Msg.show({
@@ -105,23 +110,28 @@ Ext.application({
 		 * Модель активного пользователя системы
 		 */
 		/**
-		 * @property {Ext.container.Container} searchForm
+		 *
+		 * @property {qqext.view.journal.VJournalForm} jvkForm
+		 * Форма ЖВК. Инициализируется в {@link qqext.view.MainPage#initComponent}.
+		 */
+		/**
+		 * @property {qqext.view.search.VSearchForm} searchForm
 		 * Форма поиска. Инициализируется в {@link qqext.view.MainPage#initComponent}.
 		 */
 		/**
-		 * @property {Ext.container.Container} regForm
+		 * @property {qqext.view.reg.VRegForm} regForm
 		 * Форма регистрации запроса. Инициализируется в {@link qqext.view.MainPage#initComponent}.
 		 */
 		/**
-		 * @property {qqext.view.StyledPanel} notifyForm
+		 * @property {qqext.view.notify.VNotify} notifyForm
 		 * Форма уведомления заявителя. Инициализируется в {@link qqext.view.MainPage#initComponent}.
 		 */
 		/**
-		 * @property {qqext.view.StyledPanel} transForm
+		 * @property {qqext.view.transmission.VTransmission} transForm
 		 * Форма передачи на исполнение. Инициализируется в {@link qqext.view.MainPage#initComponent}.
 		 */
 		/**
-		 * @property {Ext.container.Container} execForm
+		 * @property {qqext.view.exec.VExecForm} execForm
 		 * Форма исполнение запроса. Инициализируется в {@link qqext.view.MainPage#initComponent}.
 		 */
 		/**
@@ -142,13 +152,13 @@ Ext.application({
 		 */
 		/*
 		 * Различные кнопки, на которые нужно иметь ссылки по ходу дела. Обращаться к ним
-		 * только через интерфейс getButton и addButton.
+		 * только через интерфейс {@link #getButton} и {@link #addButton}.
 		 */
 		var buttons = [];
 		/**
 		 * Возвращает кнопку из зарегестрированных, по заданному имени. Необходим для
 		 * программного нажатия на кнопку.
-		 * @param {String} name имя кнопки
+		 * @param {String/Number} name имя кнопки
 		 * @returns {Obejct/undefined} если такая кнопка есть, то кнопку, иначе undefined
 		 * @method getButton
 		 */
@@ -164,7 +174,7 @@ Ext.application({
 		};
 		/**
 		 * Добавляет кнопку в набор, если такой еще нет
-		 * @param {String} name имя кнопки
+		 * @param {String/Number} name имя кнопки
 		 * @param {Ext.button.Button} button сама кнопка
 		 * @method addButton
 		 */
@@ -207,6 +217,20 @@ Ext.application({
 			app2: "#"
 		};
 		/**
+		 * @property {Object} btns
+		 * Условные обозначения для кнопок, которые могут использоваться
+		 * из разных частей программы. Доступ получать {@link #getButton}.
+		 */
+		qqext.btns = {
+			add: 0, // Кнопка "Добавить" новый запрос
+			jvk: 1, // Кнопка "ЖВК"
+			search: 2, // Кнопка "Поиск"
+			reg: 3, // Кнопка "Регистрация запроса"
+			notify: 4, // Кнопка "Уведомление заявителю"
+			trans: 5, // Кнопка "Передача на исполнение"
+			exec: 6 // Кнопка "Исполнение запроса"
+		};
+		/**
 		 * Вызывается когда нажали на кнопку 'Выйти'
 		 * @method quitAction
 		 */
@@ -224,6 +248,10 @@ Ext.application({
 		 *  - 1 - метка для поля формы
 		 *
 		 *  Иницализируется в qqext.model.qq.Applicant.
+		 */
+		/**
+		 * @property {Boolean} isSIC
+		 * Признак того, что пользователь является сотрудником SIC
 		 */
 		/**
 		 * Создает меню с горизонтально расположенными кнопками

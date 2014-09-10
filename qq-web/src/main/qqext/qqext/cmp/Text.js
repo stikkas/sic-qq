@@ -4,6 +4,7 @@
  *
  */
 Ext.define('qqext.cmp.Text', {
+	alias: 'TextField',
 	extend: 'Ext.form.field.Text',
 	_before: 'inputEl',
 	mixins: ['qqext.cmp.EditViewMode'],

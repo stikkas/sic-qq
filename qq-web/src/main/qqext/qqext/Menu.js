@@ -72,6 +72,35 @@ Ext.define('qqext.Menu', {
 		 */
 		articleMenu: null,
 		/**
+		 * Устанавливает верхнее меню в соответствии с отображаемой формой
+		 * @param {Number} idx индекс меню
+		 */
+		setEditMenu: function(idx) {
+			var menus = qqext.Menu;
+			if (idx < 3)
+				menus._layout1.setActiveItem(menus._forms[idx])
+			else {
+				menus._layout1.setActiveItem(1);
+				menus._layout2.setActiveItem(menus._forms[idx]);
+			}
+		},
+		/**
+		 * Карта соответствий форм меню редактирования.
+		 * Первые три для форм поиска, последние 4 для форм работы с запросом
+		 * @private
+		 */
+		_forms: [0, 0, 0, 0, 1, 2, 3],
+		/**
+		 * Слой для переключения между меню редактирования и меню поиска
+		 * @private
+		 */
+		_layout1: null,
+		/**
+		 * Слой для переключения между меню редактирования в разных вкладках запроса
+		 * @private
+		 */
+		_layout2: null,
+		/**
 		 * Этот статический метод необходимо вызвать перед запуском приложения.
 		 */
 		init: function() {
@@ -79,26 +108,28 @@ Ext.define('qqext.Menu', {
 					ns = qqext,
 					menus = ns.Menu,
 					labels = ns.labels,
+					btns = ns.btns,
+					getButton = ns.getButton,
 					//меню редактирования при выбранных разделах: 'Уведомления заявителю'
 
 					// меню редактирования при выбранных подразделах: 'ЖВК', 'Поиск', 'Отчетные документы'
 					searchEdit = ns.createHButtonMenu([
-						{text: labels.add, action: add, name: 'add'},
+						{text: labels.add, action: add, name: btns.add},
 						{text: labels.search, action: find},
 						{text: labels.clean, action: clear}
 					]),
 					// меню с подразделами поиска (основное)
 					searchMenu = createVButtonMenu([
-						{text: labels.jvk, action: jvk, name: 'jvk'},
-						{text: labels.search, action: search, name: 'search'},
+						{text: labels.jvk, action: jvk, name: btns.jvk},
+						{text: labels.search, action: search, name: btns.search},
 						{text: labels.reports, action: documents}
 					]),
 					// меню с подразделами запроса
 					requestMenu = createVButtonMenu([
-						{text: labels.reqRegister, action: regRequest, name: 'regRequest'},
-						{text: labels.reqNotify, action: notifyRequestor},
-						{text: labels.transToComplete, action: transmitToComplete},
-						{text: labels.complete, action: toComplete}
+						{text: labels.reqRegister, action: regRequest, name: btns.reg},
+						{text: labels.reqNotify, action: notifyRequestor, name: btns.notify},
+						{text: labels.transToComplete, action: transmitToComplete, name: btns.trans},
+						{text: labels.complete, action: toComplete, name: btns.exec}
 					]);
 
 			menus.navigation = ns.createHButtonMenu([
@@ -117,8 +148,8 @@ Ext.define('qqext.Menu', {
 			menus.articleMenu = createCardMenuPanel([searchMenu, requestMenu]);
 			// Слои для переключения активных элементов картбоксов.
 			var
-					editMenuLayout = menus.editMenu.getLayout(),
-					editReqMenuLayout = menus.editReqMenu.getLayout(),
+					editMenuLayout = menus._layout1 = menus.editMenu.getLayout(),
+					editReqMenuLayout = menus._layout2 = menus.editReqMenu.getLayout(),
 					articleMenuLayout = menus.articleMenu.getLayout();
 
 //----------Вспомогательные функции-----------------
@@ -156,7 +187,7 @@ Ext.define('qqext.Menu', {
 			function returnToSearch() {
 				editMenuLayout.setActiveItem(0);
 				articleMenuLayout.setActiveItem(0);
-				ns.getButton('jvk').fireEvent('click');
+				getButton(btns.jvk).fireEvent('click');
 			}
 
 			/**
@@ -165,9 +196,11 @@ Ext.define('qqext.Menu', {
 			 * @returns {undefined}
 			 */
 			function add() {
-				editMenuLayout.setActiveItem(1);
+				ns.request = null;
+				// Переключаем форму, дальше все выполняется в форме по событию
+				// 'activate'
 				articleMenuLayout.setActiveItem(1);
-				ns.getButton('regRequest').fireEvent('click');
+				getButton(btns.reg).fireEvent('click');
 			}
 			/**
 			 * Обрабатывает событие 'click' на кнопке "Поиск",  вызывается
@@ -229,14 +262,7 @@ Ext.define('qqext.Menu', {
 			 * @returns {undefined}
 			 */
 			function regRequest() {
-				var model = ns.regForm.getModel();
-				// загружаем данные только при смене вкладки
-				if (ns.setCurrentForm(3)) {
-					editReqMenuLayout.setActiveItem(0);
-					if (ns.currentRequest)
-						model.set('id', ns.currentRequest);
-					ns.regForm.loadRecord(model);
-				}
+				ns.setCurrentForm(3);
 			}
 
 			/**

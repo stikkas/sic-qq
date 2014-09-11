@@ -12,10 +12,10 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 		'qqext.model.qq.UsedMaterial',
 		'Ext.grid.Panel',
 		'Ext.grid.plugin.CellEditing',
-		'Ext.form.FieldContainer',
-		'Ext.form.FieldSet',
-		'hawk_common.fix.FixedTextField',
-		'hawk_common.cmp.DateField'
+		'qqext.cmp.FieldContainer',
+		'qqext.cmp.FieldSet',
+		'hawk_common.cmp.DateField',
+		'qqext.cmp.Text'
 	],
 	title: 'Выдача документов',
 	// height:'auto',
@@ -48,34 +48,33 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 	},
 	initComponent: function() {
 		var me = this,
-				HandlerButton = qqext.factory.HandlerButton;
-		var addButton = new HandlerButton('add',
+				createCmp = Ext.create;
+		var addButton = createCmp('FHandlerButton', 'add',
 				function() {
 					var old = me.getHeight();
-					var addComp = Ext.create('qqext.view.exec.cmp.DeliveryTypeCount');
+					var addComp = createCmp('qqext.view.exec.cmp.DeliveryTypeCount');
 					this.ownerCt.insert(this.ownerCt.items.length - 1, addComp);
-					var tm = Ext.create('qqext.model.qq.DeliveryAction');
+					var tm = createCmp('qqext.model.qq.DeliveryAction');
 					me.mOdel.delActions().add(tm);
 				}
 		);
 
-		var usedMaterialGrid = Ext.create('Ext.grid.Panel', {
+		var usedMaterialGrid = createCmp('Ext.grid.Panel', {
 			minHeight: 120,
 			plugins: [
-				Ext.create('Ext.grid.plugin.CellEditing', {
+				createCmp('Ext.grid.plugin.CellEditing', {
 					clicksToEdit: 1
 				})
 			],
 			// forceFit : true,
 			dockedItems: [
-				Ext.create('Ext.form.FieldContainer', {
+				createCmp('FieldContainer', {
 					layout: 'hbox',
 					items: [
-						new HandlerButton('add', function() {
-							var um = Ext.create('qqext.model.qq.UsedMaterial');
-							usedMaterialGrid.getStore().add(um);
+						createCmp('FHandlerButton', 'add', function() {
+							usedMaterialGrid.getStore().add(createCmp('qqext.model.qq.UsedMaterial'));
 						}),
-						new HandlerButton('del', function() {
+						createCmp('FHandlerButton', 'del', function() {
 							var sm = usedMaterialGrid
 									.getSelectionModel();
 							if (sm.hasSelection()) {
@@ -100,28 +99,28 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 				{
 					text: '№ фонда',
 					dataIndex: 'fundNum',
-					editor: {xtype: 'textfield'}
+					editor: {xtype: 'textfieldcmp'}
 				},
 				{
 					text: '№ описи',
 					dataIndex: 'seriesNum',
-					editor: {xtype: 'textfield'}
+					editor: {xtype: 'textfieldcmp'}
 				},
 				{
 					text: '№ ед. хранения',
 					dataIndex: 'storageUnitNum',
-					editor: {xtype: 'textfield'}
+					editor: {xtype: 'textfieldcmp'}
 				},
 				{
 					text: '№ листов',
 					dataIndex: 'listNum',
-					editor: {xtype: 'textfield'}
+					editor: {xtype: 'textfieldcmp'}
 				}
 			]
 		});
 
 		me.grid = usedMaterialGrid;
-		var fieldSet = Ext.create('Ext.form.FieldSet', {
+		var fieldSet = createCmp('FieldSet', {
 			title: 'Используемые материалы',
 			items: [usedMaterialGrid],
 			collapsible: true
@@ -130,6 +129,6 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 		Ext.applyIf(me, {
 			items: [addButton, fieldSet]
 		});
-		me.callParent(arguments);
+		me.callParent();
 	}
 });

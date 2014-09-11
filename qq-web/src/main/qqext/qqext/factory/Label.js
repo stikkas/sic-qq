@@ -4,20 +4,17 @@
  * @author С. Благодатских
  */
 Ext.define('qqext.factory.Label', {
-	extend: 'qqext.factory.Base',
-	requires: [
-		'Ext.form.Label'
-	],
+	extend: 'Ext.form.Label',
+	mixins: ['qqext.factory.Base'],
+	alias: 'FLabel',
 	/**
-	 * Возвращает объект типа label
+	 * Возвращает объект типа FLabel
 	 * @param {String} text надпись
-	 * @returns {Object} объект, на основе которого ExtJS сделает Label
+	 * @param {Object} opts дополнительные параметры для компонента
 	 */
-	constructor: function(text) {
-		return this.c({
-			xtype: 'label',
-			text: text
-		});
+	constructor: function(text, opts) {
+		this.text = text;
+		this._config(opts);
 	}
 });
 

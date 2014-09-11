@@ -20,10 +20,9 @@ Ext.define('qqext.view.reg.VFiles', {
 		icon: 'webapp/resources/images/fieldset/collapse-tool.png'
 	},
 	initComponent: function() {
-		var me = this;
-		Ext.apply(me, {
+		Ext.apply(this, {
 			items: [Ext.create('hawk_common.cmp.FileList')]
 		});
-		me.callParent(arguments);
+		this.callParent();
 	}
 });

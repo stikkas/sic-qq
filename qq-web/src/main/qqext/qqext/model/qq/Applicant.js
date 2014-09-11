@@ -16,6 +16,7 @@ Ext.define('qqext.model.qq.Applicant', (function() {
 				nameOfJurPerson: ['nameOfJurPerson', 'ФИО юр. лица (кто подписал)'],
 				addendum: ['addendum', 'Приложения']};
 	return {
+		alias: 'ApplicantModel',
 		extend: 'Ext.data.Model',
 		idProperty: 'id',
 		clientIdProperty: 'cliId',

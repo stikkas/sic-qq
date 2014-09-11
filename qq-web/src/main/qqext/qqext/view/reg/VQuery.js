@@ -13,12 +13,10 @@ Ext.define('qqext.view.reg.VQuery', {
 	title: 'Запрос',
 	disabledCls: '',
 	initComponent: function() {
-		var me = this,
-				factory = qqext.factory,
-				ComboBox = factory.ComboBox;
-		Ext.applyIf(me, {
+		var createCmp = Ext.create;
+		Ext.applyIf(this, {
 			items: [
-				new ComboBox('Вид запроса', 'queryType', 'questionType').cfg({
+				createCmp('FComboBox', 'Вид запроса', 'queryType', 'questionType', {
 					listeners: {
 						change: function(box, value) {
 							var target = qqext.regForm.target;
@@ -29,12 +27,12 @@ Ext.define('qqext.view.reg.VQuery', {
 						}
 					}
 				}),
-				new factory.DateField('Плановая дата исполнения запроса', 'plannedFinishDate'),
-				new factory.TextArea('Содержание запроса', 'content').cfg({width: 600}),
-				new ComboBox('Форма выдачи ответа', 'answerForm', 'answerFormType'),
-				new factory.Checkbox('Мотивированный отказ', 'motivatedRefusal')
+				createCmp('FDateField', 'Плановая дата исполнения запроса', 'plannedFinishDate'),
+				createCmp('FTextArea', 'Содержание запроса', 'content', {width: 600}),
+				createCmp('FComboBox', 'Форма выдачи ответа', 'answerForm', 'answerFormType'),
+				createCmp('FCheckbox', 'Мотивированный отказ', 'motivatedRefusal')
 			]
 		});
-		me.callParent(arguments);
+		this.callParent();
 	}
 });

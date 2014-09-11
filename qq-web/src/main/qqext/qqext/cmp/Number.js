@@ -6,6 +6,7 @@
 Ext.define('qqext.cmp.Number', {
 	extend: 'Ext.form.field.Number',
 	mixins: ['qqext.cmp.EditViewMode'],
-	xtype: 'numberfieldcmp'
+	xtype: 'numberfieldcmp',
+	alias: 'NumberField'
 });
 

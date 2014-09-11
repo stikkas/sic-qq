@@ -10,8 +10,8 @@ Ext.define('qqext.view.transmission.VTransmission', {
 		'qqext.factory.DateField',
 		'qqext.factory.Checkbox',
 		'qqext.factory.TextField',
-		'Ext.form.FieldContainer',
-		'Ext.form.FieldSet',
+		'qqext.cmp.FieldContainer',
+		'qqext.cmp.FieldSet',
 		'qqext.Menu'
 	],
 	title: 'Передача на исполнение',
@@ -73,45 +73,44 @@ Ext.define('qqext.view.transmission.VTransmission', {
 			console.log(this);
 		}
 		//----------------------------------------------
-		var me = edit.sc = save.sc = remove.sc = book.sc = this,
+		var
 				ns = qqext,
 				labels = ns.labels,
-				factory = ns.factory,
-				ComboBox = factory.ComboBox,
-				DateField = factory.DateField,
-				TextField = factory.TextField,
+				createCmp = Ext.create,
 				configForDate = {
 					labelAlign: 'right',
 					margin: '6 0 0 0'
 				};
+		// scope for buttons
+		edit.sc = save.sc = remove.sc = book.sc = this;
 
-		Ext.applyIf(me, {
+		Ext.applyIf(this, {
 			items: [
-				Ext.create('Ext.form.FieldContainer', {
+				createCmp('FieldContainer', {
 					layout: 'hbox',
 					items: [
-						new ComboBox('Ответственный за исполнение', 'allUsers',
+						createCmp('FComboBox', 'Ответственный за исполнение', 'allUsers',
 								'responsibleForExecution'),
-						new DateField('Дата', 'responsibleForExecutionDate').cfg(configForDate)
+						createCmp('FDateField', 'Дата', 'responsibleForExecutionDate', configForDate)
 					]
 				}),
-				Ext.create('Ext.form.FieldContainer', {
+				createCmp('FieldContainer', {
 					layout: 'hbox',
 					items: [
-						new ComboBox('ФИО исполнителя', 'allUsers', 'executorName'),
-						new DateField('Дата', 'executorDate').cfg(configForDate)
+						createCmp('FComboBox', 'ФИО исполнителя', 'allUsers', 'executorName'),
+						createCmp('FDateField', 'Дата', 'executorDate', configForDate)
 					]
 				}),
-				new factory.Checkbox('Контроль', 'control'),
-				new DateField('Контрольная дата исполнения', 'controlDateOfExecution'),
-				Ext.create('Ext.form.FieldSet', {
+				createCmp('FCheckbox', 'Контроль', 'control'),
+				createCmp('FDateField', 'Контрольная дата исполнения', 'controlDateOfExecution'),
+				createCmp('FieldSet', {
 					collapsible: true,
 					title: 'Дополнительная информация',
 					layout: 'vbox',
 					items: [
-						new TextField('Автор резолюции', 'resolutionAuthor'),
-						new ComboBox('Территория хранилища', 'storageTerritory', 'storageTerritory'),
-						new TextField('Название хранилища', 'storageName')
+						createCmp('FTextField', 'Автор резолюции', 'resolutionAuthor'),
+						createCmp('FComboBox', 'Территория хранилища', 'storageTerritory', 'storageTerritory'),
+						createCmp('FTextField', 'Название хранилища', 'storageName')
 					]
 				})
 			],
@@ -121,7 +120,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 				{text: labels.remove, action: remove},
 				{text: labels.register, action: book}])
 		});
-		me.callParent(arguments);
-		ns.Menu.editReqMenu.insert(2, me.menus);
+		this.callParent(arguments);
+		ns.Menu.editReqMenu.insert(2, this.menus);
 	}
 });

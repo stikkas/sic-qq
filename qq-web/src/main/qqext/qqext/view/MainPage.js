@@ -23,8 +23,9 @@ Ext.define('qqext.view.MainPage', {
 	],
 	layout: 'border',
 	initComponent: function() {
-		var me = this,
+		var
 				ns = qqext,
+				createCmp = Ext.create,
 				mainPanel,
 				mainPanelLayout;
 
@@ -32,26 +33,26 @@ Ext.define('qqext.view.MainPage', {
 			layout: 'card',
 			region: 'center',
 			items: [
-				ns.jvkForm = Ext.create('VJournalForm'),
-				ns.searchForm = Ext.create('VSearchForm'),
-				Ext.create('Ext.container.Container', {html: '<h1>Отчетные документы</h1>'}),
-				ns.regForm = Ext.create('VRegForm'),
-				ns.notifyForm = Ext.create('VNotify'),
-				ns.transForm = Ext.create('VTransmission'),
-				ns.execForm = Ext.create('VExecForm')
+				ns.jvkForm = createCmp('VJournalForm'),
+				ns.searchForm = createCmp('VSearchForm'),
+				createCmp('Ext.container.Container', {html: '<h1>Отчетные документы</h1>'}),
+				ns.regForm = createCmp('VRegForm'),
+				ns.notifyForm = createCmp('VNotify'),
+				ns.transForm = createCmp('VTransmission'),
+				ns.execForm = createCmp('VExecForm')
 			]
 		});
 		mainPanelLayout = mainPanel.getLayout();
 
 
-		Ext.applyIf(me, {
+		Ext.applyIf(this, {
 			items: [
-				Ext.create('VTitleBar'),
-				Ext.create('VLeftMenu'),
+				createCmp('VTitleBar'),
+				createCmp('VLeftMenu'),
 				mainPanel
 			]});
 
-		me.callParent(arguments);
+		this.callParent();
 
 		/*
 		 * Показывает форму с заданным индексом

@@ -74,6 +74,7 @@ Ext.define('qqext.view.exec.VExecForm', {
 		var me = edit.sc = save.sc = remove.sc = book.sc = this,
 				ns = qqext,
 				labels = ns.labels,
+				createCmp = Ext.create,
 				menus = ns.createHButtonMenu([
 					{text: labels.edit, action: edit},
 					{text: labels.save, action: save},
@@ -81,14 +82,14 @@ Ext.define('qqext.view.exec.VExecForm', {
 					{text: labels.register, action: book}]);
 		Ext.applyIf(me, {
 			items: [
-				Ext.create('VExecInfo'),
-				Ext.create('VDeliveryOfDocuments'),
-				Ext.create('VCoordination'),
-				Ext.create('VDeliveryMethod')
+				createCmp('VExecInfo'),
+				createCmp('VDeliveryOfDocuments'),
+				createCmp('VCoordination'),
+				createCmp('VDeliveryMethod')
 			],
 			menus: menus
 		});
-		me.callParent(arguments);
+		me.callParent();
 		ns.Menu.editReqMenu.insert(3, me.menus);
 	},
 	setDisabled: function(disabled) {

@@ -5,21 +5,18 @@
  * @author С. Благодатских
  */
 Ext.define('qqext.factory.HandlerButton', {
-	extend: 'qqext.factory.Base',
-	requires: [
-		'Ext.button.Button'
-	],
+	extend: 'Ext.button.Button',
+	mixins: ['qqext.factory.Base'],
+	alias: 'FHandlerButton',
 	/**
 	 * Создает объект типа button
 	 * @param {String} text Надпись на кнопке
 	 * @param {Function} handler Функция реагирования на нажатие кнопки
-	 * @returns {Object} объект, на основе которого ExtJS сделает Button
+	 * @param {Object} opts дополнительные параметры для компонента
 	 */
-	constructor: function(text, handler) {
-		return  this.c({
-			xtype: 'button',
-			text: text,
-			handler: handler
-		});
+	constructor: function(text, handler, opts) {
+		this.text = text;
+		this.handler = handler;
+		this._config(opts);
 	}
 });

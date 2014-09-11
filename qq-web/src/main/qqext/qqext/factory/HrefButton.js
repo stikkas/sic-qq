@@ -5,22 +5,19 @@
  * @author С. Благодатских
  */
 Ext.define('qqext.factory.HrefButton', {
-	extend: 'qqext.factory.Base',
-	requires: [
-		'Ext.button.Button'
-	],
+	extend: 'Ext.button.Button',
+	mixins: ['qqext.factory.Base'],
+	alias: 'FHrefButton',
 	/**
 	 * Создает объект типа button
 	 * @param {String} text Надпись на кнопке
 	 * @param {String} href Адрес, куда будет отправлен запрос при нажатии
-	 * @returns {Object} объект, на основе которого ExtJS сделает Button
+	 * @param {Object} opts дополнительные параметры для компонента
 	 */
-	constructor: function(text, href) {
-		return  this.c({
-			xtype: 'button',
-			text: text,
-			href: href
-		});
+	constructor: function(text, href, opts) {
+		this.text = text;
+		this.href = href;
+		this._config(opts);
 	}
 });
 

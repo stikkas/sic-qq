@@ -6,33 +6,28 @@ Ext.define('qqext.view.search.VSearchParams', {
 	extend: 'qqext.view.StyledPanel',
 	requires: [
 		'qqext.factory.ComboBox',
-		'qqext.factory.FioField',
+		'qqext.view.search.FioFieldContainer',
 		'qqext.factory.TextField',
 		'qqext.factory.DateField',
 		'qqext.factory.Label'
 	],
 	title: 'Параметры поиска',
 	initComponent: function() {
-		var
-				me = this,
-				factory = qqext.factory,
-				ComboBox = factory.ComboBox,
-				FioFieldContainer = factory.FioField,
-				Label = factory.Label;
-		Ext.applyIf(me, {
+		var createCmp = Ext.create;
+		Ext.applyIf(this, {
 			items: [
-				new ComboBox('Архив исполнитель', 'inboxDocExecOrg', 'archiveId'),
-				new ComboBox('Вид запроса', 'queryType', 'queryTypeId'),
-				new factory.TextField('Содержание запроса', 'queryContent'),
-				new ComboBox('Тип заявителя', 'applicantType', 'applicantTypeId'),
-				new ComboBox('Категория заявителя', 'applicantCategory', 'applicantCategoryId'),
-				new factory.DateField('Дата регистрации', 'regDate'),
-				new Label('На кого запрос'),
-				new FioFieldContainer('reqObjSurname', 'reqObjName', 'regObjFatherName'),
-				new Label('Заявитель'),
-				new FioFieldContainer('applSurname', 'applName', 'applFatherName')
+				createCmp('FComboBox', 'Архив исполнитель', 'inboxDocExecOrg', 'archiveId'),
+				createCmp('FComboBox', 'Вид запроса', 'queryType', 'queryTypeId'),
+				createCmp('FTextField', 'Содержание запроса', 'queryContent'),
+				createCmp('FComboBox', 'Тип заявителя', 'applicantType', 'applicantTypeId'),
+				createCmp('FComboBox', 'Категория заявителя', 'applicantCategory', 'applicantCategoryId'),
+				createCmp('FDateField', 'Дата регистрации', 'regDate'),
+				createCmp('FLabel', 'На кого запрос'),
+				createCmp('FioFieldContainer', 'reqObjSurname', 'reqObjName', 'regObjFatherName'),
+				createCmp('FLabel', 'Заявитель'),
+				createCmp('FioFieldContainer', 'applSurname', 'applName', 'applFatherName')
 			]
 		});
-		me.callParent(arguments);
+		this.callParent();
 	}
 });

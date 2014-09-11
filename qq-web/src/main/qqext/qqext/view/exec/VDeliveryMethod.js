@@ -12,7 +12,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 		'qqext.factory.TextField',
 		'qqext.factory.DateField',
 		'Ext.Component',
-		'Ext.form.FieldSet',
+		'qqext.cmp.FieldSet',
 		'hawk_common.cmp.FileList'
 	],
 	title: 'Способ отправки',
@@ -62,31 +62,30 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 	},
 	initComponent: function() {
 		var me = this,
-				factory = qqext.factory;
+				createCmp = Ext.create;
 
 		Ext.apply(me, {
 			items: [
-				new factory.HandlerButton('add', function() {
-					var t = Ext.create('ComboDateTrash', me.comboTrashConfig);
+				createCmp('FHandlerButton', 'add', function() {
+					var t = createCmp('ComboDateTrash', me.comboTrashConfig);
 					me.insert(me.items.length - 5, t);
-					me.mOdel.sendActions().add(Ext
-							.create('qqext.model.qq.SendAction'));
+					me.mOdel.sendActions().add(createCmp('qqext.model.qq.SendAction'));
 				}),
-				Ext.create('Ext.Component', {autoEl: 'hr'}),
-				new factory.DateField('Уведомление о переносе сроков', 'renewalNotice'),
-				new factory.TextField('Исходящий №', 'ref_num'),
-				new factory.TextArea('Примечание', 'note').cfg({
+				createCmp('Ext.Component', {autoEl: 'hr'}),
+				createCmp('FDateField', 'Уведомление о переносе сроков', 'renewalNotice'),
+				createCmp('FTextField', 'Исходящий №', 'ref_num'),
+				createCmp('FTextArea', 'Примечание', 'note', {
 					width: 600,
 					labelWidth: 100
 				}),
-				Ext.create('Ext.form.FieldSet', {
+				createCmp('FieldSet', {
 					title: 'Ответ',
 					collapsible: true,
-					items: [Ext.create('hawk_common.cmp.FileList')]
+					items: [createCmp('hawk_common.cmp.FileList')]
 				})
 			]
 		});
 
-		me.callParent(arguments);
+		me.callParent();
 	}
 });

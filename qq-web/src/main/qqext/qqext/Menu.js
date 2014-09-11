@@ -110,6 +110,7 @@ Ext.define('qqext.Menu', {
 					labels = ns.labels,
 					btns = ns.btns,
 					getButton = ns.getButton,
+					createCmp = Ext.create,
 					//меню редактирования при выбранных разделах: 'Уведомления заявителю'
 
 					// меню редактирования при выбранных подразделах: 'ЖВК', 'Поиск', 'Отчетные документы'
@@ -140,7 +141,7 @@ Ext.define('qqext.Menu', {
 			menus.editReqMenu = createCardMenuPanel([]);
 			menus.editMenu = createCardMenuPanel([searchEdit,
 				// Меню с кнопкой "Вернуться в поиск" и различными меню для редактирования
-				Ext.create('Ext.panel.Panel', {
+				createCmp('Ext.panel.Panel', {
 					layout: 'hbox',
 					items: [ns.createHButtonMenu([{text: labels.toSearch, action: returnToSearch}]),
 						menus.editReqMenu]
@@ -160,7 +161,7 @@ Ext.define('qqext.Menu', {
 			 * @returns {Ext.panel.Panel} панель с набором
 			 */
 			function createCardMenuPanel(menus) {
-				return Ext.create('Ext.panel.Panel', {
+				return createCmp('Ext.panel.Panel', {
 					layout: 'card',
 					flex: 2,
 					activeItem: 0,
@@ -175,7 +176,7 @@ Ext.define('qqext.Menu', {
 			 * @returns {qqext.view.menu.VButtonMenu} меню
 			 */
 			function createVButtonMenu(buttons) {
-				return Ext.create('qqext.view.menu.VButtonMenu',
+				return createCmp('qqext.view.menu.VButtonMenu',
 						buttons, 'qqext.button.ArticleButton');
 			}
 
@@ -282,7 +283,7 @@ Ext.define('qqext.Menu', {
 
 					if (!notify) {
 						console.debug('model.getNotification undefined, creating new instance');
-						var n = Ext.create('qqext.model.qq.Notification');
+						var n = createCmp('qqext.model.qq.Notification');
 						model.setNotification(n);
 						ns.notifyForm.loadRecord(n);
 					} else {

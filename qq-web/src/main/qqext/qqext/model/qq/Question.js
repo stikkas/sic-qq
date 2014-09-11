@@ -2,6 +2,7 @@
  * Модель запроса
  */
 Ext.define('qqext.model.qq.Question', {
+	alias: 'QuestionModel',
 	extend: 'Ext.data.Model',
 	requires: [
 		'qqext.model.qq.Transmission',

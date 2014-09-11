@@ -1,38 +1,39 @@
 /**
- * Предок всех фабрик. Нужен для обеспечения всех фабрик общей функциональностью.
- * На данный момент это только метод cfg, который добавляет в результирующий объект
- * различные свойства.
+ * Добавляет интерфейс
+ * _config(viewmode, opts) - должен вызываться в конструкторе, объекта, который
+ * добавляет к себе эту функциональность.
  *
  * @author С. Благодатских
  */
 Ext.define('qqext.factory.Base', {
 	/**
-	 * Добавляет метод конфигурирования и listener на afterrender для установки
-	 * режима 'только просмотр', если необходимо.
-	 * @param {Object} obj полуфабрикат для создания компонента
-	 * @param {Boolean} viewmode флаг отображения компонента: true - режим просмотра
-	 * @returns {Object} тот же полуфабрикат с дополнительными свойствами
+	 * Устанавливает объект изначально только для просмотра, если требуется, и
+	 * обрабатывает случаи когда передали или не передали в контруктор два последних
+	 * аргумента.
+	 *
+	 * @private
+	 * @param {Boolean} viewmode режим просмотра для первоначального отображения элемента
+	 * @param {Object} opts дополнительные настройки элемента
 	 */
-	c: function(obj, viewmode) {
-		/**
-		 * Добавляет в объект новые свойства, или обновляет, если такие свойства в
-		 * объекте уже есть
-		 * @param {Object} conf набор нужных свойств
-		 * @returns {Object} целевой объект, для цепочных операций
-		 */
-		obj.cfg = function(conf) {
-			for (var o in conf)
-				obj[o] = conf[o];
-			return obj;
-		};
+	_config: function(viewmode, opts) {
+		var me = this,
+				superMethod = me.superclass[me.callParent.caller.$name];
 		if (viewmode === true) {
-			obj.listeners = {
+			// Если afterrender ужа назначен, то он должен отвечать за режим просмотра
+			// здесь тогда ничего не делается
+			me.listeners = me.listeners || {};
+			Ext.applyIf(me.listeners, {
 				afterrender: function() {
-					this.setViewOnly(viewmode);
+					me.setViewOnly(viewmode);
 				}
-			};
+			});
 		}
-		return obj;
+		// Если не передали viewmode, но передали opts
+		(viewmode instanceof Object) ?
+				superMethod.apply(me, [viewmode]) :
+				(viewmode !== undefined && opts !== undefined) ?
+				superMethod.apply(me, [opts]) :
+				superMethod.apply(me, []);
 	}
 });
 

@@ -9,50 +9,40 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 		'qqext.factory.ComboBox',
 		'qqext.factory.TextField',
 		'qqext.factory.DateField',
-		'qqext.cmp.FieldContainer'
+		'qqext.cmp.FieldContainer',
+		'qqext.cmp.FieldSet'
 	],
 	disabledCls: '',
 	maskOnDisable: false,
 	title: 'Входящий документ',
 	initComponent: function() {
-		var me = this, ns = qqext,
-				factory = ns.factory,
-				ComboBox = factory.ComboBox,
-				TextField = factory.TextField,
-				DateField = factory.DateField;
+		var me = this,
+				createCmp = Ext.create;
 		Ext.applyIf(me, {
 			items: [
-				Ext.create('FieldContainer', {
+				createCmp('FieldContainer', {
 					layout: 'hbox',
 					items: [
-						me.litera = Ext.create('ComboBox',
-								new ComboBox('Литера', 'literas', 'litera', true).cfg({width: 190,
-							viewOnly: true})),
-						new TextField('№ Входящего документа', 'inboxNum').cfg({
+						me.litera = createCmp('FComboBox', 'Литера', 'literas', 'litera', true, {width: 190,
+							viewOnly: true}),
+						createCmp('FTextField', '№ Входящего документа', 'inboxNum', {
 							labelAlign: 'right',
-							labelWidth: 200,
+							labelWidth: 180,
 							width: 245
 						}),
-						new TextField('/').cfg({
+						createCmp('FTextField', '/', 'inboxNumSuf', {
 							labelWidth: 5,
 							width: 50
 						})
 					]
 				}),
-				me.datereg = Ext.create('DateField',
-						new DateField('Дата регистрации', 'regDate', true).cfg({viewOnly: true})),
-				new ComboBox('Способ передачи', 'inboxDocDeliveryType', 'transferType'),
-				me.executor = Ext.create('ComboBox',
-						new ComboBox('Исполняющая организация', 'inboxDocExecOrg', 'execOrg')),
-				me.registrator = Ext.create('ComboBox',
-						new ComboBox('ФИО регистратора', 'allUsers', 'registrator', true).
-						cfg({viewOnly: true}))
+				me.datereg = createCmp('FDateField', 'Дата регистрации', 'regDate', true, {viewOnly: true}),
+				createCmp('FComboBox', 'Способ передачи', 'inboxDocDeliveryType', 'transferType'),
+				me.executor = createCmp('FComboBox', 'Исполняющая организация', 'inboxDocExecOrg', 'execOrg'),
+				me.registrator = createCmp('FComboBox', 'ФИО регистратора', 'allUsers', 'registrator', true,
+						{viewOnly: true})
 			]
 		});
-		me.callParent(arguments);
-	},
-	setValues: function() {
-		console.log(arguments);
-		this.callParent(arguments);
+		me.callParent();
 	}
 });

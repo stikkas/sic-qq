@@ -19,25 +19,22 @@ Ext.define('qqext.view.WelcomePage', {
 	cls: 'welcomepage',
 	initComponent: function() {
 		var
-				me = this,
 				ns = qqext,
 				labels = ns.labels,
 				urls = ns.urls,
-				HrefButton = ns.factory.HrefButton,
-				HandlerButton = ns.factory.HandlerButton;
+				createCmp = Ext.create,
+				cls = 'welcomebutton';
 
-		Ext.applyIf(me, {
+		Ext.applyIf(this, {
 			items: [
-				new HrefButton(labels.app1, urls.app1),
-				new HrefButton(labels.app2, urls.app2),
-				new HandlerButton(labels.asq, function() {
+				createCmp('FHrefButton', labels.app1, urls.app1, {cls: cls}),
+				createCmp('FHrefButton', labels.app2, urls.app2, {cls: cls}),
+				createCmp('FHandlerButton', labels.asq, function() {
 					ns.setActivePage(1);
-				})
-			].map(function(btn) {
-				return btn.cfg({cls: 'welcomebutton'});
-			}),
-			buttons: [new HandlerButton(labels.quit, ns.quitAction)]
+				}, {cls: cls})
+			],
+			buttons: [createCmp('FHandlerButton', labels.quit, ns.quitAction)]
 		});
-		me.callParent();
+		this.callParent();
 	}
 });

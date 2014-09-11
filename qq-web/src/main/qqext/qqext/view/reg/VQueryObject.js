@@ -12,21 +12,19 @@ Ext.define('qqext.view.reg.VQueryObject', {
 	disabledCls: '',
 	formBind: true,
 	initComponent: function() {
-		var me = this,
-				factory = qqext.factory,
-				TextField = factory.TextField;
+		var createCmp = Ext.create;
 
-		Ext.applyIf(me, {
+		Ext.applyIf(this, {
 			items: [
-				new TextField('Фамилия', 'requestObjectSurname'),
-				new TextField('Имя', 'requestObjectName'),
-				new TextField('Отчество', 'requestFatherName'),
-				new factory.NumberField('Год рождения', 'request_object_birthyear').cfg({
+				createCmp('FTextField', 'Фамилия', 'requestObjectSurname'),
+				createCmp('FTextField', 'Имя', 'requestObjectName'),
+				createCmp('FTextField', 'Отчество', 'requestFatherName'),
+				createCmp('FNumberField', 'Год рождения', 'request_object_birthyear', {
 					width: 200
 				})
 			]
 		});
 
-		me.callParent(arguments);
+		this.callParent();
 	}
 });

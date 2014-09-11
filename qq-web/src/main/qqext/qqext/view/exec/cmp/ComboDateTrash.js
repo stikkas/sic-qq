@@ -22,31 +22,29 @@ Ext.define('qqext.view.exec.cmp.ComboDateTrash', {
 	 */
 	constructor: function(config) {
 		var me = this,
-				factory = qqext.factory;
+				createCmp = Ext.create;
 
 		Ext.applyIf(me, {
 			items: [
-				new factory.ComboBox(config.comboLabel, config.store),
-				new factory.DateField(config.dateLabel).cfg({
+				createCmp('FComboBox', config.comboLabel, config.store, 'fcomboBoxId'),
+				createCmp('FDateField', config.dateLabel, {
 					labelAlign: 'right',
 					width: 180,
 					labelWidth: 70
 				}),
-				new factory.HandlerButton('trash', function() {
+				createCmp('FHandlerButton', 'trash', function() {
 					me.ownerCt.remove(me);
 					me.destroy();
-				}).cfg({margin: '0 0 0 15'})
+				}, {margin: '0 0 0 15'})
 			]
 		});
-		me.callParent(arguments);
+		me.callParent();
 	},
 	getComboValue: function() {
-		var me = this;
-		return me.items.getAt(0).getValue();
+		return this.items.getAt(0).getValue();
 	},
 	getDateValue: function() {
-		var me = this;
-		return me.items.getAt(1).getValue();
+		return this.items.getAt(1).getValue();
 	},
 	setComboValue: function(value) {
 		this.items.getAt(0).setValue(value);

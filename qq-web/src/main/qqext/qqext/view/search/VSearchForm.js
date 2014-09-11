@@ -16,14 +16,13 @@ Ext.define('qqext.view.search.VSearchForm', {
 	_idx: 1,
 	id: 'VSearchForm',
 	initComponent: function() {
-		var me = this;
-		Ext.applyIf(me, {
+		Ext.applyIf(this, {
 			items: [
-				me._form = Ext.create('VSearchParams'),
+				this._form = Ext.create('VSearchParams'),
 				Ext.create('VSearchResult')
 			]
 		});
-		me.callParent(arguments);
+		this.callParent();
 	},
 	/**
 	 * Очищает все поля формы

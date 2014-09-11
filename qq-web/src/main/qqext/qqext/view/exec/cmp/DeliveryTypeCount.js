@@ -23,30 +23,31 @@ Ext.define('qqext.view.exec.cmp.DeliveryTypeCount', {
 		model.set('numOfDocs', this.items.getAt(1).getValue())
 	},
 	initComponent: function() {
-		var me = this, factory = qqext.factory;
+		var me = this,
+				createCmp = Ext.create;
 		Ext.applyIf(me, {
 			items: [
-				new factory.ComboBox('Тип документов', 'docType').cfg({
+				createCmp('FComboBox', 'Тип документов', 'docType', {
 					editable: false,
 					labelWidth: 100,
 					width: 250,
 					height: 22
 				}),
-				new factory.NumberField('Количество документов').cfg({
+				createCmp('FNumberField', 'Количество документов', {
 					labelAlign: 'right',
 					hideTrigger: true,
 					width: 230,
 					labelWidth: 150
 				}),
-				new factory.HandlerButton('Trash', function() {
+				createCmp('FHandlerButton', 'Trash', function() {
 					this.ownerCt.ownerCt.remove(this.ownerCt);
-				}).cfg({
+				}, {
 					action: 'drop',
 					height: 25,
 					margin: '0 0 0 15'
 				})
 			]
 		});
-		me.callParent(arguments);
+		me.callParent();
 	}
 });

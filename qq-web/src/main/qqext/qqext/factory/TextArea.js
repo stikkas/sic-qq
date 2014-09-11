@@ -4,21 +4,18 @@
  * @author С. Благодатских
  */
 Ext.define('qqext.factory.TextArea', {
-	extend: 'qqext.factory.Base',
-	requires: [
-		'qqext.cmp.TextArea'
-	],
+	extend: 'qqext.cmp.TextArea',
+	mixins: ['qqext.factory.Base'],
+	alias: 'FTextArea',
 	/**
-	 * Возвращает объект типа textareafield
-	 * @param {String} fieldLabel Заголовок
-	 * @param {String} name наименование элемента формы
-	 * @returns {Object} объект, на основе которого ExtJS сделает TextArea
+	 * @param {String} fieldLabel (required) Заголовок
+	 * @param {String} name (required) наименование элемента формы
+	 * @param {Boolean} viewmode режим просмотра (опционально, по умолчанию - редактирование)
+	 * @param {Object} opts дополнительные параметры для компонента
 	 */
-	constructor: function(fieldLabel, name) {
-		return this.c({
-			xtype: 'textareafieldcmp',
-			fieldLabel: fieldLabel,
-			name: name
-		});
+	constructor: function(fieldLabel, name, viewmode, opts) {
+		this.fieldLabel = fieldLabel;
+		this.name = name;
+		this._config(viewmode, opts);
 	}
 });

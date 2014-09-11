@@ -26,6 +26,28 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 * @private
 	 */
 	_idx: 3,
+	// Состояние кнопок меню
+	_btnstate: [],
+	//Кнопки меню
+	_btns: null,
+	// Сохранить состояние кнопок
+	_saveBtnState: function() {
+		var i = 0,
+				btns = this._btns,
+				states = this._btnstate,
+				max = btns.length;
+		for (; i < max; ++i)
+			states[i] = btns.getAt(i).isDisabled();
+	},
+	// Восстановить состояние кнопок
+	_loadBtnState: function() {
+		var i = 0,
+				btns = this._btns,
+				states = this._btnstate,
+				max = btns.length;
+		for (; i < max; ++i)
+			btns.getAt(i).setDisabled(states[i]);
+	},
 	listeners: {
 		activate: function(me, prev) {
 			var ns = qqext;
@@ -38,7 +60,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 						user = ns.user,
 						orgId = user.get('organization'),
 						btns = ns.btns;
-
 				//Кнопка "Редактировать"
 				buttons.getAt(0).setDisabled(true);
 				//Кнопка "Удалить"
@@ -54,9 +75,9 @@ Ext.define('qqext.view.reg.VRegForm', {
 					model.set('execOrg', orgId);
 				}
 			} else if (prev === ns.searchForm || prev === ns.jvkForm) {
-				// Значит пришли по двойному клику на существуещем запросе
+// Значит пришли по двойному клику на существуещем запросе
 			} else {
-				// Переключаемся между вкладками одного запроса
+// Переключаемся между вкладками одного запроса
 			}
 			me.loadRecord();
 		}
@@ -124,25 +145,24 @@ Ext.define('qqext.view.reg.VRegForm', {
 		var me = edit.sc = save.sc = remove.sc = book.sc = this,
 				ns = qqext,
 				labels = ns.labels,
+				createCmp = Ext.create,
 				menu = ns.createHButtonMenu([
 					{text: labels.edit, action: edit},
 					{text: labels.save, action: save},
 					{text: labels.remove, action: remove},
 					{text: labels.register, action: book}]);
-
 		Ext.applyIf(me, {
 			items: [
-				me.inbox = Ext.create('VInboxDoc'),
-				Ext.create('VQuery'),
-				me.applicant = Ext.create('VApplicant'),
-				me.target = Ext.create('VQueryObject', {hidden: true}),
-				Ext.create('VFiles')
-			],
-			menu: menu
+				me.inbox = createCmp('VInboxDoc'),
+				createCmp('VQuery'),
+				me.applicant = createCmp('VApplicant'),
+				me.target = createCmp('VQueryObject', {hidden: true}),
+				createCmp('VFiles')
+			]
 		});
-		me.callParent(arguments);
-		ns.Menu.editReqMenu.insert(0, me.menu);
-
+		me._btns = menu.items;
+		me.callParent();
+		ns.Menu.editReqMenu.insert(0, menu);
 		var execModelAction = function(action) {
 			var max = me.items.length, i = 0, item,
 					model = me.model;
@@ -169,12 +189,13 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 * Инициализируем модель
 	 */
 	initModel: function() {
-		var model = this.model = Ext.create('qqext.model.qq.Question');
-		model.setNotification(Ext.create('qqext.model.qq.Notification'));
-		model.setApplicant(Ext.create('qqext.model.qq.Applicant'));
-		model.setTransmission(Ext.create('qqext.model.qq.Transmission'));
-		model.setExecutionInfo(Ext.create('qqext.model.qq.ExecutionInfo'));
-		model.setWayToSend(Ext.create('qqext.model.qq.WayToSend'));
+		var createCmp = Ext.create,
+				model = this.model = createCmp('QuestionModel');
+		model.setNotification(createCmp('NotificationModel'));
+		model.setApplicant(createCmp('ApplicantModel'));
+		model.setTransmission(createCmp('TransmissionModel'));
+		model.setExecutionInfo(createCmp('ExecutionInfoModel'));
+		model.setWayToSend(createCmp('WayToSendModel'));
 	},
 	/**
 	 * Отдает модель привязанную к форме

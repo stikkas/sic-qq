@@ -12,9 +12,8 @@ Ext.define('qqext.view.VLeftMenu', {
 	region: 'west',
 	layout: 'vbox',
 	initComponent: function() {
-		var me = this;
-		Ext.applyIf(me, {
+		Ext.applyIf(this, {
 			items: [qqext.Menu.articleMenu]});
-		me.callParent(arguments);
+		this.callParent();
 	}
 });

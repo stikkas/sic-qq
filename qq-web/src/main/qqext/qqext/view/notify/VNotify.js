@@ -36,8 +36,7 @@ Ext.define('qqext.view.notify.VNotify', {
 
 		var me = saveNotify.sc = editNotify.sc = this,
 				ns = qqext,
-				factory = ns.factory,
-				ComboBox = factory.ComboBox,
+				createCmp = Ext.create,
 				labels = ns.labels,
 				menus = ns.createHButtonMenu([
 					{text: labels.save, action: saveNotify},
@@ -46,15 +45,15 @@ Ext.define('qqext.view.notify.VNotify', {
 
 		Ext.applyIf(me, {
 			items: [
-				new ComboBox('ФИО исполнителя', 'allUsers', 'executor'),
-				new ComboBox('Тип документов', 'docType', 'docType'),
-				new ComboBox('Способ передачи', 'answerForm', 'deliveryType'),
-				new factory.DateField('Дата уведомления', 'notificationDate')
+				createCmp('FComboBox', 'ФИО исполнителя', 'allUsers', 'executor'),
+				createCmp('FComboBox', 'Тип документов', 'docType', 'docType'),
+				createCmp('FComboBox', 'Способ передачи', 'answerForm', 'deliveryType'),
+				createCmp('FDateField', 'Дата уведомления', 'notificationDate')
 			],
 			menus: menus
 		});
 
-		me.callParent(arguments);
+		me.callParent();
 		ns.Menu.editReqMenu.insert(1, me.menus);
 	}
 });

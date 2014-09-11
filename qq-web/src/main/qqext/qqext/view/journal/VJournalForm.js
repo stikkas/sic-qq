@@ -11,7 +11,8 @@ Ext.define('qqext.view.journal.VJournalForm', {
 		'qqext.factory.ComboBox',
 		'qqext.factory.Label',
 		'qqext.factory.TextField',
-		'Ext.toolbar.Paging'
+		'Ext.toolbar.Paging',
+		'hawk_common.cmp.DateField'
 	],
 	width: '100%',
 	forceFit: true,
@@ -102,19 +103,19 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	},
 	initComponent: function() {
 		var me = this,
-				factory = qqext.factory,
-				ComboBox = factory.ComboBox;
+				createCmp = Ext.create;
 		Ext.applyIf(me, {
 			columns: {
 				defaults: {
 					menuDisabled: true
 				},
-				items: [{
+				items: [
+					{
 						text: 'Литера',
 						itemId: 'literaCount',
 						dataIndex: 'litera',
 						items: [
-							new ComboBox('', 'literas', 'filterLiteraCombo').cfg({
+							createCmp('FComboBox', '', 'literas', 'filterLiteraCombo', {
 								itemId: 'filterLiteraCombo',
 								width: '100%',
 								listeners: {
@@ -129,7 +130,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						text: '№ вх. документа',
 						dataIndex: 'inboxDocNum',
 						items: [
-							new factory.TextField('', 'docNumberTextField').cfg({
+							createCmp('FTextField', '', 'docNumberTextField', {
 								width: '100%',
 								listeners: {
 									specialkey: function(tf, event, eopts) {
@@ -198,7 +199,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						text: 'От кого поступил',
 						dataIndex: 'fioOrg',
 						items: [
-							new ComboBox('', 'journalApplicantFilterStore', 'requestFromCombo').cfg({
+							createCmp('FComboBox', '', 'journalApplicantFilterStore', 'requestFromCombo', {
 								width: '100%',
 								queryMode: 'local',
 								listeners: {
@@ -213,7 +214,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						text: 'Состояние запроса',
 						dataIndex: 'status',
 						items: [
-							new ComboBox('', 'Q_DICT_QUESTION_STATUSES', 'requestStatusCombo').cfg({
+							createCmp('FComboBox', '', 'Q_DICT_QUESTION_STATUSES', 'requestStatusCombo', {
 								width: '100%',
 								listeners: {
 									select: me._filterComboSelected,
@@ -227,7 +228,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						text: 'Исполнитель',
 						dataIndex: 'executor',
 						items: [
-							new ComboBox('', 'journalExecutors').cfg({
+							createCmp('FComboBox', '', 'journalExecutors', {
 								width: '100%',
 								select: me._filterComboSelected,
 								render: me._render,
@@ -246,12 +247,12 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					displayInfo: false,
 					store: 'journal'
 				},
-				new factory.Label('СИЦ/Архив').cfg({
+				createCmp('FLabel', 'СИЦ/Архив', {
 					dock: 'top',
 					cls: 'journal_title_label'
 				})
 			]
 		});
-		me.callParent(arguments);
+		me.callParent();
 	}
 });

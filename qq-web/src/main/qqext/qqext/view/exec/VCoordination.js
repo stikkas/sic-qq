@@ -25,17 +25,18 @@ Ext.define('qqext.view.exec.VCoordination', {
 	},
 	mOdel: null,
 	initComponent: function() {
-		var me = this;
+		var me = this,
+				createCmp = Ext.create;
 		Ext.applyIf(me, {
 			items: [
-				new qqext.factory.HandlerButton('add', function() {
-					me.add(Ext.create('qqext.view.exec.cmp.ComboDateTrash',
+				createCmp('FHandlerButton', 'add', function() {
+					me.add(createCmp('ComboDateTrash',
 							me.comboTrashConfig));
-					me.mOdel.coordinations().add(Ext.create('qqext.model.qq.Coordination'));
+					me.mOdel.coordinations().add(createCmp('qqext.model.qq.Coordination'));
 				})
 			]
 		});
-		me.callParent(arguments);
+		me.callParent();
 	},
 	updateRecord: function(model) {
 		var me = this;

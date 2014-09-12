@@ -11,6 +11,7 @@ Ext.application({
 	appFolder: 'qqext',
 	autoCreateViewport: false,
 	requires: [
+		'Ext.data.proxy.Rest',
 		'hawk_common.model.User',
 		'hawk_common.store.UserLocalStorage',
 		'qqext.view.Viewport',
@@ -24,7 +25,7 @@ Ext.application({
 		Ext.Ajax.request({
 			url: '/qq-web/Rules',
 			// Используется только в целях тестирования, в обход реальной аутентификации
-			params: {username: 'ARCHIVE_USER'},
+//			params: {username: 'ARCHIVE_USER'},
 			success: function(response) {
 				// Настраиваем глобальные переменные
 				me.initQQ();
@@ -222,13 +223,14 @@ Ext.application({
 		 * из разных частей программы. Доступ получать {@link #getButton}.
 		 */
 		qqext.btns = {
-			add: 0, // Кнопка "Добавить" новый запрос
-			jvk: 1, // Кнопка "ЖВК"
-			search: 2, // Кнопка "Поиск"
-			reg: 3, // Кнопка "Регистрация запроса"
-			notify: 4, // Кнопка "Уведомление заявителю"
-			trans: 5, // Кнопка "Передача на исполнение"
-			exec: 6 // Кнопка "Исполнение запроса"
+			add: 1, // Кнопка "Добавить" новый запрос
+			jvk: 2, // Кнопка "ЖВК"
+			search: 3, // Кнопка "Поиск"
+			reg: 4, // Кнопка "Регистрация запроса"
+			notify: 5, // Кнопка "Уведомление заявителю"
+			trans: 6, // Кнопка "Передача на исполнение"
+			exec: 7, // Кнопка "Исполнение запроса"
+			toSearch: 8 // Кнопка "Вернуться в поиск"
 		};
 		/**
 		 * Вызывается когда нажали на кнопку 'Выйти'
@@ -253,15 +255,8 @@ Ext.application({
 		 * @property {Boolean} isSIC
 		 * Признак того, что пользователь является сотрудником SIC
 		 */
-		/**
-		 * Создает меню с горизонтально расположенными кнопками
-		 * @param {Array} buttons набор кнопок
-		 * @returns {qqext.view.menu.HButtonMenu} меню
-		 */
-		qqext.createHButtonMenu = function(buttons) {
-			return Ext.create('qqext.view.menu.HButtonMenu', buttons,
-					'qqext.button.ToolButton');
-		};
+
+
 
 		// создаем все меню
 		qqext.Menu.init();

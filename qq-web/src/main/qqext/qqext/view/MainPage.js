@@ -73,4 +73,3 @@ Ext.define('qqext.view.MainPage', {
 	}
 });
 
-

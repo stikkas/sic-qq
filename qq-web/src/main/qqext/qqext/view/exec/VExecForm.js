@@ -9,6 +9,8 @@ Ext.define('qqext.view.exec.VExecForm', {
 		'qqext.view.exec.VDeliveryOfDocuments',
 		'qqext.view.exec.VCoordination',
 		'qqext.view.exec.VDeliveryMethod',
+		'qqext.button.ToolButton',
+		'qqext.view.menu.HButtonMenu',
 		'qqext.Menu'
 	],
 	overflowY: 'auto',
@@ -75,11 +77,12 @@ Ext.define('qqext.view.exec.VExecForm', {
 				ns = qqext,
 				labels = ns.labels,
 				createCmp = Ext.create,
-				menus = ns.createHButtonMenu([
+				menus = createCmp('HButtonMenu', [
 					{text: labels.edit, action: edit},
 					{text: labels.save, action: save},
 					{text: labels.remove, action: remove},
-					{text: labels.register, action: book}]);
+					{text: labels.register, action: book}],
+						'ToolButton');
 		Ext.applyIf(me, {
 			items: [
 				createCmp('VExecInfo'),

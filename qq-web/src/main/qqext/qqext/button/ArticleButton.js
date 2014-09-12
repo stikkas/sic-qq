@@ -5,6 +5,7 @@
  * @author С. Благодатских
  */
 Ext.define('qqext.button.ArticleButton', {
+	alias: 'ArticleButton',
 	extend: 'Ext.button.Button',
 	xtype: 'articlebutton',
 	cls: 'article-btn'

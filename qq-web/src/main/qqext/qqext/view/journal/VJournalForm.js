@@ -143,7 +143,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 									render: me._render
 								}
 							})
-						],
+						]
 					},
 					{
 						text: 'Дата регистрации',

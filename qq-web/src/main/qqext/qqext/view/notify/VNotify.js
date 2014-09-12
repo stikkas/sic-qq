@@ -10,6 +10,8 @@ Ext.define('qqext.view.notify.VNotify', {
 	requires: [
 		'qqext.factory.ComboBox',
 		'qqext.factory.DateField',
+		'qqext.button.ToolButton',
+		'qqext.view.menu.HButtonMenu',
 		'qqext.Menu'
 	],
 	height: 300,
@@ -38,10 +40,10 @@ Ext.define('qqext.view.notify.VNotify', {
 				ns = qqext,
 				createCmp = Ext.create,
 				labels = ns.labels,
-				menus = ns.createHButtonMenu([
+				menus = createCmp('HButtonMenu', [
 					{text: labels.save, action: saveNotify},
 					{text: labels.edit, action: editNotify}
-				]);
+				], 'ToolButton');
 
 		Ext.applyIf(me, {
 			items: [

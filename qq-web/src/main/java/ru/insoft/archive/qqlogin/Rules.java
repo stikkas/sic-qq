@@ -24,10 +24,6 @@ import ru.insoft.archive.qq.webmodel.UserModel;
 @WebServlet(name = "Rules", urlPatterns = "/Rules")
 public class Rules extends AbstractServlet {
 
-	// Только на время разработки
-	@EJB
-	private ru.insoft.archive.qq.ejb.UserInfo userInfo;
-
 	@EJB
 	@SessionScoped
 	private UserInfo ui;
@@ -37,15 +33,8 @@ public class Rules extends AbstractServlet {
 		throws Exception {
 		try {
 			UserModel um = new UserModel();
-
-			// Только на время разработки ---------------
-			String username = req.getParameter("username");
-			if (username != null && !username.isEmpty()) {
-				AdmUser user = userInfo.getUser(username);
-				um.setUser(user, userInfo.getEmployee(user), ui.getAccessRules());
-			} else { //-------------------------
-				um.setUser(ui.getUser(), ui.getAccessRules());
-			} //---------------------------
+			AdmUser user = ui.getUser();
+			um.setUser(user, ui.getEmployee(user), ui.getAccessRules());
 			JsonObject jo = jsonTools.getJsonForEntity(um);
 			resp.getWriter().write(jo.toString());
 		} catch (Exception e) {
@@ -55,5 +44,4 @@ public class Rules extends AbstractServlet {
 		}
 
 	}
-
 }

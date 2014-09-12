@@ -5,7 +5,7 @@
 
 Ext.define('qqext.view.reg.VRegForm', {
 	alias: 'VRegForm',
-	extend: 'Ext.container.Container',
+	extend: 'qqext.cmp.Container',
 	requires: [
 		'qqext.view.reg.VInboxDoc',
 		'qqext.view.reg.VQuery',
@@ -13,6 +13,8 @@ Ext.define('qqext.view.reg.VRegForm', {
 		'qqext.view.reg.VQueryObject',
 		'qqext.view.reg.VFiles',
 		'qqext.model.qq.Question',
+		'qqext.button.ToolButton',
+		'qqext.view.menu.HButtonMenu',
 		'qqext.Menu'
 	],
 	disabledCls: '',
@@ -54,16 +56,15 @@ Ext.define('qqext.view.reg.VRegForm', {
 			ns.Menu.setEditMenu(me._idx);
 			if (ns.request === null) {
 				// Значит событие случилось по нажатию на кнопку "Добавить"
-				var buttons = me.menu.items,
+				var
 						model = me.getModel(true),
 						inbox = me.inbox,
 						user = ns.user,
 						orgId = user.get('organization'),
 						btns = ns.btns;
-				//Кнопка "Редактировать"
-				buttons.getAt(0).setDisabled(true);
-				//Кнопка "Удалить"
-				buttons.getAt(2).setDisabled(true);
+				//Кнопки "Редактировать" и "Удалить"
+				me._disableButtons(true, 0, 2);
+				// Кнопки подразделов
 				me._disableArticles(btns.notify, btns.trans, btns.exec);
 				// Литера
 				model.set('litera', orgId);
@@ -90,6 +91,17 @@ Ext.define('qqext.view.reg.VRegForm', {
 		for (var i = 0; i < arguments.length; ++i)
 			qqext.getButton(arguments[i]).setDisabled(true);
 	},
+	/**
+	 * Устанавливает режим доступности для нескольки элементов
+	 * @param {Boolean} mode режим в который установить все другие параметры метода
+	 * Остальные параметры передаются индексами, которые соотвествуют this._btns
+	 * @private
+	 */
+	_disableButtons: function(mode) {
+		var i = 1, max = arguments.length, btns = this._btns;
+		for (; i < max; ++i)
+			btns.getAt(arguments[i]).setDisabled(mode);
+	},
 	initComponent: function() {
 		//----------обработчики для кнопок меню---------
 		//sc - контекст для обработчика
@@ -100,8 +112,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 		 */
 		function edit() {
 			//TODO: разобраться что эта функция должна делать
-			this.setDisabled(!this.isDisabled());
-			this.doLayout();
 		}
 
 		/**
@@ -110,10 +120,43 @@ Ext.define('qqext.view.reg.VRegForm', {
 		 * @returns {undefined}
 		 */
 		function save() {
-			this.updateRecord()
-			ns.mainController.syncModel()
-					.getModel().save(function(rec, op, suc) {
-				console.log('is saving success?: ' + suc);
+			var me = this,
+					model = me.model,
+					statusId;
+			// Кнопки сохранить и регистрировать
+			me._disableButtons(true, 1, 3);
+			me.setViewOnly(true);
+			me.updateRecord();
+			Ext.getStore('Q_DICT_QUESTION_STATUSES').
+					findBy(function(record, id) {
+						if (record.get('code') === 'Q_VALUE_QSTAT_ONREG') {
+							statusId = id;
+							return true;
+						}
+						return false;
+					});
+			model.set('status', statusId);
+			model.save({
+				callback: function(records, operation, success) {
+					if (success) {
+						ns.request = model;
+						// кнопка удалить
+						me._disableButtons(false, 2);
+						model.set('id', records.data.id)
+					} else {
+						Ext.Msg.show({
+							title: 'Ошибка сохранения на сервер',
+							msg: operation.getError(),
+							buttons: Ext.Msg.OK,
+							icon: Ext.Msg.ERROR,
+							cls: 'err_msg',
+							maxWidth: 1000
+						});
+					}
+					// Кнопки сохранить и регистрировать
+					me._disableButtons(false, 1, 3);
+					me.setViewOnly(false);
+				}
 			});
 		}
 		/**
@@ -122,16 +165,26 @@ Ext.define('qqext.view.reg.VRegForm', {
 		 * @returns {undefined}
 		 */
 		function remove() {
-			ns.mainController.syncModel()
-					.getModel().destroy({
-				success: function() {
-					ns.getButton('search').fireEvent('click');
-				},
-				failure: function() {
-					alert('Ошибка при удалении');
+			var me = this;
+			me.model.destroy({
+				callback: function(records, operation, success) {
+					if (success) {
+						me.model = ns.request = null;
+						ns.getButton(ns.btns.toSearch).fireEvent('click');
+					} else {
+						Ext.Msg.show({
+							title: 'Ошибка сохранения на сервер',
+							msg: operation.getError(),
+							buttons: Ext.Msg.OK,
+							icon: Ext.Msg.ERROR,
+							cls: 'err_msg',
+							maxWidth: 1000
+						});
+					}
 				}
 			});
 		}
+
 		/**
 		 * Обрабатывает событие 'click' на кнопке "Регистрировать".
 		 * TODO реализовать метод
@@ -146,11 +199,12 @@ Ext.define('qqext.view.reg.VRegForm', {
 				ns = qqext,
 				labels = ns.labels,
 				createCmp = Ext.create,
-				menu = ns.createHButtonMenu([
+				menu = createCmp('HButtonMenu', [
 					{text: labels.edit, action: edit},
 					{text: labels.save, action: save},
 					{text: labels.remove, action: remove},
-					{text: labels.register, action: book}]);
+					{text: labels.register, action: book}],
+						'ToolButton');
 		Ext.applyIf(me, {
 			items: [
 				me.inbox = createCmp('VInboxDoc'),

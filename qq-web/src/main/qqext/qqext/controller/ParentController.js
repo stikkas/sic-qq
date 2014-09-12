@@ -6,8 +6,7 @@
 Ext.define('qqext.controller.ParentController', {
 	extend: 'Ext.app.Controller',
 	requires: [
-		'qqext.model.qq.SearchCritery',
-		'qqext.Constants'
+		'qqext.model.qq.SearchCritery'
 	],
 	refs: [{
 			ref: 'vp',

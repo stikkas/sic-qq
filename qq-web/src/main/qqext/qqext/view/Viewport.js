@@ -11,7 +11,6 @@ Ext.define('qqext.view.Viewport', {
 	],
 	layout: 'card',
 	initComponent: function() {
-
 		var
 				me = this,
 				layout = me.getLayout(),

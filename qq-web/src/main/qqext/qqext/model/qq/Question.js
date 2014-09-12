@@ -139,20 +139,52 @@ Ext.define('qqext.model.qq.Question', {
 			associationKey: 'wayToSend'
 		}],
 	proxy: {
-		type: 'ajax',
-		url: 'api/Question',
-		api: {
-			create: 'api/Question',
-			read: 'api/Question',
-			update: 'api/Question',
-			destroy: 'api/Question'
-		},
+		type: 'rest',
+		url: '/qq-web/rest/questionmodel',
 		reader: {
-			type: 'json',
-			root: 'data',
-			messageProperty: 'msg',
-			successProperty: 'success'
+			type: 'json'
+//			rootProperty: 'data'
 		},
-		writer: {type: 'json'}
+		writer: {
+			type: 'json'
+		}
+	},
+	listeners: {
+		write: function() {
+			console.log(arguments);
+			/*
+			 var record = operation.getRecords()[0],
+			 name = Ext.String.capitalize(operation.action),
+			 verb;
+
+
+			 if (name == 'Destroy') {
+			 verb = 'Destroyed';
+			 } else {
+			 verb = name + 'd';
+			 }
+			 Ext.example.msg(name, Ext.String.format("{0} user: {1}", verb, record.getId()));
+			 */
+
+		}
 	}
+	/*
+	 proxy: {
+	 type: 'ajax',
+	 url: 'api/Question',
+	 api: {
+	 create: 'api/Question',
+	 read: 'api/Question',
+	 update: 'api/Question',
+	 destroy: 'api/Question'
+	 },
+	 reader: {
+	 type: 'json',
+	 root: 'data',
+	 messageProperty: 'msg',
+	 successProperty: 'success'
+	 },
+	 writer: {type: 'json'}
+	 }
+	 */
 });

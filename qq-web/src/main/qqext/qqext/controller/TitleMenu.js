@@ -1,36 +1,34 @@
 /**
- * 
+ *
  */
 Ext.define('qqext.controller.TitleMenu', {
-	extend : 'qqext.controller.ParentController',
-	requires : ['Ext.data.writer.Json'],
-	init : function() {
+	extend: 'qqext.controller.ParentController',
+	init: function() {
 		this.control({
-					'button[action=edit]' : {
-						click : this.editQuestion
-					},
-					'button[action=save]' : {
-						click : this.saveQuestion
-					},
-					'button[action=delete]' : {
-						click : this.deleteQuestion
-					},
-					'button[action=register]' : {
-						click : this.regQuestion
-					},
-					'button[action=add_query]' : {
-						click : this.addQuery
-					},
-					'button[action=start_search]' : {
-						click : this.startSearch
-					},
-					'button[action=clear]' : {
-						click : this.clearSearch
-					}
-				});
+			'button[action=edit]': {
+				click: this.editQuestion
+			},
+			'button[action=save]': {
+				click: this.saveQuestion
+			},
+			'button[action=delete]': {
+				click: this.deleteQuestion
+			},
+			'button[action=register]': {
+				click: this.regQuestion
+			},
+			'button[action=add_query]': {
+				click: this.addQuery
+			},
+			'button[action=start_search]': {
+				click: this.startSearch
+			},
+			'button[action=clear]': {
+				click: this.clearSearch
+			}
+		});
 	},
-
-	editQuestion : function() {
+	editQuestion: function() {
 		var me = this;
 		var form = me.getMainCont();
 		var disbl = form.isDisabled();
@@ -38,73 +36,73 @@ Ext.define('qqext.controller.TitleMenu', {
 		form.setDisabled(disbl);
 		form.doLayout();
 	},
-	saveQuestion : function() {
+	saveQuestion: function() {
 		this.syncModel();
 		var model = this.getModel();
 		model.save(function(rec, op, suc) {
-					console.log('is saving success?: ' + suc);
-				});
+			console.log('is saving success?: ' + suc);
+		});
 	},
-	deleteQuestion : function() {
+	deleteQuestion: function() {
 		this.syncModel();
 		var me = this;
 		var model = this.getModel();
 		model.destroy({
-					success : function() {
-						alert('Успешно удалено');
-						me.getApplication()
-								.getController('qqext.controller.LeftMenu')
-								.goSearch();
-					},
-					failure : function() {
-						alert('Ошибка при удалении');
-					}
-				});
+			success: function() {
+				alert('Успешно удалено');
+				me.getApplication()
+						.getController('qqext.controller.LeftMenu')
+						.goSearch();
+			},
+			failure: function() {
+				alert('Ошибка при удалении');
+			}
+		});
 	},
-	regQuestion : function() {
+	regQuestion: function() {
 		alert('Регистрировать');
 	},
-	addQuery : function() {
+	addQuery: function() {
 		var me = this;
 		me.clearVp();
 		var btnsCard = new Array();
 		btnsCard[btnsCard.length] = {
-			text : 'Вернуться в поиск',
-			action : 'search'
+			text: 'Вернуться в поиск',
+			action: 'search'
 		};
 		btnsCard[btnsCard.length] = {
-			text : 'Редактировать',
-			action : 'edit'
+			text: 'Редактировать',
+			action: 'edit'
 		};
 		btnsCard[btnsCard.length] = {
-			text : 'Сохранить',
-			action : 'save'
+			text: 'Сохранить',
+			action: 'save'
 		};
 		btnsCard[btnsCard.length] = {
-			text : 'Удалить',
-			action : 'delete'
+			text: 'Удалить',
+			action: 'delete'
 		};
 		btnsCard[btnsCard.length] = {
-			text : 'Регистрация',
-			action : 'register'
+			text: 'Регистрация',
+			action: 'register'
 		}
 
 		var title = Ext.create('qqext.view.VTitleBar', {
-					region : 'north',
-					buttons : btnsCard
-				});
+			region: 'north',
+			buttons: btnsCard
+		});
 		var leftCardMenu = Ext.create('qqext.view.VLeftMenu', {
-					region : 'west'
-				});
+			region: 'west'
+		});
 
 		var mainCont = Ext.create('qqext.view.reg.VRegForm', {
-					region : 'center'
-				});
+			region: 'center'
+		});
 		me.getApplication().getController('qqext.controller.LeftMenu').currentQueryFormSection = 'REGISTRATION';
 		me.getVp().add(title, leftCardMenu, mainCont);
 		me.initNewModel();
 	},
-	clearSearch : function() {
+	clearSearch: function() {
 		var me = this;
 		var currentMainContCls = me.getMainCont().$className;
 		console.log('currentMainContCls: ' + currentMainContCls);
@@ -125,7 +123,7 @@ Ext.define('qqext.controller.TitleMenu', {
 				break;
 		}
 	},
-	startSearch : function() {
+	startSearch: function() {
 		var model = this.getSearchParams();
 		var mainCont = this.getMainCont();
 		switch (mainCont.$className) {
@@ -135,10 +133,10 @@ Ext.define('qqext.controller.TitleMenu', {
 				Ext.data.writer.Json
 						.dropNullsAndUndefinedFields(dataWithoutNulls);
 				Ext.getStore('searchResults').load({
-							params : {
-								q : Ext.encode(dataWithoutNulls)
-							}
-						});
+					params: {
+						q: Ext.encode(dataWithoutNulls)
+					}
+				});
 				break;
 			case 'qqext.view.journal.VJournalForm' :
 				Ext.getStore('journal').reload();

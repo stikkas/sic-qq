@@ -5,6 +5,7 @@
  * @author С. Благодатских
  */
 Ext.define('qqext.button.ToolButton', {
+	alias: 'ToolButton',
 	extend: 'Ext.button.Button',
 	xtype: 'toolbutton',
 	cls: 'tool-btn',

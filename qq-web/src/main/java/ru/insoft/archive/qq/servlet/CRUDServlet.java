@@ -11,42 +11,36 @@ import ru.insoft.archive.extcommons.servlet.AbstractServlet;
 
 /**
  * Абстрактный класс для обработки операций CRUD для конкретного объекта.
- * 
+ *
  * @author sorokin
- * 
+ *
  */
 public abstract class CRUDServlet extends AbstractServlet {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -1204272940137400579L;
 
 	@Override
 	protected void handleRequest(HttpServletRequest req,
-			HttpServletResponse resp) throws Exception {
+		HttpServletResponse resp) throws Exception {
 		String rawData = readRequestData(req);
 		JsonObjectBuilder obdr = Json.createObjectBuilder();
 		try {
 			if (jsonTools.isJsonArray(rawData)) {
-				JsonArray arr = jsonTools.getJsonArray(rawData);
-				JsonArray r = handleArray(arr);
-				obdr.add("success", true);
-				obdr.add("msg", "Операция выполнена успешно");
-				obdr.add("data", r);
+				obdr.add("data", handleArray(jsonTools.getJsonArray(rawData)));
 			} else {
-				JsonObject obj = jsonTools.getJsonObject(rawData);
-				JsonObject r = handleObject(obj);
-				obdr.add("success", true);
-				obdr.add("msg", "Операция выполнена успешно");
-				obdr.add("data", r);
+				obdr.add("data", handleObject(jsonTools.getJsonObject(rawData)));
 			}
+			obdr.add("success", true);
+			obdr.add("msg", "Операция выполнена успешно");
 		} catch (Exception e) {
 			obdr.add("success", false);
-			if (e.getMessage()!=null){
+			if (e.getMessage() != null) {
 				obdr.add("msg", e.getMessage());
 			}
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 		resp.getWriter().write(obdr.build().toString());
 	}

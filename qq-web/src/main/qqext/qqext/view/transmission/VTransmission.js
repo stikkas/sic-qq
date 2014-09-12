@@ -12,6 +12,8 @@ Ext.define('qqext.view.transmission.VTransmission', {
 		'qqext.factory.TextField',
 		'qqext.cmp.FieldContainer',
 		'qqext.cmp.FieldSet',
+		'qqext.button.ToolButton',
+		'qqext.view.menu.HButtonMenu',
 		'qqext.Menu'
 	],
 	title: 'Передача на исполнение',
@@ -114,11 +116,12 @@ Ext.define('qqext.view.transmission.VTransmission', {
 					]
 				})
 			],
-			menus: ns.createHButtonMenu([
+			menus: createCmp('HButtonMenu', [
 				{text: labels.edit, action: edit},
 				{text: labels.save, action: save},
 				{text: labels.remove, action: remove},
-				{text: labels.register, action: book}])
+				{text: labels.register, action: book}],
+					'ToolButton')
 		});
 		this.callParent(arguments);
 		ns.Menu.editReqMenu.insert(2, this.menus);

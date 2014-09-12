@@ -1,6 +1,5 @@
 Ext.define('qqext.model.qq.Transmission', {
 	alias: 'TransmissionModel',
-	requires: ['qqext.model.qq.Question'],
 	extend: 'Ext.data.Model',
 	idProperty: 'id',
 	clientIdProperty: 'cliId',
@@ -46,7 +45,10 @@ Ext.define('qqext.model.qq.Transmission', {
 			name: 'storageName',
 			type: 'string'
 		}],
-	belongsTo: 'QuestionModel',
+	associations: {
+		type: 'belongsTo',
+		model: 'qqext.model.qq.Question'
+	},
 	proxy: {
 		type: 'ajax',
 		url: 'api/Transmission',

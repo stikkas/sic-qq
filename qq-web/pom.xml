@@ -12,6 +12,18 @@
 	</properties>
 	<dependencies>
 		<dependency>
+			<groupId>ru.insoft.archive</groupId>
+			<artifactId>ext-commons</artifactId>
+			<version>0.1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxrs</artifactId>
+			<version>2.3.2.Final</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-web-api</artifactId>
 			<version>6.0</version>

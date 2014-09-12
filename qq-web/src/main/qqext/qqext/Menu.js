@@ -13,7 +13,6 @@ Ext.define('qqext.Menu', {
 		'qqext.button.ArticleButton',
 		'qqext.model.qq.Notification',
 		'qqext.model.qq.Applicant',
-		'qqext.model.qq.Transmission',
 		'qqext.model.qq.ExecutionInfo',
 		'qqext.model.qq.WayToSend',
 		'qqext.model.qq.SearchCritery'
@@ -78,7 +77,7 @@ Ext.define('qqext.Menu', {
 		setEditMenu: function(idx) {
 			var menus = qqext.Menu;
 			if (idx < 3)
-				menus._layout1.setActiveItem(menus._forms[idx])
+				menus._layout1.setActiveItem(menus._forms[idx]);
 			else {
 				menus._layout1.setActiveItem(1);
 				menus._layout2.setActiveItem(menus._forms[idx]);
@@ -114,36 +113,37 @@ Ext.define('qqext.Menu', {
 					//меню редактирования при выбранных разделах: 'Уведомления заявителю'
 
 					// меню редактирования при выбранных подразделах: 'ЖВК', 'Поиск', 'Отчетные документы'
-					searchEdit = ns.createHButtonMenu([
+					searchEdit = createCmp('HButtonMenu', [
 						{text: labels.add, action: add, name: btns.add},
 						{text: labels.search, action: find},
 						{text: labels.clean, action: clear}
-					]),
+					], 'ToolButton'),
 					// меню с подразделами поиска (основное)
-					searchMenu = createVButtonMenu([
+					searchMenu = createCmp('VButtonMenu', [
 						{text: labels.jvk, action: jvk, name: btns.jvk},
 						{text: labels.search, action: search, name: btns.search},
 						{text: labels.reports, action: documents}
-					]),
+					], 'ArticleButton'),
 					// меню с подразделами запроса
-					requestMenu = createVButtonMenu([
+					requestMenu = createCmp('VButtonMenu', [
 						{text: labels.reqRegister, action: regRequest, name: btns.reg},
 						{text: labels.reqNotify, action: notifyRequestor, name: btns.notify},
 						{text: labels.transToComplete, action: transmitToComplete, name: btns.trans},
 						{text: labels.complete, action: toComplete, name: btns.exec}
-					]);
+					], 'ArticleButton');
 
-			menus.navigation = ns.createHButtonMenu([
+			menus.navigation = createCmp('HButtonMenu', [
 				{text: labels.toBegin, action: toStartPage},
 				{text: labels.quit, action: ns.quitAction}
-			]);
+			], 'ToolButton');
 			// Инициализация пустого меню для редактирвания в режиме работы с запросом
 			menus.editReqMenu = createCardMenuPanel([]);
 			menus.editMenu = createCardMenuPanel([searchEdit,
 				// Меню с кнопкой "Вернуться в поиск" и различными меню для редактирования
 				createCmp('Ext.panel.Panel', {
 					layout: 'hbox',
-					items: [ns.createHButtonMenu([{text: labels.toSearch, action: returnToSearch}]),
+					items: [createCmp('HButtonMenu', [{text: labels.toSearch, action: returnToSearch,
+								name: btns.toSearch}], 'ToolButton'),
 						menus.editReqMenu]
 				})]);
 			menus.articleMenu = createCardMenuPanel([searchMenu, requestMenu]);
@@ -167,17 +167,6 @@ Ext.define('qqext.Menu', {
 					activeItem: 0,
 					items: menus
 				});
-			}
-
-			/**
-			 * Создает меню с вертикально расположенными кнопками
-			 * @private
-			 * @param {Array} buttons набор кнопок
-			 * @returns {qqext.view.menu.VButtonMenu} меню
-			 */
-			function createVButtonMenu(buttons) {
-				return createCmp('qqext.view.menu.VButtonMenu',
-						buttons, 'qqext.button.ArticleButton');
 			}
 
 			/**
@@ -282,7 +271,6 @@ Ext.define('qqext.Menu', {
 							notify = model.getNotification();
 
 					if (!notify) {
-						console.debug('model.getNotification undefined, creating new instance');
 						var n = createCmp('qqext.model.qq.Notification');
 						model.setNotification(n);
 						ns.notifyForm.loadRecord(n);

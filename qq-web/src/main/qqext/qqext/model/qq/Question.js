@@ -6,8 +6,8 @@ Ext.define('qqext.model.qq.Question', {
 	extend: 'Ext.data.Model',
 	requires: [
 		'qqext.model.qq.Transmission',
-		'Ext.data.AbstractStore',
 		'qqext.model.qq.Applicant',
+		'Ext.data.AbstractStore',
 		'qqext.model.qq.AttachedFile',
 		'qqext.model.qq.Notification',
 		'qqext.model.qq.ExecutionInfo',
@@ -18,173 +18,57 @@ Ext.define('qqext.model.qq.Question', {
 		'qqext.model.qq.WayToSend'
 	],
 	idProperty: 'id',
-	clientIdProperty: 'cliId',
+//	clientIdProperty: 'cliId',
 	fields: [
-		{name: 'cliId', type: 'string'},
-		{name: 'id', type: 'int',
-			defaultValue: null, convert: null},
+//		{name: 'cliId', type: 'string'},
+		{name: 'id', type: 'int', defaultValue: null, convert: null},
+		{name: 'insertDate', type: 'date'},
+		{name: 'updateDate', type: 'date'},
+		{name: 'status', type: 'int', defaultValue: null, convert: null},
+		{name: 'createOrg', type: 'int', defaultValue: null, convert: null},
+		{name: 'litera', type: 'int', defaultValue: null, convert: null},
 		{name: 'inboxNum', type: 'string'},
-		{name: 'status', type: 'int',
-			defaultValue: null, convert: null},
 		{name: 'regDate', type: 'date'},
-		{name: 'litera', type: 'int',
-			defaultValue: null, convert: null},
-		{name: 'transferType', type: 'int',
-			defaultValue: null, convert: null},
-		{name: 'execOrg', type: 'int',
-			defaultValue: null, convert: null},
-		{name: 'registrator', type: 'int',
-			defaultValue: null, convert: null},
-		{name: 'questionType', type: 'int',
-			defaultValue: null, convert: null},
+		{name: 'transferType', type: 'int', defaultValue: null, convert: null},
+		{name: 'execOrg', type: 'int', defaultValue: null, convert: null},
+		{name: 'insertUser', type: 'int', defaultValue: null, convert: null},
+		{name: 'updateUser', type: 'int', defaultValue: null, convert: null},
+		{name: 'questionType', type: 'int', defaultValue: null, convert: null},
+		{name: 'registrator', type: 'int', defaultValue: null, convert: null},
 		{name: 'plannedFinishDate', type: 'date'},
-		{name: 'content', type: 'string',
-			defaultValue: null},
-		{name: 'answerFormType', type: 'int',
-			defaultValue: null, convert: null},
-		{name: 'motivatedRefusal', type: 'boolean',
-			defaultValue: false, convert: null},
-		{name: 'requestObjectSurname', type: 'string',
-			defaultValue: null, convert: null},
-		{name: 'requestObjectName', type: 'string',
-			defaultValue: null, convert: null},
-		{name: 'requestFatherName', type: 'string'},
-		{name: 'request_object_birthyear', type: 'int',
-			defaultValue: null, convert: null},
-		{name: 'createOrg', type: 'int',
-			defaultValue: null, convert: null}
+		{name: 'content', type: 'string', defaultValue: null},
+		{name: 'answerFormType', type: 'int', defaultValue: null, convert: null},
+		{name: 'motivatedRefusal', type: 'boolean', defaultValue: false, convert: null},
+		{name: 'objectLName', type: 'string', defaultValue: null, convert: null},
+		{name: 'objectFName', type: 'string', defaultValue: null, convert: null},
+		{name: 'objectMName', type: 'string', defaultValue: null, convert: null},
+		{name: 'objectBirthYear', type: 'int', defaultValue: null, convert: null}
 	],
 	associations: [
-		{
-			type: 'hasOne',
-			model: 'qqext.model.qq.Transmission',
-			setterName: 'setTransmission',
-			getterName: 'getTransmission',
-			primaryKey: 'id',
-			name: 'transmission',
-			foreignKey: 'transmission',
-			associationKey: 'transmission'
-		}, {
-			type: 'hasOne',
-			model: 'qqext.model.qq.Applicant',
-			setterName: 'setApplicant',
-			getterName: 'getApplicant',
-			primaryKey: 'id',
-			name: 'applicant',
-			foreignKey: 'applicant',
-			associationKey: 'applicant'
-		}, {
-			type: 'hasMany',
-			model: 'qqext.model.qq.AttachedFile',
-			setterName: 'setFiles',
-			getterName: 'getFiles',
-			primaryKey: 'id',
-			name: 'files',
-			foreignKey: 'q',
-			associationKey: 'files'
-		}, {
-			type: 'hasOne',
-			model: 'qqext.model.qq.Notification',
-			setterName: 'setNotification',
-			getterName: 'getNotification',
-			primaryKey: 'id',
-			name: 'notify',
-			foreignKey: 'notify',
-			associationKey: 'notify'
-		}, {
-			type: 'hasOne',
-			model: 'qqext.model.qq.ExecutionInfo',
-			setterName: 'setExecutionInfo',
-			getterName: 'getExecutionInfo',
-			primaryKey: 'id',
-			name: 'execInfo',
-			foreignKey: 'q',
-			associationKey: 'execInfo'
-		}, {
-			type: 'hasMany',
-			model: 'qqext.model.qq.DeliveryAction',
-			primaryKey: 'id',
-			name: 'delActions',
-			foreignKey: 'q',
-			associationKey: 'delActions'
-		}, {
-			type: 'hasMany',
-			model: 'qqext.model.qq.UsedMaterial',
-			primaryKey: 'id',
-			name: 'usedMaterials',
-			foreignKey: 'q',
-			associationKey: 'usedMaterials'
-		}, {
-			type: 'hasMany',
-			model: 'qqext.model.qq.Coordination',
-			primaryKey: 'id',
-			name: 'coordinations',
-			foreignKey: 'q',
-			associationKey: 'coordinations'
-		}, {
-			type: 'hasMany',
-			model: 'qqext.model.qq.SendAction',
-			primaryKey: 'id',
-			name: 'sendActions',
-			foreignKey: 'q',
-			associationKey: 'sendActions'
-		}, {
-			type: 'hasOne',
-			model: 'qqext.model.qq.WayToSend',
-			setterName: 'setWayToSend',
-			getterName: 'getWayToSend',
-			primaryKey: 'id',
-			name: 'wayToSend',
-			foreignKey: 'q',
-			associationKey: 'wayToSend'
-		}],
-	proxy: {
-		type: 'rest',
-		url: '/qq-web/rest/questionmodel',
-		reader: {
-			type: 'json'
-//			rootProperty: 'data'
-		},
-		writer: {
-			type: 'json'
-		}
-	},
-	listeners: {
-		write: function() {
-			console.log(arguments);
-			/*
-			 var record = operation.getRecords()[0],
-			 name = Ext.String.capitalize(operation.action),
-			 verb;
-
-
-			 if (name == 'Destroy') {
-			 verb = 'Destroyed';
-			 } else {
-			 verb = name + 'd';
-			 }
-			 Ext.example.msg(name, Ext.String.format("{0} user: {1}", verb, record.getId()));
-			 */
-
-		}
+		{type: 'hasOne', model: 'qqext.model.qq.Transmission',
+			name: 'transmission', foreignKey: 'id'},
+		{type: 'hasOne', model: 'qqext.model.qq.Applicant',
+			name: 'applicant', foreignKey: 'id'},
+		{type: 'hasMany', model: 'qqext.model.qq.AttachedFile',
+			name: 'files', foreignKey: 'question'},
+		{type: 'hasOne', model: 'qqext.model.qq.Notification',
+			name: 'notification', foreignKey: 'id'},
+		{type: 'hasOne', model: 'qqext.model.qq.ExecutionInfo',
+			name: 'execInfo', foreignKey: 'id'},
+		{type: 'hasMany', model: 'qqext.model.qq.DeliveryAction',
+			name: 'delActions', foreignKey: 'question'},
+		{type: 'hasMany', model: 'qqext.model.qq.UsedMaterial',
+			name: 'usedMaterials', foreignKey: 'question'},
+		{type: 'hasMany', model: 'qqext.model.qq.Coordination',
+			name: 'coordinations', foreignKey: 'question'},
+		{type: 'hasMany', model: 'qqext.model.qq.SendAction',
+			name: 'sendActions', foreignKey: 'question'},
+		{type: 'hasOne', model: 'qqext.model.qq.WayToSend',
+			name: 'wayToSend', foreignKey: 'id'}
+	],
+	mixins: ['qqext.qq.model.RestProxy'],
+	constructor: function() {
+		this.proxy.url += 'question';
+		this.callParent(arguments);
 	}
-	/*
-	 proxy: {
-	 type: 'ajax',
-	 url: 'api/Question',
-	 api: {
-	 create: 'api/Question',
-	 read: 'api/Question',
-	 update: 'api/Question',
-	 destroy: 'api/Question'
-	 },
-	 reader: {
-	 type: 'json',
-	 root: 'data',
-	 messageProperty: 'msg',
-	 successProperty: 'success'
-	 },
-	 writer: {type: 'json'}
-	 }
-	 */
 });

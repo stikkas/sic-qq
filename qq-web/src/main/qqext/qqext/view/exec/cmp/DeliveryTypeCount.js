@@ -15,25 +15,26 @@ Ext.define('qqext.view.exec.cmp.DeliveryTypeCount', {
 	height: 40,
 	width: 600,
 	loadRecord: function(model) {
-		this.items.getAt(0).setValue(model.get('docType'));
-		this.items.getAt(1).setValue(model.get('numOfDocs'));
+		this.items.getAt(0).setValue(model.get(qqext.delAction.type[0]));
+		this.items.getAt(1).setValue(model.get(qqext.delAction.count[0]));
 	},
 	updateRecord: function(model) {
-		model.set('docType', this.items.getAt(0).getValue());
-		model.set('numOfDocs', this.items.getAt(1).getValue())
+		model.set(qqext.delAction.type[0], this.items.getAt(0).getValue());
+		model.set(qqext.delAction.count[0], this.items.getAt(1).getValue())
 	},
 	initComponent: function() {
 		var me = this,
-				createCmp = Ext.create;
+				createCmp = Ext.create,
+				del = qqext.delAction;
 		Ext.applyIf(me, {
 			items: [
-				createCmp('FComboBox', 'Тип документов', 'docType', {
+				createCmp('FComboBox', del.type[1], del.type[0], {
 					editable: false,
 					labelWidth: 100,
 					width: 250,
 					height: 22
 				}),
-				createCmp('FNumberField', 'Количество документов', {
+				createCmp('FNumberField', del.count[1], del.count[0], {
 					labelAlign: 'right',
 					hideTrigger: true,
 					width: 230,

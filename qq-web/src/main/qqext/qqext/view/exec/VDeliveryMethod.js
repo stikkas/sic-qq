@@ -20,8 +20,8 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 	minHeight: 60,
 	comboTrashConfig: {
 		store: 'answerForm',
-		comboLabel: 'Способ отправки',
-		dateLabel: 'Дата'
+		comboLabel: qqext.sendAction.type[1],
+		dateLabel: qqext.sendAction.date[1]
 	},
 	remove: function() {
 		var me = this;
@@ -62,19 +62,20 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 	},
 	initComponent: function() {
 		var me = this,
-				createCmp = Ext.create;
+				createCmp = Ext.create,
+				way = qqext.wayToSend;
 
 		Ext.apply(me, {
 			items: [
 				createCmp('FHandlerButton', 'add', function() {
 					var t = createCmp('ComboDateTrash', me.comboTrashConfig);
 					me.insert(me.items.length - 5, t);
-					me.mOdel.sendActions().add(createCmp('qqext.model.qq.SendAction'));
+					me.mOdel.sendActions().add(createCmp('SendActionModel'));
 				}),
 				createCmp('Ext.Component', {autoEl: 'hr'}),
-				createCmp('FDateField', 'Уведомление о переносе сроков', 'renewalNotice'),
-				createCmp('FTextField', 'Исходящий №', 'ref_num'),
-				createCmp('FTextArea', 'Примечание', 'note', {
+				createCmp('FDateField', way.notice[1], way.notice[0]),
+				createCmp('FTextField', way.number[1], way.number[0]),
+				createCmp('FTextArea', way.remark[1], way.remark[0], {
 					width: 600,
 					labelWidth: 100
 				}),

@@ -7,14 +7,14 @@ import ru.insoft.archive.extcommons.json.JsonIn;
 import ru.insoft.archive.extcommons.json.JsonOut;
 import ru.insoft.archive.qq.model.Applicant;
 import ru.insoft.archive.qq.model.ExecutionInfo;
-import ru.insoft.archive.qq.model.Question;
+import ru.insoft.archive.qq.model.QuestionModel;
 
 /**
  * @author sorokin
  */
 public class SearchResultItem extends QuestionInfoItem implements JsonOut, JsonIn {
 
-	public SearchResultItem(Question q) {
+	public SearchResultItem(QuestionModel q) {
 		super(q);
 
 		ExecutionInfo ei = q.getExecInfo();

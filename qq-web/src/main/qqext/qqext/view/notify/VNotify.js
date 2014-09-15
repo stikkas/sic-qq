@@ -40,17 +40,19 @@ Ext.define('qqext.view.notify.VNotify', {
 				ns = qqext,
 				createCmp = Ext.create,
 				labels = ns.labels,
+				notf = ns.notification,
 				menus = createCmp('HButtonMenu', [
 					{text: labels.save, action: saveNotify},
 					{text: labels.edit, action: editNotify}
 				], 'ToolButton');
 
+
 		Ext.applyIf(me, {
 			items: [
-				createCmp('FComboBox', 'ФИО исполнителя', 'allUsers', 'executor'),
-				createCmp('FComboBox', 'Тип документов', 'docType', 'docType'),
-				createCmp('FComboBox', 'Способ передачи', 'answerForm', 'deliveryType'),
-				createCmp('FDateField', 'Дата уведомления', 'notificationDate')
+				createCmp('FComboBox', notf.executor[1], 'allUsers', notf.executor[0]),
+				createCmp('FComboBox', notf.docType[1], 'docType', notf.docType[0]),
+				createCmp('FComboBox', notf.deliveryType[1], 'answerForm', notf.deliveryType[0]),
+				createCmp('FDateField', notf.notificationDate[1], notf.notificationDate[0])
 			],
 			menus: menus
 		});

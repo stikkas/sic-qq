@@ -48,13 +48,14 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 	},
 	initComponent: function() {
 		var me = this,
-				createCmp = Ext.create;
+				createCmp = Ext.create,
+				mat = qqext.usedMaterial;
 		var addButton = createCmp('FHandlerButton', 'add',
 				function() {
 					var old = me.getHeight();
 					var addComp = createCmp('qqext.view.exec.cmp.DeliveryTypeCount');
 					this.ownerCt.insert(this.ownerCt.items.length - 1, addComp);
-					var tm = createCmp('qqext.model.qq.DeliveryAction');
+					var tm = createCmp('DeliveryActionModel');
 					me.mOdel.delActions().add(tm);
 				}
 		);
@@ -72,7 +73,7 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 					layout: 'hbox',
 					items: [
 						createCmp('FHandlerButton', 'add', function() {
-							usedMaterialGrid.getStore().add(createCmp('qqext.model.qq.UsedMaterial'));
+							usedMaterialGrid.getStore().add(createCmp('UsedMaterialModel'));
 						}),
 						createCmp('FHandlerButton', 'del', function() {
 							var sm = usedMaterialGrid
@@ -97,25 +98,31 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 				})],
 			columns: [
 				{
-					text: '№ фонда',
-					dataIndex: 'fundNum',
+					text: mat.fond[1],
+					dataIndex: mat.fond[0],
 					editor: {xtype: 'textfieldcmp'}
 				},
 				{
-					text: '№ описи',
-					dataIndex: 'seriesNum',
+					text: mat.opis[1],
+					dataIndex: mat.opis[0],
 					editor: {xtype: 'textfieldcmp'}
 				},
 				{
-					text: '№ ед. хранения',
-					dataIndex: 'storageUnitNum',
+					text: mat.storage[1],
+					dataIndex: mat.storage[0],
 					editor: {xtype: 'textfieldcmp'}
 				},
 				{
-					text: '№ листов',
-					dataIndex: 'listNum',
+					text: mat.pages[1],
+					dataIndex: mat.pages[0],
+					editor: {xtype: 'textfieldcmp'}
+				},
+				{
+					text: mat.remark[1],
+					dataIndex: mat.remark[0],
 					editor: {xtype: 'textfieldcmp'}
 				}
+
 			]
 		});
 

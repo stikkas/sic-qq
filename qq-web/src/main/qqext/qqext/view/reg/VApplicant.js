@@ -19,17 +19,18 @@ Ext.define('qqext.view.reg.VApplicant', {
 		var
 				me = this,
 				ns = qqext,
-				applicants = ns.applicants,
+				applicant = ns.applicant,
 				createCmp = Ext.create,
-				surname = createCmp('FTextField', applicants.surname[1], applicants.surname[0]),
-				name = createCmp('FTextField', applicants.name[1], applicants.name[0]),
-				fatherName = createCmp('FTextField', applicants.fatherName[1], applicants.fatherName[0]),
-				org = createCmp('FTextArea', applicants.applicantObject[1], applicants.applicantObject[0],
+				surname = createCmp('FTextField', applicant.lastName[1], applicant.lastName[0]),
+				name = createCmp('FTextField', applicant.firstName[1], applicant.firstName[0]),
+				fatherName = createCmp('FTextField', applicant.middleName[1], applicant.middleName[0]),
+				org = createCmp('FTextArea', applicant.organization[1], applicant.organization[0],
 						{width: 400});
+
 		Ext.applyIf(me, {
 			items: [
-				createCmp('FComboBox', applicants.applicantType[1],
-						applicants.applicantType[0], applicants.applicantType[0], {
+				createCmp('FComboBox', applicant.applicantType[1],
+						applicant.applicantType[0], applicant.applicantType[0], {
 					listeners: {
 						select: function change(cb, selected) {
 							if (!change.remove) {
@@ -56,25 +57,25 @@ Ext.define('qqext.view.reg.VApplicant', {
 						}
 					}
 				}),
-				createCmp('FComboBox', applicants.applicantCategory[1],
-						applicants.applicantCategory[0], applicants.applicantCategory[0]),
-				createCmp('FTextField', applicants.country[1], applicants.country[0]),
-				createCmp('FTextField', applicants.address[1], applicants.address[0]),
-				createCmp('FTextField', applicants.phone[1], applicants.phone[0]),
+				createCmp('FComboBox', applicant.applicantCategory[1],
+						applicant.applicantCategory[0], applicant.applicantCategory[0]),
+				createCmp('FTextField', applicant.country[1], applicant.country[0]),
+				createCmp('FTextField', applicant.address[1], applicant.address[0]),
+				createCmp('FTextField', applicant.phone[1], applicant.phone[0]),
 				createCmp('FieldSet', {
 					title: 'Дополнительные сведения',
 					collapsible: true,
 					items: [
-						createCmp('FTextField', applicants.inboxDocNum[1], applicants.inboxDocNum[0], {
+						createCmp('FTextField', applicant.issueDocNum[1], applicant.issueDocNum[0], {
 							width: 200
 						}),
-						createCmp('FDateField', applicants.inboxDocDate[1], applicants.inboxDocDate[0], {
+						createCmp('FDateField', applicant.issueDocDate[1], applicant.issueDocDate[0], {
 							width: 200
 						}),
-						createCmp('FTextField', applicants.nameOfJurPerson[1], applicants.nameOfJurPerson[0], {
+						createCmp('FTextField', applicant.fioJurPerson[1], applicant.fioJurPerson[0], {
 							width: 300
 						}),
-						createCmp('FTextField', applicants.addendum[1], applicants.addendum[0], {
+						createCmp('FTextField', applicant.appends[1], applicant.appends[0], {
 							width: 350
 						})
 					]

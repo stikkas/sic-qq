@@ -17,7 +17,7 @@
 	</module>
 
 	<module>
-		<ejb>ext-commons-0.0.8.jar</ejb>
+		<ejb>ext-commons-0.1.0.jar</ejb>
 	</module>
 	<library-directory>lib/</library-directory>
 </application>

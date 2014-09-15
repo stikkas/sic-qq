@@ -3,27 +3,29 @@
  * "Исполнение запроса"
  */
 
-Ext.define('qqext.model.qq.Coordination', {
-	alias: 'CoordinationModel',
-	extend: 'Ext.data.Model',
-	idProperty: 'id',
-	clientIdProperty: 'cliId',
-	fields: [{
-			name: 'cliId',
-			type: 'string'
-		}, {
-			name: 'id',
-			type: 'int'
-		}, {
-			name: 'q',
-			type: 'int'
-		}, {
-			name: 'stage',
-			type: 'int',
-			defaultValue: null,
-			convert: null
-		}, {
-			name: 'stageDate',
-			type: 'date'
-		}]
-});
+Ext.define('qqext.model.qq.Coordination', (function() {
+	var ns = Ext.ns('qqext'),
+			coor = ns.coordination = {
+				stage: ['stage', 'Этап согласования документа'],
+				date: ['stageDate', 'Дата']
+			};
+	return {
+		alias: 'CoordinationModel',
+		extend: 'Ext.data.Model',
+		idProperty: 'id',
+//	clientIdProperty: 'cliId',
+		fields: [
+//		{name: 'cliId', type: 'string'},
+			{name: 'id', type: 'int'},
+			{name: 'question', type: 'int'},
+			{name: coor.stage[0], type: 'int', defaultValue: null, convert: null},
+			{name: coor.date[0], type: 'date'}
+		],
+		belongsTo: 'qqext.model.qq.Question',
+		mixins: ['qqext.qq.model.RestProxy'],
+		constructor: function() {
+			this.proxy.url += 'coordination';
+			this.callParent(arguments);
+		}
+	};
+})());

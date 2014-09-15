@@ -1,94 +1,48 @@
 Ext.define('qqext.model.qq.Applicant', (function() {
 	var ns = Ext.ns('qqext'),
-			applicants = ns.applicants = {
+			applicant = ns.applicant = {
 				applicantType: ['applicantType', 'Тип заявителя'],
-				applicantObject: ['applicantObject', 'Организация'],
-				name: ['name', 'Имя'],
-				surname: ['surname', 'Фамилия'],
-				fatherName: ['fatherName', 'Отчество'],
+				organization: ['organization', 'Организация'],
+				firstName: ['firstName', 'Имя'],
+				lastName: ['lastName', 'Фамилия'],
+				middleName: ['middleName', 'Отчество'],
 				birthYear: ['birthYear', 'Год рождения'],
 				applicantCategory: ['applicantCategory', 'Категория заявителя'],
 				country: ['country', 'Страна'],
 				address: ['address', 'Адрес'],
 				phone: ['phone', 'Телефон'],
-				inboxDocNum: ['inboxDocNum', '№ входящего документа'],
-				inboxDocDate: ['inboxDocDate', 'Дата'],
-				nameOfJurPerson: ['nameOfJurPerson', 'ФИО юр. лица (кто подписал)'],
-				addendum: ['addendum', 'Приложения']};
+				issueDocNum: ['issueDocNum', '№ входящего документа'],
+				issueDocDate: ['issueDocDate', 'Дата'],
+				fioJurPerson: ['fioJurPerson', 'ФИО юр. лица (кто подписал)'],
+				appends: ['appends', 'Приложения']};
 	return {
 		alias: 'ApplicantModel',
 		extend: 'Ext.data.Model',
 		idProperty: 'id',
-		clientIdProperty: 'cliId',
-		fields: [{
-				name: 'id',
-				type: 'int',
-				defaultValue: null,
-				convert: null
-			}, {
-				name: 'cliId',
-				type: 'string'
-			}, {
-				name: applicants.applicantType[0],
-				type: 'int',
-				defaultValue: null,
-				convert: null
-			}, {
-				name: applicants.applicantObject[0],
-				type: 'string'
-			}, {
-				name: applicants.name[0],
-				type: 'string'
-			}, {
-				name: applicants.surname[0],
-				type: 'string'
-			}, {
-				name: applicants.fatherName[0],
-				type: 'string'
-			}, {
-				name: applicants.birthYear[0],
-				type: 'int',
-				defaultValue: null,
-				convert: null
-			}, {
-				name: applicants.applicantCategory[0],
-				type: 'int',
-				defaultValue: null,
-				convert: null
-			}, {
-				name: applicants.country[0],
-				type: 'string',
-				defaultValue: null,
-				convert: null
-			}, {
-				name: applicants.address[0],
-				type: 'string',
-				defaultValue: null,
-				convert: null
-			}, {
-				name: applicants.phone[0],
-				type: 'string',
-				defaultValue: null,
-				convert: null
-			}, {
-				name: applicants.inboxDocNum[0],
-				type: 'string',
-				defaultValue: null,
-				convert: null
-			}, {
-				name: applicants.inboxDocDate[0],
-				type: 'date'
-
-			}, {
-				name: applicants.nameOfJurPerson[0],
-				type: 'string',
-				defaultValue: null,
-				convert: null
-			}, {
-				name: applicants.addendum[0],
-				type: 'string',
-				defaultValue: null,
-				convert: null
-			}]
+//		clientIdProperty: 'cliId',
+		fields: [
+			{name: 'id', type: 'int', defaultValue: null, convert: null},
+//			{ name: 'cliId', type: 'string' },
+			{name: applicant.applicantType[0], type: 'int', defaultValue: null, convert: null},
+			{name: applicant.organization[0], type: 'string'},
+			{name: applicant.firstName[0], type: 'string'},
+			{name: applicant.lastName[0], type: 'string'},
+			{name: applicant.middleName[0], type: 'string'},
+			{name: applicant.birthYear[0], type: 'int', defaultValue: null, convert: null},
+			{name: applicant.applicantCategory[0], type: 'int', defaultValue: null, convert: null},
+			{name: applicant.country[0], type: 'string', defaultValue: null, convert: null},
+			{name: applicant.address[0], type: 'string', defaultValue: null, convert: null},
+			{name: applicant.phone[0], type: 'string', defaultValue: null, convert: null},
+			{name: applicant.issueDocNum[0], type: 'string', defaultValue: null, convert: null},
+			{name: applicant.issueDocDate[0], type: 'date'},
+			{name: applicant.fioJurPerson[0], type: 'string', defaultValue: null, convert: null},
+			{name: applicant.appends[0], type: 'string', defaultValue: null, convert: null}
+		],
+		belongsTo: 'qqext.model.qq.Question',
+		mixins: ['qqext.qq.model.RestProxy'],
+		constructor: function() {
+			this.proxy.url += 'applicant';
+			this.callParent(arguments);
+		}
 	};
 })());

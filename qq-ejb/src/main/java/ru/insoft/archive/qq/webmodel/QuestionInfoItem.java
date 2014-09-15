@@ -5,13 +5,13 @@ import java.util.Date;
 import ru.insoft.archive.core_model.table.desc.DescriptorValue;
 import ru.insoft.archive.core_model.view.desc.VDescAttrValue;
 import ru.insoft.archive.qq.model.Applicant;
-import ru.insoft.archive.qq.model.Question;
+import ru.insoft.archive.qq.model.QuestionModel;
 
 public class QuestionInfoItem {
 
 	
 	
-	public QuestionInfoItem(Question q){
+	public QuestionInfoItem(QuestionModel q){
 		this.id = q.getId();
 		
 		DescriptorValue createOrg = q.getLitera();

@@ -79,6 +79,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 				ns = qqext,
 				labels = ns.labels,
 				createCmp = Ext.create,
+				trans = ns.transmission,
 				configForDate = {
 					labelAlign: 'right',
 					margin: '6 0 0 0'
@@ -91,28 +92,31 @@ Ext.define('qqext.view.transmission.VTransmission', {
 				createCmp('FieldContainer', {
 					layout: 'hbox',
 					items: [
-						createCmp('FComboBox', 'Ответственный за исполнение', 'allUsers',
-								'responsibleForExecution'),
-						createCmp('FDateField', 'Дата', 'responsibleForExecutionDate', configForDate)
+						createCmp('FComboBox', trans.bossExecutor[1], 'allUsers',
+								trans.bossExecutor[0]),
+						createCmp('FDateField', trans.bossExecutionDate[1], trans.bossExecutionDate[0],
+								configForDate)
 					]
 				}),
 				createCmp('FieldContainer', {
 					layout: 'hbox',
 					items: [
-						createCmp('FComboBox', 'ФИО исполнителя', 'allUsers', 'executorName'),
-						createCmp('FDateField', 'Дата', 'executorDate', configForDate)
+						createCmp('FComboBox', trans.executor[1], 'allUsers', trans.executor[0]),
+						createCmp('FDateField', trans.executionDate[1], trans.executionDate[0],
+								configForDate)
 					]
 				}),
-				createCmp('FCheckbox', 'Контроль', 'control'),
-				createCmp('FDateField', 'Контрольная дата исполнения', 'controlDateOfExecution'),
+				createCmp('FCheckbox', trans.control[1], trans.control[0]),
+				createCmp('FDateField', trans.controlDate[1], trans.controlDate[0]),
 				createCmp('FieldSet', {
 					collapsible: true,
 					title: 'Дополнительная информация',
 					layout: 'vbox',
 					items: [
-						createCmp('FTextField', 'Автор резолюции', 'resolutionAuthor'),
-						createCmp('FComboBox', 'Территория хранилища', 'storageTerritory', 'storageTerritory'),
-						createCmp('FTextField', 'Название хранилища', 'storageName')
+						createCmp('FTextField', trans.resolutionAuthor[1], trans.resolutionAuthor[0]),
+						createCmp('FComboBox', trans.storageTerritory[1], 'storageTerritory',
+								trans.storageTerritory[0]),
+						createCmp('FTextField', trans.storageName[1], trans.storageName[0])
 					]
 				})
 			],

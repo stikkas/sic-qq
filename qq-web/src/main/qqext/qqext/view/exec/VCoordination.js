@@ -20,8 +20,8 @@ Ext.define('qqext.view.exec.VCoordination', {
 	hideCollapseTool: true,
 	comboTrashConfig: {
 		store: 'coordinationStage',
-		comboLabel: 'Этап согласования документа',
-		dateLabel: 'Дата'
+		comboLabel: qqext.coordination.stage[1],
+		dateLabel: qqext.coordination.date[1]
 	},
 	mOdel: null,
 	initComponent: function() {
@@ -32,7 +32,7 @@ Ext.define('qqext.view.exec.VCoordination', {
 				createCmp('FHandlerButton', 'add', function() {
 					me.add(createCmp('ComboDateTrash',
 							me.comboTrashConfig));
-					me.mOdel.coordinations().add(createCmp('qqext.model.qq.Coordination'));
+					me.mOdel.coordinations().add(createCmp('CoordinationModel'));
 				})
 			]
 		});
@@ -42,9 +42,9 @@ Ext.define('qqext.view.exec.VCoordination', {
 		var me = this;
 		for (var i = 0; i < model.coordinations().getCount(); i++) {
 			var comp = me.items.getAt(i + 1);
-			model.coordinations().getAt(i).set('stage', comp.getComboValue());
+			model.coordinations().getAt(i).set(qqext.coordination.stage[0], comp.getComboValue());
 			model.coordinations().getAt(i)
-					.set('stageDate', comp.getDateValue());
+					.set(qqext.coordination.date[0], comp.getDateValue());
 		}
 	},
 	loadRecord: function(model) {
@@ -54,8 +54,8 @@ Ext.define('qqext.view.exec.VCoordination', {
 			var t = Ext.create('qqext.view.exec.cmp.ComboDateTrash',
 					me.comboTrashConfig);
 			me.add(t);
-			t.setComboValue(model.coordinations().getAt(i).get('stage'));
-			t.setDateValue(model.coordinations().getAt(i).get('stageDate'));
+			t.setComboValue(model.coordinations().getAt(i).get(qqext.coordination.stage[0]));
+			t.setDateValue(model.coordinations().getAt(i).get(qqext.coordination.date[0]));
 		}
 	},
 	remove: function() {

@@ -1,31 +1,27 @@
-Ext.define('qqext.model.qq.DeliveryAction', {
-	alias: 'DeliveryActionModel',
-	extend: 'Ext.data.Model',
-	idProperty: 'id',
-	clientIdProperty: 'cliId',
-	fields: [{
-			name: 'cliId',
-			type: 'string'
-		}, {
-			name: 'id',
-			type: 'int',
-			convert: null,
-			defaultValue: null
-		}, {
-			name: 'q',
-			type: 'int',
-			convert: null,
-			defaultValue: null
-		}, {
-			name: 'docType',
-			type: 'int',
-			convert: null,
-			defaultValue: null
+Ext.define('qqext.model.qq.DeliveryAction', (function() {
 
-		}, {
-			name: 'numOfDocs',
-			type: 'int',
-			convert: null,
-			defaultValue: null
-		}]
-});
+	var ns = Ext.ns('qqext'),
+			del = ns.delAction = {
+				type: ['docType', 'Тип документов'],
+				count: ['docCount', 'Количество документов']
+			};
+	return {
+		alias: 'DeliveryActionModel',
+		extend: 'Ext.data.Model',
+		idProperty: 'id',
+//	clientIdProperty: 'cliId',
+		fields: [
+//		{ name: 'cliId', type: 'string' },
+			{name: 'id', type: 'int', convert: null, defaultValue: null},
+			{name: 'question', type: 'int', convert: null, defaultValue: null},
+			{name: del.type[0], type: 'int', convert: null, defaultValue: null},
+			{name: del.count[0], type: 'int', convert: null, defaultValue: null}
+		],
+		belongsTo: 'qqext.model.qq.Question',
+		mixins: ['qqext.qq.model.RestProxy'],
+		constructor: function() {
+			this.proxy.url += 'deliveryaction';
+			this.callParent(arguments);
+		}
+	};
+})());

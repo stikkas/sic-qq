@@ -12,10 +12,13 @@ import ru.insoft.archive.core_model.table.adm.AdmUser;
 
 /**
  * Нужен для тестовых операций. Когда пользователь реально не залогинился, а
- * нужна информация о нем.
+ * нужна информация о нем. Отпала надобнасть.
+ *
+ * @deprecated Используйте {@link ru.insoft.archive.extcommons.ejb.UserInfo}
  *
  * @author С. Благодатских
  */
+@Deprecated
 @Stateless(name = "QQ_UserInfo")
 @LocalBean
 public class UserInfo implements Serializable {

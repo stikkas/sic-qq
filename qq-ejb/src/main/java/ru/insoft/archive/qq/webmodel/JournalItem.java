@@ -8,7 +8,7 @@ import java.util.Date;
 import ru.insoft.archive.core_model.table.desc.DescriptorValue;
 import ru.insoft.archive.extcommons.json.JsonOut;
 import ru.insoft.archive.qq.model.ExecutionInfo;
-import ru.insoft.archive.qq.model.Question;
+import ru.insoft.archive.qq.model.QuestionModel;
 import ru.insoft.archive.qq.model.Transmission;
 
 /**
@@ -16,7 +16,7 @@ import ru.insoft.archive.qq.model.Transmission;
  * 
  */
 public class JournalItem extends QuestionInfoItem implements JsonOut {
-	public JournalItem(Question q) {
+	public JournalItem(QuestionModel q) {
 		super(q);
 
 		ExecutionInfo ei = q.getExecInfo();

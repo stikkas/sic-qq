@@ -28,7 +28,7 @@ import ru.insoft.archive.extcommons.webmodel.FilterBy;
 import ru.insoft.archive.extcommons.webmodel.OrderBy;
 import ru.insoft.archive.qq.model.Applicant;
 import ru.insoft.archive.qq.model.ExecutionInfo;
-import ru.insoft.archive.qq.model.Question;
+import ru.insoft.archive.qq.model.QuestionModel;
 import ru.insoft.archive.qq.model.SearchCritery;
 import ru.insoft.archive.qq.model.Transmission;
 import ru.insoft.archive.qq.webmodel.JournalItem;
@@ -44,7 +44,7 @@ public class QQSearch extends LoggedBean {
 	private JsonTools jsonTools;
 
 	private Expression<Boolean> getLikeExp(String queryValue, String field,
-		Join<Question, Applicant> ro) {
+		Join<QuestionModel, Applicant> ro) {
 		queryValue = queryValue.toUpperCase();
 		queryValue += "%";
 		logger.info("value for like expression: " + queryValue);
@@ -57,8 +57,8 @@ public class QQSearch extends LoggedBean {
 	public JsonObject getJournalData(Integer start, Integer limit,
 		List<FilterBy> filters, List<OrderBy> orders) throws Exception {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<Question> criteriaQuery = cb.createQuery(Question.class);
-		Root<Question> root = criteriaQuery.from(Question.class);
+		CriteriaQuery<QuestionModel> criteriaQuery = cb.createQuery(QuestionModel.class);
+		Root<QuestionModel> root = criteriaQuery.from(QuestionModel.class);
 		ArrayList<Expression> expressions = new ArrayList<>();
 		if (filters != null) {
 			for (FilterBy fb : filters) {
@@ -88,7 +88,7 @@ public class QQSearch extends LoggedBean {
 						expressions.add(dateEqual);
 						break;
 					case "execDate":
-						Join<Question, ExecutionInfo> eiJoin = root
+						Join<QuestionModel, ExecutionInfo> eiJoin = root
 							.join("execInfo");
 						Date d2 = jsonTools.parseBadStringDate(fb.getValue().toString());
 						logger.info("Фильтр дата исполнения: " + d2);
@@ -98,7 +98,7 @@ public class QQSearch extends LoggedBean {
 						break;
 					case "fioOrg":
 						String applicant = (String) fb.getValue();
-						Join<Question, Applicant> aplJoin = root.join("applicant");
+						Join<QuestionModel, Applicant> aplJoin = root.join("applicant");
 						Expression<String> concat = cb.concat(
 							aplJoin.<String>get("surname"), " ");
 						concat = cb.concat(concat, aplJoin.<String>get("name"));
@@ -123,7 +123,7 @@ public class QQSearch extends LoggedBean {
 						break;
 					case "executor":
 						Long executor = (Long) fb.getValue();
-						Join<Question, Transmission> jTr = root
+						Join<QuestionModel, Transmission> jTr = root
 							.join("transmission");
 						Expression<Boolean> equalExecutor = cb.equal(
 							jTr.get("executorName").get("id"), executor);
@@ -141,7 +141,7 @@ public class QQSearch extends LoggedBean {
 				Order o = null;
 				switch (orderField) {
 					case "litera":
-						Join<Question, DescriptorValue> jj = root.join("litera", JoinType.LEFT);
+						Join<QuestionModel, DescriptorValue> jj = root.join("litera", JoinType.LEFT);
 						if (ou.asc()) {
 							o = cb.asc(jj.get("value"));
 						} else {
@@ -166,7 +166,7 @@ public class QQSearch extends LoggedBean {
 						jpaOrders.add(o);
 						break;
 					case "execDate":
-						Join<Question, ExecutionInfo> eiJoin = root
+						Join<QuestionModel, ExecutionInfo> eiJoin = root
 							.join("execInfo", JoinType.LEFT);
 						if (ou.asc()) {
 							o = cb.asc(eiJoin.get("execDate"));
@@ -177,7 +177,7 @@ public class QQSearch extends LoggedBean {
 						break;
 					case "fioOrg":
 						//Сортируются сначала по Юридическим лицам, потом по физическим
-						Join<Question, Applicant> aplJoin = root.join("applicant");
+						Join<QuestionModel, Applicant> aplJoin = root.join("applicant");
 						Expression<String> concat = cb.concat(
 							aplJoin.<String>get("surname"), " ");
 						concat = cb.concat(concat, aplJoin.<String>get("name"));
@@ -208,7 +208,7 @@ public class QQSearch extends LoggedBean {
 						jpaOrders.add(o);
 						break;
 					case "executor":
-						Join<Question, Transmission> jTr = root.join("transmission", JoinType.LEFT);
+						Join<QuestionModel, Transmission> jTr = root.join("transmission", JoinType.LEFT);
 						Join<Transmission, AdmUser> admUserJoin = jTr.join("executorName", JoinType.LEFT);
 						if (ou.asc()) {
 							o = cb.asc(admUserJoin.get("name"));
@@ -235,17 +235,17 @@ public class QQSearch extends LoggedBean {
 			criteriaQuery.orderBy(jpaOrders);
 		}
 
-		TypedQuery<Question> q = em.createQuery(criteriaQuery);
+		TypedQuery<QuestionModel> q = em.createQuery(criteriaQuery);
 
 		Integer total = q.getResultList().size();
 		q.setFirstResult(start);
 		q.setMaxResults(start + limit);
 
-		Question[] array = new Question[q.getResultList().size()];
+		QuestionModel[] array = new QuestionModel[q.getResultList().size()];
 		q.getResultList().toArray(array);
 
 		ArrayList<JournalItem> items = new ArrayList<>();
-		for (Question qq : array) {
+		for (QuestionModel qq : array) {
 			items.add(new JournalItem(qq));
 		}
 		JsonObjectBuilder resultBuilde = Json.createObjectBuilder();
@@ -257,14 +257,14 @@ public class QQSearch extends LoggedBean {
 
 	public JsonObject getSearchResult(SearchCritery query) throws Exception {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<Question> searchQuery = cb.createQuery(Question.class);
+		CriteriaQuery<QuestionModel> searchQuery = cb.createQuery(QuestionModel.class);
 
-		Root<Question> root = searchQuery.from(Question.class);
+		Root<QuestionModel> root = searchQuery.from(QuestionModel.class);
 
 		ArrayList<Expression<Boolean>> expressions = new ArrayList<>();
 
 		if (query.isApplicantJoinNeeds()) {
-			Join<Question, Applicant> join = root.join("applicant");
+			Join<QuestionModel, Applicant> join = root.join("applicant");
 
 			Long applType = query.getApplicantTypeId();
 			if (applType != null) {
@@ -367,11 +367,11 @@ public class QQSearch extends LoggedBean {
 		if (finalExpression != null) {
 			searchQuery.where(finalExpression);
 		}
-		TypedQuery<Question> q = em.createQuery(searchQuery);
+		TypedQuery<QuestionModel> q = em.createQuery(searchQuery);
 		@SuppressWarnings("unchecked")
-		List<Question> result = q.getResultList();
+		List<QuestionModel> result = q.getResultList();
 		ArrayList<SearchResultItem> resultItems = new ArrayList<>();
-		for (Question qq : result) {
+		for (QuestionModel qq : result) {
 			SearchResultItem item = new SearchResultItem(qq);
 			resultItems.add(item);
 		}

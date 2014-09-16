@@ -20,10 +20,11 @@ Ext.define('qqext.model.qq.ExecutionInfo', (function() {
 			{name: exec.category[0], type: 'int', defaultValue: null, convert: null}
 		],
 		belongsTo: 'qqext.model.qq.Question',
-		mixins: ['qqext.qq.model.RestProxy'],
+		requires: ['qqext.model.qq.RestProxy'],
 		constructor: function() {
-			this.proxy.url += 'executioninfo';
-			this.callParent(arguments);
+			this.proxy = Ext.create('qqext.model.qq.RestProxy', 'execution');
+			this.callParent();
 		}
+
 	}
 })());

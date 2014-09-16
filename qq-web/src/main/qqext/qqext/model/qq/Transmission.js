@@ -30,10 +30,10 @@ Ext.define('qqext.model.qq.Transmission', (function() {
 			{name: trans.storageName[0], type: 'string'}
 		],
 		belongsTo: 'qqext.model.qq.Question',
-		mixins: ['qqext.qq.model.RestProxy'],
+		requires: ['qqext.model.qq.RestProxy'],
 		constructor: function() {
-			this.proxy.url += 'transmission';
-			this.callParent(arguments);
+			this.proxy = Ext.create('qqext.model.qq.RestProxy', 'transmission');
+			this.callParent();
 		}
 	};
 })());

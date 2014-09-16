@@ -11,9 +11,9 @@ Ext.define('qqext.model.qq.AttachedFile', {
 		{name: 'question', type: 'int', defaultValue: null, convert: null}
 	],
 	belongsTo: 'qqext.model.qq.Question',
-	mixins: ['qqext.qq.model.RestProxy'],
+	requires: ['qqext.model.qq.RestProxy'],
 	constructor: function() {
-		this.proxy.url += 'attachedfile';
-		this.callParent(arguments);
+		this.proxy = Ext.create('qqext.model.qq.RestProxy', 'attachedfile');
+		this.callParent();
 	}
 });

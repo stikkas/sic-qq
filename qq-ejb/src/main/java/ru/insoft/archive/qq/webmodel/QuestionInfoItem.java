@@ -4,17 +4,15 @@ import java.util.Date;
 
 import ru.insoft.archive.core_model.table.desc.DescriptorValue;
 import ru.insoft.archive.core_model.view.desc.VDescAttrValue;
-import ru.insoft.archive.qq.model.Applicant;
-import ru.insoft.archive.qq.model.QuestionModel;
+import ru.insoft.archive.qq.entity.Applicant;
+import ru.insoft.archive.qq.entity.Question;
 
 public class QuestionInfoItem {
 
-	
-	
-	public QuestionInfoItem(QuestionModel q){
+	public QuestionInfoItem(Question q) {
 		this.id = q.getId();
-		
-		DescriptorValue createOrg = q.getLitera();
+
+		DescriptorValue createOrg = q.getLiteraValue();
 		if (createOrg != null) {
 			for (VDescAttrValue a : createOrg.getAttrValues()) {
 				if ("MEMBER_LETTER".equals(a.getCode())) {
@@ -24,48 +22,45 @@ public class QuestionInfoItem {
 		}
 		this.inboxDocNum = q.getInboxNum();
 		this.regDate = q.getRegDate();
-		
-		
-		
+
 		Applicant a = q.getApplicant();
 		if (a != null) {
 			String r = "";
-			DescriptorValue applicantType = a.getApplicantType();
+			DescriptorValue applicantType = a.getApplicantTypeValue();
 			switch (applicantType.getCode()) {
-			case "Q_VALUE_APP_TYPE_FFACE":
-				if (a.getSurname() != null) {
-					r += a.getSurname();
-					r += " ";
-				}
-				if (a.getName() != null) {
-					r += a.getName();
-					r += " ";
-				}
-				if (a.getFatherName() != null) {
-					r += a.getFatherName();
-					r += " ";
-				}
-				break;
-			case "Q_VALUE_APP_TYPE_JURFACE":
-				r = a.getApplicantObject();
-				break;
-			default:
-				break;
+				case "Q_VALUE_APP_TYPE_FFACE":
+					if (a.getLastName() != null) {
+						r += a.getLastName();
+						r += " ";
+					}
+					if (a.getFirstName() != null) {
+						r += a.getFirstName();
+						r += " ";
+					}
+					if (a.getMiddleName() != null) {
+						r += a.getMiddleName();
+						r += " ";
+					}
+					break;
+				case "Q_VALUE_APP_TYPE_JURFACE":
+					r = a.getOrganization();
+					break;
+				default:
+					break;
 			}
 			this.fioOrg = r;
 
 		}
 	}
-	
-	
+
 	protected Long id;
-	
+
 	private String fioOrg;
-	
+
 	protected String litera;
-	
+
 	protected String inboxDocNum;
-	
+
 	protected Date regDate;
 
 	public Long getId() {
@@ -107,9 +102,5 @@ public class QuestionInfoItem {
 	public void setFioOrg(String fioOrg) {
 		this.fioOrg = fioOrg;
 	}
-	
-	
-	
-	
-	
+
 }

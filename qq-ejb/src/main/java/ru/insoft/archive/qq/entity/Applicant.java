@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -16,6 +17,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import ru.insoft.archive.core_model.table.desc.DescriptorValue;
+import ru.insoft.archive.extcommons.entity.HasId;
+import ru.insoft.archive.extcommons.json.JsonIn;
+import ru.insoft.archive.extcommons.json.JsonOut;
 
 /**
  * Данные по заявителю
@@ -39,7 +44,7 @@ import javax.validation.constraints.Size;
 	@NamedQuery(name = "Applicant.findByFioJurPerson", query = "SELECT a FROM Applicant a WHERE a.fioJurPerson = :fioJurPerson"),
 	@NamedQuery(name = "Applicant.findByPhone", query = "SELECT a FROM Applicant a WHERE a.phone = :phone"),
 	@NamedQuery(name = "Applicant.findByLastName", query = "SELECT a FROM Applicant a WHERE a.lastName = :lastName")})
-public class Applicant implements Serializable {
+public class Applicant implements Serializable, HasId, JsonIn, JsonOut {
 
 	private static final long serialVersionUID = 1L;
 
@@ -107,6 +112,11 @@ public class Applicant implements Serializable {
 	@OneToOne(optional = false, fetch = FetchType.LAZY)
 	private Question question;
 
+	@JoinColumn(name = "APPLICANT_TYPE_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
+		insertable = false, updatable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	private DescriptorValue applicantTypeValue;
+
 	public Applicant() {
 	}
 
@@ -120,6 +130,14 @@ public class Applicant implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public DescriptorValue getApplicantTypeValue() {
+		return applicantTypeValue;
+	}
+
+	public void setApplicantTypeValue(DescriptorValue applicantTypeValue) {
+		this.applicantTypeValue = applicantTypeValue;
 	}
 
 	public Long getApplicantCategory() {

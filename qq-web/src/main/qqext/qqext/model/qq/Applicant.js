@@ -18,11 +18,10 @@ Ext.define('qqext.model.qq.Applicant', (function() {
 	return {
 		alias: 'ApplicantModel',
 		extend: 'Ext.data.Model',
+		requires: ['Ext.data.proxy.Rest'],
 		idProperty: 'id',
-//		clientIdProperty: 'cliId',
 		fields: [
 			{name: 'id', type: 'int', defaultValue: null, convert: null},
-//			{ name: 'cliId', type: 'string' },
 			{name: applicant.applicantType[0], type: 'int', defaultValue: null, convert: null},
 			{name: applicant.organization[0], type: 'string'},
 			{name: applicant.firstName[0], type: 'string'},
@@ -39,10 +38,11 @@ Ext.define('qqext.model.qq.Applicant', (function() {
 			{name: applicant.appends[0], type: 'string', defaultValue: null, convert: null}
 		],
 		belongsTo: 'qqext.model.qq.Question',
-		mixins: ['qqext.qq.model.RestProxy'],
-		constructor: function() {
-			this.proxy.url += 'applicant';
-			this.callParent(arguments);
+		proxy: {
+			type: 'rest',
+			url: '/qq-web/rest/applicant',
+			reader: 'json',
+			writer: 'json'
 		}
 	};
 })());

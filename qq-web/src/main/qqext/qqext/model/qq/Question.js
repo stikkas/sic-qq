@@ -15,12 +15,10 @@ Ext.define('qqext.model.qq.Question', {
 		'qqext.model.qq.UsedMaterial',
 		'qqext.model.qq.Coordination',
 		'qqext.model.qq.SendAction',
-		'qqext.model.qq.WayToSend'
+		'qqext.model.qq.WayToSend',
+		'Ext.data.proxy.Rest'
 	],
-	idProperty: 'id',
-//	clientIdProperty: 'cliId',
 	fields: [
-//		{name: 'cliId', type: 'string'},
 		{name: 'id', type: 'int', defaultValue: null, convert: null},
 		{name: 'insertDate', type: 'date'},
 		{name: 'updateDate', type: 'date'},
@@ -45,16 +43,16 @@ Ext.define('qqext.model.qq.Question', {
 		{name: 'objectBirthYear', type: 'int', defaultValue: null, convert: null}
 	],
 	associations: [
-		{type: 'hasOne', model: 'qqext.model.qq.Transmission',
-			name: 'transmission', foreignKey: 'id'},
-		{type: 'hasOne', model: 'qqext.model.qq.Applicant',
-			name: 'applicant', foreignKey: 'id'},
+		{type: 'hasOne', model: 'qqext.model.qq.Transmission', foreignKey: 'id',
+			setterName: 'setTransmission', getterName: 'getTransmission'},
+		{type: 'hasOne', model: 'qqext.model.qq.Applicant', foreignKey: 'id',
+			setterName: 'setApplicant', getterName: 'getApplicant'},
 		{type: 'hasMany', model: 'qqext.model.qq.AttachedFile',
 			name: 'files', foreignKey: 'question'},
-		{type: 'hasOne', model: 'qqext.model.qq.Notification',
-			name: 'notification', foreignKey: 'id'},
-		{type: 'hasOne', model: 'qqext.model.qq.ExecutionInfo',
-			name: 'execInfo', foreignKey: 'id'},
+		{type: 'hasOne', model: 'qqext.model.qq.Notification', foreignKey: 'id',
+			setterName: 'setNotification', getterName: 'getNotification'},
+		{type: 'hasOne', model: 'qqext.model.qq.ExecutionInfo', foreignKey: 'id',
+			setterName: 'setExecutionInfo', getterName: 'getExecutionInfo'},
 		{type: 'hasMany', model: 'qqext.model.qq.DeliveryAction',
 			name: 'delActions', foreignKey: 'question'},
 		{type: 'hasMany', model: 'qqext.model.qq.UsedMaterial',
@@ -63,12 +61,13 @@ Ext.define('qqext.model.qq.Question', {
 			name: 'coordinations', foreignKey: 'question'},
 		{type: 'hasMany', model: 'qqext.model.qq.SendAction',
 			name: 'sendActions', foreignKey: 'question'},
-		{type: 'hasOne', model: 'qqext.model.qq.WayToSend',
-			name: 'wayToSend', foreignKey: 'id'}
+		{type: 'hasOne', model: 'qqext.model.qq.WayToSend', foreignKey: 'id',
+			setterName: 'setWayToSend', getterName: 'getWayToSend'}
 	],
-	mixins: ['qqext.qq.model.RestProxy'],
-	constructor: function() {
-		this.proxy.url += 'question';
-		this.callParent(arguments);
+	proxy: {
+		type: 'rest',
+		url: '/qq-web/rest/question',
+		reader: 'json',
+		writer: 'json'
 	}
 });

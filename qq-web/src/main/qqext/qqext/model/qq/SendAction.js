@@ -17,10 +17,11 @@ Ext.define('qqext.model.qq.SendAction', (function() {
 			{name: send.date[0], type: 'date'}
 		],
 		belongsTo: 'qqext.model.qq.Question',
-		mixins: ['qqext.qq.model.RestProxy'],
+		requires: ['qqext.model.qq.RestProxy'],
 		constructor: function() {
-			this.proxy.url += 'sendaction';
-			this.callParent(arguments);
+			this.proxy = Ext.create('qqext.model.qq.RestProxy', 'sendaction');
+			this.callParent();
 		}
+
 	};
 })());

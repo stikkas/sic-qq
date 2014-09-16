@@ -14,6 +14,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import ru.insoft.archive.extcommons.entity.HasId;
+import ru.insoft.archive.extcommons.json.JsonIn;
+import ru.insoft.archive.extcommons.json.JsonOut;
 
 /**
  * Прикрепленные файлы. Могут быть в запросе и в ответе (два типа файлов)
@@ -26,7 +29,7 @@ import javax.validation.constraints.Size;
 	@NamedQuery(name = "AttachedFile.findAll", query = "SELECT a FROM AttachedFile a"),
 	@NamedQuery(name = "AttachedFile.findById", query = "SELECT a FROM AttachedFile a WHERE a.id = :id"),
 	@NamedQuery(name = "AttachedFile.findByFileName", query = "SELECT a FROM AttachedFile a WHERE a.fileName = :fileName")})
-public class AttachedFile implements Serializable {
+public class AttachedFile implements Serializable, HasId, JsonIn, JsonOut {
 
 	private static final long serialVersionUID = 1L;
 	@Id

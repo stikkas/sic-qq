@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package ru.insoft.archive.qq.webmodel;
 
@@ -7,31 +7,32 @@ import java.util.Date;
 
 import ru.insoft.archive.core_model.table.desc.DescriptorValue;
 import ru.insoft.archive.extcommons.json.JsonOut;
-import ru.insoft.archive.qq.model.ExecutionInfo;
-import ru.insoft.archive.qq.model.QuestionModel;
-import ru.insoft.archive.qq.model.Transmission;
+import ru.insoft.archive.qq.entity.Execution;
+import ru.insoft.archive.qq.entity.Question;
+import ru.insoft.archive.qq.entity.Transmission;
 
 /**
  * @author sorokin
- * 
+ *
  */
 public class JournalItem extends QuestionInfoItem implements JsonOut {
-	public JournalItem(QuestionModel q) {
+
+	public JournalItem(Question q) {
 		super(q);
 
-		ExecutionInfo ei = q.getExecInfo();
+		Execution ei = q.getExecution();
 		if (ei != null) {
 			this.execDate = ei.getExecDate();
 		}
 
-		DescriptorValue statusdv = q.getStatus();
+		DescriptorValue statusdv = q.getStatusValue();
 		if (statusdv != null) {
 			this.status = statusdv.getValue();
 		}
 
 		Transmission t = q.getTransmission();
 		if (t != null) {
-			this.executor = t.getExecutorName().getName();
+			this.executor = t.getExecutorValue().getName();
 		}
 
 	}

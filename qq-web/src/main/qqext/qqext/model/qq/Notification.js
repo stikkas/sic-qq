@@ -21,10 +21,11 @@ Ext.define('qqext.model.qq.Notification', (function() {
 			{name: notf.notificationDate[0], type: 'date'}
 		],
 		belongsTo: 'qqext.model.qq.Question',
-		mixins: ['qqext.qq.model.RestProxy'],
+		requires: ['qqext.model.qq.RestProxy'],
 		constructor: function() {
-			this.proxy.url += 'notification';
-			this.callParent(arguments);
+			this.proxy = Ext.create('qqext.model.qq.RestProxy', 'notification');
+			this.callParent();
 		}
+
 	};
 })());

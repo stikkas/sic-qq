@@ -1,25 +1,35 @@
 package ru.insoft.archive.qq.entity;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import ru.insoft.archive.core_model.table.desc.DescriptorValue;
+import ru.insoft.archive.extcommons.entity.HasId;
+import ru.insoft.archive.extcommons.json.JsonIn;
+import ru.insoft.archive.extcommons.json.JsonOut;
 
 /**
+ * Данные по запросам.
  *
  * @author С. Благодатских
  */
@@ -35,17 +45,17 @@ import javax.validation.constraints.Size;
 	@NamedQuery(name = "Question.findByMotivatedRefusal", query = "SELECT q FROM Question q WHERE q.motivatedRefusal = :motivatedRefusal"),
 	@NamedQuery(name = "Question.findByPlannedFinishDate", query = "SELECT q FROM Question q WHERE q.plannedFinishDate = :plannedFinishDate"),
 	@NamedQuery(name = "Question.findByRegDate", query = "SELECT q FROM Question q WHERE q.regDate = :regDate"),
-	@NamedQuery(name = "Question.findByObjectMname", query = "SELECT q FROM Question q WHERE q.objectMname = :objectMname"),
-	@NamedQuery(name = "Question.findByObjectFname", query = "SELECT q FROM Question q WHERE q.objectFname = :objectFname"),
-	@NamedQuery(name = "Question.findByObjectLname", query = "SELECT q FROM Question q WHERE q.objectLname = :objectLname"),
-	@NamedQuery(name = "Question.findByObjectBirthyear", query = "SELECT q FROM Question q WHERE q.objectBirthyear = :objectBirthyear")})
-public class Question implements Serializable {
+	@NamedQuery(name = "Question.findByObjectMName", query = "SELECT q FROM Question q WHERE q.objectMName = :objectMName"),
+	@NamedQuery(name = "Question.findByObjectFName", query = "SELECT q FROM Question q WHERE q.objectFName = :objectFName"),
+	@NamedQuery(name = "Question.findByObjectLName", query = "SELECT q FROM Question q WHERE q.objectLName = :objectLName"),
+	@NamedQuery(name = "Question.findByObjectBirthYear", query = "SELECT q FROM Question q WHERE q.objectBirthYear = :objectBirthYear")})
+public class Question implements Serializable, HasId, JsonIn, JsonOut {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Basic(optional = false)
-	@NotNull
+	@GeneratedValue(generator = "SEQ_QQ_QUESTION", strategy = GenerationType.SEQUENCE)
+	@SequenceGenerator(name = "SEQ_QQ_QUESTION", sequenceName = "SEQ_QQ_QUESTION", allocationSize = 1)
 	@Column(name = "QUESTION_ID")
 	private Long id;
 
@@ -75,7 +85,7 @@ public class Question implements Serializable {
 	private String content;
 
 	@Column(name = "TRANSFER_TYPE_ID")
-	private Long tarnserType;
+	private Long transferType;
 
 	@Column(name = "EXEC_ORG_ID")
 	private Long execOrg;
@@ -129,35 +139,45 @@ public class Question implements Serializable {
 	@Column(name = "OBJECT_BIRTHYEAR")
 	private Long objectBirthYear;
 
-	@OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
-	private Collection<Coordintation> coordintationCollection;
+	@OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
+	private Set<Coordination> coordinations;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.LAZY)
-	private Collection<SendAction> sendActionCollection;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
+	private Set<SendAction> sendActions;
 
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Execution execution;
 
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.LAZY)
-	private Transmissions transmissions;
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
+	private Transmission transmission;
 
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private WayToSend wayToSend;
 
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Applicant applicant;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.LAZY)
-	private Collection<AttachedFile> attachedFileCollection;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
+	private Set<AttachedFile> attachedFiles;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.LAZY)
-	private Collection<DeliveryAction> deliveryActionCollection;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
+	private Set<DeliveryAction> deliveryActions;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.LAZY)
-	private Collection<UsedMaterial> usedMaterialCollection;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
+	private Set<UsedMaterial> usedMaterials;
 
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Notification notification;
+
+	@JoinColumn(name = "LITERA_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
+		insertable = false, updatable = false)
+	@ManyToOne(fetch = FetchType.EAGER)
+	private DescriptorValue literaValue;
+
+	@JoinColumn(name = "STATUS_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
+		insertable = false, updatable = false)
+	@ManyToOne(fetch = FetchType.EAGER)
+	private DescriptorValue statusValue;
 
 	public Question() {
 	}
@@ -178,6 +198,22 @@ public class Question implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public DescriptorValue getStatusValue() {
+		return statusValue;
+	}
+
+	public void setStatusValue(DescriptorValue statusValue) {
+		this.statusValue = statusValue;
+	}
+
+	public DescriptorValue getLiteraValue() {
+		return literaValue;
+	}
+
+	public void setLiteraValue(DescriptorValue literaValue) {
+		this.literaValue = literaValue;
 	}
 
 	public Long getStatus() {
@@ -204,12 +240,12 @@ public class Question implements Serializable {
 		this.litera = litera;
 	}
 
-	public Long getTarnserType() {
-		return tarnserType;
+	public Long getTransferType() {
+		return transferType;
 	}
 
-	public void setTarnserType(Long tarnserType) {
-		this.tarnserType = tarnserType;
+	public void setTransferType(Long transferType) {
+		this.transferType = transferType;
 	}
 
 	public Long getExecOrg() {
@@ -344,7 +380,7 @@ public class Question implements Serializable {
 		return objectLName;
 	}
 
-	public void setObjectLname(String objectLName) {
+	public void setObjectLName(String objectLName) {
 		this.objectLName = objectLName;
 	}
 
@@ -356,20 +392,20 @@ public class Question implements Serializable {
 		this.objectBirthYear = objectBirthYear;
 	}
 
-	public Collection<Coordintation> getCoordintationCollection() {
-		return coordintationCollection;
+	public Set<Coordination> getCoordinations() {
+		return coordinations;
 	}
 
-	public void setCoordintationCollection(Collection<Coordintation> coordintationCollection) {
-		this.coordintationCollection = coordintationCollection;
+	public void setCoordinations(Set<Coordination> coordinations) {
+		this.coordinations = coordinations;
 	}
 
-	public Collection<SendAction> getSendActionCollection() {
-		return sendActionCollection;
+	public Set<SendAction> getSendActions() {
+		return sendActions;
 	}
 
-	public void setSendActionCollection(Collection<SendAction> sendActionCollection) {
-		this.sendActionCollection = sendActionCollection;
+	public void setSendActions(Set<SendAction> sendActions) {
+		this.sendActions = sendActions;
 	}
 
 	public Execution getExecution() {
@@ -380,12 +416,12 @@ public class Question implements Serializable {
 		this.execution = execution;
 	}
 
-	public Transmissions getTransmissions() {
-		return transmissions;
+	public Transmission getTransmission() {
+		return transmission;
 	}
 
-	public void setTransmissions(Transmissions transmissions) {
-		this.transmissions = transmissions;
+	public void setTransmission(Transmission transmission) {
+		this.transmission = transmission;
 	}
 
 	public WayToSend getWayToSend() {
@@ -404,28 +440,28 @@ public class Question implements Serializable {
 		this.applicant = applicant;
 	}
 
-	public Collection<AttachedFile> getAttachedFileCollection() {
-		return attachedFileCollection;
+	public Set<AttachedFile> getAttachedFiles() {
+		return attachedFiles;
 	}
 
-	public void setAttachedFileCollection(Collection<AttachedFile> attachedFileCollection) {
-		this.attachedFileCollection = attachedFileCollection;
+	public void setAttachedFiles(Set<AttachedFile> attachedFiles) {
+		this.attachedFiles = attachedFiles;
 	}
 
-	public Collection<DeliveryAction> getDeliveryActionCollection() {
-		return deliveryActionCollection;
+	public Set<DeliveryAction> getDeliveryActions() {
+		return deliveryActions;
 	}
 
-	public void setDeliveryActionCollection(Collection<DeliveryAction> deliveryActionCollection) {
-		this.deliveryActionCollection = deliveryActionCollection;
+	public void setDeliveryActions(Set<DeliveryAction> deliveryActions) {
+		this.deliveryActions = deliveryActions;
 	}
 
-	public Collection<UsedMaterial> getUsedMaterialCollection() {
-		return usedMaterialCollection;
+	public Set<UsedMaterial> getUsedMaterials() {
+		return usedMaterials;
 	}
 
-	public void setUsedMaterialCollection(Collection<UsedMaterial> usedMaterialCollection) {
-		this.usedMaterialCollection = usedMaterialCollection;
+	public void setUsedMaterials(Set<UsedMaterial> usedMaterials) {
+		this.usedMaterials = usedMaterials;
 	}
 
 	public Notification getNotification() {

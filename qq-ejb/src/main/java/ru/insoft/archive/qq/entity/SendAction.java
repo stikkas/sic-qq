@@ -15,6 +15,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import ru.insoft.archive.extcommons.entity.HasId;
+import ru.insoft.archive.extcommons.json.JsonIn;
+import ru.insoft.archive.extcommons.json.JsonOut;
 
 /**
  *
@@ -27,7 +30,7 @@ import javax.validation.constraints.NotNull;
 	@NamedQuery(name = "SendAction.findById", query = "SELECT s FROM SendAction s WHERE s.id = :id"),
 	@NamedQuery(name = "SendAction.findBySendDate", query = "SELECT s FROM SendAction s WHERE s.sendDate = :sendDate"),
 	@NamedQuery(name = "SendAction.findBySendType", query = "SELECT s FROM SendAction s WHERE s.sendType = :sendType")})
-public class SendAction implements Serializable {
+public class SendAction implements Serializable, HasId, JsonIn, JsonOut {
 
 	private static final long serialVersionUID = 1L;
 	@Id

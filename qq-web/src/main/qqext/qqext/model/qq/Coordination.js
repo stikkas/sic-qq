@@ -22,10 +22,11 @@ Ext.define('qqext.model.qq.Coordination', (function() {
 			{name: coor.date[0], type: 'date'}
 		],
 		belongsTo: 'qqext.model.qq.Question',
-		mixins: ['qqext.qq.model.RestProxy'],
+		requires: ['qqext.model.qq.RestProxy'],
 		constructor: function() {
-			this.proxy.url += 'coordination';
-			this.callParent(arguments);
+			this.proxy = Ext.create('qqext.model.qq.RestProxy', 'coordination');
+			this.callParent();
 		}
+
 	};
 })());

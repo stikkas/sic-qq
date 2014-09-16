@@ -25,8 +25,8 @@ import ru.insoft.archive.core_model.table.desc.DescriptorValueAttr;
 import ru.insoft.archive.extcommons.ejb.CommonDBHandler;
 import ru.insoft.archive.extcommons.ejb.JsonTools;
 import ru.insoft.archive.extcommons.webmodel.ScalarItem;
-import ru.insoft.archive.qq.model.Applicant;
-import ru.insoft.archive.qq.model.Transmission;
+import ru.insoft.archive.qq.entity.Applicant;
+import ru.insoft.archive.qq.entity.Transmission;
 
 /**
  * @author sorokin

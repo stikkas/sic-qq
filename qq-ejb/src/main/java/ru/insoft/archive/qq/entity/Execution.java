@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -15,6 +16,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import ru.insoft.archive.core_model.table.desc.DescriptorValue;
+import ru.insoft.archive.extcommons.entity.HasId;
+import ru.insoft.archive.extcommons.json.JsonIn;
+import ru.insoft.archive.extcommons.json.JsonOut;
 
 /**
  *
@@ -26,7 +31,7 @@ import javax.validation.constraints.NotNull;
 	@NamedQuery(name = "Execution.findAll", query = "SELECT e FROM Execution e"),
 	@NamedQuery(name = "Execution.findById", query = "SELECT e FROM Execution e WHERE e.id = :id"),
 	@NamedQuery(name = "Execution.findByExecDate", query = "SELECT e FROM Execution e WHERE e.execDate = :execDate")})
-public class Execution implements Serializable {
+public class Execution implements Serializable, HasId, JsonIn, JsonOut {
 
 	private static final long serialVersionUID = 1L;
 
@@ -49,9 +54,20 @@ public class Execution implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date execDate;
 
-	@JoinColumn(name = "QUESTION_ID", referencedColumnName = "QUESTION_ID", insertable = false, updatable = false)
+	@JoinColumn(name = "QUESTION_ID", referencedColumnName = "QUESTION_ID",
+		insertable = false, updatable = false)
 	@OneToOne(optional = false, fetch = FetchType.LAZY)
 	private Question question;
+
+	@JoinColumn(name = "USAGE_ANSWER_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
+		insertable = false, updatable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	private DescriptorValue usageAnswerValue;
+
+	@JoinColumn(name = "ANSWER_RESULT_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
+		insertable = false, updatable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	private DescriptorValue answerResultValue;
 
 	public Execution() {
 	}
@@ -76,12 +92,28 @@ public class Execution implements Serializable {
 		this.answerResult = answerResult;
 	}
 
+	public DescriptorValue getAnswerResultValue() {
+		return answerResultValue;
+	}
+
+	public void setAnswerResultValue(DescriptorValue answerResultValue) {
+		this.answerResultValue = answerResultValue;
+	}
+
 	public Long getUsageAnswer() {
 		return usageAnswer;
 	}
 
 	public void setUsageAnswer(Long usageAnswer) {
 		this.usageAnswer = usageAnswer;
+	}
+
+	public DescriptorValue getUsageAnswerValue() {
+		return usageAnswerValue;
+	}
+
+	public void setUsageAnswerValue(DescriptorValue usageAnswerValue) {
+		this.usageAnswerValue = usageAnswerValue;
 	}
 
 	public Long getCategoryComplexity() {

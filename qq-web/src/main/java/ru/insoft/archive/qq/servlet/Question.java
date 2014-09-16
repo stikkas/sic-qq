@@ -8,9 +8,8 @@ import javax.json.JsonObjectBuilder;
 import javax.servlet.annotation.WebServlet;
 import ru.insoft.archive.extcommons.ejb.CommonDBHandler;
 import ru.insoft.archive.qq.ejb.Constants;
-import ru.insoft.archive.qq.model.Applicant;
-import ru.insoft.archive.qq.model.AttachedFile;
-import ru.insoft.archive.qq.model.QuestionModel;
+import ru.insoft.archive.qq.entity.Applicant;
+import ru.insoft.archive.qq.entity.AttachedFile;
 
 /**
  * @author sorokin
@@ -32,14 +31,14 @@ public class Question extends CRUDServlet implements Constants {
 
 	@Override
 	protected JsonObject handleObject(JsonObject obj) throws Exception {
-		QuestionModel q = (QuestionModel) jsonTools.parseJsonObject(obj, QuestionModel.class);
+		ru.insoft.archive.qq.entity.Question q = (ru.insoft.archive.qq.entity.Question) jsonTools.parseJsonObject(obj, ru.insoft.archive.qq.entity.Question.class);
 
 		Applicant a = q.getApplicant();
 		if (a != null) {
-			a.setQ(q);
+			a.setQuestion(q);
 		}
 
-		for (AttachedFile f : q.getFiles()) {
+		for (AttachedFile f : q.getAttachedFiles()) {
 		}
 
 		/*

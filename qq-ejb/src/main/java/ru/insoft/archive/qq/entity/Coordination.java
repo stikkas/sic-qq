@@ -15,18 +15,21 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import ru.insoft.archive.extcommons.entity.HasId;
+import ru.insoft.archive.extcommons.json.JsonIn;
+import ru.insoft.archive.extcommons.json.JsonOut;
 
 /**
  *
  * @author С. Благодатских
  */
 @Entity
-@Table(name = "QQ_COORDINTATION")
+@Table(name = "QQ_COORDINATION")
 @NamedQueries({
-	@NamedQuery(name = "Coordintation.findAll", query = "SELECT c FROM Coordintation c"),
-	@NamedQuery(name = "Coordintation.findById", query = "SELECT c FROM Coordintation c WHERE c.id = :id"),
-	@NamedQuery(name = "Coordintation.findByStageDate", query = "SELECT c FROM Coordintation c WHERE c.stageDate = :stageDate")})
-public class Coordintation implements Serializable {
+	@NamedQuery(name = "Coordination.findAll", query = "SELECT c FROM Coordination c"),
+	@NamedQuery(name = "Coordination.findById", query = "SELECT c FROM Coordination c WHERE c.id = :id"),
+	@NamedQuery(name = "Coordination.findByStageDate", query = "SELECT c FROM Coordination c WHERE c.stageDate = :stageDate")})
+public class Coordination implements Serializable, HasId, JsonIn, JsonOut {
 
 	private static final long serialVersionUID = 1L;
 
@@ -47,10 +50,10 @@ public class Coordintation implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Question question;
 
-	public Coordintation() {
+	public Coordination() {
 	}
 
-	public Coordintation(Long id) {
+	public Coordination(Long id) {
 		this.id = id;
 	}
 
@@ -95,16 +98,16 @@ public class Coordintation implements Serializable {
 
 	@Override
 	public boolean equals(Object object) {
-		if (!(object instanceof Coordintation)) {
+		if (!(object instanceof Coordination)) {
 			return false;
 		}
-		Coordintation other = (Coordintation) object;
+		Coordination other = (Coordination) object;
 		return this.id.equals(other.id);
 	}
 
 	@Override
 	public String toString() {
-		return "ru.insoft.archive.qq.entity.Coordintation[ coordinationId=" + id + " ]";
+		return "ru.insoft.archive.qq.entity.Coordination[ coordinationId=" + id + " ]";
 	}
 
 }

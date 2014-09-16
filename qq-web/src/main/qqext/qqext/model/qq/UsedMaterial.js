@@ -23,10 +23,10 @@ Ext.define('qqext.model.qq.UsedMaterial', (function() {
 			{name: mat.remark[0], type: 'string'}
 		],
 		belongsTo: 'qqext.model.qq.Question',
-		mixins: ['qqext.qq.model.RestProxy'],
+		requires: ['qqext.model.qq.RestProxy'],
 		constructor: function() {
-			this.proxy.url += 'usedmaterial';
-			this.callParent(arguments);
+			this.proxy = Ext.create('qqext.model.qq.RestProxy', 'usedmaterial');
+			this.callParent();
 		}
 	}
 })());

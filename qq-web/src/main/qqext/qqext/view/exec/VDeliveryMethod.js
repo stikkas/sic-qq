@@ -18,11 +18,6 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 	title: 'Способ отправки',
 	mOdel: null,
 	minHeight: 60,
-	comboTrashConfig: {
-		store: 'answerForm',
-		comboLabel: qqext.sendAction.type[1],
-		dateLabel: qqext.sendAction.date[1]
-	},
 	remove: function() {
 		var me = this;
 		var index = me.items.indexOf(arguments[0]);
@@ -63,7 +58,14 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 	initComponent: function() {
 		var me = this,
 				createCmp = Ext.create,
-				way = qqext.wayToSend;
+				way = qqext.wayToSend,
+				action = qqext.sendAction;
+
+		me.comboTrashConfig = {
+			store: 'answerForm',
+			comboLabel: action.type[1],
+			dateLabel: action.date[1]
+		};
 
 		Ext.apply(me, {
 			items: [

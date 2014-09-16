@@ -12,6 +12,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import ru.insoft.archive.extcommons.entity.HasId;
+import ru.insoft.archive.extcommons.json.JsonIn;
+import ru.insoft.archive.extcommons.json.JsonOut;
 
 /**
  * Выдача документов.
@@ -24,7 +27,7 @@ import javax.validation.constraints.NotNull;
 	@NamedQuery(name = "DeliveryAction.findAll", query = "SELECT d FROM DeliveryAction d"),
 	@NamedQuery(name = "DeliveryAction.findById", query = "SELECT d FROM DeliveryAction d WHERE d.id = :id"),
 	@NamedQuery(name = "DeliveryAction.findByDocCount", query = "SELECT d FROM DeliveryAction d WHERE d.docCount = :docCount")})
-public class DeliveryAction implements Serializable {
+public class DeliveryAction implements Serializable, HasId, JsonIn, JsonOut {
 
 	private static final long serialVersionUID = 1L;
 

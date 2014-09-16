@@ -18,10 +18,10 @@ Ext.define('qqext.model.qq.WayToSend', (function() {
 			{name: way.remark[0], type: 'string'}
 		],
 		belongsTo: 'qqext.model.qq.Question',
-		mixins: ['qqext.qq.model.RestProxy'],
+		requires: ['qqext.model.qq.RestProxy'],
 		constructor: function() {
-			this.proxy.url += 'waytosend';
-			this.callParent(arguments);
+			this.proxy = Ext.create('qqext.model.qq.RestProxy', 'waytosend');
+			this.callParent();
 		}
 	};
 })());

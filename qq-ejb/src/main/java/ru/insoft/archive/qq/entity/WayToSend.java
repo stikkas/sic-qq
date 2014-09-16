@@ -1,12 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ru.insoft.archive.qq.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -22,8 +16,12 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import ru.insoft.archive.extcommons.entity.HasId;
+import ru.insoft.archive.extcommons.json.JsonIn;
+import ru.insoft.archive.extcommons.json.JsonOut;
 
 /**
+ * Способ отправки.
  *
  * @author С. Благодатских
  */
@@ -31,44 +29,48 @@ import javax.validation.constraints.Size;
 @Table(name = "QQ_WAY_TO_SEND")
 @NamedQueries({
 	@NamedQuery(name = "WayToSend.findAll", query = "SELECT w FROM WayToSend w"),
-	@NamedQuery(name = "WayToSend.findByQuestionId", query = "SELECT w FROM WayToSend w WHERE w.questionId = :questionId"),
+	@NamedQuery(name = "WayToSend.findById", query = "SELECT w FROM WayToSend w WHERE w.id = :id"),
 	@NamedQuery(name = "WayToSend.findByRemark", query = "SELECT w FROM WayToSend w WHERE w.remark = :remark"),
 	@NamedQuery(name = "WayToSend.findByIssueNumber", query = "SELECT w FROM WayToSend w WHERE w.issueNumber = :issueNumber"),
 	@NamedQuery(name = "WayToSend.findByRenewalNotice", query = "SELECT w FROM WayToSend w WHERE w.renewalNotice = :renewalNotice")})
-public class WayToSend implements Serializable {
+public class WayToSend implements Serializable, HasId, JsonIn, JsonOut {
+
 	private static final long serialVersionUID = 1L;
-	// @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
 	@Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "QUESTION_ID")
-	private BigDecimal questionId;
+	@Basic(optional = false)
+	@NotNull
+	@Column(name = "QUESTION_ID")
+	private Long id;
+
 	@Size(max = 255)
-    @Column(name = "REMARK")
+	@Column(name = "REMARK")
 	private String remark;
+
 	@Size(max = 255)
-    @Column(name = "ISSUE_NUMBER")
+	@Column(name = "ISSUE_NUMBER")
 	private String issueNumber;
-	@Column(name = "RENEWAL_NOTICE")
-    @Temporal(TemporalType.TIMESTAMP)
+
+	@Column(name = "RENEWAL_NOTICE", columnDefinition = "DATE")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date renewalNotice;
+
 	@JoinColumn(name = "QUESTION_ID", referencedColumnName = "QUESTION_ID", insertable = false, updatable = false)
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+	@OneToOne(optional = false, fetch = FetchType.LAZY)
 	private Question question;
 
 	public WayToSend() {
 	}
 
-	public WayToSend(BigDecimal questionId) {
-		this.questionId = questionId;
+	public WayToSend(Long id) {
+		this.id = id;
 	}
 
-	public BigDecimal getQuestionId() {
-		return questionId;
+	public Long getId() {
+		return id;
 	}
 
-	public void setQuestionId(BigDecimal questionId) {
-		this.questionId = questionId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getRemark() {
@@ -106,26 +108,22 @@ public class WayToSend implements Serializable {
 	@Override
 	public int hashCode() {
 		int hash = 0;
-		hash += (questionId != null ? questionId.hashCode() : 0);
+		hash += (id != null ? id.hashCode() : 0);
 		return hash;
 	}
 
 	@Override
 	public boolean equals(Object object) {
-		// TODO: Warning - this method won't work in the case the id fields are not set
 		if (!(object instanceof WayToSend)) {
 			return false;
 		}
 		WayToSend other = (WayToSend) object;
-		if ((this.questionId == null && other.questionId != null) || (this.questionId != null && !this.questionId.equals(other.questionId))) {
-			return false;
-		}
-		return true;
+		return this.id.equals(other.id);
 	}
 
 	@Override
 	public String toString() {
-		return "ru.insoft.archive.qq.entity.WayToSend[ questionId=" + questionId + " ]";
+		return "ru.insoft.archive.qq.entity.WayToSend[ questionId=" + id + " ]";
 	}
 
 }

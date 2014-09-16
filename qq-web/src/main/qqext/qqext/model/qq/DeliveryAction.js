@@ -18,10 +18,11 @@ Ext.define('qqext.model.qq.DeliveryAction', (function() {
 			{name: del.count[0], type: 'int', convert: null, defaultValue: null}
 		],
 		belongsTo: 'qqext.model.qq.Question',
-		mixins: ['qqext.qq.model.RestProxy'],
+		requires: ['qqext.model.qq.RestProxy'],
 		constructor: function() {
-			this.proxy.url += 'deliveryaction';
-			this.callParent(arguments);
+			this.proxy = Ext.create('qqext.model.qq.RestProxy', 'deliveryaction');
+			this.callParent();
 		}
+
 	};
 })());

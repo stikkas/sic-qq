@@ -68,7 +68,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 				me._disableArticles(btns.notify, btns.trans, btns.exec);
 				// Литера
 				model.set('litera', orgId);
-				model.set('registrator', user.get('userId'));
 				if (!ns.isSIC) {
 					var executor = inbox.executor;
 					executor.setViewOnly(true);
@@ -122,11 +121,22 @@ Ext.define('qqext.view.reg.VRegForm', {
 		function save() {
 			var me = this,
 					model = me.model,
-					statusId;
+					statusId,
+					userId = qqext.user.get('userId'),
+					now = new Date();
 			// Кнопки сохранить и регистрировать
 			me._disableButtons(true, 1, 3);
 			me.setViewOnly(true);
 			me.updateRecord();
+
+			// Заполняем обязательные поля:
+			if (!model.get('insertUser')) {
+				model.set('insertUser', userId);
+				model.set('insertDate', now);
+			}
+			model.set('updateUser', userId);
+			model.set('updateDate', now);
+
 			Ext.getStore('Q_DICT_QUESTION_STATUSES').
 					findBy(function(record, id) {
 						if (record.get('code') === 'Q_VALUE_QSTAT_ONREG') {
@@ -136,22 +146,18 @@ Ext.define('qqext.view.reg.VRegForm', {
 						return false;
 					});
 			model.set('status', statusId);
-			model.save({
-				callback: function(records, operation, success) {
-					if (success) {
-						ns.request = model;
+			if (model.get('id') === 0) // Еще ни разу не сохраняли
+				model.set('id', null);
+			model.save({callback: function(records, operation, status) {
+					if (status) {
+						if (!model.get('id')) {
+							model.set('id', operation.response.responseText)
+							ns.request = model;
+						}
 						// кнопка удалить
 						me._disableButtons(false, 2);
-						model.set('id', records.data.id)
 					} else {
-						Ext.Msg.show({
-							title: 'Ошибка сохранения на сервер',
-							msg: operation.getError(),
-							buttons: Ext.Msg.OK,
-							icon: Ext.Msg.ERROR,
-							cls: 'err_msg',
-							maxWidth: 1000
-						});
+						me.showError("Ошибка сохранения на сервер", operation.getError());
 					}
 					// Кнопки сохранить и регистрировать
 					me._disableButtons(false, 1, 3);
@@ -168,18 +174,11 @@ Ext.define('qqext.view.reg.VRegForm', {
 			var me = this;
 			me.model.destroy({
 				callback: function(records, operation, success) {
-					if (success) {
+					if (operation.success) {
 						me.model = ns.request = null;
 						ns.getButton(ns.btns.toSearch).fireEvent('click');
 					} else {
-						Ext.Msg.show({
-							title: 'Ошибка сохранения на сервер',
-							msg: operation.getError(),
-							buttons: Ext.Msg.OK,
-							icon: Ext.Msg.ERROR,
-							cls: 'err_msg',
-							maxWidth: 1000
-						});
+						me.showError("Ошибка удаления записи", operation.getError());
 					}
 				}
 			});
@@ -233,9 +232,11 @@ Ext.define('qqext.view.reg.VRegForm', {
 			}
 		};
 		this.loadRecord = function() {
+			console.log("loadRecord")
 			execModelAction('loadRecord');
 		};
 		this.updateRecord = function() {
+			console.log("update record");
 			execModelAction('updateRecord');
 		};
 	},
@@ -260,5 +261,15 @@ Ext.define('qqext.view.reg.VRegForm', {
 		if (create || !this.model)
 			this.initModel();
 		return this.model;
+	},
+	showError: function(title, message) {
+		Ext.Msg.show({
+			title: title,
+			msg: message,
+			buttons: Ext.Msg.OK,
+			icon: Ext.Msg.ERROR,
+			cls: 'err_msg',
+			maxWidth: 1000
+		});
 	}
 });

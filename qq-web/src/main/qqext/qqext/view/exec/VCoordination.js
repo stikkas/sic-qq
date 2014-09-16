@@ -18,15 +18,17 @@ Ext.define('qqext.view.exec.VCoordination', {
 	titleCollapse: true,
 	animCollapse: true,
 	hideCollapseTool: true,
-	comboTrashConfig: {
-		store: 'coordinationStage',
-		comboLabel: qqext.coordination.stage[1],
-		dateLabel: qqext.coordination.date[1]
-	},
 	mOdel: null,
 	initComponent: function() {
 		var me = this,
-				createCmp = Ext.create;
+				createCmp = Ext.create,
+				coor = qqext.coordination;
+
+		me.comboTrashConfig = {
+			store: 'coordinationStage',
+			comboLabel: coor.stage[1],
+			dateLabel: coor.date[1]
+		};
 		Ext.applyIf(me, {
 			items: [
 				createCmp('FHandlerButton', 'add', function() {

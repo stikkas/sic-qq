@@ -1,34 +1,28 @@
-
 package ru.insoft.archive.qq.webmodel;
 
-import ru.insoft.archive.core_model.table.desc.DescriptorValue;
-import ru.insoft.archive.core_model.view.desc.VDescAttrValue;
 import ru.insoft.archive.extcommons.json.JsonIn;
 import ru.insoft.archive.extcommons.json.JsonOut;
-import ru.insoft.archive.qq.model.Applicant;
-import ru.insoft.archive.qq.model.ExecutionInfo;
-import ru.insoft.archive.qq.model.QuestionModel;
+import ru.insoft.archive.qq.entity.Execution;
+import ru.insoft.archive.qq.entity.Question;
 
 /**
  * @author sorokin
  */
 public class SearchResultItem extends QuestionInfoItem implements JsonOut, JsonIn {
 
-	public SearchResultItem(QuestionModel q) {
+	public SearchResultItem(Question q) {
 		super(q);
 
-		ExecutionInfo ei = q.getExecInfo();
+		Execution ei = q.getExecution();
 		if (ei != null) {
-			if (ei.getUsageAnswer() != null)
-				this.answerTematic = q.getExecInfo().getUsageAnswer()
-						.getValue();
-			if (ei.getAnswerResult() != null)
-				this.answerResult = q.getExecInfo().getAnswerResult()
-						.getValue();
+			if (ei.getUsageAnswerValue() != null) {
+				this.answerTematic = ei.getUsageAnswerValue().getValue();
+			}
+			if (ei.getAnswerResultValue() != null) {
+				this.answerResult = ei.getAnswerResultValue().getValue();
+			}
 		}
 	}
-
-
 
 	private String answerTematic;
 

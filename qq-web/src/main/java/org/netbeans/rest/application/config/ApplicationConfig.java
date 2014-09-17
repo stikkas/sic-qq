@@ -36,7 +36,6 @@ public class ApplicationConfig extends Application {
 		resources.add(ru.insoft.archive.qq.service.TransmissionFacadeREST.class);
 		resources.add(ru.insoft.archive.qq.service.UsedMaterialFacadeREST.class);
 		resources.add(ru.insoft.archive.qq.service.WayToSendFacadeREST.class);
-		resources.add(ru.insoft.archive.qq.servlet.QuestionREST.class);
 	}
 
 }

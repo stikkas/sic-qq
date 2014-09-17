@@ -12,7 +12,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 		'qqext.view.reg.VApplicant',
 		'qqext.view.reg.VQueryObject',
 		'qqext.view.reg.VFiles',
-		'qqext.model.qq.Question',
+		'qqext.model.Question',
 		'qqext.button.ToolButton',
 		'qqext.view.menu.HButtonMenu',
 		'qqext.Menu'
@@ -64,8 +64,12 @@ Ext.define('qqext.view.reg.VRegForm', {
 						btns = ns.btns;
 				//Кнопки "Редактировать" и "Удалить"
 				me._disableButtons(true, 0, 2);
+				//Кнопки "Сохранить" и "Регистрировать"
+				me._disableButtons(false, 1, 3);
+				// Устанавливаем режим редактирования
+				me.setViewOnly(false);
 				// Кнопки подразделов
-				me._disableArticles(btns.notify, btns.trans, btns.exec);
+				me._disableArticles(true, btns.notify, btns.trans, btns.exec);
 				// Литера
 				model.set('litera', orgId);
 				if (!ns.isSIC) {
@@ -83,12 +87,13 @@ Ext.define('qqext.view.reg.VRegForm', {
 		}
 	},
 	/**
-	 * Выключает кнопки левого меню
+	 * Выключает/Включает кнопки левого меню
+	 * @param {Boolean} status true - сделать не активным
 	 * @private
 	 */
-	_disableArticles: function() {
-		for (var i = 0; i < arguments.length; ++i)
-			qqext.getButton(arguments[i]).setDisabled(true);
+	_disableArticles: function(status) {
+		for (var i = 1; i < arguments.length; ++i)
+			qqext.getButton(arguments[i]).setDisabled(status);
 	},
 	/**
 	 * Устанавливает режим доступности для нескольки элементов
@@ -121,47 +126,46 @@ Ext.define('qqext.view.reg.VRegForm', {
 		function save() {
 			var me = this,
 					model = me.model,
-					statusId,
-					userId = qqext.user.get('userId'),
-					now = new Date();
+					user = ns.user,
+					userId = user.get('userId'),
+					now = new Date(),
+					applicant = model.getAppl();
 			// Кнопки сохранить и регистрировать
 			me._disableButtons(true, 1, 3);
 			me.setViewOnly(true);
 			me.updateRecord();
-
 			// Заполняем обязательные поля:
-			if (!model.get('insertUser')) {
+			if (!model.get('id')) { // Только для новых моделей
 				model.set('insertUser', userId);
 				model.set('insertDate', now);
+				model.set('createOrg', user.get('organization'))
 			}
 			model.set('updateUser', userId);
 			model.set('updateDate', now);
-
-			Ext.getStore('Q_DICT_QUESTION_STATUSES').
-					findBy(function(record, id) {
-						if (record.get('code') === 'Q_VALUE_QSTAT_ONREG') {
-							statusId = id;
-							return true;
-						}
-						return false;
-					});
-			model.set('status', statusId);
-			if (model.get('id') === 0) // Еще ни разу не сохраняли
-				model.set('id', null);
-			model.save({callback: function(records, operation, status) {
+			model.set('status', me._getStatusId('Q_VALUE_QSTAT_ONREG'));
+			model.save({callback: function(recs, operation, status) {
 					if (status) {
 						if (!model.get('id')) {
-							model.set('id', operation.response.responseText)
+							var id = operation.response.responseText;
+							model.set('id', id)
+							applicant.set('id', id);
 							ns.request = model;
 						}
-						// кнопка удалить
-						me._disableButtons(false, 2);
+						applicant.save({callback: function(r, o, s) {
+								if (!s)
+									me.showError("Данные о заявители не сохранены",
+											o.getError());
+								// Кнопки сохранить, удалить и регистрировать
+								me._disableButtons(false, 1, 2, 3);
+								me.setViewOnly(false);
+							}
+						});
 					} else {
 						me.showError("Ошибка сохранения на сервер", operation.getError());
+						// Кнопки сохранить и регистрировать
+						me._disableButtons(false, 1, 3);
+						me.setViewOnly(false);
 					}
-					// Кнопки сохранить и регистрировать
-					me._disableButtons(false, 1, 3);
-					me.setViewOnly(false);
 				}
 			});
 		}
@@ -173,7 +177,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 		function remove() {
 			var me = this;
 			me.model.destroy({
-				callback: function(records, operation, success) {
+				callback: function(recs, operation) {
 					if (operation.success) {
 						me.model = ns.request = null;
 						ns.getButton(ns.btns.toSearch).fireEvent('click');
@@ -186,14 +190,75 @@ Ext.define('qqext.view.reg.VRegForm', {
 
 		/**
 		 * Обрабатывает событие 'click' на кнопке "Регистрировать".
-		 * TODO реализовать метод
 		 * @private
 		 * @returns {undefined}
 		 */
 		function book() {
-			console.log(this);
+			// Кнопки сохранить, удалить и регистрировать
+			me._disableButtons(true, 1, 2, 3);
+			me.setViewOnly(true);
+			var model = me.model,
+					applicant = model.getAppl();
+			if (me.validate()) {
+				var userId = ns.user.get('userId'),
+						now = new Date();
+				me.updateRecord();
+				// Заполняем обязательные поля:
+				model.set('status', me._getStatusId('Q_VALUE_QSTAT_REG'));
+				if (!ns.request) {// Еще не сохраненная модель
+					model.set('insertUser', userId);
+					model.set('insertDate', now);
+				}
+				model.set('updateUser', userId);
+				model.set('updateDate', now);
+				model.set('registrator', userId);
+				model.set('regDate', now);
+				model.save({callback: function(rec, op, success) {
+						if (!success) {
+							me.showError("Ошибка сохранения на сервер", op.getError());
+							model.set('status', me._getStatusId('Q_VALUE_QSTAT_ONREG'));
+							me._disableButtons(false, 1, 2, 3);
+							me.setViewOnly(false);
+						} else { // Переходим на другую вкладку приналичии прав
+							var id = op.response.responseText;
+							if (!ns.request)
+								model.set('id', id);
+							me._saveApplicant(function() {
+								ns.model.Question.load(id, {callback: function(record, op, status) {
+										if (status) {
+											applicant = model.getAppl();
+											model = ns.request = me.model = record;
+											model.setAppl(applicant);
+											me.loadRecord();
+											if (model.get('litera') !== model.get('execOrg')) {
+												// Значит сотрудник из СИЦ назначил задачу архиву
+												var notifyButton = ns.getButton(ns.btns.notify);
+												notifyButton.setDisabled(false);
+												notifyButton.fireEvent('click');
+											}
+											if (ns.user.isAllowed("Q_RULE_COORDINATOR")) {
+												// Открываем закладку для передачи на исполнение
+												var transButton = ns.getButton(ns.btns.trans);
+												transButton.setDisabled(false);
+												if (!notifyButton)
+													transButton.fireEvent('click');
+											}
+
+										} else {
+											me.showError("Ошибка получения данных", o.getError());
+										}
+									}
+								});
+							});
+						}
+					}});
+			} else { // Валидация не прошла
+				model.set('status', me._getStatusId('Q_VALUE_QSTAT_ONREG'));
+				me._disableButtons(false, 1, 2, 3);
+				me.setViewOnly(false);
+			}
 		}
-		//----------------------------------------------
+//----------------------------------------------
 		var me = edit.sc = save.sc = remove.sc = book.sc = this,
 				ns = qqext,
 				labels = ns.labels,
@@ -204,41 +269,74 @@ Ext.define('qqext.view.reg.VRegForm', {
 					{text: labels.remove, action: remove},
 					{text: labels.register, action: book}],
 						'ToolButton');
-		Ext.applyIf(me, {
-			items: [
-				me.inbox = createCmp('VInboxDoc'),
-				createCmp('VQuery'),
-				me.applicant = createCmp('VApplicant'),
-				me.target = createCmp('VQueryObject', {hidden: true}),
-				createCmp('VFiles')
-			]
-		});
+		me._forms = [me.inbox = createCmp('VInboxDoc'),
+			me.query = createCmp('VQuery'),
+			me.applicant = createCmp('VApplicant'),
+			me.target = createCmp('VQueryObject', {hidden: true}),
+			createCmp('VFiles')
+		];
+		Ext.applyIf(me, {items: me._forms, });
 		me._btns = menu.items;
 		me.callParent();
 		ns.Menu.editReqMenu.insert(0, menu);
-		var execModelAction = function(action) {
-			var max = me.items.length, i = 0, item,
-					model = me.model;
-			for (; i < max; ++i) {
-				item = me.items.getAt(i);
-				if (item !== me.applicant)
-					item[action](model);
-				else {
-					var applicant = model.getApplicant();
-					if (applicant) {
-						item[action](applicant);
-					}
+	},
+	/**
+	 *
+	 * @param {Function} fn функция вызываемая при успешном сохранении
+	 * @returns {undefined}
+	 * @private
+	 */
+	_saveApplicant: function(fn) {
+		var me = this,
+				appl = me.model.getAppl();
+		appl.set('id', me.model.get('id'));
+		appl.save({callback: function(r, o, s) {
+				if (!s) {
+					me.showError("Ошибка при сохранении данных заявителя", o.getError());
+					me._disableButtons(false, 1, 2, 3);
+					me.setViewOnly(false);
+				} else {
+					fn.apply(me, []);
 				}
 			}
-		};
-		this.loadRecord = function() {
-			console.log("loadRecord")
-			execModelAction('loadRecord');
-		};
-		this.updateRecord = function() {
-			console.log("update record");
-			execModelAction('updateRecord');
-		};
+		});
+	},
+	_loadApplicant: function() {
+		var me = this,
+				id = me.model.get('id');
+		qqext.model.Applicant.load(id, {callback: function(r, o, s) {
+				if (s) {
+					me.model.setAppl(r);
+					me.loadRecord();
+				}
+			}
+		});
+	},
+	/**
+	 * Метод для выполнения операций loadRecord и updateRecord
+	 * @param {String} action операция для выполнения
+	 * @private
+	 */
+	_mAction: function(action) {
+		var me = this,
+				model = me.model;
+		[me.inbox, me.query, me.target].forEach(function(f) {
+			f[action](model);
+		});
+		me.applicant[action](model.getAppl());
+	},
+	/**
+	 * Загружает данные из модели на форму
+	 */
+	loadRecord: function() {
+		this._mAction('loadRecord');
+	}
+	,
+	/**
+	 * Сохраняет данные формы в модели
+	 */
+	updateRecord: function() {
+		this._mAction('updateRecord');
 	},
 	/**
 	 * Инициализируем модель
@@ -246,21 +344,56 @@ Ext.define('qqext.view.reg.VRegForm', {
 	initModel: function() {
 		var createCmp = Ext.create,
 				model = this.model = createCmp('QuestionModel');
-		model.setNotification(createCmp('NotificationModel'));
-		model.setApplicant(createCmp('ApplicantModel'));
-		model.setTransmission(createCmp('TransmissionModel'));
-		model.setExecutionInfo(createCmp('ExecutionInfoModel'));
-		model.setWayToSend(createCmp('WayToSendModel'));
+		model.setAppl(createCmp('ApplicantModel'));
+	},
+	/**
+	 * Выполняет дествия над всеми ассоциациями модели
+	 * @param {Function} onOne функция для ассоциации hasOne
+	 * @param {Function} onMany функция для ассоциации hasMany
+	 */
+	_onAllModels: function(onOne, onMany) {
+		var associations = this.model.associations.items,
+				i = 0, max = associations.length,
+				association;
+		for (; i < max; ++i) {
+			association = associations[i];
+			if (association.type === 'hasOne') {
+				onOne.apply(this, [association.model]);
+			} else { // Проверку не делаю, т.к. на данный момент у нас только два вида асоциации
+				onMany.apply(this, [association.name]);
+			}
+		}
 	},
 	/**
 	 * Отдает модель привязанную к форме
 	 * @param {Boolean} create Создавать ли новую модель?
-	 * @returns {qqext.model.qq.Question} модель
+	 * @returns {qqext.model.Question} модель
 	 */
 	getModel: function(create) {
 		if (create || !this.model)
 			this.initModel();
 		return this.model;
+	},
+	/**
+	 * Проверяет форму на валидность (для прохождения регистрации).
+	 * @returns {Boolean} показывает ошибку и возвращает false в случае не правильного заполнения формы
+	 */
+	validate: function() {
+		var forms = this._forms,
+				i = 0,
+				max = forms.length,
+				errors = [], form;
+		for (; i < max; ++i) {
+			form = forms[i];
+			if (!(form.isHidden() || form.isValid())) {
+				errors.push(form.getErrors());
+			}
+		}
+		if (errors.length > 0) {
+			this.showError("Форма заполнена неправильно", errors.join(''));
+			return false;
+		}
+		return true;
 	},
 	showError: function(title, message) {
 		Ext.Msg.show({
@@ -271,5 +404,23 @@ Ext.define('qqext.view.reg.VRegForm', {
 			cls: 'err_msg',
 			maxWidth: 1000
 		});
+	},
+	/**
+	 * Возвращает id статуса запроса для заданного кодового значения
+	 * @param {String} code код для статуса
+	 * @returns {Number/undefined} номер id соответстующего коду
+	 * @private
+	 */
+	_getStatusId: function(code) {
+		var statusId;
+		Ext.getStore('Q_DICT_QUESTION_STATUSES').
+				findBy(function(record, id) {
+					if (record.get('code') === code) {
+						statusId = id;
+						return true;
+					}
+					return false;
+				});
+		return statusId;
 	}
 });

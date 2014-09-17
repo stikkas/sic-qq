@@ -1,4 +1,4 @@
-Ext.define('qqext.model.qq.Notification', (function() {
+Ext.define('qqext.model.Notification', (function() {
 	var ns = Ext.ns('qqext'),
 			notf = ns.notification = {
 				executor: ['executor', 'ФИО исполнителя'],
@@ -20,10 +20,10 @@ Ext.define('qqext.model.qq.Notification', (function() {
 			{name: notf.deliveryType[0], type: 'int', convert: null, defaultValue: null},
 			{name: notf.notificationDate[0], type: 'date'}
 		],
-		belongsTo: 'qqext.model.qq.Question',
-		requires: ['qqext.model.qq.RestProxy'],
+		belongsTo: 'qqext.model.Question',
+		requires: ['qqext.model.RestProxy'],
 		constructor: function() {
-			this.proxy = Ext.create('qqext.model.qq.RestProxy', 'notification');
+			this.proxy = Ext.create('qqext.model.RestProxy', 'notification');
 			this.callParent();
 		}
 

@@ -10,18 +10,18 @@ import ru.insoft.archive.qq.entity.Question;
 public class QuestionInfoItem {
 
 	public QuestionInfoItem(Question q) {
-		this.id = q.getId();
+		id = q.getId();
 
 		DescriptorValue createOrg = q.getLiteraValue();
 		if (createOrg != null) {
 			for (VDescAttrValue a : createOrg.getAttrValues()) {
 				if ("MEMBER_LETTER".equals(a.getCode())) {
-					this.litera = a.getAttrValue();
+					litera = a.getAttrValue();
 				}
 			}
 		}
-		this.inboxDocNum = q.getInboxNum();
-		this.regDate = q.getRegDate();
+		inboxDocNum = q.getPrefixNum() + "/" + q.getSufixNum();
+		regDate = q.getRegDate();
 
 		Applicant a = q.getApplicant();
 		if (a != null) {
@@ -48,8 +48,7 @@ public class QuestionInfoItem {
 				default:
 					break;
 			}
-			this.fioOrg = r;
-
+			fioOrg = r;
 		}
 	}
 

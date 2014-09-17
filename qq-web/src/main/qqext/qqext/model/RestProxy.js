@@ -2,7 +2,7 @@
  * Общие настройки прокси для всех моделей. Каждая модель должна в конструкторе
  * добавить к URL свой конечный адрес.
  */
-Ext.define('qqext.model.qq.RestProxy', {
+Ext.define('qqext.model.RestProxy', {
 	extend: 'Ext.data.proxy.Rest',
 	alias: 'RestProxy',
 	constructor: function(model) {

@@ -53,7 +53,6 @@ Ext.application({
 				user.set('organization', authRes.organization);
 				userStore.add(user);
 				userStore.sync();
-
 				Ext.create('Viewport', {});
 			},
 			failure: function(response) {

@@ -8,6 +8,10 @@ Ext.define('qqext.view.reg.VQueryObject', {
 		'qqext.factory.TextField',
 		'qqext.factory.NumberField'
 	],
+	fieldDefaults: {
+		blankText: 'Обязательно для заполнения',
+		allowBlank: false
+	},
 	title: 'На кого запрос',
 	disabledCls: '',
 	formBind: true,

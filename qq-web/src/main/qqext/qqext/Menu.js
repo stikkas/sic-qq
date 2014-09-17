@@ -11,11 +11,11 @@ Ext.define('qqext.Menu', {
 		'Ext.panel.Panel',
 		'qqext.button.ToolButton',
 		'qqext.button.ArticleButton',
-		'qqext.model.qq.Notification',
-		'qqext.model.qq.Applicant',
-		'qqext.model.qq.ExecutionInfo',
-		'qqext.model.qq.WayToSend',
-		'qqext.model.qq.SearchCritery'
+		'qqext.model.Notification',
+		'qqext.model.Applicant',
+		'qqext.model.ExecutionInfo',
+		'qqext.model.WayToSend',
+		'qqext.model.SearchCritery'
 	],
 	statics: {
 		/**
@@ -271,7 +271,7 @@ Ext.define('qqext.Menu', {
 							notify = model.getNotification();
 
 					if (!notify) {
-						var n = createCmp('qqext.model.qq.Notification');
+						var n = createCmp('qqext.model.Notification');
 						model.setNotification(n);
 						ns.notifyForm.loadRecord(n);
 					} else {

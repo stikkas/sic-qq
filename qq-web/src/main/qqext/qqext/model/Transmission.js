@@ -1,4 +1,4 @@
-Ext.define('qqext.model.qq.Transmission', (function() {
+Ext.define('qqext.model.Transmission', (function() {
 	var ns = Ext.ns('qqext'),
 			trans = ns.transmission = {
 				bossExecutor: ['bossExecutor', 'Ответственный за исполнение'],
@@ -29,10 +29,10 @@ Ext.define('qqext.model.qq.Transmission', (function() {
 			{name: trans.storageTerritory[0], type: 'int', defaultValue: null, convert: null},
 			{name: trans.storageName[0], type: 'string'}
 		],
-		belongsTo: 'qqext.model.qq.Question',
-		requires: ['qqext.model.qq.RestProxy'],
+		belongsTo: 'qqext.model.Question',
+		requires: ['qqext.model.RestProxy'],
 		constructor: function() {
-			this.proxy = Ext.create('qqext.model.qq.RestProxy', 'transmission');
+			this.proxy = Ext.create('qqext.model.RestProxy', 'transmission');
 			this.callParent();
 		}
 	};

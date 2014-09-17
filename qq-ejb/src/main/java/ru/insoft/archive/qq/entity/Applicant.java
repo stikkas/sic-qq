@@ -15,6 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import ru.insoft.archive.core_model.table.desc.DescriptorValue;
@@ -252,14 +253,15 @@ public class Applicant implements Serializable, HasId, JsonIn, JsonOut {
 		this.lastName = lastName;
 	}
 
-	public Question getQuestion() {
-		return question;
-	}
+	/*
+	 public Question getQuestion() {
+	 return question;
+	 }
 
-	public void setQuestion(Question question) {
-		this.question = question;
-	}
-
+	 public void setQuestion(Question question) {
+	 this.question = question;
+	 }
+	 */
 	@Override
 	public int hashCode() {
 		int hash = 0;

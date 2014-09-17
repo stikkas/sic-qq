@@ -5,9 +5,9 @@ Ext.define('qqext.controller.Main', {
 	extend: 'Ext.app.Controller',
 	views: ['qqext.view.VTitleBar'],
 	requires: [
-		'qqext.model.qq.JournalItem',
-		'qqext.model.qq.SearchResultItem',
-		'qqext.model.qq.SearchCritery',
+		'qqext.model.JournalItem',
+		'qqext.model.SearchResultItem',
+		'qqext.model.SearchCritery',
 		'qqext.store.DictValuesStore',
 		'qqext.store.CustomStore',
 		'hawk_common.store.UserLocalStorage'
@@ -45,14 +45,14 @@ Ext.define('qqext.controller.Main', {
 		createCmp('qqext.store.CustomStore', {
 			storeId: 'searchResults',
 			url: 'api/Search',
-			model: 'qqext.model.qq.SearchResultItem'
+			model: 'qqext.model.SearchResultItem'
 		});
 		createCmp('qqext.store.CustomStore', {
 			storeId: 'journal',
 			url: 'api/Journal',
 			pageSize: 10,
 			remoteSort: true,
-			model: 'qqext.model.qq.JournalItem',
+			model: 'qqext.model.JournalItem',
 			remoteFilter: true
 		});
 

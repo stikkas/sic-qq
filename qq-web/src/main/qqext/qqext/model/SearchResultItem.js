@@ -1,7 +1,7 @@
 /**
  *
  */
-Ext.define('qqext.model.qq.SearchResultItem', {
+Ext.define('qqext.model.SearchResultItem', {
 	alias: 'SearchResultItemModel',
 	extend: 'Ext.data.Model',
 	fields: [{

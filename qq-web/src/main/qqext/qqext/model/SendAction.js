@@ -1,4 +1,4 @@
-Ext.define('qqext.model.qq.SendAction', (function() {
+Ext.define('qqext.model.SendAction', (function() {
 	var ns = Ext.ns('qqext'),
 			send = ns.sendAction = {
 				type: ['sendType', 'Способ отправки'],
@@ -16,10 +16,10 @@ Ext.define('qqext.model.qq.SendAction', (function() {
 			{name: send.type[0], type: 'int'},
 			{name: send.date[0], type: 'date'}
 		],
-		belongsTo: 'qqext.model.qq.Question',
-		requires: ['qqext.model.qq.RestProxy'],
+		belongsTo: 'qqext.model.Question',
+		requires: ['qqext.model.RestProxy'],
 		constructor: function() {
-			this.proxy = Ext.create('qqext.model.qq.RestProxy', 'sendaction');
+			this.proxy = Ext.create('qqext.model.RestProxy', 'sendaction');
 			this.callParent();
 		}
 

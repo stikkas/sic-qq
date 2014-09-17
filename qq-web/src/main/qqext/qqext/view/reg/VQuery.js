@@ -10,6 +10,10 @@ Ext.define('qqext.view.reg.VQuery', {
 		'qqext.factory.TextArea',
 		'qqext.factory.Checkbox'
 	],
+	fieldDefaults: {
+		blankText: 'Обязательно для заполнения',
+		allowBlank: false
+	},
 	title: 'Запрос',
 	disabledCls: '',
 	initComponent: function() {

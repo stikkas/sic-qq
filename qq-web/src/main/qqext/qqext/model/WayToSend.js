@@ -1,4 +1,4 @@
-Ext.define('qqext.model.qq.WayToSend', (function() {
+Ext.define('qqext.model.WayToSend', (function() {
 	var ns = Ext.ns('qqext'),
 			way = ns.wayToSend = {
 				remark: ['remark', 'Примечание'],
@@ -17,10 +17,10 @@ Ext.define('qqext.model.qq.WayToSend', (function() {
 			{name: way.number[0], type: 'string'},
 			{name: way.remark[0], type: 'string'}
 		],
-		belongsTo: 'qqext.model.qq.Question',
-		requires: ['qqext.model.qq.RestProxy'],
+		belongsTo: 'qqext.model.Question',
+		requires: ['qqext.model.RestProxy'],
 		constructor: function() {
-			this.proxy = Ext.create('qqext.model.qq.RestProxy', 'waytosend');
+			this.proxy = Ext.create('qqext.model.RestProxy', 'waytosend');
 			this.callParent();
 		}
 	};

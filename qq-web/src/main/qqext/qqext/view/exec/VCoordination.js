@@ -7,7 +7,7 @@ Ext.define('qqext.view.exec.VCoordination', {
 	requires: [
 		'qqext.factory.HandlerButton',
 		'qqext.view.exec.cmp.ComboDateTrash',
-		'qqext.model.qq.Coordination'
+		'qqext.model.Coordination'
 	],
 	title: 'Согласование документа',
 	header: {

@@ -1,4 +1,4 @@
-Ext.define('qqext.model.qq.Applicant', (function() {
+Ext.define('qqext.model.Applicant', (function() {
 	var ns = Ext.ns('qqext'),
 			applicant = ns.applicant = {
 				applicantType: ['applicantType', 'Тип заявителя'],
@@ -11,7 +11,7 @@ Ext.define('qqext.model.qq.Applicant', (function() {
 				country: ['country', 'Страна'],
 				address: ['address', 'Адрес'],
 				phone: ['phone', 'Телефон'],
-				issueDocNum: ['issueDocNum', '№ входящего документа'],
+				issueDocNum: ['issueDocNum', '№ исходящего документа'],
 				issueDocDate: ['issueDocDate', 'Дата'],
 				fioJurPerson: ['fioJurPerson', 'ФИО юр. лица (кто подписал)'],
 				appends: ['appends', 'Приложения']};
@@ -33,11 +33,14 @@ Ext.define('qqext.model.qq.Applicant', (function() {
 			{name: applicant.address[0], type: 'string', defaultValue: null, convert: null},
 			{name: applicant.phone[0], type: 'string', defaultValue: null, convert: null},
 			{name: applicant.issueDocNum[0], type: 'string', defaultValue: null, convert: null},
-			{name: applicant.issueDocDate[0], type: 'date'},
+			{name: applicant.issueDocDate[0], type: 'date', convert: function(v) {
+					if (v)
+						return new Date(v);
+				}},
 			{name: applicant.fioJurPerson[0], type: 'string', defaultValue: null, convert: null},
 			{name: applicant.appends[0], type: 'string', defaultValue: null, convert: null}
 		],
-		belongsTo: 'qqext.model.qq.Question',
+		belongsTo: 'qqext.model.Question',
 		proxy: {
 			type: 'rest',
 			url: '/qq-web/rest/applicant',

@@ -1,4 +1,4 @@
-Ext.define('qqext.model.qq.ExecutionInfo', (function() {
+Ext.define('qqext.model.ExecutionInfo', (function() {
 	var ns = Ext.ns('qqext'),
 			exec = ns.execInfo = {
 				date: ['execDate', 'Дата исполнения'],
@@ -19,10 +19,10 @@ Ext.define('qqext.model.qq.ExecutionInfo', (function() {
 			{name: exec.tema[0], type: 'int', defaultValue: null, convert: null},
 			{name: exec.category[0], type: 'int', defaultValue: null, convert: null}
 		],
-		belongsTo: 'qqext.model.qq.Question',
-		requires: ['qqext.model.qq.RestProxy'],
+		belongsTo: 'qqext.model.Question',
+		requires: ['qqext.model.RestProxy'],
 		constructor: function() {
-			this.proxy = Ext.create('qqext.model.qq.RestProxy', 'execution');
+			this.proxy = Ext.create('qqext.model.RestProxy', 'execution');
 			this.callParent();
 		}
 

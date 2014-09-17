@@ -7,7 +7,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 	requires: [
 		'qqext.view.exec.cmp.ComboDateTrash',
 		'qqext.factory.HandlerButton',
-		'qqext.model.qq.SendAction',
+		'qqext.model.SendAction',
 		'qqext.factory.TextArea',
 		'qqext.factory.TextField',
 		'qqext.factory.DateField',

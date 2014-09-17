@@ -12,6 +12,10 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 		'qqext.cmp.FieldContainer',
 		'qqext.cmp.FieldSet'
 	],
+	fieldDefaults: {
+		blankText: 'Обязательно для заполнения',
+		allowBlank: false
+	},
 	disabledCls: '',
 	maskOnDisable: false,
 	title: 'Входящий документ',
@@ -25,22 +29,23 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 					items: [
 						me.litera = createCmp('FComboBox', 'Литера', 'literas', 'litera', true, {width: 190,
 							viewOnly: true}),
-						createCmp('FTextField', '№ Входящего документа', 'inboxNum', {
+						createCmp('FTextField', '№ Входящего документа', 'prefixNum', {
 							labelAlign: 'right',
 							labelWidth: 180,
 							width: 245
 						}),
-						createCmp('FTextField', '/', 'inboxNumSuf', {
+						createCmp('FTextField', '/', 'sufixNum', {
 							labelWidth: 5,
 							width: 50
 						})
 					]
 				}),
-				me.datereg = createCmp('FDateField', 'Дата регистрации', 'regDate', true, {viewOnly: true}),
+				me.datereg = createCmp('FDateField', 'Дата регистрации', 'regDate', true,
+						{viewOnly: true, allowBlank: true}), // Выставляется программно в модели
 				createCmp('FComboBox', 'Способ передачи', 'inboxDocDeliveryType', 'transferType'),
 				me.executor = createCmp('FComboBox', 'Исполняющая организация', 'inboxDocExecOrg', 'execOrg'),
 				me.registrator = createCmp('FComboBox', 'ФИО регистратора', 'allUsers', 'registrator', true,
-						{viewOnly: true})
+						{viewOnly: true, allowBlank: true})// Выставляется программно в модели
 			]
 		});
 		me.callParent();

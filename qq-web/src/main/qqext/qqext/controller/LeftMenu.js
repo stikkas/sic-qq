@@ -123,7 +123,7 @@ Ext.define('qqext.controller.LeftMenu', {
 			if (!model.getNotification()) {
 				console
 						.debug('model.getNotification undefined, creating new instance');
-				var n = Ext.create('qqext.model.qq.Notification');
+				var n = Ext.create('qqext.model.Notification');
 				model.setNotification(n);
 				mainCont.loadRecord(n);
 			} else {

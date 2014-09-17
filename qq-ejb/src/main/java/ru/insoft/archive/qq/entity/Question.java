@@ -21,6 +21,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import ru.insoft.archive.core_model.table.desc.DescriptorValue;
@@ -41,7 +42,6 @@ import ru.insoft.archive.extcommons.json.JsonOut;
 	@NamedQuery(name = "Question.findByInsertDate", query = "SELECT q FROM Question q WHERE q.insertDate = :insertDate"),
 	@NamedQuery(name = "Question.findByUpdateDate", query = "SELECT q FROM Question q WHERE q.updateDate = :updateDate"),
 	@NamedQuery(name = "Question.findByContent", query = "SELECT q FROM Question q WHERE q.content = :content"),
-	@NamedQuery(name = "Question.findByInboxNum", query = "SELECT q FROM Question q WHERE q.inboxNum = :inboxNum"),
 	@NamedQuery(name = "Question.findByMotivatedRefusal", query = "SELECT q FROM Question q WHERE q.motivatedRefusal = :motivatedRefusal"),
 	@NamedQuery(name = "Question.findByPlannedFinishDate", query = "SELECT q FROM Question q WHERE q.plannedFinishDate = :plannedFinishDate"),
 	@NamedQuery(name = "Question.findByRegDate", query = "SELECT q FROM Question q WHERE q.regDate = :regDate"),
@@ -106,9 +106,13 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 	@Column(name = "REGISTRATOR_ID")
 	private Long registrator;
 
-	@Size(max = 255)
-	@Column(name = "INBOX_NUM")
-	private String inboxNum;
+	@Size(max = 20)
+	@Column(name = "PREFIX_NUM")
+	private String prefixNum;
+
+	@Size(max = 20)
+	@Column(name = "SUFIX_NUM")
+	private String sufixNum;
 
 	@Column(name = "MOTIVATED_REFUSAL")
 	private Boolean motivatedRefusal;
@@ -139,41 +143,53 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 	@Column(name = "OBJECT_BIRTHYEAR")
 	private Long objectBirthYear;
 
+	@Transient
 	@OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
 	private Set<Coordination> coordinations;
 
+	@Transient
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Set<SendAction> sendActions;
 
+	@Transient
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Execution execution;
 
+	@Transient
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Transmission transmission;
 
+	@Transient
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private WayToSend wayToSend;
 
+	@Transient
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Applicant applicant;
 
+	@Transient
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Set<AttachedFile> attachedFiles;
 
+	@Transient
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Set<DeliveryAction> deliveryActions;
 
+	@Transient
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Set<UsedMaterial> usedMaterials;
 
+	@Transient
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Notification notification;
 
+	@Transient
 	@JoinColumn(name = "LITERA_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
 		insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
 	private DescriptorValue literaValue;
 
+	@Transient
 	@JoinColumn(name = "STATUS_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
 		insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -206,6 +222,22 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 
 	public void setStatusValue(DescriptorValue statusValue) {
 		this.statusValue = statusValue;
+	}
+
+	public String getPrefixNum() {
+		return prefixNum;
+	}
+
+	public void setPrefixNum(String prefixNum) {
+		this.prefixNum = prefixNum;
+	}
+
+	public String getSufixNum() {
+		return sufixNum;
+	}
+
+	public void setSufixNum(String sufixNum) {
+		this.sufixNum = sufixNum;
 	}
 
 	public DescriptorValue getLiteraValue() {
@@ -326,14 +358,6 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 
 	public void setContent(String content) {
 		this.content = content;
-	}
-
-	public String getInboxNum() {
-		return inboxNum;
-	}
-
-	public void setInboxNum(String inboxNum) {
-		this.inboxNum = inboxNum;
 	}
 
 	public Boolean getMotivatedRefusal() {

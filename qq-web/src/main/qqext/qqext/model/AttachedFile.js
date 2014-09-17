@@ -1,4 +1,4 @@
-Ext.define('qqext.model.qq.AttachedFile', {
+Ext.define('qqext.model.AttachedFile', {
 	alias: 'AttachedFileModel',
 	extend: 'Ext.data.Model',
 	idProperty: 'id',
@@ -10,10 +10,13 @@ Ext.define('qqext.model.qq.AttachedFile', {
 		{name: 'fileType', type: 'int'},
 		{name: 'question', type: 'int', defaultValue: null, convert: null}
 	],
-	belongsTo: 'qqext.model.qq.Question',
-	requires: ['qqext.model.qq.RestProxy'],
-	constructor: function() {
-		this.proxy = Ext.create('qqext.model.qq.RestProxy', 'attachedfile');
-		this.callParent();
+	belongsTo: 'qqext.model.Question',
+	requires: ['Ext.data.proxy.Rest'],
+	proxy: {
+		type: 'rest',
+		url: '/qq-web/rest/attachedfile',
+		reader: 'json',
+		writer: 'json'
 	}
 });
+

@@ -17,7 +17,9 @@ Ext.define('qqext.factory.Base', {
 	 */
 	_config: function(viewmode, opts) {
 		var me = this,
-				superMethod = me.superclass[me.callParent.caller.$name];
+				superMethod = me.superclass[me.callParent.caller.$name],
+				getErrors = me.getErrors;
+
 		if (viewmode === true) {
 			// Если afterrender ужа назначен, то он должен отвечать за режим просмотра
 			// здесь тогда ничего не делается
@@ -28,6 +30,22 @@ Ext.define('qqext.factory.Base', {
 				}
 			});
 		}
+		/**
+		 * Получает все ошибки из поля и преобразует их в строку:
+		 *  'Имя поля': Ошибка 1
+		 *  			Ошибка 2
+		 *  			Ошибка 3
+		 */
+		me.getErrors = function() {
+			var errors = getErrors.apply(me, []);
+			if (errors.length > 0) {
+				return '<p>' + me.fieldLabel + ": "
+						+ errors.map(function(v) {
+							return v + "<br/>";
+						}).join('') + "</p>";
+
+			}
+		};
 		// Если не передали viewmode, но передали opts
 		(viewmode instanceof Object) ?
 				superMethod.apply(me, [viewmode]) :

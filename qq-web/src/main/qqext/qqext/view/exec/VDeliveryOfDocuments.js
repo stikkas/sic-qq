@@ -8,8 +8,8 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 	requires: [
 		'qqext.view.exec.cmp.DeliveryTypeCount',
 		'qqext.factory.HandlerButton',
-		'qqext.model.qq.DeliveryAction',
-		'qqext.model.qq.UsedMaterial',
+		'qqext.model.DeliveryAction',
+		'qqext.model.UsedMaterial',
 		'Ext.grid.Panel',
 		'Ext.grid.plugin.CellEditing',
 		'qqext.cmp.FieldContainer',

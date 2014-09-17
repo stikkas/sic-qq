@@ -1,7 +1,7 @@
 /**
  *
  */
-Ext.define('qqext.model.qq.JournalItem', {
+Ext.define('qqext.model.JournalItem', {
 	alias: 'JournalItemModel',
 	extend: 'Ext.data.Model',
 	idProperty: 'id',

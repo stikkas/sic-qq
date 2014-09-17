@@ -1,4 +1,4 @@
-Ext.define('qqext.model.qq.DeliveryAction', (function() {
+Ext.define('qqext.model.DeliveryAction', (function() {
 
 	var ns = Ext.ns('qqext'),
 			del = ns.delAction = {
@@ -17,10 +17,10 @@ Ext.define('qqext.model.qq.DeliveryAction', (function() {
 			{name: del.type[0], type: 'int', convert: null, defaultValue: null},
 			{name: del.count[0], type: 'int', convert: null, defaultValue: null}
 		],
-		belongsTo: 'qqext.model.qq.Question',
-		requires: ['qqext.model.qq.RestProxy'],
+		belongsTo: 'qqext.model.Question',
+		requires: ['qqext.model.RestProxy'],
 		constructor: function() {
-			this.proxy = Ext.create('qqext.model.qq.RestProxy', 'deliveryaction');
+			this.proxy = Ext.create('qqext.model.RestProxy', 'deliveryaction');
 			this.callParent();
 		}
 

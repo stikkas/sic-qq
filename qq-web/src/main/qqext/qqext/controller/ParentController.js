@@ -6,7 +6,7 @@
 Ext.define('qqext.controller.ParentController', {
 	extend: 'Ext.app.Controller',
 	requires: [
-		'qqext.model.qq.SearchCritery'
+		'qqext.model.SearchCritery'
 	],
 	refs: [{
 			ref: 'vp',
@@ -20,7 +20,7 @@ Ext.define('qqext.controller.ParentController', {
 				model = controller.searchParams;
 
 		if (!model)
-			model = controller.searchParams = Ext.create('qqext.model.qq.SearchCritery');
+			model = controller.searchParams = Ext.create('qqext.model.SearchCritery');
 
 		return model;
 	},
@@ -79,20 +79,20 @@ Ext.define('qqext.controller.ParentController', {
 	},
 	initNewModel: function() {
 		var me = this;
-		var model = Ext.create('qqext.model.qq.Question');
-		var notification = Ext.create('qqext.model.qq.Notification');
+		var model = Ext.create('qqext.model.Question');
+		var notification = Ext.create('qqext.model.Notification');
 		model.setNotification(notification);
 
-		var applicant = Ext.create('qqext.model.qq.Applicant');
+		var applicant = Ext.create('qqext.model.Applicant');
 		model.setApplicant(applicant);
 
-		var transmission = Ext.create('qqext.model.qq.Transmission');
+		var transmission = Ext.create('qqext.model.Transmission');
 		model.setTransmission(transmission);
 
-		var execInfo = Ext.create('qqext.model.qq.ExecutionInfo');
+		var execInfo = Ext.create('qqext.model.ExecutionInfo');
 		model.setExecutionInfo(execInfo);
 
-		var wayToSend = Ext.create('qqext.model.qq.WayToSend');
+		var wayToSend = Ext.create('qqext.model.WayToSend');
 		model.setWayToSend(wayToSend);
 
 		this.getApplication().getController('qqext.controller.Main').currentModel = model;

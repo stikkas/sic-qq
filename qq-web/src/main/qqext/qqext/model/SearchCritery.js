@@ -1,7 +1,7 @@
 /**
  *  Модель для формы поиска {@link qqext.view.search.VSearchParams}
  */
-Ext.define('qqext.model.qq.SearchCritery', {
+Ext.define('qqext.model.SearchCritery', {
 	alias: 'SearchCriteryModel',
 	extend: 'Ext.data.Model',
 	singleton: true,

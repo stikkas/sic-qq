@@ -1,4 +1,4 @@
-Ext.define('qqext.model.qq.UsedMaterial', (function() {
+Ext.define('qqext.model.UsedMaterial', (function() {
 	var ns = Ext.ns('qqext'),
 			mat = ns.usedMaterial = {
 				fond: ['fondNumber', '№ фонда'],
@@ -22,10 +22,10 @@ Ext.define('qqext.model.qq.UsedMaterial', (function() {
 			{name: mat.pages[0], type: 'string'},
 			{name: mat.remark[0], type: 'string'}
 		],
-		belongsTo: 'qqext.model.qq.Question',
-		requires: ['qqext.model.qq.RestProxy'],
+		belongsTo: 'qqext.model.Question',
+		requires: ['qqext.model.RestProxy'],
 		constructor: function() {
-			this.proxy = Ext.create('qqext.model.qq.RestProxy', 'usedmaterial');
+			this.proxy = Ext.create('qqext.model.RestProxy', 'usedmaterial');
 			this.callParent();
 		}
 	}

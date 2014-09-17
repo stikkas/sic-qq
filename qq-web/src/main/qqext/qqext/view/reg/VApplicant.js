@@ -4,6 +4,10 @@
 Ext.define('qqext.view.reg.VApplicant', {
 	alias: 'VApplicant',
 	extend: 'qqext.view.StyledPanel',
+	fieldDefaults: {
+		validateOnChange: false,
+		blankText: 'Обязательно для заполнения'
+	},
 	requires: [
 		'qqext.factory.TextField',
 		'qqext.factory.TextArea',
@@ -21,16 +25,23 @@ Ext.define('qqext.view.reg.VApplicant', {
 				ns = qqext,
 				applicant = ns.applicant,
 				createCmp = Ext.create,
-				surname = createCmp('FTextField', applicant.lastName[1], applicant.lastName[0]),
-				name = createCmp('FTextField', applicant.firstName[1], applicant.firstName[0]),
-				fatherName = createCmp('FTextField', applicant.middleName[1], applicant.middleName[0]),
+				surname = createCmp('FTextField', applicant.lastName[1], applicant.lastName[0], {
+					allowBlank: false
+				}),
+				name = createCmp('FTextField', applicant.firstName[1], applicant.firstName[0], {
+					allowBlank: false
+				}),
+				fatherName = createCmp('FTextField', applicant.middleName[1], applicant.middleName[0], {
+					allowBlank: false
+				}),
 				org = createCmp('FTextArea', applicant.organization[1], applicant.organization[0],
-						{width: 400});
+						{width: 400, allowBlank: false});
 
 		Ext.applyIf(me, {
 			items: [
 				createCmp('FComboBox', applicant.applicantType[1],
 						applicant.applicantType[0], applicant.applicantType[0], {
+					allowBlank: false,
 					listeners: {
 						select: function change(cb, selected) {
 							if (!change.remove) {
@@ -58,7 +69,9 @@ Ext.define('qqext.view.reg.VApplicant', {
 					}
 				}),
 				createCmp('FComboBox', applicant.applicantCategory[1],
-						applicant.applicantCategory[0], applicant.applicantCategory[0]),
+						applicant.applicantCategory[0], applicant.applicantCategory[0], {
+					allowBlank: false
+				}),
 				createCmp('FTextField', applicant.country[1], applicant.country[0]),
 				createCmp('FTextField', applicant.address[1], applicant.address[0]),
 				createCmp('FTextField', applicant.phone[1], applicant.phone[0]),

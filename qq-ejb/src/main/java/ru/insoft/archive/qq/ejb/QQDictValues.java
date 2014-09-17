@@ -77,7 +77,7 @@ public class QQDictValues {
 		CriteriaQuery<AdmUser> cq = cb.createQuery(AdmUser.class);
 		Root<Transmission> from = cq.from(Transmission.class);
 		cq.distinct(true);
-		cq.select(from.<AdmUser>get("executorName"));
+		cq.select(from.<AdmUser>get("executorValue"));
 		Query q = em.createQuery(cq);
 		List<AdmUser> result = q.getResultList();
 		ArrayList<ScalarItem> items = new ArrayList<>();
@@ -96,22 +96,21 @@ public class QQDictValues {
 
 		CriteriaQuery<String> cq = cb.createQuery(String.class);
 		Root<Applicant> root = cq.from(Applicant.class);
+		Expression<String> sn = cb.concat(root.<String>get("lastName"), " ");
 
-		Expression<String> sn = cb.concat(root.<String>get("surname"), " ");
-
-		Expression<String> fn = cb.concat(root.<String>get("name"), " ");
+		Expression<String> fn = cb.concat(root.<String>get("firstName"), " ");
 
 		Expression<String> snfn = cb.concat(sn, fn);
 
 		Expression<String> snfnfan = cb.concat(snfn,
-			root.<String>get("fatherName"));
+			root.<String>get("middleName"));
 
 		Expression<Long> id = root.<Long>get("id");
 		// cq.multiselect(id,snfnfan);
 		cq.select(snfnfan);
 		cq.distinct(true);
 		Expression<Boolean> whExp = cb.equal(
-			root.get("applicantType").get("code"),
+			root.get("applicantTypeValue").get("code"),
 			Constants.Q_VALUE_APPLICANT_TYPE_FFACE);
 		cq.where(whExp);
 		Query q = em.createQuery(cq);
@@ -119,12 +118,12 @@ public class QQDictValues {
 		cq.orderBy(cb.asc(snfnfan));
 		CriteriaQuery<String> cqJur = cb.createQuery(String.class);
 		Root<Applicant> jurRoot = cqJur.from(Applicant.class);
-		Expression<String> selectColumn = jurRoot.get("applicantObject");
+		Expression<String> selectColumn = jurRoot.get("organization");
 		cqJur.select(selectColumn);
 		cqJur.orderBy(cb.asc(selectColumn));
 		cqJur.distinct(true);
 		Expression<Boolean> whEx = cb.equal(
-			jurRoot.get("applicantType").get("code"),
+			jurRoot.get("applicantTypeValue").get("code"),
 			Constants.Q_VALUE_APPLICANT_TYPE_JURFACE);
 		Query q2 = em.createQuery(cqJur);
 		List result2List = q2.getResultList();

@@ -22,11 +22,13 @@ Ext.define('qqext.model.UsedMaterial', (function() {
 			{name: mat.pages[0], type: 'string'},
 			{name: mat.remark[0], type: 'string'}
 		],
+		requires: ['Ext.data.proxy.Rest'],
 		belongsTo: 'qqext.model.Question',
-		requires: ['qqext.model.RestProxy'],
-		constructor: function() {
-			this.proxy = Ext.create('qqext.model.RestProxy', 'usedmaterial');
-			this.callParent();
+		proxy: {
+			type: 'rest',
+			url: '/qq-web/rest/usedmaterial',
+			reader: 'json',
+			writer: 'json'
 		}
-	}
+	};
 })());

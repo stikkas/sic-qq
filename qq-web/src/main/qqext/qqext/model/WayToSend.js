@@ -13,15 +13,20 @@ Ext.define('qqext.model.WayToSend', (function() {
 		fields: [
 			{name: 'cliId', type: 'string'},
 			{name: 'id', type: 'int'},
-			{name: way.notice[0], type: 'date'},
+			{name: way.notice[0], type: 'date', convert: function(v) {
+					if (v)
+						return new Date(v);
+				}},
 			{name: way.number[0], type: 'string'},
 			{name: way.remark[0], type: 'string'}
 		],
+		requires: ['Ext.data.proxy.Rest'],
 		belongsTo: 'qqext.model.Question',
-		requires: ['qqext.model.RestProxy'],
-		constructor: function() {
-			this.proxy = Ext.create('qqext.model.RestProxy', 'waytosend');
-			this.callParent();
+		proxy: {
+			type: 'rest',
+			url: '/qq-web/rest/waytosend',
+			reader: 'json',
+			writer: 'json'
 		}
 	};
 })());

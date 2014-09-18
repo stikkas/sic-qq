@@ -23,7 +23,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import ru.insoft.archive.core_model.table.desc.DescriptorValue;
 import ru.insoft.archive.extcommons.entity.HasId;
 import ru.insoft.archive.extcommons.json.JsonIn;
@@ -143,53 +143,53 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 	@Column(name = "OBJECT_BIRTHYEAR")
 	private Long objectBirthYear;
 
-	@XmlTransient
+	@JsonIgnore
 	@OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
 	private Set<Coordination> coordinations;
 
-	@XmlTransient
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Set<SendAction> sendActions;
 
-	@XmlTransient
+	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Execution execution;
 
-	@XmlTransient
+	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Transmission transmission;
 
-	@XmlTransient
+	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private WayToSend wayToSend;
 
-	@XmlTransient
+	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Applicant applicant;
 
-	@XmlTransient
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Set<AttachedFile> attachedFiles;
 
-	@XmlTransient
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Set<DeliveryAction> deliveryActions;
 
-	@XmlTransient
+	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Set<UsedMaterial> usedMaterials;
 
-	@XmlTransient
+	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Notification notification;
 
-	@XmlTransient
+	@JsonIgnore
 	@JoinColumn(name = "LITERA_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
 		insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
 	private DescriptorValue literaValue;
 
-	@XmlTransient
+	@JsonIgnore
 	@JoinColumn(name = "STATUS_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
 		insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.EAGER)

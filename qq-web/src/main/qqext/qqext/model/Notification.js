@@ -18,14 +18,18 @@ Ext.define('qqext.model.Notification', (function() {
 			{name: notf.executor[0], type: 'int', convert: null, defaultValue: null},
 			{name: notf.docType[0], type: 'int', convert: null, defaultValue: null},
 			{name: notf.deliveryType[0], type: 'int', convert: null, defaultValue: null},
-			{name: notf.notificationDate[0], type: 'date'}
+			{name: notf.notificationDate[0], type: 'date', convert: function(v) {
+					if (v)
+						return new Date(v);
+				}}
 		],
 		belongsTo: 'qqext.model.Question',
-		requires: ['qqext.model.RestProxy'],
-		constructor: function() {
-			this.proxy = Ext.create('qqext.model.RestProxy', 'notification');
-			this.callParent();
+		requires: ['Ext.data.proxy.Rest'],
+		proxy: {
+			type: 'rest',
+			url: '/qq-web/rest/notification',
+			reader: 'json',
+			writer: 'json'
 		}
-
 	};
 })());

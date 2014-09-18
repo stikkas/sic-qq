@@ -11,7 +11,6 @@ Ext.application({
 	appFolder: 'qqext',
 	autoCreateViewport: false,
 	requires: [
-		'Ext.data.proxy.Rest',
 		'hawk_common.model.User',
 		'hawk_common.store.UserLocalStorage',
 		'qqext.view.Viewport',

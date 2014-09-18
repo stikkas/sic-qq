@@ -175,6 +175,8 @@ Ext.define('qqext.Menu', {
 			 * @returns {undefined}
 			 */
 			function returnToSearch() {
+				// Удаляем ссылку на запрос, с которым работали
+				ns.request = null;
 				editMenuLayout.setActiveItem(0);
 				articleMenuLayout.setActiveItem(0);
 				getButton(btns.jvk).fireEvent('click');
@@ -186,11 +188,16 @@ Ext.define('qqext.Menu', {
 			 * @returns {undefined}
 			 */
 			function add() {
-				ns.request = null;
-				// Переключаем форму, дальше все выполняется в форме по событию
-				// 'activate'
-				articleMenuLayout.setActiveItem(1);
-				getButton(btns.reg).fireEvent('click');
+				// Только с ролью регистратор можно добавлять запрос
+				if (ns.user.isAllowed('Q_RULE_REGISTRATOR')) {
+					ns.request = null;
+					// Переключаем форму, дальше все выполняется в форме по событию
+					// 'activate'
+					articleMenuLayout.setActiveItem(1);
+					// Все вкладки кроме "Регистрация запроса" делаем недоступными
+					ns.disableArticles(true, btns.notify, btns.trans, btns.exec);
+					getButton(btns.reg).fireEvent('click');
+				}
 			}
 			/**
 			 * Обрабатывает событие 'click' на кнопке "Поиск",  вызывается

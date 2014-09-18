@@ -68,8 +68,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 				me._disableButtons(false, 1, 3);
 				// Устанавливаем режим редактирования
 				me.setViewOnly(false);
-				// Кнопки подразделов
-				me._disableArticles(true, btns.notify, btns.trans, btns.exec);
 				// Литера
 				model.set('litera', orgId);
 				if (!ns.isSIC) {
@@ -87,15 +85,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 		}
 	},
 	/**
-	 * Выключает/Включает кнопки левого меню
-	 * @param {Boolean} status true - сделать не активным
-	 * @private
-	 */
-	_disableArticles: function(status) {
-		for (var i = 1; i < arguments.length; ++i)
-			qqext.getButton(arguments[i]).setDisabled(status);
-	},
-	/**
 	 * Устанавливает режим доступности для нескольки элементов
 	 * @param {Boolean} mode режим в который установить все другие параметры метода
 	 * Остальные параметры передаются индексами, которые соотвествуют this._btns
@@ -106,6 +95,51 @@ Ext.define('qqext.view.reg.VRegForm', {
 		for (; i < max; ++i)
 			btns.getAt(arguments[i]).setDisabled(mode);
 	},
+	/**
+	 * Сохраняет модель Question с Applicant
+	 * Глобалная ссылка на модель устанавливается после сохранения Question на сервере и получения
+	 * id от сервера.
+	 * @param {Function} success будет вызвана в случае полного успеха, т.е. после сохранения Applicant
+	 * @param {Function} fail1 будет вызвана в случае несохранения Question, т.е. ничего не сохранилось
+	 * @param {Function} fail2 будет вызвана в случае несохранения Applicant, т.е. Question сохранилось
+	 * @private
+	 */
+	_saveModel: function(success, fail1, fail2) {
+		var me = this, model = me.model,
+				applicant = model.getAppl();
+		model.save({callback: function(recs, operation, status) {
+				if (status) {
+					if (!model.get('id')) {
+						var id = operation.response.responseText;
+						model.set('id', id)
+						applicant.set('id', id);
+						qqext.request = model;
+					}
+					applicant.save({callback: function(r, o, s) {
+							if (!s) {
+								qqext.showError("Данные о заявители не сохранены",
+										o.getError());
+								me.setViewOnly(false);
+								// Провал на втором уровне
+								if (fail2)
+									fail2();
+							} else {
+								// Полный успех
+								if (success)
+									success();
+							}
+						}
+					});
+				} else {
+					qqext.showError("Ошибка сохранения запроса", operation.getError());
+					me.setViewOnly(false);
+					// Провал на первом уровне
+					if (fail1)
+						fail1();
+				}
+			}
+		});
+	},
 	initComponent: function() {
 		//----------обработчики для кнопок меню---------
 		//sc - контекст для обработчика
@@ -115,7 +149,11 @@ Ext.define('qqext.view.reg.VRegForm', {
 		 * @returns {undefined}
 		 */
 		function edit() {
-			//TODO: разобраться что эта функция должна делать
+			me.setViewOnly(false);
+			// Отключить кнопку редактирования
+			me._disableButtons(true, 0);
+			// Включить все остальные кнопки
+			me._disableButtons(false, 1, 2, 3);
 		}
 
 		/**
@@ -130,43 +168,25 @@ Ext.define('qqext.view.reg.VRegForm', {
 					userId = user.get('userId'),
 					now = new Date(),
 					applicant = model.getAppl();
-			// Кнопки сохранить и регистрировать
-			me._disableButtons(true, 1, 3);
+			// Кнопки сохранить, удалить и регистрировать
+			me._disableButtons(true, 1, 2, 3);
 			me.setViewOnly(true);
 			me.updateRecord();
 			// Заполняем обязательные поля:
 			if (!model.get('id')) { // Только для новых моделей
 				model.set('insertUser', userId);
 				model.set('insertDate', now);
-				model.set('createOrg', user.get('organization'))
+				model.set('createOrg', user.get('organization'));
 			}
 			model.set('updateUser', userId);
 			model.set('updateDate', now);
-			model.set('status', me._getStatusId('Q_VALUE_QSTAT_ONREG'));
-			model.save({callback: function(recs, operation, status) {
-					if (status) {
-						if (!model.get('id')) {
-							var id = operation.response.responseText;
-							model.set('id', id)
-							applicant.set('id', id);
-							ns.request = model;
-						}
-						applicant.save({callback: function(r, o, s) {
-								if (!s)
-									me.showError("Данные о заявители не сохранены",
-											o.getError());
-								// Кнопки сохранить, удалить и регистрировать
-								me._disableButtons(false, 1, 2, 3);
-								me.setViewOnly(false);
-							}
-						});
-					} else {
-						me.showError("Ошибка сохранения на сервер", operation.getError());
-						// Кнопки сохранить и регистрировать
-						me._disableButtons(false, 1, 3);
-						me.setViewOnly(false);
-					}
-				}
+			model.set('status', ns.getStatusId('Q_VALUE_QSTAT_ONREG'));
+			me._saveModel(function() {
+				me._disableButtons(false, 0);
+			}, function() {
+				me._disableButtons(false, 1, 3);
+			}, function() {
+				me._disableButtons(false, 1, 2, 3);
 			});
 		}
 		/**
@@ -182,7 +202,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 						me.model = ns.request = null;
 						ns.getButton(ns.btns.toSearch).fireEvent('click');
 					} else {
-						me.showError("Ошибка удаления записи", operation.getError());
+						ns.showError("Ошибка удаления записи", operation.getError());
 					}
 				}
 			});
@@ -204,7 +224,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 						now = new Date();
 				me.updateRecord();
 				// Заполняем обязательные поля:
-				model.set('status', me._getStatusId('Q_VALUE_QSTAT_REG'));
+				model.set('status', ns.getStatusId('Q_VALUE_QSTAT_REG'));
 				if (!ns.request) {// Еще не сохраненная модель
 					model.set('insertUser', userId);
 					model.set('insertDate', now);
@@ -213,47 +233,16 @@ Ext.define('qqext.view.reg.VRegForm', {
 				model.set('updateDate', now);
 				model.set('registrator', userId);
 				model.set('regDate', now);
-				model.save({callback: function(rec, op, success) {
-						if (!success) {
-							me.showError("Ошибка сохранения на сервер", op.getError());
-							model.set('status', me._getStatusId('Q_VALUE_QSTAT_ONREG'));
-							me._disableButtons(false, 1, 2, 3);
-							me.setViewOnly(false);
-						} else { // Переходим на другую вкладку приналичии прав
-							var id = op.response.responseText;
-							if (!ns.request)
-								model.set('id', id);
-							me._saveApplicant(function() {
-								ns.model.Question.load(id, {callback: function(record, op, status) {
-										if (status) {
-											applicant = model.getAppl();
-											model = ns.request = me.model = record;
-											model.setAppl(applicant);
-											me.loadRecord();
-											if (model.get('litera') !== model.get('execOrg')) {
-												// Значит сотрудник из СИЦ назначил задачу архиву
-												var notifyButton = ns.getButton(ns.btns.notify);
-												notifyButton.setDisabled(false);
-												notifyButton.fireEvent('click');
-											}
-											if (ns.user.isAllowed("Q_RULE_COORDINATOR")) {
-												// Открываем закладку для передачи на исполнение
-												var transButton = ns.getButton(ns.btns.trans);
-												transButton.setDisabled(false);
-												if (!notifyButton)
-													transButton.fireEvent('click');
-											}
 
-										} else {
-											me.showError("Ошибка получения данных", o.getError());
-										}
-									}
-								});
-							});
-						}
-					}});
+				me._saveModel(function() {
+					me.loadRecord();
+					ns.turnOnArticles(ns.btns.notify, ns.btns.trans);
+				}, function() { // Не смогли сохранить ничего
+					me._disableButtons(false, 1, 3);
+				}, function() { // Не смогли сохранить заявителя
+					me._disableButtons(false, 1, 2, 3);
+				});
 			} else { // Валидация не прошла
-				model.set('status', me._getStatusId('Q_VALUE_QSTAT_ONREG'));
 				me._disableButtons(false, 1, 2, 3);
 				me.setViewOnly(false);
 			}
@@ -390,37 +379,9 @@ Ext.define('qqext.view.reg.VRegForm', {
 			}
 		}
 		if (errors.length > 0) {
-			this.showError("Форма заполнена неправильно", errors.join(''));
+			qqext.showError("Форма заполнена неправильно", errors.join(''));
 			return false;
 		}
 		return true;
-	},
-	showError: function(title, message) {
-		Ext.Msg.show({
-			title: title,
-			msg: message,
-			buttons: Ext.Msg.OK,
-			icon: Ext.Msg.ERROR,
-			cls: 'err_msg',
-			maxWidth: 1000
-		});
-	},
-	/**
-	 * Возвращает id статуса запроса для заданного кодового значения
-	 * @param {String} code код для статуса
-	 * @returns {Number/undefined} номер id соответстующего коду
-	 * @private
-	 */
-	_getStatusId: function(code) {
-		var statusId;
-		Ext.getStore('Q_DICT_QUESTION_STATUSES').
-				findBy(function(record, id) {
-					if (record.get('code') === code) {
-						statusId = id;
-						return true;
-					}
-					return false;
-				});
-		return statusId;
 	}
 });

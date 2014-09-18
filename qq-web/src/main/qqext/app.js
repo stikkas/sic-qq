@@ -21,7 +21,6 @@ Ext.application({
 	controllers: ['qqext.controller.Main'],
 	launch: function() {
 		var me = this;
-
 		Ext.Ajax.request({
 			url: '/qq-web/Rules',
 			// Используется только в целях тестирования, в обход реальной аутентификации
@@ -45,7 +44,6 @@ Ext.application({
 								}
 							}
 						});
-
 				user.set('id', 'current');
 				user.set('name', authRes.msg);
 				user.set('access', authRes.access);
@@ -145,11 +143,7 @@ Ext.application({
 		 */
 		/**
 		 * @property {Ext.data.Model} request
-		 * Текущий запрос
-		 */
-		/**
-		 * @property {String} currentRequest
-		 * id выбранного запроса, в данный момент с ним ведется работа
+		 * Текущий запрос (модель Question)
 		 */
 		/*
 		 * Различные кнопки, на которые нужно иметь ссылки по ходу дела. Обращаться к ним
@@ -231,6 +225,73 @@ Ext.application({
 			trans: 6, // Кнопка "Передача на исполнение"
 			exec: 7, // Кнопка "Исполнение запроса"
 			toSearch: 8 // Кнопка "Вернуться в поиск"
+		};
+		/**
+		 * Делает доступной кнопку раздела для работы с ним. Проверяет правоправность действия, если
+		 * у пользователя соответствующей роли нет, то ничего не происходит. Этот метод
+		 * не включает раздел на редактирование.
+		 * Схема работы такая: сначала выключаем все кнопки с помощью функции qqext.disableArticles,
+		 * затем включаем все кнопки с помощью qqext.turnOnArticles.
+		 * Кнопку регистрации никогда не включаем и не выключаем. Право переключение на вкладку работы с
+		 * запросами проверяем перед переключением.
+		 * (одноименная кнопка в меню регистрации запроса)
+		 * @param {qqext.btns.btn} button кнопка или кнопки которые необходимо включить, если не передается
+		 * то включает все кнопки
+		 * @method turnOnArticles
+		 */
+		ns.turnOnArticles = function toa() {
+			var btns = ns.btns,
+					user = ns.user,
+					request = ns.request,
+					registrator = 'Q_RULE_REGISTRATOR',
+					coordinator = 'Q_RULE_COORDINATOR',
+					executor = 'Q_RULE_EXECUTOR',
+					// TODO: сделать что-то чтобы проверять по кодам статуса а не по ID из таблицы
+					onreg = toa.onreg || (toa.onreg = ns.getStatusId('Q_VALUE_QSTAT_ONREG')),
+					registered = toa.reg || (toa.reg = ns.getStatusId('Q_VALUE_QSTAT_REG')),
+					onexec = toa.onexec || (toa.onexec = ns.getStatusId('Q_VALUE_QSTAT_ONEXEC')),
+					exec = toa.exec || (toa.exec = ns.getStatusId('Q_VALUE_QSTAT_EXEC')),
+					status,
+					buttons = arguments.length > 0 ? arguments : [btns.notify, btns.trans, btns.exec],
+					i = 0, max = buttons.length;
+			for (; i < max; ++i) {
+				switch (buttons[i]) {
+					case btns.notify:
+						if (user.isSIC) {
+							if ((user.isAllowed(registrator) || user.isAllowed(coordinator) ||
+									user.isAllowed(executor))) {
+								var status = request.get('status');
+								if (status !== onreg &&
+										ns.request.get('execOrg') !== user.get('organization'))
+									ns.disableArticles(false, btns.notify);
+							}
+						}
+						break;
+					case btns.trans:
+						if ((user.isAllowed(coordinator) || user.isAllowed(executor))) {
+							var status = request.get('status');
+							if (status === registered || status === onexec || status === exec)
+								ns.disableArticles(false, btns.trans);
+						}
+						break;
+					case btns.exec:
+						if (user.isAllowed(executor)) {
+							var status = request.get('status');
+							if (status === onexec || status === exec)
+								ns.disableArticles(false, btns.exec);
+						}
+				}
+			}
+		};
+		/**
+		 * Выключает/Включает кнопки левого меню
+		 * @param {Boolean} status true - сделать неактивным
+		 * @param {qqext.btns} Дополнительно передаются кнопки, которые необходимо выключить или включить
+		 * @method disableArticles
+		 */
+		ns.disableArticles = function(status) {
+			for (var i = 1; i < arguments.length; ++i)
+				ns.getButton(arguments[i]).setDisabled(status);
 		};
 		/**
 		 * Вызывается когда нажали на кнопку 'Выйти'
@@ -337,8 +398,40 @@ Ext.application({
 		 * Признак того, что пользователь является сотрудником SIC
 		 */
 
-
-
+		/**
+		 * Показывает ошибки в диалоговом окне
+		 * @param {String} title заголовок окна
+		 * @param {String} message сообщение об ошибке
+		 * @method showError
+		 */
+		ns.showError = function(title, message) {
+			Ext.Msg.show({
+				title: title,
+				msg: message,
+				buttons: Ext.Msg.OK,
+				icon: Ext.Msg.ERROR,
+				cls: 'err_msg',
+				maxWidth: 800
+			});
+		};
+		// Пока так, в будущем, когда буду дорабатывать программу, надо обязательно переделать
+		/**
+		 * Возвращает id статуса запроса для заданного кодового значения
+		 * @param {String} code код для статуса
+		 * @returns {Number/undefined} номер id соответстующего коду
+		 */
+		ns.getStatusId = function(code) {
+			var statusId;
+			Ext.getStore('Q_DICT_QUESTION_STATUSES').
+					findBy(function(record, id) {
+						if (record.get('code') === code) {
+							statusId = id;
+							return true;
+						}
+						return false;
+					});
+			return statusId;
+		}
 		// создаем все меню
 		ns.Menu.init();
 	}

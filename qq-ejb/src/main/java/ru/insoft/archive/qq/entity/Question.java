@@ -21,9 +21,9 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlTransient;
 import ru.insoft.archive.core_model.table.desc.DescriptorValue;
 import ru.insoft.archive.extcommons.entity.HasId;
 import ru.insoft.archive.extcommons.json.JsonIn;
@@ -143,53 +143,53 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 	@Column(name = "OBJECT_BIRTHYEAR")
 	private Long objectBirthYear;
 
-	@Transient
+	@XmlTransient
 	@OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
 	private Set<Coordination> coordinations;
 
-	@Transient
+	@XmlTransient
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Set<SendAction> sendActions;
 
-	@Transient
+	@XmlTransient
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Execution execution;
 
-	@Transient
+	@XmlTransient
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Transmission transmission;
 
-	@Transient
+	@XmlTransient
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private WayToSend wayToSend;
 
-	@Transient
+	@XmlTransient
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Applicant applicant;
 
-	@Transient
+	@XmlTransient
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Set<AttachedFile> attachedFiles;
 
-	@Transient
+	@XmlTransient
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Set<DeliveryAction> deliveryActions;
 
-	@Transient
+	@XmlTransient
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Set<UsedMaterial> usedMaterials;
 
-	@Transient
+	@XmlTransient
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Notification notification;
 
-	@Transient
+	@XmlTransient
 	@JoinColumn(name = "LITERA_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
 		insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
 	private DescriptorValue literaValue;
 
-	@Transient
+	@XmlTransient
 	@JoinColumn(name = "STATUS_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
 		insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.EAGER)

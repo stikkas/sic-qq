@@ -15,9 +15,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlTransient;
 import ru.insoft.archive.core_model.table.desc.DescriptorValue;
 import ru.insoft.archive.extcommons.entity.HasId;
 import ru.insoft.archive.extcommons.json.JsonIn;
@@ -108,11 +108,13 @@ public class Applicant implements Serializable, HasId, JsonIn, JsonOut {
 	@Column(name = "LAST_NAME")
 	private String lastName;
 
+	@XmlTransient
 	@JoinColumn(name = "QUESTION_ID",
 		referencedColumnName = "QUESTION_ID", insertable = false, updatable = false)
 	@OneToOne(optional = false, fetch = FetchType.LAZY)
 	private Question question;
 
+	@XmlTransient
 	@JoinColumn(name = "APPLICANT_TYPE_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
 		insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -253,15 +255,14 @@ public class Applicant implements Serializable, HasId, JsonIn, JsonOut {
 		this.lastName = lastName;
 	}
 
-	/*
-	 public Question getQuestion() {
-	 return question;
-	 }
+	public Question getQuestion() {
+		return question;
+	}
 
-	 public void setQuestion(Question question) {
-	 this.question = question;
-	 }
-	 */
+	public void setQuestion(Question question) {
+		this.question = question;
+	}
+
 	@Override
 	public int hashCode() {
 		int hash = 0;

@@ -189,7 +189,7 @@ Ext.define('qqext.Menu', {
 			 */
 			function add() {
 				// Только с ролью регистратор можно добавлять запрос
-				if (ns.user.isAllowed('Q_RULE_REGISTRATOR')) {
+				if (ns.user.isAllowed(ns.rules.reg)) {
 					ns.request = null;
 					// Переключаем форму, дальше все выполняется в форме по событию
 					// 'activate'
@@ -268,24 +268,7 @@ Ext.define('qqext.Menu', {
 			 * @returns {undefined}
 			 */
 			function notifyRequestor() {
-				editReqMenuLayout.setActiveItem(1);
-				var me = ns.mainController;
-				me.syncModel();
-
-				if (ns.setCurrentForm(4)) {
-					var
-							model = me.getModel(),
-							notify = model.getNotification();
-
-					if (!notify) {
-						var n = createCmp('qqext.model.Notification');
-						model.setNotification(n);
-						ns.notifyForm.loadRecord(n);
-					} else {
-						console.log('notification: ' + notify.getData());
-						ns.notifyForm.loadRecord(notify);
-					}
-				}
+				ns.setCurrentForm(4);
 			}
 
 			/**
@@ -294,11 +277,7 @@ Ext.define('qqext.Menu', {
 			 * @returns {undefined}
 			 */
 			function transmitToComplete() {
-				editReqMenuLayout.setActiveItem(2);
-				var me = ns.mainController;
-				me.syncModel();
-				if (ns.setCurrentForm(5))
-					ns.transForm.loadRecord(me.getModel().getTransmission());
+				ns.setCurrentForm(5)
 			}
 
 			/**
@@ -307,11 +286,7 @@ Ext.define('qqext.Menu', {
 			 * @returns {undefined}
 			 */
 			function toComplete() {
-				editReqMenuLayout.setActiveItem(3);
-				var me = ns.mainController;
-				me.syncModel();
-				if (ns.setCurrentForm(6))
-					ns.execForm.loadRecord(me.getModel());
+				ns.setCurrentForm(6);
 			}
 
 		}

@@ -14,6 +14,7 @@ Ext.define('qqext.view.notify.VNotify', {
 		'qqext.view.menu.HButtonMenu',
 		'qqext.Menu'
 	],
+	mixins: ['qqext.cmp.DisableButtons'],
 	height: 300,
 	maxHeight: 300,
 	title: 'Уведомление заявителю',
@@ -22,16 +23,69 @@ Ext.define('qqext.view.notify.VNotify', {
 	 * @private
 	 */
 	_idx: 4,
+	listeners: {
+		activate: function(me, prev) {
+			var ns = qqext, model;
+			ns.Menu.setEditMenu(me._idx);
+			if (ns.request !== me.model) {
+				// Значит новый запрос (не тот который был до этого)
+				var model = me.model = ns.request,
+						noti = model.getNoti(),
+						edit = ns.user.isAllowed(ns.rules.reg);
+				if (noti) {
+					me.loadRecord(noti);
+					me.setViewOnly(true);
+					me._disableButtons(true, 0);
+					me._disableButtons(!edit, 1);
+				} else if (edit) {
+					model.setNoti(Ext.create('NotificationModel', {
+						id: model.get('id')}));
+					me.setViewOnly(false);
+					me._disableButtons(true, 1);
+					me._disableButtons(false, 0);
+				}
+			}
+		}
+	},
 	initComponent: function() {
 		//----------Обработчики кнопок меню----------
 		function saveNotify() {
-			console.log(this);
-			//TODO: реализовать
+			var model = me.model,
+					noti = model.getNoti();
+
+			me._disableButtons(true, 0, 1);
+			me.setViewOnly(true);
+			me.updateRecord(noti);
+
+			noti.save({callback: function(rec, op, suc) {
+					if (suc) {
+						model.set('status', ns.getStatusId(ns.stats.notify));
+						// Обновляем модель запроса (статус)
+						model.save({callback: function(record, operation, success) {
+								if (success) {
+									me._disableButtons(false, 1);
+								} else {
+									ns.showError("Ошибка сохранения", operation.getError());
+									me.setViewOnly(false);
+									// Включаем кнопку сохранить
+									me._disableButtons(false, 0);
+									noti.destroy();
+								}
+							}
+						});
+					} else {
+						ns.showError("Ошибка сохранения", op.getError());
+						me.setViewOnly(false);
+						me._disableButtons(false, 0);
+					}
+				}
+			});
 		}
 
 		function editNotify() {
-			console.log(this);
-			//TODO: реализовать
+			me._disableButtons(true, 1);
+			me._disableButtons(false, 0);
+			me.setViewOnly(false);
 		}
 
 		//-------------------------------------------
@@ -41,23 +95,20 @@ Ext.define('qqext.view.notify.VNotify', {
 				createCmp = Ext.create,
 				labels = ns.labels,
 				notf = ns.notification,
-				menus = createCmp('HButtonMenu', [
+				menu = createCmp('HButtonMenu', [
 					{text: labels.save, action: saveNotify},
 					{text: labels.edit, action: editNotify}
 				], 'ToolButton');
-
-
 		Ext.applyIf(me, {
 			items: [
 				createCmp('FComboBox', notf.executor[1], 'allUsers', notf.executor[0]),
 				createCmp('FComboBox', notf.docType[1], 'docType', notf.docType[0]),
 				createCmp('FComboBox', notf.deliveryType[1], 'answerForm', notf.deliveryType[0]),
 				createCmp('FDateField', notf.notificationDate[1], notf.notificationDate[0])
-			],
-			menus: menus
+			]
 		});
-
+		me._btns = menu.items;
 		me.callParent();
-		ns.Menu.editReqMenu.insert(1, me.menus);
+		ns.Menu.editReqMenu.insert(1, menu);
 	}
 });

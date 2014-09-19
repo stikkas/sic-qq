@@ -14,7 +14,8 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 	],
 	fieldDefaults: {
 		blankText: 'Обязательно для заполнения',
-		allowBlank: false
+		allowBlank: false,
+		validateOnChange: false
 	},
 	disabledCls: '',
 	maskOnDisable: false,

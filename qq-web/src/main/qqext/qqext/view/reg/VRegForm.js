@@ -17,6 +17,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 		'qqext.view.menu.HButtonMenu',
 		'qqext.Menu'
 	],
+	mixins: ['qqext.cmp.DisableButtons'],
 	disabledCls: '',
 	maskOnDisable: false,
 	disabled: null,
@@ -30,8 +31,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 	_idx: 3,
 	// Состояние кнопок меню
 	_btnstate: [],
-	//Кнопки меню
-	_btns: null,
 	// Сохранить состояние кнопок
 	_saveBtnState: function() {
 		var i = 0,
@@ -59,9 +58,9 @@ Ext.define('qqext.view.reg.VRegForm', {
 				var
 						inbox = me.inbox,
 						user = ns.user,
-						orgId = user.get('organization'),
-						btns = ns.btns;
+						orgId = user.get('organization');
 
+				me.clear();
 				model = me.initModel();
 				//Кнопки "Редактировать" и "Удалить"
 				me._disableButtons(true, 0, 2);
@@ -79,21 +78,11 @@ Ext.define('qqext.view.reg.VRegForm', {
 				}
 			} else if (prev === ns.searchForm || prev === ns.jvkForm) {
 // Значит пришли по двойному клику на существуещем запросе, (открыли существующий запрос)
+				me.clear();
 				model = me.initModel(ns.request);
 			}
 			me.loadRecord();
 		}
-	},
-	/**
-	 * Устанавливает режим доступности для нескольки элементов
-	 * @param {Boolean} mode режим в который установить все другие параметры метода
-	 * Остальные параметры передаются индексами, которые соотвествуют this._btns
-	 * @private
-	 */
-	_disableButtons: function(mode) {
-		var i = 1, max = arguments.length, btns = this._btns;
-		for (; i < max; ++i)
-			btns.getAt(arguments[i]).setDisabled(mode);
 	},
 	/**
 	 * Сохраняет модель Question с Applicant
@@ -111,7 +100,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 				if (status) {
 					if (!model.get('id')) {
 						var id = operation.response.responseText;
-						model.set('id', id)
+						model.set('id', id);
 						applicant.set('id', id);
 						qqext.request = model;
 					}
@@ -166,8 +155,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 					model = me.model,
 					user = ns.user,
 					userId = user.get('userId'),
-					now = new Date(),
-					applicant = model.getAppl();
+					now = new Date();
 			// Кнопки сохранить, удалить и регистрировать
 			me._disableButtons(true, 1, 2, 3);
 			me.setViewOnly(true);
@@ -180,7 +168,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 			}
 			model.set('updateUser', userId);
 			model.set('updateDate', now);
-			model.set('status', ns.getStatusId('Q_VALUE_QSTAT_ONREG'));
+			model.set('status', ns.getStatusId(ns.stats.onreg));
 			me._saveModel(function() {
 				me._disableButtons(false, 0);
 			}, function() {
@@ -225,9 +213,9 @@ Ext.define('qqext.view.reg.VRegForm', {
 				// Заполняем обязательные поля:
 
 				if (model.get('litera') !== model.get('execOrg'))
-					status = 'Q_VALUE_QSTAT_TRANS';
+					status = ns.stats.trans;
 				else
-					status = 'Q_VALUE_QSTAT_REG';
+					status = ns.stats.reg;
 				model.set('status', ns.getStatusId(status));
 
 				if (!ns.request) {// Еще не сохраненная модель
@@ -387,5 +375,23 @@ Ext.define('qqext.view.reg.VRegForm', {
 			return false;
 		}
 		return true;
+	},
+	/**
+	 * Сбрасывает все ошибки
+	 */
+	reset: function() {
+		for (var i = 0; i < this._forms.length; ++i)
+			this._forms[i].reset();
+	},
+	/**
+	 * Приводит форму к первоначальному состоянию,
+	 * без данных
+	 */
+	clear: function() {
+		var me = this;
+		me.reset();
+		me.target.hide();
+		me.applicant.appType.setValue(null);
+		me.doLayout();
 	}
 });

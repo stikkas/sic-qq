@@ -18,6 +18,20 @@ Ext.define('qqext.cmp.Panel', {
 			}
 		}
 		return error;
+	},
+	/**
+	 * Очищает все поля формы вместе с ошибками.
+	 */
+	reset: function() {
+		var items = this.items,
+				max = items.length, i = 0;
+		for (; i < max; ++i) {
+			try {
+				items.getAt(i).reset();
+			} catch (e) {
+
+			}
+		}
 	}
 });
 

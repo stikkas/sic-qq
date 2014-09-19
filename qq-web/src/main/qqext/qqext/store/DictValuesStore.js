@@ -20,7 +20,7 @@ Ext.define('qqext.store.DictValuesStore', {
 		me.storeId = storeId;
 		me.proxy = {
 			type: 'ajax',
-			url: 'api/DictValues',
+			url: '/qq-web/api/DictValues',
 			reader: {
 				type: 'json'
 			},

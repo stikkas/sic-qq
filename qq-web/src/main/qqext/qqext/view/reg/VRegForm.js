@@ -52,16 +52,17 @@ Ext.define('qqext.view.reg.VRegForm', {
 	},
 	listeners: {
 		activate: function(me, prev) {
-			var ns = qqext;
+			var ns = qqext, model;
 			ns.Menu.setEditMenu(me._idx);
 			if (ns.request === null) {
 				// Значит событие случилось по нажатию на кнопку "Добавить"
 				var
-						model = me.getModel(true),
 						inbox = me.inbox,
 						user = ns.user,
 						orgId = user.get('organization'),
 						btns = ns.btns;
+
+				model = me.initModel();
 				//Кнопки "Редактировать" и "Удалить"
 				me._disableButtons(true, 0, 2);
 				//Кнопки "Сохранить" и "Регистрировать"
@@ -77,9 +78,8 @@ Ext.define('qqext.view.reg.VRegForm', {
 					model.set('execOrg', orgId);
 				}
 			} else if (prev === ns.searchForm || prev === ns.jvkForm) {
-// Значит пришли по двойному клику на существуещем запросе
-			} else {
-// Переключаемся между вкладками одного запроса
+// Значит пришли по двойному клику на существуещем запросе, (открыли существующий запрос)
+				model = me.initModel(ns.request);
 			}
 			me.loadRecord();
 		}
@@ -217,18 +217,24 @@ Ext.define('qqext.view.reg.VRegForm', {
 			// Кнопки сохранить, удалить и регистрировать
 			me._disableButtons(true, 1, 2, 3);
 			me.setViewOnly(true);
-			var model = me.model,
-					applicant = model.getAppl();
+			var model = me.model, status;
 			if (me.validate()) {
 				var userId = ns.user.get('userId'),
 						now = new Date();
 				me.updateRecord();
 				// Заполняем обязательные поля:
-				model.set('status', ns.getStatusId('Q_VALUE_QSTAT_REG'));
+
+				if (model.get('litera') !== model.get('execOrg'))
+					status = 'Q_VALUE_QSTAT_TRANS';
+				else
+					status = 'Q_VALUE_QSTAT_REG';
+				model.set('status', ns.getStatusId(status));
+
 				if (!ns.request) {// Еще не сохраненная модель
 					model.set('insertUser', userId);
 					model.set('insertDate', now);
 				}
+
 				model.set('updateUser', userId);
 				model.set('updateDate', now);
 				model.set('registrator', userId);
@@ -328,14 +334,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 		this._mAction('updateRecord');
 	},
 	/**
-	 * Инициализируем модель
-	 */
-	initModel: function() {
-		var createCmp = Ext.create,
-				model = this.model = createCmp('QuestionModel');
-		model.setAppl(createCmp('ApplicantModel'));
-	},
-	/**
 	 * Выполняет дествия над всеми ассоциациями модели
 	 * @param {Function} onOne функция для ассоциации hasOne
 	 * @param {Function} onMany функция для ассоциации hasMany
@@ -354,14 +352,20 @@ Ext.define('qqext.view.reg.VRegForm', {
 		}
 	},
 	/**
-	 * Отдает модель привязанную к форме
-	 * @param {Boolean} create Создавать ли новую модель?
+	 * Инициализирует модель для формы, если глобальная модель не задана, то создается новая
+	 * @param {qqext.model.Question} model если задана то модель формы инициализируется ей
 	 * @returns {qqext.model.Question} модель
 	 */
-	getModel: function(create) {
-		if (create || !this.model)
-			this.initModel();
-		return this.model;
+	initModel: function(model) {
+		var me = this;
+		if (model)
+			return me.model = model;
+
+		var createCmp = Ext.create,
+				model = me.model = createCmp('QuestionModel');
+		model.setAppl(createCmp('ApplicantModel'));
+
+		return model;
 	},
 	/**
 	 * Проверяет форму на валидность (для прохождения регистрации).

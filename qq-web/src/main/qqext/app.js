@@ -36,10 +36,14 @@ Ext.application({
 				Ext.create('DictValuesStore',
 						'inboxDocExecOrg', 'ORG_STRUCTURE', {
 							listeners: {
-								load: function(st) {
-									ns.isSIC =
-											st.getById(authRes.organization).get('code')
-											=== 'Q_VALUE_MEMBER_SIC';
+								load: function(st, records) {
+									var record, max = records.length, i = 0;
+									for (; i < max; ++i) {
+										record = records[i];
+										if (record.get('code') === 'Q_VALUE_MEMBER_SIC')
+											ns.sicId = record.get('id');
+									}
+									ns.isSIC = ns.sicId === authRes.organization;
 								}
 							}
 						});
@@ -156,7 +160,7 @@ Ext.application({
 		 * @returns {Obejct/undefined} если такая кнопка есть, то кнопку, иначе undefined
 		 * @method getButton
 		 */
-		ns.getButton = function(name) {
+		var getButton = ns.getButton = function(name) {
 			var max = buttons.length,
 					i = 0,
 					btn;
@@ -173,7 +177,7 @@ Ext.application({
 		 * @method addButton
 		 */
 		ns.addButton = function(name, button) {
-			if (!qqext.getButton(name))
+			if (!getButton(name))
 				buttons.push({name: name, body: button});
 		};
 		/**
@@ -204,7 +208,7 @@ Ext.application({
 		/**
 		 * @property {Object} urls URLs для доступа к серверу
 		 */
-		ns.urls = {
+		var urls = ns.urls = {
 			welcome: "/qq-web/",
 			login: "/qq-web/Auth?action=logout&redirect=1",
 			app1: "#",
@@ -215,7 +219,7 @@ Ext.application({
 		 * Условные обозначения для кнопок, которые могут использоваться
 		 * из разных частей программы. Доступ получать {@link #getButton}.
 		 */
-		ns.btns = {
+		var buttonNames = ns.btns = {
 			add: 1, // Кнопка "Добавить" новый запрос
 			jvk: 2, // Кнопка "ЖВК"
 			search: 3, // Кнопка "Поиск"
@@ -239,7 +243,7 @@ Ext.application({
 		 * @method turnOnArticles
 		 */
 		ns.turnOnArticles = function toa() {
-			var btns = ns.btns,
+			var
 					user = ns.user,
 					request = ns.request,
 					registrator = 'Q_RULE_REGISTRATOR',
@@ -250,34 +254,33 @@ Ext.application({
 					registered = toa.reg || (toa.reg = ns.getStatusId('Q_VALUE_QSTAT_REG')),
 					onexec = toa.onexec || (toa.onexec = ns.getStatusId('Q_VALUE_QSTAT_ONEXEC')),
 					exec = toa.exec || (toa.exec = ns.getStatusId('Q_VALUE_QSTAT_EXEC')),
+					trans = toa.trans || (toa.trans = ns.getStatusId('Q_VALUE_QSTAT_TRANS')),
+					notify = toa.notify || (toa.notify = ns.getStatusId('Q_VALUE_QSTAT_NOTIFY')),
 					status,
-					buttons = arguments.length > 0 ? arguments : [btns.notify, btns.trans, btns.exec],
+					buttons = arguments.length > 0 ? arguments : [
+						buttonNames.notify, buttonNames.trans, buttonNames.exec],
 					i = 0, max = buttons.length;
 			for (; i < max; ++i) {
 				switch (buttons[i]) {
-					case btns.notify:
+					case buttonNames.notify:
 						if (user.isSIC) {
-							if ((user.isAllowed(registrator) || user.isAllowed(coordinator) ||
-									user.isAllowed(executor))) {
-								var status = request.get('status');
-								if (status !== onreg &&
-										ns.request.get('execOrg') !== user.get('organization'))
-									ns.disableArticles(false, btns.notify);
-							}
+							if (user.isAllowed([registrator, coordinator, executor]) &&
+									request.get('status') === trans)
+								ns.disableArticles(false, buttonNames.notify);
 						}
 						break;
-					case btns.trans:
-						if ((user.isAllowed(coordinator) || user.isAllowed(executor))) {
+					case buttonNames.trans:
+						if (user.isAllowed([coordinator, executor])) {
 							var status = request.get('status');
 							if (status === registered || status === onexec || status === exec)
-								ns.disableArticles(false, btns.trans);
+								ns.disableArticles(false, buttonNames.trans);
 						}
 						break;
-					case btns.exec:
+					case buttonNames.exec:
 						if (user.isAllowed(executor)) {
 							var status = request.get('status');
 							if (status === onexec || status === exec)
-								ns.disableArticles(false, btns.exec);
+								ns.disableArticles(false, buttonNames.exec);
 						}
 				}
 			}
@@ -290,7 +293,7 @@ Ext.application({
 		 */
 		ns.disableArticles = function(status) {
 			for (var i = 1; i < arguments.length; ++i)
-				ns.getButton(arguments[i]).setDisabled(status);
+				getButton(arguments[i]).setDisabled(status);
 		};
 		/**
 		 * Вызывается когда нажали на кнопку 'Выйти'
@@ -299,7 +302,7 @@ Ext.application({
 		ns.quitAction = function() {
 			// молча, без выстерла событий, удаляем все данные из хранилища
 			qqext.userStore.removeAll(true);
-			window.location = qqext.urls.login;
+			window.location = urls.login;
 		};
 		/**
 		 * @property {Obejct} applicant
@@ -430,7 +433,12 @@ Ext.application({
 						return false;
 					});
 			return statusId;
-		}
+		};
+		/**
+		 * Идентификатор СИЦ
+		 * @property {Number} sicId
+		 */
+
 		// создаем все меню
 		ns.Menu.init();
 	}

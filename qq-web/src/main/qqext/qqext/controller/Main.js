@@ -44,12 +44,12 @@ Ext.define('qqext.controller.Main', {
 
 		createCmp('qqext.store.CustomStore', {
 			storeId: 'searchResults',
-			url: 'api/Search',
+			url: '/qq-web/api/Search',
 			model: 'qqext.model.SearchResultItem'
 		});
 		createCmp('qqext.store.CustomStore', {
 			storeId: 'journal',
-			url: 'api/Journal',
+			url: '/qq-web/api/Journal',
 			pageSize: 10,
 			remoteSort: true,
 			model: 'qqext.model.JournalItem',

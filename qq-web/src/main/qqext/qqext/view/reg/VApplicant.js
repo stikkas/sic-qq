@@ -25,49 +25,36 @@ Ext.define('qqext.view.reg.VApplicant', {
 				ns = qqext,
 				applicant = ns.applicant,
 				createCmp = Ext.create,
-				surname = createCmp('FTextField', applicant.lastName[1], applicant.lastName[0], {
-					allowBlank: false
-				}),
-				name = createCmp('FTextField', applicant.firstName[1], applicant.firstName[0], {
-					allowBlank: false
-				}),
-				fatherName = createCmp('FTextField', applicant.middleName[1], applicant.middleName[0], {
-					allowBlank: false
-				}),
-				org = createCmp('FTextArea', applicant.organization[1], applicant.organization[0],
-						{width: 400, allowBlank: false});
-
+				surname, name, fatherName, org,
+				allusers, fisic,
+				typef = 'Q_VALUE_APP_TYPE_FFACE';
 		Ext.applyIf(me, {
 			items: [
-				createCmp('FComboBox', applicant.applicantType[1],
+				me.appType = createCmp('FComboBox', applicant.applicantType[1],
 						applicant.applicantType[0], applicant.applicantType[0], {
 					allowBlank: false,
 					listeners: {
-						select: function change(cb, selected) {
-							if (!change.remove) {
-								change.f = []; // еще ничего не выбиралось
-								change.remove = function() {
-									for (var i = 0; i < change.f.length; ++i)
-										me.remove(change.f[i], false);
-								};
-							}
-
-							var code = selected[0].data.code;
-							if (change.curCode !== code) {
-								change.remove();
-								if (code === 'Q_VALUE_APP_TYPE_FFACE') {
-									change.f = [surname, name, fatherName];
-								} else if (code === 'Q_VALUE_APP_TYPE_JURFACE') {
-									change.f = [org];
-								}
-								change.f.forEach(function(val, idx) {
-									me.insert(idx + 1, val);
+						change: function(cb, newv) {
+							if (newv)
+								switchTypeUser(cb.getStore().getById(newv).get('code'));
+							else
+								allusers.forEach(function(v) {
+									v.hide()
 								});
-								change.curCode = code;
-							}
 						}
 					}
 				}),
+				surname = createCmp('FTextField', applicant.lastName[1], applicant.lastName[0], {
+					allowBlank: false, hidden: true
+				}),
+				name = createCmp('FTextField', applicant.firstName[1], applicant.firstName[0], {
+					allowBlank: false, hidden: true
+				}),
+				fatherName = createCmp('FTextField', applicant.middleName[1], applicant.middleName[0], {
+					allowBlank: false, hidden: true
+				}),
+				org = createCmp('FTextArea', applicant.organization[1], applicant.organization[0],
+						{width: 400, allowBlank: false, hidden: true}),
 				createCmp('FComboBox', applicant.applicantCategory[1],
 						applicant.applicantCategory[0], applicant.applicantCategory[0], {
 					allowBlank: false
@@ -95,6 +82,24 @@ Ext.define('qqext.view.reg.VApplicant', {
 				})
 			]
 		});
+		allusers = [surname, name, fatherName, org];
+		fisic = [surname, name, fatherName];
+		// Переключает тип пользователя
+		function switchTypeUser(type) {
+			if (typef === type) { // Выбрано физическое лицо
+				fisic.forEach(function(v) {
+					v.show();
+				});
+				org.hide();
+				org.setValue('');
+			} else {  // Выбрано юридическое лицо
+				fisic.forEach(function(v) {
+					v.hide();
+					v.setValue('');
+				});
+				org.show();
+			}
+		}
 		me.callParent();
 	}
 });

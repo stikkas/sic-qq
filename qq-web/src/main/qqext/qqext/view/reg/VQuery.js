@@ -12,7 +12,8 @@ Ext.define('qqext.view.reg.VQuery', {
 	],
 	fieldDefaults: {
 		blankText: 'Обязательно для заполнения',
-		allowBlank: false
+		allowBlank: false,
+		validateOnChange: false
 	},
 	title: 'Запрос',
 	disabledCls: '',

@@ -33,7 +33,7 @@ Ext.define('qqext.cmp.Checkbox', {
 	_hideInput: function() {
 		var me = this;
 		me[me._before].dom.style.display = 'none';
-		me.boxLabelEl.dom.onclick = me._onClick;
+		me.labelEl.dom.onclick = me._onClick;
 	},
 	/**
 	 * Показывает поле ввода
@@ -41,7 +41,7 @@ Ext.define('qqext.cmp.Checkbox', {
 	 */
 	_showInput: function() {
 		this[this._before].dom.style.display = '';
-		this.boxLabelEl.dom.onclick = null;
+		this.labelEl.dom.onclick = null;
 	},
 	/**
 	 * Отменяет обычное действие на событие для DOM. Нужно для отмены

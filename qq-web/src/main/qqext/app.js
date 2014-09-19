@@ -230,6 +230,27 @@ Ext.application({
 			toSearch: 8 // Кнопка "Вернуться в поиск"
 		};
 		/**
+		 * @property {Object} rules
+		 * кодовые значения для ролей пользователей.
+		 */
+		var rules = ns.rules = {
+			reg: 'Q_RULE_REGISTRATOR',
+			crd: 'Q_RULE_COORDINATOR',
+			exec: 'Q_RULE_EXECUTOR'
+		};
+		/**
+		 * @property {Object} stats
+		 * кодовые значения статусов заросов
+		 */
+		var statuses = ns.stats = {
+			onreg: 'Q_VALUE_QSTAT_ONREG',
+			reg: 'Q_VALUE_QSTAT_REG',
+			onexec: 'Q_VALUE_QSTAT_ONEXEC',
+			exec: 'Q_VALUE_QSTAT_EXEC',
+			trans: 'Q_VALUE_QSTAT_TRANS',
+			notify: 'Q_VALUE_QSTAT_NOTIFY'
+		};
+		/**
 		 * Делает доступной кнопку раздела для работы с ним. Проверяет правоправность действия, если
 		 * у пользователя соответствующей роли нет, то ничего не происходит. Этот метод
 		 * не включает раздел на редактирование.
@@ -246,38 +267,36 @@ Ext.application({
 			var
 					user = ns.user,
 					request = ns.request,
-					registrator = 'Q_RULE_REGISTRATOR',
-					coordinator = 'Q_RULE_COORDINATOR',
-					executor = 'Q_RULE_EXECUTOR',
 					// TODO: сделать что-то чтобы проверять по кодам статуса а не по ID из таблицы
-					onreg = toa.onreg || (toa.onreg = ns.getStatusId('Q_VALUE_QSTAT_ONREG')),
-					registered = toa.reg || (toa.reg = ns.getStatusId('Q_VALUE_QSTAT_REG')),
-					onexec = toa.onexec || (toa.onexec = ns.getStatusId('Q_VALUE_QSTAT_ONEXEC')),
-					exec = toa.exec || (toa.exec = ns.getStatusId('Q_VALUE_QSTAT_EXEC')),
-					trans = toa.trans || (toa.trans = ns.getStatusId('Q_VALUE_QSTAT_TRANS')),
-					notify = toa.notify || (toa.notify = ns.getStatusId('Q_VALUE_QSTAT_NOTIFY')),
+					onreg = toa.onreg || (toa.onreg = ns.getStatusId(statuses.onreg)),
+					registered = toa.reg || (toa.reg = ns.getStatusId(statuses.reg)),
+					onexec = toa.onexec || (toa.onexec = ns.getStatusId(statuses.onexec)),
+					exec = toa.exec || (toa.exec = ns.getStatusId(statuses.exec)),
+					trans = toa.trans || (toa.trans = ns.getStatusId(statuses.trans)),
+					notify = toa.notify || (toa.notify = ns.getStatusId(statuses.notify)),
 					status,
 					buttons = arguments.length > 0 ? arguments : [
 						buttonNames.notify, buttonNames.trans, buttonNames.exec],
 					i = 0, max = buttons.length;
+
 			for (; i < max; ++i) {
 				switch (buttons[i]) {
 					case buttonNames.notify:
-						if (user.isSIC) {
-							if (user.isAllowed([registrator, coordinator, executor]) &&
+						if (ns.isSIC) {
+							if (user.isAllowed([rules.reg, rules.crd, rules.exec]) &&
 									request.get('status') === trans)
 								ns.disableArticles(false, buttonNames.notify);
 						}
 						break;
 					case buttonNames.trans:
-						if (user.isAllowed([coordinator, executor])) {
+						if (user.isAllowed([rules.crd, rules.exec])) {
 							var status = request.get('status');
 							if (status === registered || status === onexec || status === exec)
 								ns.disableArticles(false, buttonNames.trans);
 						}
 						break;
 					case buttonNames.exec:
-						if (user.isAllowed(executor)) {
+						if (user.isAllowed(rules.exec)) {
 							var status = request.get('status');
 							if (status === onexec || status === exec)
 								ns.disableArticles(false, buttonNames.exec);
@@ -415,6 +434,9 @@ Ext.application({
 				cls: 'err_msg',
 				maxWidth: 800
 			});
+			if (message instanceof Object) {
+				console.log(message);
+			}
 		};
 		// Пока так, в будущем, когда буду дорабатывать программу, надо обязательно переделать
 		/**

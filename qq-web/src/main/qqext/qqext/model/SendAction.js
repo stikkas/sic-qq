@@ -14,14 +14,18 @@ Ext.define('qqext.model.SendAction', (function() {
 			{name: 'id', type: 'int'},
 			{name: 'question', type: 'int'},
 			{name: send.type[0], type: 'int'},
-			{name: send.date[0], type: 'date'}
+			{name: send.date[0], type: 'date', convert: function(v) {
+					if (v)
+						return new Date(v);
+				}}
 		],
+		requires: ['Ext.data.proxy.Rest'],
 		belongsTo: 'qqext.model.Question',
-		requires: ['qqext.model.RestProxy'],
-		constructor: function() {
-			this.proxy = Ext.create('qqext.model.RestProxy', 'sendaction');
-			this.callParent();
+		proxy: {
+			type: 'rest',
+			url: '/qq-web/rest/sendaction',
+			reader: 'json',
+			writer: 'json'
 		}
-
 	};
 })());

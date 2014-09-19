@@ -14,17 +14,21 @@ Ext.define('qqext.model.ExecutionInfo', (function() {
 		fields: [
 //		{name: 'cliId', type: 'string'},
 			{name: 'id', type: 'int', defaultValue: null, convert: null},
-			{name: exec.date[0], type: 'date'},
+			{name: exec.date[0], type: 'date', convert: function(v) {
+					if (v)
+						return new Date(v);
+				}},
 			{name: exec.result[0], type: 'int', defaultValue: null, convert: null},
 			{name: exec.tema[0], type: 'int', defaultValue: null, convert: null},
 			{name: exec.category[0], type: 'int', defaultValue: null, convert: null}
 		],
 		belongsTo: 'qqext.model.Question',
-		requires: ['qqext.model.RestProxy'],
-		constructor: function() {
-			this.proxy = Ext.create('qqext.model.RestProxy', 'execution');
-			this.callParent();
+		requires: ['Ext.data.proxy.Rest'],
+		proxy: {
+			type: 'rest',
+			url: '/qq-web/rest/execution',
+			reader: 'json',
+			writer: 'json'
 		}
-
 	}
 })());

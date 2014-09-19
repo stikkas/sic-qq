@@ -20,20 +20,31 @@ Ext.define('qqext.model.Transmission', (function() {
 //		{name: 'cliId', type: 'string'},
 			{name: 'id', type: 'int', defaultValue: null, convert: null},
 			{name: trans.bossExecutor[0], type: 'int', convert: null, defaultValue: null},
-			{name: trans.bossExecutionDate[0], type: 'date'},
+			{name: trans.bossExecutionDate[0], type: 'date', convert: function(v) {
+					if (v)
+						return new Date(v);
+				}},
 			{name: trans.executor[0], type: 'int', convert: null, defaultValue: null},
-			{name: trans.executionDate[0], type: 'date'},
+			{name: trans.executionDate[0], type: 'date', convert: function(v) {
+					if (v)
+						return new Date(v);
+				}},
 			{name: trans.control[0], type: 'boolean', defaultValue: false},
-			{name: trans.controlDate[0], type: 'date'},
+			{name: trans.controlDate[0], type: 'date', convert: function(v) {
+					if (v)
+						return new Date(v);
+				}},
 			{name: trans.resolutionAuthor[0], type: 'string'},
 			{name: trans.storageTerritory[0], type: 'int', defaultValue: null, convert: null},
 			{name: trans.storageName[0], type: 'string'}
 		],
+		requires: ['Ext.data.proxy.Rest'],
 		belongsTo: 'qqext.model.Question',
-		requires: ['qqext.model.RestProxy'],
-		constructor: function() {
-			this.proxy = Ext.create('qqext.model.RestProxy', 'transmission');
-			this.callParent();
+		proxy: {
+			type: 'rest',
+			url: '/qq-web/rest/transmission',
+			reader: 'json',
+			writer: 'json'
 		}
 	};
 })());

@@ -1,3 +1,6 @@
+.x-panel-body-default{
+    background-color:transparent;
+}
 .x-border-layout-ct{
     background-image:-moz-linear-gradient(right bottom, #DDE1E8, #fff);
     background-image:-webkit-gradient(linear, right bottom, left top, from(#DDE1E8), to(#fff));
@@ -6,7 +9,6 @@
 }
 .x-panel-header-default{
     border:1px solid #38547B;
-   /*border-bottom-width:0;*/
     background-color:#C1CEE1;
     background-image:-moz-linear-gradient(left, #758FAF, #DEE2E9);
     background-image:-webkit-gradient(linear, left center, right center, from(#758FAF), to(#DEE2E9));
@@ -29,7 +31,8 @@
 .hmenu a{
     padding:10px 0;
 }
-.hmenu a.x-btn-plain-toolbar-small-over{
+.hmenu a.x-btn-plain-toolbar-small-over,
+.hmenu a.x-focus{
     background:none;
     border:none;
 }
@@ -46,7 +49,7 @@
     color:#2D446D;
     font:1.5em 'Lucida Sans Unicod', sans-serif;
     text-align:left;
-    padding:20px;
+    padding:15px;
     border:none;
     border-bottom:1px solid #38547B;
     background-image:-moz-linear-gradient(top, #7D95B4, #ABBED8, #C7D0DC, #ABBED8, #7D95B4);

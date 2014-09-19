@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jboss-web>
-    <security-domain>sso</security-domain>
+    <security-domain>sic</security-domain>
     <valve>
         <class-name>org.apache.catalina.authenticator.SingleSignOn</class-name>
     </valve>

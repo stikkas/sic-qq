@@ -7,7 +7,7 @@
     background: -o-linear-gradient(left, #DDE1E8, #fff);
     background: -ms-linear-gradient(left, #DDE1E8, #fff);
 }
-.x-panel-header-default{
+.title_cls .x-panel-header-default{
     border:1px solid #38547B;
     background-color:#C1CEE1;
     background-image:-moz-linear-gradient(left, #758FAF, #DEE2E9);
@@ -15,7 +15,31 @@
     background: -o-linear-gradient(left, #758FAF, #DEE2E9);
     background: -ms-linear-gradient(left, #758FAF, #DEE2E9);
 }
+.x-panel-header-default,
+label.journal_title_label{
+    font:bold 1.3em Arial, sans-serif;
+    border:1px solid #38547B !important;
+    background-color:#C1CEE1;
+    background-image:-moz-linear-gradient(left, #DDE3EB, #fff);
+    background-image:-webkit-gradient(linear, left center, right center, from(#DDE3EB), to(#fff));
+    background: -o-linear-gradient(left, #DDE3EB, #fff);
+    background: -ms-linear-gradient(left, #DDE3EB, #fff);
+}
+.x-panel-header-default{
+    border:1px solid #38547B;
+}
+.journal_title_label{
+    color:#6A84A6;
+    text-align:center;
+    padding:10px 0;
+}
 .x-panel-header-text-container-default{
+    color:#2D446D;
+    font:bold 1.2em Arial, sans-serif;
+    padding-left:20px;
+}
+.title_cls .x-panel-header-text-container-default{
+    color:#fff;
     font: bold 1.8em Arial, sans-serif;
     text-shadow:3px 2px 3px #000;
     margin-left:50px;

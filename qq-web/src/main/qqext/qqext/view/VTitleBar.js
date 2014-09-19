@@ -11,6 +11,7 @@ Ext.define('qqext.view.VTitleBar', {
 	region: 'north',
 	layout: 'hbox',
 	margin: '0 0 10 0',
+        cls:'title_cls',
 	initComponent: function() {
 		var me = this,
 				menus = qqext.Menu;

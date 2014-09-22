@@ -10,6 +10,11 @@ Ext.define('qqext.view.exec.VExecInfo', {
 	],
 	title: 'Сведения об исполнении',
 	maxHeight: 205,
+	fieldDefaults: {
+		validateOnChange: false,
+		blankText: 'Обязательно для заполнения',
+		allowBlank: false
+	},
 	initComponent: function() {
 		var createCmp = Ext.create,
 				exec = qqext.execInfo;
@@ -21,7 +26,7 @@ Ext.define('qqext.view.exec.VExecInfo', {
 				createCmp('FComboBox', exec.tema[1], 'tematicOfAnswer', exec.tema[0],
 						{editable: false}),
 				createCmp('FComboBox', exec.category[1], 'diffCategory', exec.category[0],
-						{width: 175, editable: false})
+						{width: 175, editable: false, allowBlank: true})
 			]
 		});
 		this.callParent();

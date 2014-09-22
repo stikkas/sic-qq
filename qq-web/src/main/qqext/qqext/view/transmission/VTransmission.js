@@ -21,6 +21,10 @@ Ext.define('qqext.view.transmission.VTransmission', {
 	title: 'Передача на исполнение',
 	height: 400,
 	maxHeight: 400,
+	fieldDefaults: {
+		validateOnChange: false,
+		blankText: 'Обязательно для заполнения'
+	},
 	/**
 	 * Индекс, в соответствии с которым сопоставляется верхнее меню (см. qqext.Menu)
 	 * @private
@@ -32,13 +36,14 @@ Ext.define('qqext.view.transmission.VTransmission', {
 			ns.Menu.setEditMenu(me._idx);
 			if (ns.request !== me.model) {
 				// Значит новый запрос (не тот который был до этого)
-				var model = me.model = ns.request,
-						trans = model.getTrans();
-				me.loadRecord(trans);
-				me.setViewOnly(true);
-				me._disableButtons(true, 1, 2, 3);
-				me._disableButtons(!(ns.user.isAllowed(ns.rules.crd) &&
-						model.get('status') === ns.getStatusId(ns.stats.reg)), 0);
+				var model = me.model = ns.request;
+				model.getTrans({callback: function(r) {
+						me.loadRecord(r);
+						me.setViewOnly(true);
+						me._disableButtons(true, 1, 2, 3);
+						me._disableButtons(!(ns.user.isAllowed(ns.rules.crd) &&
+								model.get('status') === ns.getStatusId(ns.stats.reg)), 0);
+					}});
 
 			}
 			ns.viewport.doLayout();
@@ -47,16 +52,6 @@ Ext.define('qqext.view.transmission.VTransmission', {
 	initComponent: function() {
 		//----------обработчики для кнопок меню---------
 		//sc - контекст для обработчика
-		/**
-		 * Обрабатывает событие 'click' на кнопке "Редактировать"
-		 * @private
-		 * @returns {undefined}
-		 */
-		function edit() {
-			me.setViewOnly(false);
-			me._disableButtons(false, 1, 2, 3);
-			me._disableButtons(true, 0);
-		}
 
 		/**
 		 * Обрабатывает событие 'click' на кнопке "Сохранить"
@@ -137,7 +132,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 		}
 //----------------------------------------------
 // scope for buttons
-		var me = edit.sc = save.sc = remove.sc = book.sc = this,
+		var me = this,
 				ns = qqext,
 				labels = ns.labels,
 				createCmp = Ext.create,
@@ -147,11 +142,11 @@ Ext.define('qqext.view.transmission.VTransmission', {
 					margin: '6 0 0 0'
 				},
 		menus = createCmp('HButtonMenu', [
-			{text: labels.edit, action: edit},
+			{text: labels.edit, action: ns.edit},
 			{text: labels.save, action: save},
 			{text: labels.remove, action: remove},
 			{text: labels.register, action: book}],
-				'ToolButton');
+				'ToolButton', me);
 		Ext.applyIf(me, {
 			items: [
 				createCmp('FieldContainer', {

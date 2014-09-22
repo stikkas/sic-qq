@@ -175,6 +175,20 @@ Ext.application({
 			}
 		};
 		/**
+		 * Работа кнопки "Редактировать" одинакова на всех формах:
+		 * отключить себя, включить все другие кнопки, сделать форму доступной
+		 * для редактирования.
+		 * @method edit
+		 */
+		ns.edit = function() {
+			var me = this;
+			me.setViewOnly(false);
+			me._disableButtons(false, 1, 2, 3);
+			me._disableButtons(true, 0);
+			me.doLayout();
+		};
+
+		/**
 		 * Добавляет кнопку в набор, если такой еще нет
 		 * @param {String/Number} name имя кнопки
 		 * @param {Ext.button.Button} button сама кнопка
@@ -288,7 +302,7 @@ Ext.application({
 					case buttonNames.notify:
 						if (ns.isSIC) {
 							if (user.isAllowed([rules.reg, rules.crd, rules.exec]) &&
-									request.get('status') === trans)
+									(request.get('status') === trans || request.get('status') === notify))
 								ns.disableArticles(false, buttonNames.notify);
 						}
 						break;
@@ -423,6 +437,25 @@ Ext.application({
 		 * Признак того, что пользователь является сотрудником SIC
 		 */
 
+		/**
+		 * Открывает существующий запрос. Срабатывает по двойному щелчку в поиске или ЖВК
+		 * @param {Object} view сам grid компонент
+		 * @param {Object} record запись, по которой щелкнули
+		 * @method openRequest
+		 */
+		ns.openRequest = function(view, record) {
+			ns.model.Question.load(record.get('id'), {callback: function(r, o, s) {
+					if (s) {
+						ns.request = r;
+						ns.disableArticles(true, buttonNames.notify, buttonNames.trans, buttonNames.exec);
+						ns.turnOnArticles();
+						ns.Menu.setArticleMenu(1);
+						getButton(buttonNames.reg).fireEvent('click');
+					} else {
+						ns.showError("Ошибка загрузки данных", o.getError());
+					}
+				}});
+		};
 		/**
 		 * Показывает ошибки в диалоговом окне
 		 * @param {String} title заголовок окна

@@ -17,6 +17,7 @@ Ext.define('qqext.view.Viewport', {
 				ns = qqext;
 		Ext.applyIf(me, {items: [Ext.create('WelcomePage')]});
 		me.callParent();
+		ns.viewport = me;
 
 		/**
 		 * Переключает страницы

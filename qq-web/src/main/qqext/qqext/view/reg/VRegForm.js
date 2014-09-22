@@ -29,26 +29,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 * @private
 	 */
 	_idx: 3,
-	// Состояние кнопок меню
-	_btnstate: [],
-	// Сохранить состояние кнопок
-	_saveBtnState: function() {
-		var i = 0,
-				btns = this._btns,
-				states = this._btnstate,
-				max = btns.length;
-		for (; i < max; ++i)
-			states[i] = btns.getAt(i).isDisabled();
-	},
-	// Восстановить состояние кнопок
-	_loadBtnState: function() {
-		var i = 0,
-				btns = this._btns,
-				states = this._btnstate,
-				max = btns.length;
-		for (; i < max; ++i)
-			btns.getAt(i).setDisabled(states[i]);
-	},
 	listeners: {
 		activate: function(me, prev) {
 			var ns = qqext, model;
@@ -80,7 +60,13 @@ Ext.define('qqext.view.reg.VRegForm', {
 // Значит пришли по двойному клику на существуещем запросе, (открыли существующий запрос)
 				me.clear();
 				model = me.initModel(ns.request);
+				me._disableButtons(true, 1, 2, 3);
+				me._disableButtons(!(ns.user.isAllowed(ns.rules.reg) &&
+						model.get('status') === ns.getStatusId(ns.stats.onreg)), 0);
+				me.setViewOnly(true);
+
 			}
+			ns.viewport.doLayout();
 			me.loadRecord();
 		}
 	},

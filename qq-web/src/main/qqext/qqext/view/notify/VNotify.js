@@ -25,8 +25,8 @@ Ext.define('qqext.view.notify.VNotify', {
 	_idx: 4,
 	listeners: {
 		activate: function(me, prev) {
-			var ns = qqext, model;
 			ns.Menu.setEditMenu(me._idx);
+			var ns = qqext;
 			if (ns.request !== me.model) {
 				// Значит новый запрос (не тот который был до этого)
 				var model = me.model = ns.request,
@@ -45,6 +45,7 @@ Ext.define('qqext.view.notify.VNotify', {
 					me._disableButtons(false, 0);
 				}
 			}
+			ns.viewport.doLayout();
 		}
 	},
 	initComponent: function() {

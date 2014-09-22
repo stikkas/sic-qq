@@ -76,6 +76,10 @@ Ext.application({
 		 * @class qqext
 		 */
 		/**
+		 * @property {Ext.container.Viewport} viewport основной экран приложения
+		 * инициалзируется в qqext.view.Viewport
+		 */
+		/**
 		 * Устанавливает активную страницу (иницализируется в {@link qqext.view.Viewport#initComponent}).
 		 * Страницы приложения:
 		 *
@@ -426,6 +430,14 @@ Ext.application({
 		 * @method showError
 		 */
 		ns.showError = function(title, message) {
+			if (message instanceof Object) {
+				if (message.statusText) {
+					message = message.statusText;
+				} else {
+					console.log(message);
+					return;
+				}
+			}
 			Ext.Msg.show({
 				title: title,
 				msg: message,
@@ -434,9 +446,7 @@ Ext.application({
 				cls: 'err_msg',
 				maxWidth: 800
 			});
-			if (message instanceof Object) {
-				console.log(message);
-			}
+
 		};
 		// Пока так, в будущем, когда буду дорабатывать программу, надо обязательно переделать
 		/**

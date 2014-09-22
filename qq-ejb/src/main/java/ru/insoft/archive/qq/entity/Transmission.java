@@ -17,6 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import ru.insoft.archive.core_model.table.adm.AdmUser;
 import ru.insoft.archive.extcommons.entity.HasId;
 import ru.insoft.archive.extcommons.json.JsonIn;
@@ -79,10 +80,12 @@ public class Transmission implements Serializable, HasId, JsonIn, JsonOut {
 	@Column(name = "STORAGE_NAME")
 	private String storageName;
 
+	@JsonIgnore
 	@JoinColumn(name = "QUESTION_ID", referencedColumnName = "QUESTION_ID", insertable = false, updatable = false)
 	@OneToOne(optional = false, fetch = FetchType.LAZY)
 	private Question question;
 
+	@JsonIgnore
 	@JoinColumn(name = "EXECUTOR_ID", referencedColumnName = "USER_ID", insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private AdmUser executorValue;

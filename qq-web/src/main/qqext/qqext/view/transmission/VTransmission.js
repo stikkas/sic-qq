@@ -14,8 +14,10 @@ Ext.define('qqext.view.transmission.VTransmission', {
 		'qqext.cmp.FieldSet',
 		'qqext.button.ToolButton',
 		'qqext.view.menu.HButtonMenu',
+		'qqext.model.Transmission',
 		'qqext.Menu'
 	],
+	mixins: ['qqext.cmp.DisableButtons'],
 	title: 'Передача на исполнение',
 	height: 400,
 	maxHeight: 400,
@@ -24,6 +26,24 @@ Ext.define('qqext.view.transmission.VTransmission', {
 	 * @private
 	 */
 	_idx: 5,
+	listeners: {
+		activate: function(me, prev) {
+			var ns = qqext;
+			ns.Menu.setEditMenu(me._idx);
+			if (ns.request !== me.model) {
+				// Значит новый запрос (не тот который был до этого)
+				var model = me.model = ns.request,
+						trans = model.getTrans();
+				me.loadRecord(trans);
+				me.setViewOnly(true);
+				me._disableButtons(true, 1, 2, 3);
+				me._disableButtons(!(ns.user.isAllowed(ns.rules.crd) &&
+						model.get('status') === ns.getStatusId(ns.stats.reg)), 0);
+
+			}
+			ns.viewport.doLayout();
+		}
+	},
 	initComponent: function() {
 		//----------обработчики для кнопок меню---------
 		//sc - контекст для обработчика
@@ -33,35 +53,45 @@ Ext.define('qqext.view.transmission.VTransmission', {
 		 * @returns {undefined}
 		 */
 		function edit() {
-			//TODO: разобраться что эта функция должна делать
-			this.setDisabled(!this.isDisabled());
-			this.doLayout();
+			me.setViewOnly(false);
+			me._disableButtons(false, 1, 2, 3);
+			me._disableButtons(true, 0);
 		}
 
 		/**
 		 * Обрабатывает событие 'click' на кнопке "Сохранить"
 		 * @private
-		 * @returns {undefined}
 		 */
 		function save() {
-			ns.mainController.syncModel()
-					.getModel().save(function(rec, op, suc) {
-				console.log('is saving success?: ' + suc);
+			var me = this,
+					trans = me.model.getTrans();
+			// Кнопки сохранить, удалить и регистрировать
+			me._disableButtons(true, 1, 2, 3);
+			me.setViewOnly(true);
+			me.updateRecord(trans);
+			trans.save({callback: function(rec, op, suc) {
+					if (suc) {
+						me._disableButtons(false, 0);
+					} else {
+						qqext.showError("Ошибка сохранения данных", op.getError());
+						me.setViewOnly(false);
+						me._disableButtons(true, 1, 2, 3);
+					}
+				}
 			});
 		}
+
 		/**
 		 * Обрабатывает событие 'click' на кнопке "Удалить"
 		 * @private
 		 * @returns {undefined}
 		 */
 		function remove() {
-			ns.mainController.syncModel()
-					.getModel().destroy({
-				success: function() {
-					ns.getButton(ns.btns.search).fireEvent('click');
-				},
-				failure: function() {
-					alert('Ошибка при удалении');
+			me.model.getTrans().destroy({callback: function(recs, operation) {
+					if (!operation.success)
+						ns.showError("Ошибка удаления данных", operation.getError());
+					else
+						me._disableButtons(true, 2);
 				}
 			});
 		}
@@ -72,10 +102,42 @@ Ext.define('qqext.view.transmission.VTransmission', {
 		 * @returns {undefined}
 		 */
 		function book() {
-			console.log(this);
+			var me = this,
+					model = me.model,
+					trans = model.getTrans();
+			me._disableButtons(true, 1, 2, 3);
+			me.setViewOnly(true);
+			if (me.isValid()) {
+				me.updateRecord(trans);
+				trans.save({callback: function(r, o, s) {
+						if (s) {
+							model.set('status', ns.getStatusId(ns.stats.onexec));
+							model.save({callback: function(rec, op, suc) {
+									if (suc) {
+										// Выстрелить событие для обновления панели статуса
+										ns.turnOnArticles(ns.btns.exec);
+									} else {
+										ns.showError("Ошибка обновления статуса", op.getError());
+										trans.destroy();
+										me._disableButtons(false, 1, 2, 3);
+										me.setViewOnly(false);
+									}
+								}});
+						} else {
+							ns.showError("Ошибка сохранения данных", o.getError());
+							me._disableButtons(false, 1, 2, 3);
+							me.setViewOnly(false);
+						}
+					}});
+			} else {
+				ns.showError("Форма заполнена неправильно", me.getErrors());
+				me._disableButtons(false, 1, 2, 3);
+				me.setViewOnly(false);
+			}
 		}
-		//----------------------------------------------
-		var
+//----------------------------------------------
+// scope for buttons
+		var me = edit.sc = save.sc = remove.sc = book.sc = this,
 				ns = qqext,
 				labels = ns.labels,
 				createCmp = Ext.create,
@@ -83,17 +145,20 @@ Ext.define('qqext.view.transmission.VTransmission', {
 				configForDate = {
 					labelAlign: 'right',
 					margin: '6 0 0 0'
-				};
-		// scope for buttons
-		edit.sc = save.sc = remove.sc = book.sc = this;
-
-		Ext.applyIf(this, {
+				},
+		menus = createCmp('HButtonMenu', [
+			{text: labels.edit, action: edit},
+			{text: labels.save, action: save},
+			{text: labels.remove, action: remove},
+			{text: labels.register, action: book}],
+				'ToolButton');
+		Ext.applyIf(me, {
 			items: [
 				createCmp('FieldContainer', {
 					layout: 'hbox',
 					items: [
 						createCmp('FComboBox', trans.bossExecutor[1], 'allUsers',
-								trans.bossExecutor[0]),
+								trans.bossExecutor[0], {allowBlank: false}),
 						createCmp('FDateField', trans.bossExecutionDate[1], trans.bossExecutionDate[0],
 								configForDate)
 					]
@@ -101,13 +166,14 @@ Ext.define('qqext.view.transmission.VTransmission', {
 				createCmp('FieldContainer', {
 					layout: 'hbox',
 					items: [
-						createCmp('FComboBox', trans.executor[1], 'allUsers', trans.executor[0]),
+						createCmp('FComboBox', trans.executor[1], 'allUsers', trans.executor[0],
+								{allowBlank: false}),
 						createCmp('FDateField', trans.executionDate[1], trans.executionDate[0],
 								configForDate)
 					]
 				}),
 				createCmp('FCheckbox', trans.control[1], trans.control[0]),
-				createCmp('FDateField', trans.controlDate[1], trans.controlDate[0]),
+				createCmp('FDateField', trans.controlDate[1], trans.controlDate[0], {allowBlank: false}),
 				createCmp('FieldSet', {
 					collapsible: true,
 					title: 'Дополнительная информация',
@@ -119,15 +185,10 @@ Ext.define('qqext.view.transmission.VTransmission', {
 						createCmp('FTextField', trans.storageName[1], trans.storageName[0])
 					]
 				})
-			],
-			menus: createCmp('HButtonMenu', [
-				{text: labels.edit, action: edit},
-				{text: labels.save, action: save},
-				{text: labels.remove, action: remove},
-				{text: labels.register, action: book}],
-					'ToolButton')
+			]
 		});
-		this.callParent(arguments);
-		ns.Menu.editReqMenu.insert(2, this.menus);
+		me._btns = menus.items;
+		me.callParent();
+		ns.Menu.editReqMenu.insert(2, menus);
 	}
 });

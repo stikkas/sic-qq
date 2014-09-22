@@ -19,7 +19,7 @@ Ext.define('qqext.view.reg.VApplicant', {
 	disabledCls: '',
 	layout: 'vbox',
 	curCode: null,
-	initComponent: function() {
+	initComponent: function () {
 		var
 				me = this,
 				ns = qqext,
@@ -34,11 +34,11 @@ Ext.define('qqext.view.reg.VApplicant', {
 						applicant.applicantType[0], applicant.applicantType[0], {
 					allowBlank: false,
 					listeners: {
-						change: function(cb, newv) {
+						change: function (cb, newv) {
 							if (newv)
 								switchTypeUser(cb.getStore().getById(newv).get('code'));
 							else
-								allusers.forEach(function(v) {
+								allusers.forEach(function (v) {
 									v.hide()
 								});
 						}
@@ -87,17 +87,21 @@ Ext.define('qqext.view.reg.VApplicant', {
 		// Переключает тип пользователя
 		function switchTypeUser(type) {
 			if (typef === type) { // Выбрано физическое лицо
-				fisic.forEach(function(v) {
+				fisic.forEach(function (v) {
 					v.show();
+					v.allowBlank = false;
 				});
 				org.hide();
 				org.setValue('');
+				org.allowBlank = true;
 			} else {  // Выбрано юридическое лицо
-				fisic.forEach(function(v) {
+				fisic.forEach(function (v) {
 					v.hide();
 					v.setValue('');
+					v.allowBlank = true;
 				});
 				org.show();
+				org.allowBlank = false;
 			}
 		}
 		me.callParent();

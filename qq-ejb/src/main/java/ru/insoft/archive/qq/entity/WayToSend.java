@@ -16,6 +16,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import ru.insoft.archive.extcommons.entity.HasId;
 import ru.insoft.archive.extcommons.json.JsonIn;
 import ru.insoft.archive.extcommons.json.JsonOut;
@@ -54,6 +55,7 @@ public class WayToSend implements Serializable, HasId, JsonIn, JsonOut {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date renewalNotice;
 
+	@JsonIgnore
 	@JoinColumn(name = "QUESTION_ID", referencedColumnName = "QUESTION_ID", insertable = false, updatable = false)
 	@OneToOne(optional = false, fetch = FetchType.LAZY)
 	private Question question;

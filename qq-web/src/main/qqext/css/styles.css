@@ -72,7 +72,7 @@ label.journal_title_label{
 }
 .vmenu a{
     color:#2D446D;
-    font:1.5em 'Lucida Sans Unicod', sans-serif;
+    font:1.5em 'Lucida Sans Unicode', sans-serif;
     text-align:left;
     padding:15px;
     border:none;
@@ -87,7 +87,7 @@ label.journal_title_label{
 }
 .vmenu a .x-btn-inner{
     color:#2D446D;
-    font:bold 0.8em 'Lucida Sans Unicod', sans-serif;
+    font:bold 0.8em 'Lucida Sans Unicode', sans-serif;
     text-align:left;
 }
 .vmenu a.x-focus{
@@ -111,20 +111,30 @@ label.journal_title_label{
     background-repeat: no-repeat;
 }
 .x-trigger-cell{
-    width:14px !important;    
+    width:16px !important;    
 }
 .x-form-trigger.x-form-arrow-trigger{
     background-image:url(../images/trigger_sprite.png);
     background-position: center left;
     background-repeat: no-repeat;
-    width:14px;    
+    width:16px;    
     overflow:hidden;
 }
 .x-form-trigger.x-form-arrow-trigger-over{
     background-position: center right;
 }
+/*sorting in the table*/
+.x-column-header-sort-ASC .x-column-header-text{
+    background-image:url(../images/sortASC.png);
+}
+.x-column-header-sort-DESC .x-column-header-text{
+    background-image:url(../images/sortDESC.png);
+}
 
 /*table*/
+.x-column-header-over{
+    background-color:transparent;
+}
 .x-grid-header-ct .x-column-header{
     background-color: #90A4BE;
     border-color:#AABDD9;
@@ -140,4 +150,31 @@ label.journal_title_label{
 }
 .x-grid-header-ct .x-column-header .x-box-inner{
     margin-left:5%;
+}
+.x-grid-cell{
+    border-left:1px solid #AABDD9;
+    border-bottom:1px solid #738BAC;
+}
+.x-grid-row-alt .x-grid-td{
+    background-color:#E2E7EE;
+}
+
+/*search*/
+
+/*labels*/
+.x-panel .x-box-inner label,
+.x-panel .x-box-inner .x-form-item-label{
+    color:#000;
+    font: 1.1em "Lucida Sans Unicode", sans-serif;
+    font-stretch:condensed;
+    text-align:right;
+    width:150px !important;
+    text-decoration:none;
+    padding:0;
+}
+.x-panel .x-box-inner label{
+    color:#2D446D;
+    font-weight:bold;
+    text-decoration:underline;
+    padding:5px 0;
 }

@@ -118,18 +118,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 	initComponent: function() {
 		//----------обработчики для кнопок меню---------
 		//sc - контекст для обработчика
-		/**
-		 * Обрабатывает событие 'click' на кнопке "Редактировать"
-		 * @private
-		 * @returns {undefined}
-		 */
-		function edit() {
-			me.setViewOnly(false);
-			// Отключить кнопку редактирования
-			me._disableButtons(true, 0);
-			// Включить все остальные кнопки
-			me._disableButtons(false, 1, 2, 3);
-		}
 
 		/**
 		 * Обрабатывает событие 'click' на кнопке "Сохранить"
@@ -228,16 +216,16 @@ Ext.define('qqext.view.reg.VRegForm', {
 			}
 		}
 //----------------------------------------------
-		var me = edit.sc = save.sc = remove.sc = book.sc = this,
+		var me = this,
 				ns = qqext,
 				labels = ns.labels,
 				createCmp = Ext.create,
 				menu = createCmp('HButtonMenu', [
-					{text: labels.edit, action: edit},
+					{text: labels.edit, action: ns.edit},
 					{text: labels.save, action: save},
 					{text: labels.remove, action: remove},
 					{text: labels.register, action: book}],
-						'ToolButton');
+						'ToolButton', me);
 		me._forms = [me.inbox = createCmp('VInboxDoc'),
 			me.query = createCmp('VQuery'),
 			me.applicant = createCmp('VApplicant'),

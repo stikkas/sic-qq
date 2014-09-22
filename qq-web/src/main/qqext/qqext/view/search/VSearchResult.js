@@ -47,5 +47,9 @@ Ext.define('qqext.view.search.VSearchResult', {
 			sortable: true,
 			menuDisabled: true
 		}],
-	forceFit: true
+	forceFit: true,
+	initComponent: function() {
+		this.listeners = {itemdblclick: qqext.openRequest};
+		this.callParent();
+	}
 });

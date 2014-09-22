@@ -71,6 +71,13 @@ Ext.define('qqext.Menu', {
 		 */
 		articleMenu: null,
 		/**
+		 * Устанавливает необходимый набор левых меню:
+		 *  - 0 - меню поиска
+		 *  - 1 - меню работы с запросом
+		 * @method setArticleMenu
+		 */
+		setArticleMenu: null,
+		/**
 		 * Устанавливает верхнее меню в соответствии с отображаемой формой
 		 * @param {Number} idx индекс меню
 		 */
@@ -153,6 +160,9 @@ Ext.define('qqext.Menu', {
 					editReqMenuLayout = menus._layout2 = menus.editReqMenu.getLayout(),
 					articleMenuLayout = menus.articleMenu.getLayout();
 
+			menus.setArticleMenu = function(idx) {
+				articleMenuLayout.setActiveItem(idx);
+			};
 //----------Вспомогательные функции-----------------
 			/**
 			 * Создает набор меню с layout = 'card' расположением

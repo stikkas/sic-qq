@@ -3,7 +3,7 @@
  */
 Ext.define('qqext.view.exec.VExecForm', {
 	alias: 'VExecForm',
-	extend: 'Ext.container.Container',
+	extend: 'qqext.cmp.Container',
 	requires: [
 		'qqext.view.exec.VExecInfo',
 		'qqext.view.exec.VDeliveryOfDocuments',
@@ -13,28 +13,34 @@ Ext.define('qqext.view.exec.VExecForm', {
 		'qqext.view.menu.HButtonMenu',
 		'qqext.Menu'
 	],
+	mixins: ['qqext.cmp.DisableButtons'],
 	overflowY: 'auto',
-	disabled: false,
-	maskOnDisable: false,
-	height: 300,
+	maxHeight: 1200,
 	/**
 	 * Индекс, в соответствии с которым сопоставляется верхнее меню (см. qqext.Menu)
 	 * @private
 	 */
 	_idx: 6,
+	listeners: {
+		activate: function(me, prev) {
+			var ns = qqext;
+			ns.Menu.setEditMenu(me._idx);
+			if (ns.request !== me.model) {
+				// Значит новый запрос (не тот который был до этого)
+				me.model = ns.request;
+				me.loadRecord();
+				me.setViewOnly(true);
+				me._disableButtons(true, 1, 2, 3);
+				me._disableButtons(!(ns.user.isAllowed(ns.rules.exec) &&
+						me.model.get('status') === ns.getStatusId(ns.stats.onexec)), 0);
+
+			}
+			ns.viewport.doLayout();
+		}
+	},
 	initComponent: function() {
 		//----------обработчики для кнопок меню---------
 		//sc - контекст для обработчика
-		/**
-		 * Обрабатывает событие 'click' на кнопке "Редактировать"
-		 * @private
-		 * @returns {undefined}
-		 */
-		function edit() {
-			//TODO: разобраться что эта функция должна делать
-			this.setDisabled(!this.isDisabled());
-			this.doLayout();
-		}
 
 		/**
 		 * Обрабатывает событие 'click' на кнопке "Сохранить"
@@ -42,10 +48,6 @@ Ext.define('qqext.view.exec.VExecForm', {
 		 * @returns {undefined}
 		 */
 		function save() {
-			ns.mainController.syncModel()
-					.getModel().save(function(rec, op, suc) {
-				console.log('is saving success?: ' + suc);
-			});
 		}
 		/**
 		 * Обрабатывает событие 'click' на кнопке "Удалить"
@@ -53,15 +55,6 @@ Ext.define('qqext.view.exec.VExecForm', {
 		 * @returns {undefined}
 		 */
 		function remove() {
-			ns.mainController.syncModel()
-					.getModel().destroy({
-				success: function() {
-					ns.getButton(ns.btns.search).fireEvent('click');
-				},
-				failure: function() {
-					alert('Ошибка при удалении');
-				}
-			});
 		}
 		/**
 		 * Обрабатывает событие 'click' на кнопке "Регистрировать".
@@ -70,56 +63,41 @@ Ext.define('qqext.view.exec.VExecForm', {
 		 * @returns {undefined}
 		 */
 		function book() {
-			console.log(this);
 		}
 		//----------------------------------------------
-		var me = edit.sc = save.sc = remove.sc = book.sc = this,
-				ns = qqext,
+		var ns = qqext,
+				me = this,
 				labels = ns.labels,
 				createCmp = Ext.create,
-				menus = createCmp('HButtonMenu', [
-					{text: labels.edit, action: edit},
+				menu = createCmp('HButtonMenu', [
+					{text: labels.edit, action: ns.edit},
 					{text: labels.save, action: save},
 					{text: labels.remove, action: remove},
 					{text: labels.register, action: book}],
-						'ToolButton');
+						'ToolButton', me);
 		Ext.applyIf(me, {
 			items: [
-				createCmp('VExecInfo'),
-				createCmp('VDeliveryOfDocuments'),
+				me._eForm = createCmp('VExecInfo'),
+				me._dForm = createCmp('VDeliveryOfDocuments'),
 				createCmp('VCoordination'),
 				createCmp('VDeliveryMethod')
-			],
-			menus: menus
+			]
 		});
+		me._btns = menu.items;
 		me.callParent();
-		ns.Menu.editReqMenu.insert(3, me.menus);
+		ns.Menu.editReqMenu.insert(3, menu);
 	},
-	setDisabled: function(disabled) {
-		var me = this,
-				items = me.items.items,
-				max = items.length;
-		for (var i = 0; i < max; ++i) {
-			items[i].setDisabled(disabled);
-		}
-		me.disabled = disabled;
+	loadRecord: function() {
+		var me = this;
+		me._eForm.loadRecord(me.model.getExec());
+		me._dForm.loadRecord();
 	},
-	isDisabled: function() {
-		return this.disabled;
+	updateRecord: function() {
+		var me = this;
+		me._eForm.updateRecord(me.model.getExec());
+		me._dForm.updateloadRecord();
 	},
-	loadRecord: function(model) {
-		var items = this.items.items,
-				max = items.length;
-		items[0].loadRecord(model.getExecutionInfo());
-		for (var i = 1; i < max; ++i)
-			items[i].loadRecord(model);
-	},
-	updateRecord: function(model) {
-		var items = this.items.items,
-				max = items.length;
-		items[0].updateRecord(model.getExecutionInfo());
-		for (var i = 1; i < max; ++i)
-			items[i].updateRecord(model);
-		return model;
+	validate: function() {
+
 	}
 });

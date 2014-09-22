@@ -9,8 +9,9 @@ Ext.define('qqext.view.menu.ButtonMenu', {
 	/**
 	 * @param {Array} buttons кнопки для меню
 	 * @param {String} type тип кнопок
+	 * @param {Object} scope контекст, в котором выполняется функция
 	 */
-	constructor: function(buttons, type) {
+	constructor: function(buttons, type, scope) {
 		var me = this;
 
 		Ext.applyIf(me, {
@@ -19,7 +20,7 @@ Ext.define('qqext.view.menu.ButtonMenu', {
 					text: btn.text,
 					listeners: {
 						click: btn.action,
-						scope: btn.action.sc
+						scope: scope
 					}
 				});
 

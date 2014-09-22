@@ -11,6 +11,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 		'qqext.factory.ComboBox',
 		'qqext.factory.Label',
 		'qqext.factory.TextField',
+		'qqext.model.Question',
 		'Ext.toolbar.Paging',
 		'hawk_common.cmp.DateField'
 	],
@@ -53,13 +54,6 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	 */
 	exec: function() {
 		this.getStore().reload();
-	},
-	listeners: {
-		itemdblclick: function(view, record) {
-			var ns = qqext;
-			ns.currentRequest = record.get('id');
-			ns.getButton(ns.btns.add).fireEvent('click');
-		}
 	},
 	applyFilter: function() {
 		var me = this,
@@ -104,6 +98,8 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	initComponent: function() {
 		var me = this,
 				createCmp = Ext.create;
+
+		me.listeners = {itemdblclick: qqext.openRequest};
 		Ext.applyIf(me, {
 			columns: {
 				defaults: {

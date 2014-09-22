@@ -25,25 +25,17 @@ Ext.define('qqext.view.notify.VNotify', {
 	_idx: 4,
 	listeners: {
 		activate: function(me, prev) {
-			ns.Menu.setEditMenu(me._idx);
 			var ns = qqext;
+			ns.Menu.setEditMenu(me._idx);
 			if (ns.request !== me.model) {
 				// Значит новый запрос (не тот который был до этого)
-				var model = me.model = ns.request,
-						noti = model.getNoti(),
-						edit = ns.user.isAllowed(ns.rules.reg);
-				if (noti) {
-					me.loadRecord(noti);
-					me.setViewOnly(true);
-					me._disableButtons(true, 0);
-					me._disableButtons(!edit, 1);
-				} else if (edit) {
-					model.setNoti(Ext.create('NotificationModel', {
-						id: model.get('id')}));
-					me.setViewOnly(false);
-					me._disableButtons(true, 1);
-					me._disableButtons(false, 0);
-				}
+				var model = me.model = ns.request;
+				model.getNoti({callback: function(r) {
+						me.loadRecord(r);
+						me.setViewOnly(true);
+						me._disableButtons(true, 0);
+						me._disableButtons(!ns.user.isAllowed(ns.rules.reg), 1);
+					}});
 			}
 			ns.viewport.doLayout();
 		}
@@ -91,7 +83,7 @@ Ext.define('qqext.view.notify.VNotify', {
 
 		//-------------------------------------------
 
-		var me = saveNotify.sc = editNotify.sc = this,
+		var me = this,
 				ns = qqext,
 				createCmp = Ext.create,
 				labels = ns.labels,
@@ -99,7 +91,7 @@ Ext.define('qqext.view.notify.VNotify', {
 				menu = createCmp('HButtonMenu', [
 					{text: labels.save, action: saveNotify},
 					{text: labels.edit, action: editNotify}
-				], 'ToolButton');
+				], 'ToolButton', me);
 		Ext.applyIf(me, {
 			items: [
 				createCmp('FComboBox', notf.executor[1], 'allUsers', notf.executor[0]),

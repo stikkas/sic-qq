@@ -25,36 +25,36 @@ public class QuestionInfoItem {
 
 		Applicant a = q.getApplicant();
 		if (a != null) {
-			String r = "";
 			DescriptorValue applicantType = a.getApplicantTypeValue();
-			switch (applicantType.getCode()) {
-				case "Q_VALUE_APP_TYPE_FFACE":
-					if (a.getLastName() != null) {
-						r += a.getLastName();
-						r += " ";
-					}
-					if (a.getFirstName() != null) {
-						r += a.getFirstName();
-						r += " ";
-					}
-					if (a.getMiddleName() != null) {
-						r += a.getMiddleName();
-						r += " ";
-					}
-					break;
-				case "Q_VALUE_APP_TYPE_JURFACE":
-					r = a.getOrganization();
-					break;
-				default:
-					break;
+			if (applicantType != null) {
+				switch (applicantType.getCode()) {
+					case "Q_VALUE_APP_TYPE_FFACE":
+						String name = a.getLastName();
+						if (name != null) {
+							fioOrg += name + " ";
+						}
+						name = a.getFirstName();
+						if (name != null) {
+							fioOrg += name + " ";
+						}
+						name = a.getMiddleName();
+						if (name != null) {
+							fioOrg += name;
+						}
+						break;
+					case "Q_VALUE_APP_TYPE_JURFACE":
+						fioOrg = a.getOrganization();
+						break;
+					default:
+						break;
+				}
 			}
-			fioOrg = r;
 		}
 	}
 
 	protected Long id;
 
-	private String fioOrg;
+	private String fioOrg = "";
 
 	protected String litera;
 

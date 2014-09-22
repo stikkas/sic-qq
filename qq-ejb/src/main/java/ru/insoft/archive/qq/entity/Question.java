@@ -195,6 +195,12 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private DescriptorValue statusValue;
 
+	@JsonIgnore
+	@JoinColumn(name = "EXEC_ORG_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
+		insertable = false, updatable = false)
+	@ManyToOne(fetch = FetchType.EAGER)
+	private DescriptorValue execOrgValue;
+
 	public Question() {
 	}
 
@@ -494,6 +500,14 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 
 	public void setNotification(Notification notification) {
 		this.notification = notification;
+	}
+
+	public DescriptorValue getExecOrgValue() {
+		return execOrgValue;
+	}
+
+	public void setExecOrgValue(DescriptorValue execOrgValue) {
+		this.execOrgValue = execOrgValue;
 	}
 
 	@Override

@@ -28,16 +28,19 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 				createCmp('FieldContainer', {
 					layout: 'hbox',
 					items: [
-						me.litera = createCmp('FComboBox', 'Литера', 'literas', 'litera', true, {width: 190,
+						me.litera = createCmp('FComboBox', 'Литера', 'literas', 'litera', true, {width: 240,
+                                                        labelWidth:150,
 							viewOnly: true}),
 						createCmp('FTextField', '№ Входящего документа', 'prefixNum', {
 							labelAlign: 'right',
-							labelWidth: 180,
-							width: 245
+							width: 245,
+                                                        labelWidth:200,
+                                                        cls:'two_col_fld'
 						}),
 						createCmp('FTextField', '/', 'sufixNum', {
 							labelWidth: 5,
-							width: 50
+							width: 50,
+                                                        cls:'small_lbl'
 						})
 					]
 				}),

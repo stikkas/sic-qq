@@ -178,3 +178,9 @@ label.journal_title_label{
     text-decoration:underline;
     padding:5px 0;
 }
+.two_col_fld .x-form-item-label.x-form-item-label{
+    width:200px !important;
+}
+.small_lbl .x-form-item-label.x-form-item-label{
+    width:5px !important;
+}

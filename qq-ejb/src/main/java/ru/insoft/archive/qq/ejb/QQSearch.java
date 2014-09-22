@@ -67,16 +67,18 @@ public class QQSearch extends LoggedBean {
 						logger.info("Фильтр литера: значение: "
 							+ fb.getValue().toString());
 						Expression<Boolean> literaEqual = cb.equal(
-							root.get("litera").get("id"), fb.getValue());
+							root.get("litera"), fb.getValue());
 						expressions.add(literaEqual);
 						break;
 					case "inboxDocNum":
 						String filterValue = fb.getValue().toString();
 						logger.info("Фильтр входящий номер: значение: "
 							+ filterValue);
-						Expression<Boolean> numLike = cb.like(
-							cb.lower(root.<String>get("inboxNum")),
-							filterValue);
+						Expression<String> number
+							= cb.concat(cb.concat(root.<String>get("prefixNum"), "/"),
+								root.<String>get("sufixNum"));
+						Expression<Boolean> numLike = cb.like(cb.lower(number), filterValue);
+
 						expressions.add(numLike);
 						break;
 					case "regDate":
@@ -99,17 +101,13 @@ public class QQSearch extends LoggedBean {
 					case "fioOrg":
 						String applicant = (String) fb.getValue();
 						Join<Question, Applicant> aplJoin = root.join("applicant");
-						Expression<String> concat = cb.concat(
-							aplJoin.<String>get("surname"), " ");
-						concat = cb.concat(concat, aplJoin.<String>get("name"));
-						concat = cb.concat(concat, " ");
-						concat = cb.concat(concat,
-							aplJoin.<String>get("fatherName"));
-						concat = cb.lower(concat);
-						Expression<Boolean> phyzLike = cb.like(concat,
-							applicant.toLowerCase());
+						Expression<String> fio = cb.concat(cb.concat(cb.concat(
+							aplJoin.<String>get("lastName"), " "),
+							cb.concat(aplJoin.<String>get("firstName"), " ")),
+							aplJoin.<String>get("middleName"));
+						Expression<Boolean> phyzLike = cb.like(cb.lower(fio), applicant.toLowerCase());
 						Expression<String> jur = cb.lower(aplJoin
-							.<String>get("applicantObject"));
+							.<String>get("organization"));
 						Expression<Boolean> jyrLike = cb.like(jur,
 							applicant.toLowerCase());
 						Expression<Boolean> finalOr = cb.or(phyzLike, jyrLike);
@@ -117,8 +115,7 @@ public class QQSearch extends LoggedBean {
 						break;
 					case "status":
 						Long status = (Long) fb.getValue();
-						Expression<Boolean> eq = cb.equal(root.<Long>get("status")
-							.get("id"), status);
+						Expression<Boolean> eq = cb.equal(root.<Long>get("status"), status);
 						expressions.add(eq);
 						break;
 					case "executor":
@@ -126,7 +123,7 @@ public class QQSearch extends LoggedBean {
 						Join<Question, Transmission> jTr = root
 							.join("transmission");
 						Expression<Boolean> equalExecutor = cb.equal(
-							jTr.get("executorName").get("id"), executor);
+							jTr.get("executor"), executor);
 						expressions.add(equalExecutor);
 						break;
 					default:
@@ -298,8 +295,7 @@ public class QQSearch extends LoggedBean {
 
 		Long execArchId = query.getArchiveId();
 		if (execArchId != null) {
-			Expression<Boolean> archExecutor = cb.equal(root.get("execOrg")
-				.get("id"), execArchId);
+			Expression<Boolean> archExecutor = cb.equal(root.get("execOrg"), execArchId);
 			expressions.add(archExecutor);
 		}
 

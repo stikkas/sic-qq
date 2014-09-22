@@ -114,10 +114,11 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						text: 'Литера',
 						itemId: 'literaCount',
 						dataIndex: 'litera',
+                                                width: 50,
 						items: [
 							createCmp('FComboBox', '', 'literas', 'filterLiteraCombo', {
 								itemId: 'filterLiteraCombo',
-								width: '100%',
+								width: '90%',
 								listeners: {
 									select: me._filterComboSelected,
 									render: me._render,
@@ -129,9 +130,10 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					{
 						text: '№ вх. документа',
 						dataIndex: 'inboxDocNum',
+                                                width: 80,
 						items: [
 							createCmp('FTextField', '', 'docNumberTextField', {
-								width: '100%',
+								width: '90%',
 								listeners: {
 									specialkey: function(tf, event, eopts) {
 										event.stopPropagation();
@@ -155,7 +157,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						focusOnToFront: false,
 						items: [
 							{
-								width: '100%',
+								width: '90%',
 								xtype: 'hawkDateField',
 								name: 'regDateField',
 								listeners: {
@@ -174,11 +176,12 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					{
 						xtype: 'datecolumn',
 						text: 'Дата исполнения контрольная',
-						dataIndex: 'execDate',
+                                                width: 100,
+                                                dataIndex: 'execDate',
 						itemId: 'execDateControl',
 						format: 'd.m.Y',
 						items: [{
-								width: '100%',
+								width: '90%',
 								xtype: 'hawkDateField',
 								focusOnToFront: false,
 								name: 'execDateControl',
@@ -200,7 +203,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						dataIndex: 'fioOrg',
 						items: [
 							createCmp('FComboBox', '', 'journalApplicantFilterStore', 'requestFromCombo', {
-								width: '100%',
+								width: '90%',
 								queryMode: 'local',
 								listeners: {
 									select: me._filterComboSelected,
@@ -215,7 +218,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						dataIndex: 'status',
 						items: [
 							createCmp('FComboBox', '', 'Q_DICT_QUESTION_STATUSES', 'requestStatusCombo', {
-								width: '100%',
+								width: '90%',
 								listeners: {
 									select: me._filterComboSelected,
 									render: me._render,
@@ -229,7 +232,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						dataIndex: 'executor',
 						items: [
 							createCmp('FComboBox', '', 'journalExecutors', {
-								width: '100%',
+								width: '90%',
 								select: me._filterComboSelected,
 								render: me._render,
 								queryMode: 'local',

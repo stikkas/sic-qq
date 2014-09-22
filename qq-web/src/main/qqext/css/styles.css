@@ -17,8 +17,9 @@
 }
 .x-panel-header-default,
 label.journal_title_label{
-    font:bold 1.3em Arial, sans-serif;
+    font:bold 1.2em Arial, sans-serif;
     border:1px solid #38547B !important;
+    padding:5px;
     background-color:#C1CEE1;
     background-image:-moz-linear-gradient(left, #DDE3EB, #fff);
     background-image:-webkit-gradient(linear, left center, right center, from(#DDE3EB), to(#fff));
@@ -79,7 +80,7 @@ label.journal_title_label{
     background-image:-moz-linear-gradient(top, #7D95B4, #ABBED8, #C7D0DC, #ABBED8, #7D95B4);
     background-image:-webkit-gradient(linear, center top, center bottom, from(#7D95B4), to(#7D95B4), color-stop(25%, #ABBED8), color-stop(50%, #C7D0DC), color-stop(75%, #ABBED8));
     background: -o-linear-gradient(top, #7D95B4, #ABBED8, #C7D0DC, #ABBED8, #7D95B4);
-    background: -ms-linear-gradient(top, #7D95B4, #ABBED8, #C7D0DC, #ABBED8, #7D95B4);
+    background: -ms-linear-gradient(top, #7D95B4, #C7D0DC, #7D95B4);
 }
 .vmenu a .x-btn-button{
     height:20px;
@@ -99,6 +100,44 @@ label.journal_title_label{
     color:#fff;
 }
 
+/*icons menu*/
 .add_btn{
     background-image:url(../images/i_add.png);
+}
+
+.x-form-date-trigger{
+    background-image:url(../images/calendar.png);
+    background-position: center left;
+    background-repeat: no-repeat;
+}
+.x-trigger-cell{
+    width:14px !important;    
+}
+.x-form-trigger.x-form-arrow-trigger{
+    background-image:url(../images/trigger_sprite.png);
+    background-position: center left;
+    background-repeat: no-repeat;
+    width:14px;    
+    overflow:hidden;
+}
+.x-form-trigger.x-form-arrow-trigger-over{
+    background-position: center right;
+}
+
+/*table*/
+.x-grid-header-ct .x-column-header{
+    background-color: #90A4BE;
+    border-color:#AABDD9;
+    color:#fff;
+    text-align:center;
+}
+.x-grid-header-ct .x-column-header .x-column-header-text{
+    white-space:normal;
+    height:30px;
+}
+.x-grid-header-ct input[type="text"]{
+    height:22px !important;
+}
+.x-grid-header-ct .x-column-header .x-box-inner{
+    margin-left:5%;
 }

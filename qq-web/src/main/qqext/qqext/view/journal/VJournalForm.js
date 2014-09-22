@@ -240,7 +240,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 				{
 					xtype: 'pagingtoolbar',
 					dock: 'bottom',
-					displayInfo: false,
+					displayInfo: true,
 					store: 'journal'
 				},
 				createCmp('FLabel', 'СИЦ/Архив', {

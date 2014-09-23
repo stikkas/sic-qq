@@ -6,7 +6,6 @@
  */
 Ext.define('qqext.factory.HandlerButton', {
 	extend: 'Ext.button.Button',
-	mixins: ['qqext.factory.Base'],
 	alias: 'FHandlerButton',
 	/**
 	 * Создает объект типа button
@@ -17,6 +16,6 @@ Ext.define('qqext.factory.HandlerButton', {
 	constructor: function(text, handler, opts) {
 		this.text = text;
 		this.handler = handler;
-		this._config(opts);
+		this.callParent([opts]);
 	}
 });

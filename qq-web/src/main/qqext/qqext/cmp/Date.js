@@ -8,6 +8,7 @@ Ext.define('qqext.cmp.Date', {
 	extend: 'Ext.form.field.Date',
 	mixins: ['qqext.cmp.EditViewMode'],
 	xtype: 'datefieldcmp',
+	format: 'd.m.Y',
 	_getValue: function() {
 		return Ext.Date.format(this.getValue(), 'd.m.Y');
 	}

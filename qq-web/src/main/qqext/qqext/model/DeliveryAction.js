@@ -15,7 +15,7 @@ Ext.define('qqext.model.DeliveryAction', (function() {
 			{name: 'id', type: 'int', convert: null, defaultValue: null},
 			{name: 'question', type: 'int', convert: null, defaultValue: null},
 			{name: del.type[0], type: 'int', convert: null, defaultValue: null},
-			{name: del.count[0], type: 'int', convert: null, defaultValue: null}
+			{name: del.count[0], type: 'int', convert: null, defaultValue: 1}
 		],
 		belongsTo: 'qqext.model.Question',
 		requires: ['Ext.data.proxy.Rest'],

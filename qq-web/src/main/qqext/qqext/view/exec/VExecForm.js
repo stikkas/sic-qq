@@ -33,7 +33,7 @@ Ext.define('qqext.view.exec.VExecForm', {
 				me._disableButtons(true, 1, 2, 3);
 				me._disableButtons(!(ns.user.isAllowed(ns.rules.exec) &&
 						me.model.get('status') === ns.getStatusId(ns.stats.onexec)), 0);
-
+				me._dForm.createPanel();
 			}
 			ns.viewport.doLayout();
 		}
@@ -78,9 +78,9 @@ Ext.define('qqext.view.exec.VExecForm', {
 		Ext.applyIf(me, {
 			items: [
 				me._eForm = createCmp('VExecInfo'),
-				me._dForm = createCmp('VDeliveryOfDocuments'),
-				createCmp('VCoordination'),
-				createCmp('VDeliveryMethod')
+				me._dForm = createCmp('VDeliveryOfDocuments')/*,
+				 createCmp('VCoordination'),
+				 createCmp('VDeliveryMethod')*/
 			]
 		});
 		me._btns = menu.items;
@@ -88,14 +88,18 @@ Ext.define('qqext.view.exec.VExecForm', {
 		ns.Menu.editReqMenu.insert(3, menu);
 	},
 	loadRecord: function() {
-		var me = this;
-		me._eForm.loadRecord(me.model.getExec());
-		me._dForm.loadRecord();
+		/*
+		 var me = this;
+		 me._eForm.loadRecord(me.model.getExec());
+		 me._dForm.loadRecord();
+		 */
 	},
 	updateRecord: function() {
-		var me = this;
-		me._eForm.updateRecord(me.model.getExec());
-		me._dForm.updateloadRecord();
+		/*
+		 var me = this;
+		 me._eForm.updateRecord(me.model.getExec());
+		 me._dForm.updateloadRecord();
+		 */
 	},
 	validate: function() {
 

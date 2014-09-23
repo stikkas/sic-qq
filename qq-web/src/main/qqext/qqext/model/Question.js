@@ -69,13 +69,13 @@ Ext.define('qqext.model.Question', {
 		{type: 'hasMany', model: 'qqext.model.AttachedFile',
 			name: 'files', foreignKey: 'question'},
 		{type: 'hasMany', model: 'qqext.model.DeliveryAction',
-			name: 'delActions', foreignKey: 'question'},
+			name: 'deliveryactions', foreignKey: 'question'},
 		{type: 'hasMany', model: 'qqext.model.UsedMaterial',
-			name: 'usedMaterials', foreignKey: 'question'},
+			name: 'usedmaterials', foreignKey: 'question'},
 		{type: 'hasMany', model: 'qqext.model.Coordination',
 			name: 'coordinations', foreignKey: 'question'},
 		{type: 'hasMany', model: 'qqext.model.SendAction',
-			name: 'sendActions', foreignKey: 'question'}
+			name: 'sendactions', foreignKey: 'question'}
 	],
 	proxy: {
 		type: 'rest',

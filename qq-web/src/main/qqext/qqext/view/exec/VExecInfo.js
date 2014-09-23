@@ -9,7 +9,6 @@ Ext.define('qqext.view.exec.VExecInfo', {
 		'qqext.factory.DateField'
 	],
 	title: 'Сведения об исполнении',
-	maxHeight: 205,
 	fieldDefaults: {
 		validateOnChange: false,
 		blankText: 'Обязательно для заполнения',

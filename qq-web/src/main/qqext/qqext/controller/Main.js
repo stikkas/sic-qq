@@ -7,7 +7,6 @@ Ext.define('qqext.controller.Main', {
 	requires: [
 		'qqext.model.JournalItem',
 		'qqext.model.SearchResultItem',
-		'qqext.model.SearchCritery',
 		'qqext.store.DictValuesStore',
 		'qqext.store.CustomStore',
 		'hawk_common.store.UserLocalStorage'
@@ -56,14 +55,5 @@ Ext.define('qqext.controller.Main', {
 			model: 'qqext.model.JournalItem',
 			remoteFilter: true
 		});
-	},
-	clearSearchParams: function() {
-		this.searchParams = null;
-	},
-	getSearchParams: function() {
-		var me = this;
-		if (!me.searchParams)
-			me.searchParams = Ext.create('SearchCriteryModel');
-		return me.searchParams;
 	}
 });

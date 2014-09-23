@@ -6,7 +6,6 @@
  */
 Ext.define('qqext.factory.HrefButton', {
 	extend: 'Ext.button.Button',
-	mixins: ['qqext.factory.Base'],
 	alias: 'FHrefButton',
 	/**
 	 * Создает объект типа button
@@ -17,7 +16,7 @@ Ext.define('qqext.factory.HrefButton', {
 	constructor: function(text, href, opts) {
 		this.text = text;
 		this.href = href;
-		this._config(opts);
+		this.callParent([opts]);
 	}
 });
 

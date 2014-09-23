@@ -82,20 +82,16 @@ public class QQSearch extends LoggedBean {
 						expressions.add(numLike);
 						break;
 					case "regDate":
-						logger.info("Фильтр дата регистрации: значение: "
-							+ fb.getValue().toString());
 						Date d1 = jsonTools.parseBadStringDate((String) fb.getValue());
 						Expression<Boolean> dateEqual = cb.equal(
-							root.<Date>get("regDate"), d1);
+							cb.function("trunc", Date.class, root.<Date>get("regDate")), d1);
 						expressions.add(dateEqual);
 						break;
 					case "execDate":
-						Join<Question, Execution> eiJoin = root
-							.join("execInfo");
+						Join<Question, Execution> eiJoin = root.join("execution");
 						Date d2 = jsonTools.parseBadStringDate(fb.getValue().toString());
-						logger.info("Фильтр дата исполнения: " + d2);
 						Expression<Boolean> exDateExp = cb.equal(
-							eiJoin.get("execDate"), d2);
+							cb.function("trunc", Date.class, eiJoin.get("execDate")), d2);
 						expressions.add(exDateExp);
 						break;
 					case "fioOrg":
@@ -164,7 +160,7 @@ public class QQSearch extends LoggedBean {
 						break;
 					case "execDate":
 						Join<Question, Execution> eiJoin = root
-							.join("execInfo", JoinType.LEFT);
+							.join("execution", JoinType.LEFT);
 						if (ou.asc()) {
 							o = cb.asc(eiJoin.get("execDate"));
 						} else {
@@ -252,7 +248,8 @@ public class QQSearch extends LoggedBean {
 		return result;
 	}
 
-	public JsonObject getSearchResult(Integer start, Integer limit, SearchCritery query) throws Exception {
+	public JsonObject getSearchResult(Integer start, Integer limit, SearchCritery query)
+		throws Exception {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Question> searchQuery = cb.createQuery(Question.class);
 
@@ -317,9 +314,9 @@ public class QQSearch extends LoggedBean {
 
 		Date regDate = query.getRegDate();
 		if (regDate != null) {
-			Expression<Boolean> regDateExp = cb.equal(
-				root.<Date>get("regDate"), regDate);
-			expressions.add(regDateExp);
+			expressions.add(cb.equal(
+				cb.function("trunc", Date.class, root.<Date>get("regDate")),
+				regDate));
 		}
 
 		String reqObjSurname = query.getReqObjSurname();

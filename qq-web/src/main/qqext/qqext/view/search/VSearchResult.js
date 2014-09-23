@@ -5,10 +5,10 @@ Ext.define('qqext.view.search.VSearchResult', {
 	alias: 'VSearchResult',
 	extend: 'Ext.grid.Panel',
 	title: 'Результаты поиска',
-	requires: ['Ext.util.Point'],
+	requires: ['Ext.toolbar.Paging'],
 	margin: '0 10 0 0',
-	minHeight: 150,
 	maxHeight: 300,
+	overflowY: 'auto',
 	store: 'searchResults',
 	columns: [{
 			text: 'id',
@@ -48,8 +48,20 @@ Ext.define('qqext.view.search.VSearchResult', {
 			menuDisabled: true
 		}],
 	forceFit: true,
+	dockedItems: [
+		{
+			xtype: 'pagingtoolbar',
+			dock: 'bottom',
+			displayInfo: true,
+			store: 'searchResults'
+		}
+	],
 	initComponent: function() {
-		this.listeners = {itemdblclick: qqext.openRequest};
+		var ns = qqext,
+				rules = ns.rules;
+
+		if (ns.user.isAllowed([rules.reg, rules.crd, rules.exec]))
+			this.listeners = {itemdblclick: ns.openRequest};
 		this.callParent();
 	}
 });

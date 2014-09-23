@@ -15,6 +15,7 @@ Ext.define('qqext.Menu', {
 		'qqext.model.Applicant',
 		'qqext.model.ExecutionInfo',
 		'qqext.model.WayToSend',
+		'qqext.view.StatusPanel',
 		'qqext.model.SearchCritery'
 	],
 	statics: {
@@ -117,8 +118,6 @@ Ext.define('qqext.Menu', {
 					btns = ns.btns,
 					getButton = ns.getButton,
 					createCmp = Ext.create,
-					//меню редактирования при выбранных разделах: 'Уведомления заявителю'
-
 					// меню редактирования при выбранных подразделах: 'ЖВК', 'Поиск', 'Отчетные документы'
 					searchEdit = createCmp('HButtonMenu', [
 						{text: labels.add, action: add, name: btns.add},
@@ -139,6 +138,9 @@ Ext.define('qqext.Menu', {
 						{text: labels.complete, action: toComplete, name: btns.exec}
 					], 'ArticleButton');
 
+			//Панель отображения запроса
+			ns.statusPanel = createCmp('StatusPanel');
+			requestMenu.add(ns.statusPanel);
 			menus.navigation = createCmp('HButtonMenu', [
 				{text: labels.toBegin, action: toStartPage},
 				{text: labels.quit, action: ns.quitAction}

@@ -40,4 +40,4 @@ Ext.define('qqext.model.SearchResultItem', {
 			defaultValue: null,
 			convert: null
 		}]
-})
+});

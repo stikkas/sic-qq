@@ -45,6 +45,7 @@ Ext.define('qqext.controller.Main', {
 		createCmp('qqext.store.CustomStore', {
 			storeId: 'searchResults',
 			url: '/qq-web/api/Search',
+			pageSize: 10,
 			model: 'qqext.model.SearchResultItem'
 		});
 		createCmp('qqext.store.CustomStore', {
@@ -55,26 +56,6 @@ Ext.define('qqext.controller.Main', {
 			model: 'qqext.model.JournalItem',
 			remoteFilter: true
 		});
-
-		qqext.mainController = this;
-		this.control({
-			'toolbutton': {
-				afterrender: activateComponent
-			}
-		});
-
-		/**
-		 * Если у пользователя нет прав, то компонент делается недоступным
-		 * @param {Ext.Component} target в основном кнопки
-		 */
-		function activateComponent(target) {
-			// TODO: реализовать проверку прав
-			/*
-			 console.log(target.getText());
-			 console.log(qqext.userStore.getById('current').get('access'));
-			 target.setDisabled(true);
-			 */
-		}
 	},
 	clearSearchParams: function() {
 		this.searchParams = null;
@@ -84,46 +65,5 @@ Ext.define('qqext.controller.Main', {
 		if (!me.searchParams)
 			me.searchParams = Ext.create('SearchCriteryModel');
 		return me.searchParams;
-	},
-	dropMainCont: function() {
-		var me = this;
-		var vp = me.getVp();
-		var delItems = me.getVp().items.getAt(2);
-		vp.remove(delItems);
-		delItems.destroy();
-	},
-	getMainCont: function() {
-		return qqext.getCurrentForm();
-	},
-	/**
-	 * Синхронизация данных на форме с моделью
-	 * @return {Object} объект контоллера (нужен для цепочных операций)
-	 */
-	syncModel: function() {
-		var
-				me = this,
-				model = me.currentModel,
-				currentForm = me.getMainCont();
-
-		switch (currentForm.$className) {
-			case 'qqext.view.reg.VRegForm' :
-				currentForm.updateRecord(model);
-				break;
-			case 'qqext.view.notify.VNotify' :
-				currentForm.updateRecord(model.getNotification());
-				break;
-			case 'qqext.view.transmission.VTransmission' :
-				currentForm.updateRecord(model.getTransmission());
-				break;
-			case 'qqext.view.exec.VExecForm' :
-				currentForm.updateRecord(model);
-				break;
-			default :
-				console.debug('switch class name: ' + currentForm.$className);
-		}
-		return me;
-	},
-	getModel: function() {
-		return this.currentModel;
 	}
 });

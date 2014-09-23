@@ -141,10 +141,6 @@ Ext.application({
 		 * Форма исполнение запроса. Инициализируется в {@link qqext.view.MainPage#initComponent}.
 		 */
 		/**
-		 * @property {qqext.controller.Main} mainController
-		 * Основной контроллер приложения. Инициализируется в {@link qqext.controller.Main#init}.
-		 */
-		/**
 		 * @property {hawk_common.store.UserLocalStorage} userStore
 		 * Хранилище с правами пользователей. Иницализируется при старте приложения.
 		 */
@@ -436,6 +432,11 @@ Ext.application({
 		 * @property {Boolean} isSIC
 		 * Признак того, что пользователь является сотрудником SIC
 		 */
+		/**
+		 * @porperty {Ext.container.Container} statusPanel
+		 * Панель для отображения статуса запроса.
+		 * Инициализируется в qqext.Menu.
+		 */
 
 		/**
 		 * Открывает существующий запрос. Срабатывает по двойному щелчку в поиске или ЖВК
@@ -451,6 +452,7 @@ Ext.application({
 						ns.turnOnArticles();
 						ns.Menu.setArticleMenu(1);
 						getButton(buttonNames.reg).fireEvent('click');
+						ns.statusPanel.setStatus();
 					} else {
 						ns.showError("Ошибка загрузки данных", o.getError());
 					}

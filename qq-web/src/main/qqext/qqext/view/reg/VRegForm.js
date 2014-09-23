@@ -102,6 +102,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 								// Полный успех
 								if (success)
 									success();
+								qqext.statusPanel.setStatus();
 							}
 						}
 					});

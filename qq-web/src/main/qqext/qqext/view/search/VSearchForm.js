@@ -39,7 +39,7 @@ Ext.define('qqext.view.search.VSearchForm', {
 	 * в сетке.
 	 */
 	exec: function() {
-		Ext.getStore('searchResults').load({
+		Ext.getStore('searchResults').loadPage(1, {
 			params: {q: Ext.encode(this._form.getValues(false, true))}
 		});
 	}

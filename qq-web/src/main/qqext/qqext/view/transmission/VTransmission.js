@@ -109,7 +109,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 							model.set('status', ns.getStatusId(ns.stats.onexec));
 							model.save({callback: function(rec, op, suc) {
 									if (suc) {
-										// Выстрелить событие для обновления панели статуса
+										ns.statusPanel.setStatus();
 										ns.turnOnArticles(ns.btns.exec);
 									} else {
 										ns.showError("Ошибка обновления статуса", op.getError());

@@ -5,6 +5,7 @@ import javax.json.JsonObject;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import ru.insoft.archive.extcommons.servlet.AbstractServlet;
 import ru.insoft.archive.qq.ejb.QQSearch;
@@ -26,13 +27,28 @@ public class Search extends AbstractServlet {
 	@Override
 	protected void handleRequest(HttpServletRequest req,
 		HttpServletResponse resp) throws Exception {
+		HttpSession session = req.getSession();
 		String rawParams = req.getParameter("q");
-		logger.info("Критерии поиска: " + rawParams);
+		if (rawParams != null) {
+			session.setAttribute("q", rawParams);
+		} else {
+			rawParams = (String) session.getAttribute("q");
+		}
 		JsonObject jsonParams = jsonTools.getJsonObject(rawParams);
 
+		String startSt = req.getParameter(startParamKey);
+		String limitSt = req.getParameter(limitParamKey);
+		Integer start = null;
+		Integer limit = null;
+		if (startSt != null) {
+			start = Integer.parseInt(startSt);
+		}
+		if (limitSt != null) {
+			limit = Integer.parseInt(limitSt);
+		}
+
 		SearchCritery q = jsonTools.parseEntity(jsonParams, SearchCritery.class);
-		JsonObject searchResult = search.getSearchResult(q);
-		logger.info("Raw search answer: " + searchResult.toString());
+		JsonObject searchResult = search.getSearchResult(start, limit, q);
 		resp.getWriter().write(searchResult.toString());
 	}
 

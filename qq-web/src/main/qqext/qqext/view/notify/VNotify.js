@@ -57,6 +57,7 @@ Ext.define('qqext.view.notify.VNotify', {
 						model.save({callback: function(record, operation, success) {
 								if (success) {
 									me._disableButtons(false, 1);
+									ns.statusPanel.setStatus();
 								} else {
 									ns.showError("Ошибка сохранения", operation.getError());
 									me.setViewOnly(false);

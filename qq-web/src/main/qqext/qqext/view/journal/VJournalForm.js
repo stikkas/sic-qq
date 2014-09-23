@@ -17,10 +17,9 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	],
 	width: '100%',
 	forceFit: true,
-	maxHeight: 500,
 	name: 'journalGridPanel',
-	// autoScroll : true,
 	overflowY: 'auto',
+	maxHeight: 300,
 	draggable: false,
 	store: 'journal',
 	margin: '0 5 10 5',
@@ -97,9 +96,13 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	},
 	initComponent: function() {
 		var me = this,
-				createCmp = Ext.create;
+				createCmp = Ext.create,
+				ns = qqext,
+				rules = ns.rules;
 
-		me.listeners = {itemdblclick: qqext.openRequest};
+		if (ns.user.isAllowed([rules.reg, rules.crd, rules.exec]))
+			me.listeners = {itemdblclick: ns.openRequest};
+
 		Ext.applyIf(me, {
 			columns: {
 				defaults: {
@@ -110,7 +113,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						text: 'Литера',
 						itemId: 'literaCount',
 						dataIndex: 'litera',
-                                                width: 50,
+						width: 50,
 						items: [
 							createCmp('FComboBox', '', 'literas', 'filterLiteraCombo', {
 								itemId: 'filterLiteraCombo',
@@ -126,7 +129,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					{
 						text: '№ вх. документа',
 						dataIndex: 'inboxDocNum',
-                                                width: 80,
+						width: 80,
 						items: [
 							createCmp('FTextField', '', 'docNumberTextField', {
 								width: '90%',
@@ -172,8 +175,8 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					{
 						xtype: 'datecolumn',
 						text: 'Дата исполнения контрольная',
-                                                width: 100,
-                                                dataIndex: 'execDate',
+						width: 100,
+						dataIndex: 'execDate',
 						itemId: 'execDateControl',
 						format: 'd.m.Y',
 						items: [{

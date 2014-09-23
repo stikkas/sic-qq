@@ -236,7 +236,7 @@ public class QQSearch extends LoggedBean {
 
 		Integer total = q.getResultList().size();
 		q.setFirstResult(start);
-		q.setMaxResults(start + limit);
+		q.setMaxResults(limit);
 
 		Question[] array = new Question[q.getResultList().size()];
 		q.getResultList().toArray(array);
@@ -252,7 +252,7 @@ public class QQSearch extends LoggedBean {
 		return result;
 	}
 
-	public JsonObject getSearchResult(SearchCritery query) throws Exception {
+	public JsonObject getSearchResult(Integer start, Integer limit, SearchCritery query) throws Exception {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Question> searchQuery = cb.createQuery(Question.class);
 
@@ -353,7 +353,6 @@ public class QQSearch extends LoggedBean {
 		}
 
 		Expression<Boolean> finalExpression = null;
-		logger.info("Количество критериев поиска: " + expressions.size());
 		if (expressions.size() > 0) {
 			finalExpression = expressions.get(0);
 			for (int i = 1; i < expressions.size(); i++) {
@@ -363,18 +362,24 @@ public class QQSearch extends LoggedBean {
 		if (finalExpression != null) {
 			searchQuery.where(finalExpression);
 		}
-		TypedQuery<Question> q = em.createQuery(searchQuery);
+
 		@SuppressWarnings("unchecked")
+		Integer total = em.createQuery(searchQuery).getResultList().size();
+
+		TypedQuery<Question> q = em.createQuery(searchQuery);
+		q.setFirstResult(start);
+		q.setMaxResults(limit);
+
 		List<Question> result = q.getResultList();
+
 		ArrayList<SearchResultItem> resultItems = new ArrayList<>();
 		for (Question qq : result) {
-			SearchResultItem item = new SearchResultItem(qq);
-			resultItems.add(item);
+			resultItems.add(new SearchResultItem(qq));
 		}
-		JsonArray a = jsonTools.getJsonEntitiesList(resultItems);
 		JsonObjectBuilder bdr = Json.createObjectBuilder();
-		bdr.add("items", a);
-		bdr.add("totalCount", result.size());
+		bdr.add("items", jsonTools.getJsonEntitiesList(resultItems));
+		bdr.add("total", total);
+
 		return bdr.build();
 	}
 

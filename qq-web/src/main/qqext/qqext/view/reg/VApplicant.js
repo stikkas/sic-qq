@@ -58,26 +58,32 @@ Ext.define('qqext.view.reg.VApplicant', {
 					allowBlank: false, hidden: true
 				}),
 				org = createCmp('FTextArea', applicant.organization[1], applicant.organization[0],
-						{width: 400, allowBlank: false, hidden: true}),
+						{width: 950, labelWidth: 150, allowBlank: false, hidden: true}),
 				createCmp('FComboBox', applicant.applicantCategory[1],
 						applicant.applicantCategory[0], applicant.applicantCategory[0], {
 					allowBlank: false
 				}),
 				createCmp('FTextField', applicant.country[1], applicant.country[0]),
-				createCmp('FTextField', applicant.address[1], applicant.address[0]),
+				createCmp('FTextField', applicant.address[1], applicant.address[0], {
+					width: 950, labelWidth: 150}),
 				createCmp('FTextField', applicant.phone[1], applicant.phone[0]),
 				me._adds = createCmp('FieldSet', {
 					title: 'Дополнительные сведения',
 					collapsible: true,
+					cls: 'collapse_section',
 					items: [
-						createCmp('FTextField', applicant.issueDocNum[1],
-								applicant.issueDocNum[0], {width: 200}),
-						createCmp('FDateField', applicant.issueDocDate[1],
-								applicant.issueDocDate[0], {width: 200}),
-						createCmp('FTextField', applicant.fioJurPerson[1],
-								applicant.fioJurPerson[0], {width: 300}),
-						createCmp('FTextField', applicant.appends[1],
-								applicant.appends[0], {width: 350})
+						createCmp('FTextField', applicant.issueDocNum[1], applicant.issueDocNum[0], {
+							//width: 200
+						}),
+						createCmp('FDateField', applicant.issueDocDate[1], applicant.issueDocDate[0], {
+							//width: 200
+						}),
+						createCmp('FTextField', applicant.fioJurPerson[1], applicant.fioJurPerson[0], {
+							//width: 300
+						}),
+						createCmp('FTextField', applicant.appends[1], applicant.appends[0], {
+							//width: 450
+						})
 					]
 				})
 			]

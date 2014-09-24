@@ -1,5 +1,6 @@
 .x-panel-body-default{
     background-color:transparent;
+    border-color:#2D446D !important;
 }
 .x-border-layout-ct{
     background-image:-moz-linear-gradient(right bottom, #DDE1E8, #fff);
@@ -183,4 +184,45 @@ label.journal_title_label{
 }
 .small_lbl .x-form-item-label.x-form-item-label{
     width:5px !important;
+}
+
+.collapse_section,
+.collapse_section .x-panel-header-default{
+    width:100%;
+    border: none !important;
+    padding-left:0;
+}
+div.collapse_section{
+    border:1px solid #2D446D !important;
+    width: calc(100% - 30px);
+}
+.collapse_section legend,
+.collapse_section .x-panel-header{
+    background:url(../images/line.png) right center no-repeat;
+    background-size:calc(100% - 230px) 1px;;
+    border-bottom:2px solid #2D446D !important;
+    width:100%;
+    margin:15px;
+    padding:5px;
+}
+.collapse_section .x-panel-header{
+    margin-top:0;
+}
+.collapse_section .x-tool-toggle,
+.collapse_section .x-panel-header-icon{
+    background-image:url(../images/arrowrs.png);
+    opacity:1;
+    margin-right:5px;
+}
+.collapse_section .x-panel-header-icon{
+    background-position:0 center;    
+}
+.collapse_section .x-collapsed .x-panel-header-icon{
+    background-position:-15px center;
+}
+.collapse_section .x-fieldset-header-text,
+.collapse_section .x-panel-header-text-container-default{
+    color:#2D446D;
+    font:bold 1.1em Arial, sans-serif;
+    padding-left:0;
 }

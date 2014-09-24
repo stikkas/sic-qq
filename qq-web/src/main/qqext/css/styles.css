@@ -202,11 +202,8 @@ div.collapse_section{
     background-size:calc(100% - 230px) 1px;;
     border-bottom:2px solid #2D446D !important;
     width:100%;
-    margin:15px;
+    margin:0 15px 15px;
     padding:5px;
-}
-.collapse_section .x-panel-header{
-    margin-top:0;
 }
 .collapse_section .x-tool-toggle,
 .collapse_section .x-panel-header-icon{
@@ -225,4 +222,7 @@ div.collapse_section{
     color:#2D446D;
     font:bold 1.1em Arial, sans-serif;
     padding-left:0;
+}
+.collapse_section .x-noborder-t{
+    border:none !important;
 }

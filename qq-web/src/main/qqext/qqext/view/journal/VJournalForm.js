@@ -231,7 +231,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						dataIndex: 'executor',
 						items: [
 							createCmp('FComboBox', '', 'journalExecutors', {
-								width: '90%',
+								width: 150,
 								select: me._filterComboSelected,
 								render: me._render,
 								queryMode: 'local',

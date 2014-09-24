@@ -68,18 +68,16 @@ Ext.define('qqext.view.reg.VApplicant', {
 					collapsible: true,
                                         cls:'collapse_section',
 					items: [
-						createCmp('FTextField', applicant.issueDocNum[1], applicant.issueDocNum[0], {
-							//width: 200
-						}),
+						createCmp('FTextField', applicant.issueDocNum[1], applicant.issueDocNum[0],{
+                                                    width:250, labelWidth:150
+                                                }),
 						createCmp('FDateField', applicant.issueDocDate[1], applicant.issueDocDate[0], {
-							//width: 200
-						}),
-						createCmp('FTextField', applicant.fioJurPerson[1], applicant.fioJurPerson[0], {
-							//width: 300
-						}),
-						createCmp('FTextField', applicant.appends[1], applicant.appends[0], {
-							//width: 450
-						})
+                                                    width:250, labelWidth:150
+                                                }),
+						createCmp('FTextField', applicant.fioJurPerson[1], applicant.fioJurPerson[0]),
+						createCmp('FTextField', applicant.appends[1], applicant.appends[0],{
+                                                    width:500, labelWidth:150
+                                                })
 					]
 				})
 			]

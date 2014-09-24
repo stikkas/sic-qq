@@ -19,7 +19,11 @@ Ext.define('qqext.view.reg.VApplicant', {
 	disabledCls: '',
 	layout: 'vbox',
 	curCode: null,
-	initComponent: function () {
+	/**
+	 * @property {qqext.cmp.FieldSet} _adds поля для "Дополнительные сведения"
+	 * @private
+	 */
+	initComponent: function() {
 		var
 				me = this,
 				ns = qqext,
@@ -34,12 +38,12 @@ Ext.define('qqext.view.reg.VApplicant', {
 						applicant.applicantType[0], applicant.applicantType[0], {
 					allowBlank: false,
 					listeners: {
-						change: function (cb, newv) {
+						change: function(cb, newv) {
 							if (newv)
 								switchTypeUser(cb.getStore().getById(newv).get('code'));
 							else
-								allusers.forEach(function (v) {
-									v.hide()
+								allusers.forEach(function(v) {
+									v.hide();
 								});
 						}
 					}
@@ -62,22 +66,18 @@ Ext.define('qqext.view.reg.VApplicant', {
 				createCmp('FTextField', applicant.country[1], applicant.country[0]),
 				createCmp('FTextField', applicant.address[1], applicant.address[0]),
 				createCmp('FTextField', applicant.phone[1], applicant.phone[0]),
-				createCmp('FieldSet', {
+				me._adds = createCmp('FieldSet', {
 					title: 'Дополнительные сведения',
 					collapsible: true,
 					items: [
-						createCmp('FTextField', applicant.issueDocNum[1], applicant.issueDocNum[0], {
-							width: 200
-						}),
-						createCmp('FDateField', applicant.issueDocDate[1], applicant.issueDocDate[0], {
-							width: 200
-						}),
-						createCmp('FTextField', applicant.fioJurPerson[1], applicant.fioJurPerson[0], {
-							width: 300
-						}),
-						createCmp('FTextField', applicant.appends[1], applicant.appends[0], {
-							width: 350
-						})
+						createCmp('FTextField', applicant.issueDocNum[1],
+								applicant.issueDocNum[0], {width: 200}),
+						createCmp('FDateField', applicant.issueDocDate[1],
+								applicant.issueDocDate[0], {width: 200}),
+						createCmp('FTextField', applicant.fioJurPerson[1],
+								applicant.fioJurPerson[0], {width: 300}),
+						createCmp('FTextField', applicant.appends[1],
+								applicant.appends[0], {width: 350})
 					]
 				})
 			]
@@ -87,7 +87,7 @@ Ext.define('qqext.view.reg.VApplicant', {
 		// Переключает тип пользователя
 		function switchTypeUser(type) {
 			if (typef === type) { // Выбрано физическое лицо
-				fisic.forEach(function (v) {
+				fisic.forEach(function(v) {
 					v.show();
 					v.allowBlank = false;
 				});
@@ -95,7 +95,7 @@ Ext.define('qqext.view.reg.VApplicant', {
 				org.setValue('');
 				org.allowBlank = true;
 			} else {  // Выбрано юридическое лицо
-				fisic.forEach(function (v) {
+				fisic.forEach(function(v) {
 					v.hide();
 					v.setValue('');
 					v.allowBlank = true;
@@ -105,6 +105,15 @@ Ext.define('qqext.view.reg.VApplicant', {
 			}
 		}
 		me.callParent();
+	},
+	/**
+	 * Скрывает дополнительные сведения.
+	 * Изначально в конструкторе опция collapsed: true - не работает (extjs не может
+	 * правильно пересчитать размер), поэтому приходится делать это руками, после
+	 * того как форма будет активирована (afterrender тоже слишком рано)
+	 */
+	collapseAdds: function() {
+		this._adds.collapse();
 	}
 });
 

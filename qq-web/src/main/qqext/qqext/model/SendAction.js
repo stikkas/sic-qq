@@ -8,10 +8,8 @@ Ext.define('qqext.model.SendAction', (function() {
 		alias: 'SendActionModel',
 		extend: 'Ext.data.Model',
 		idProperty: 'id',
-		clientIdProperty: 'cliId',
 		fields: [
-			{name: 'cliId', type: 'string'},
-			{name: 'id', type: 'int'},
+			{name: 'id', type: 'int', convert: null, defaultValue: null, isNull: true},
 			{name: 'question', type: 'int'},
 			{name: send.type[0], type: 'int'},
 			{name: send.date[0], type: 'date', convert: function(v) {

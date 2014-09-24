@@ -9,10 +9,8 @@ Ext.define('qqext.model.DeliveryAction', (function() {
 		alias: 'DeliveryActionModel',
 		extend: 'Ext.data.Model',
 		idProperty: 'id',
-//	clientIdProperty: 'cliId',
 		fields: [
-//		{ name: 'cliId', type: 'string' },
-			{name: 'id', type: 'int', convert: null, defaultValue: null},
+			{name: 'id', type: 'int', convert: null, defaultValue: null, isNull: true},
 			{name: 'question', type: 'int', convert: null, defaultValue: null},
 			{name: del.type[0], type: 'int', convert: null, defaultValue: null},
 			{name: del.count[0], type: 'int', convert: null, defaultValue: 1}

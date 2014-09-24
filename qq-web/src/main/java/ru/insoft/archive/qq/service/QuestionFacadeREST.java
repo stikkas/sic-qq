@@ -28,7 +28,7 @@ public class QuestionFacadeREST extends AbstractFacade<Question> {
 	@POST
 	@Produces({"application/json"})
 	@Consumes({"application/json"})
-	public Long createQ(Question entity) {
+	public Long createEntity(Question entity) {
 		return super.create(entity).getId();
 	}
 

@@ -16,10 +16,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import ru.insoft.archive.core_model.table.desc.DescriptorValue;
-import ru.insoft.archive.extcommons.entity.HasId;
-import ru.insoft.archive.extcommons.json.JsonIn;
-import ru.insoft.archive.extcommons.json.JsonOut;
 
 /**
  *
@@ -31,7 +29,7 @@ import ru.insoft.archive.extcommons.json.JsonOut;
 	@NamedQuery(name = "Execution.findAll", query = "SELECT e FROM Execution e"),
 	@NamedQuery(name = "Execution.findById", query = "SELECT e FROM Execution e WHERE e.id = :id"),
 	@NamedQuery(name = "Execution.findByExecDate", query = "SELECT e FROM Execution e WHERE e.execDate = :execDate")})
-public class Execution implements Serializable, HasId, JsonIn, JsonOut {
+public class Execution implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -54,16 +52,19 @@ public class Execution implements Serializable, HasId, JsonIn, JsonOut {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date execDate;
 
+	@JsonIgnore
 	@JoinColumn(name = "QUESTION_ID", referencedColumnName = "QUESTION_ID",
 		insertable = false, updatable = false)
 	@OneToOne(optional = false, fetch = FetchType.LAZY)
 	private Question question;
 
+	@JsonIgnore
 	@JoinColumn(name = "USAGE_ANSWER_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
 		insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private DescriptorValue usageAnswerValue;
 
+	@JsonIgnore
 	@JoinColumn(name = "ANSWER_RESULT_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
 		insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.LAZY)

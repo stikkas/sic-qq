@@ -17,36 +17,45 @@ Ext.define('qqext.factory.PanelGrid', {
 	overflowY: 'auto',
 	/**
 	 * Создает таблицу
-	 * @param {Ext.data.Store} store хранилище нужно брать из зпароса,
-	 * чтобы автоматом прописывался id запроса
 	 * @param {Ext.data.Model} model модель для использования в хранилище сетки
 	 * @param {Object[]} columns колонки для сетки, см. Ext.grid.Panel
-	 * @param {Boolean} viewonly только для чтения
 	 */
-	constructor: function(store, model, columns, viewonly) {
+	constructor: function(model, columns) {
 		var me = this,
 				createCmp = Ext.create;
-		me.store = store;
-		if (!viewonly) {
-			me.plugins = 'cellediting';
-			me.dockedItems = [
-				createCmp('Ext.container.Container', {
-					layout: 'hbox',
-					items: [createCmp('FHandlerButton', 'Добавить', function() {
-							store.add(createCmp(model));
-						}),
-						createCmp('FHandlerButton', 'Удалить', function() {
-							var sm = me.getSelectionModel();
-							if (sm.hasSelection()) {
-								store.remove(sm.getSelection());
-							}
-						})
-					]
-				})];
-		}
+		me.plugins = 'cellediting';
+		me.dockedItems = [
+			createCmp('Ext.container.Container', {
+				layout: 'hbox',
+				items: [createCmp('FHandlerButton', 'Добавить', function() {
+						me.getStore().add(createCmp(model));
+					}),
+					createCmp('FHandlerButton', 'Удалить', function() {
+						var sm = me.getSelectionModel();
+						if (sm.hasSelection())
+							me.getStore().remove(sm.getSelection());
+					})
+				]
+			})];
 		me.columns = columns;
 		me.callParent();
 		me.getSelectionModel().setSelectionMode('MULTI');
+	},
+	/**
+	 * Обработчик события beforeedit в режиме просмотра
+	 * @returns {Boolean} false - запретить редактирование
+	 */
+	_bh: function() {
+		return false;
+	},
+	setViewOnly: function(state) {
+		var me = this;
+		// 0 - заголовки таблицы, 1 - контейнер с кнопками
+		me.dockedItems.getAt(1).setDisabled(state);
+		if (state)
+			me.on('beforeedit', me._bh);
+		else
+			me.removeListener('beforeedit', me._bh);
 	}
 });
 

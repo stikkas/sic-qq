@@ -5,66 +5,86 @@ Ext.define('qqext.view.exec.VCoordination', {
 	alias: 'VCoordination',
 	extend: 'qqext.view.StyledPanel',
 	requires: [
-		'qqext.factory.HandlerButton',
-		'qqext.view.exec.cmp.ComboDateTrash',
-		'qqext.model.Coordination'
+		'qqext.factory.PanelGrid',
+		'qqext.model.Coordination',
+		'Ext.form.field.ComboBox',
+		'Ext.form.field.Date',
+		'qqext.cmp.FieldSet',
+		'Ext.Date',
+		'hawk_common.cmp.DateField'
 	],
-	title: 'Согласование документа',
-	header: {
-		icon: 'webapp/resources/images/fieldset/collapse-tool.png'
+	/**
+	 * @property {qqext.factory.PanelGrid} _cf Таблица для согласования документа
+	 * @private
+	 */
+	/**
+	 * Обновляет данные на сервере
+	 */
+	sync: function() {
+		var store = this._cf.getStore();
+		store.sync({callback: function() {
+				store.load()
+			}});
 	},
-	minHeight: 60,
-	collapsible: true,
-	titleCollapse: true,
-	animCollapse: true,
-	hideCollapseTool: true,
-	mOdel: null,
+	/**
+	 * Загружает данные в форму
+	 */
+	loadRecord: function() {
+		this._cf.getStore().load();
+	},
+	/**
+	 * Устанавливает хранилища для своих таблиц. Хранилища берутся
+	 * из ассоциаций текущего запроса.
+	 */
+	setStorage: function() {
+		this._cf.reconfigure(qqext.request.coordinations());
+	},
 	initComponent: function() {
 		var me = this,
 				createCmp = Ext.create,
-				coor = qqext.coordination;
+				coor = qqext.coordination,
+				storeId = 'coordinationStage';
 
-		me.comboTrashConfig = {
-			store: 'coordinationStage',
-			comboLabel: coor.stage[1],
-			dateLabel: coor.date[1]
-		};
 		Ext.applyIf(me, {
-			items: [
-				createCmp('FHandlerButton', 'add', function() {
-					me.add(createCmp('ComboDateTrash',
-							me.comboTrashConfig));
-					me.mOdel.coordinations().add(createCmp('CoordinationModel'));
-				})
-			]
-		});
+			items: [createCmp('FieldSet', {
+					collapsible: true,
+					collapsed: true,
+					title: 'Согласование документа',
+					items: [me._cf = createCmp('FPanelGrid', 'CoordinationModel', {
+							defaults: {
+								sortable: false,
+								menuDisabled: true
+							}, items: [
+								{
+									text: coor.stage[1],
+									dataIndex: coor.stage[0],
+									flex: 1,
+									editor: {
+										xtype: 'combobox',
+										store: storeId,
+										displayField: 'name',
+										valueField: 'id',
+										editable: false
+									},
+									renderer: function(value) {
+										var v = Ext.getStore(storeId).getById(value);
+										if (v)
+											return v.get('name');
+										return value;
+									}
+								},
+								{
+									text: coor.date[1],
+									dataIndex: coor.date[0],
+									editor: {xtype: 'hawkDateField'},
+									renderer: function(value) {
+										return Ext.Date.format(value, 'd.m.Y');
+									}
+								}
+							]
+						})
+					]})
+			]});
 		me.callParent();
-	},
-	updateRecord: function(model) {
-		var me = this;
-		for (var i = 0; i < model.coordinations().getCount(); i++) {
-			var comp = me.items.getAt(i + 1);
-			model.coordinations().getAt(i).set(qqext.coordination.stage[0], comp.getComboValue());
-			model.coordinations().getAt(i)
-					.set(qqext.coordination.date[0], comp.getDateValue());
-		}
-	},
-	loadRecord: function(model) {
-		var me = this;
-		this.mOdel = model;
-		for (var i = 0; i < model.coordinations().getCount(); i++) {
-			var t = Ext.create('qqext.view.exec.cmp.ComboDateTrash',
-					me.comboTrashConfig);
-			me.add(t);
-			t.setComboValue(model.coordinations().getAt(i).get(qqext.coordination.stage[0]));
-			t.setDateValue(model.coordinations().getAt(i).get(qqext.coordination.date[0]));
-		}
-	},
-	remove: function() {
-		var me = this;
-		var index = me.items.indexOf(arguments[0]);
-		var delCoordination = me.mOdel.coordinations().getAt(index - 1);
-		me.mOdel.coordinations().remove(delCoordination);
-		me.callParent(arguments);
 	}
 });

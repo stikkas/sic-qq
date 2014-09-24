@@ -5,19 +5,16 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import ru.insoft.archive.extcommons.entity.HasId;
-import ru.insoft.archive.extcommons.json.JsonIn;
-import ru.insoft.archive.extcommons.json.JsonOut;
 
 /**
  *
@@ -30,12 +27,13 @@ import ru.insoft.archive.extcommons.json.JsonOut;
 	@NamedQuery(name = "SendAction.findById", query = "SELECT s FROM SendAction s WHERE s.id = :id"),
 	@NamedQuery(name = "SendAction.findBySendDate", query = "SELECT s FROM SendAction s WHERE s.sendDate = :sendDate"),
 	@NamedQuery(name = "SendAction.findBySendType", query = "SELECT s FROM SendAction s WHERE s.sendType = :sendType")})
-public class SendAction implements Serializable, HasId, JsonIn, JsonOut {
+public class SendAction implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
-	@Basic(optional = false)
-	@NotNull
+	@GeneratedValue(generator = "sendActionGen", strategy = GenerationType.SEQUENCE)
+	@SequenceGenerator(name = "sendActionGen", sequenceName = "SEQ_QQ_SEND_ACTION",
+		allocationSize = 1)
 	@Column(name = "SEND_ACTION_ID")
 	private Long id;
 
@@ -46,9 +44,16 @@ public class SendAction implements Serializable, HasId, JsonIn, JsonOut {
 	@Column(name = "SEND_TYPE_ID")
 	private Long sendType;
 
-	@JoinColumn(name = "QUESTION_ID", referencedColumnName = "QUESTION_ID")
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	private Question question;
+	@Basic(optional = false)
+	@NotNull
+	@Column(name = "QUESTION_ID")
+	private Long question;
+	/*
+	 @JsonIgnore
+	 @JoinColumn(name = "QUESTION_ID", referencedColumnName = "QUESTION_ID")
+	 @ManyToOne(optional = false, fetch = FetchType.LAZY)
+	 private Question questionValue;
+	 */
 
 	public SendAction() {
 	}
@@ -81,11 +86,11 @@ public class SendAction implements Serializable, HasId, JsonIn, JsonOut {
 		this.sendType = sendType;
 	}
 
-	public Question getQuestion() {
+	public Long getQuestion() {
 		return question;
 	}
 
-	public void setQuestion(Question question) {
+	public void setQuestion(Long question) {
 		this.question = question;
 	}
 

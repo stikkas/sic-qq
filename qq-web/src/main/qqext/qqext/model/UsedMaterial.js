@@ -11,10 +11,8 @@ Ext.define('qqext.model.UsedMaterial', (function() {
 		alias: 'UsedMaterialModel',
 		extend: 'Ext.data.Model',
 		idProperty: 'id',
-//		clientIdProperty: 'cliId',
 		fields: [
-//			{name: 'cliId', type: 'string'},
-			{name: 'id', type: 'int', convert: null, defaultValue: null},
+			{name: 'id', type: 'int', convert: null, defaultValue: null, isNull: true},
 			{name: 'question', type: 'int', convert: null, defaultValue: null},
 			{name: mat.fond[0], type: 'string'},
 			{name: mat.opis[0], type: 'string'},

@@ -39,7 +39,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 						inbox = me.inbox,
 						user = ns.user,
 						orgId = user.get('organization');
-
 				me.clear();
 				model = me.initModel();
 				//Кнопки "Редактировать" и "Удалить"
@@ -56,6 +55,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 					executor.viewOnly = true;
 					model.set('execOrg', orgId);
 				}
+				me.loadRecord();
 			} else if (prev === ns.searchForm || prev === ns.jvkForm) {
 // Значит пришли по двойному клику на существуещем запросе, (открыли существующий запрос)
 				me.clear();
@@ -63,11 +63,11 @@ Ext.define('qqext.view.reg.VRegForm', {
 				me._disableButtons(true, 1, 2, 3);
 				me._disableButtons(!(ns.user.isAllowed(ns.rules.reg) &&
 						model.get('status') === ns.getStatusId(ns.stats.onreg)), 0);
-				me.setViewOnly(true);
-
+				model.getAppl({callback: function() {
+						me.setViewOnly(true);
+						me.loadRecord();
+					}});
 			}
-			ns.viewport.doLayout();
-			me.loadRecord();
 		}
 	},
 	/**
@@ -192,7 +192,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 				else
 					status = ns.stats.reg;
 				model.set('status', ns.getStatusId(status));
-
 				if (!ns.request) {// Еще не сохраненная модель
 					model.set('insertUser', userId);
 					model.set('insertDate', now);
@@ -202,7 +201,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 				model.set('updateDate', now);
 				model.set('registrator', userId);
 				model.set('regDate', now);
-
 				me._saveModel(function() {
 					me.loadRecord();
 					ns.turnOnArticles(ns.btns.notify, ns.btns.trans);
@@ -288,8 +286,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 */
 	loadRecord: function() {
 		this._mAction('loadRecord');
-	}
-	,
+	},
 	/**
 	 * Сохраняет данные формы в модели
 	 */
@@ -323,11 +320,9 @@ Ext.define('qqext.view.reg.VRegForm', {
 		var me = this;
 		if (model)
 			return me.model = model;
-
 		var createCmp = Ext.create,
 				model = me.model = createCmp('QuestionModel');
 		model.setAppl(createCmp('ApplicantModel'));
-
 		return model;
 	},
 	/**
@@ -367,6 +362,8 @@ Ext.define('qqext.view.reg.VRegForm', {
 		me.reset();
 		me.target.hide();
 		me.applicant.appType.setValue(null);
+		me.applicant.collapseAdds();
+		qqext.statusPanel.setStatus('');
 		me.doLayout();
 	}
 });

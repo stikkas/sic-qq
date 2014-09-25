@@ -19,7 +19,7 @@ Ext.define('qqext.model.WayToSend', (function() {
 			{name: way.remark[0], type: 'string'}
 		],
 		requires: ['Ext.data.proxy.Rest'],
-		belongsTo: 'qqext.model.Question',
+		belongsTo: 'qqext.model.ExecutionInfo',
 		proxy: {
 			type: 'rest',
 			url: '/qq-web/rest/waytosend',

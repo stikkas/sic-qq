@@ -231,7 +231,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 			me.target = createCmp('VQueryObject', {hidden: true}),
 			createCmp('VFiles')
 		];
-		Ext.applyIf(me, {items: me._forms, });
+		Ext.applyIf(me, {items: me._forms});
 		me._btns = menu.items;
 		me.callParent();
 		ns.Menu.editReqMenu.insert(0, menu);
@@ -292,24 +292,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 */
 	updateRecord: function() {
 		this._mAction('updateRecord');
-	},
-	/**
-	 * Выполняет дествия над всеми ассоциациями модели
-	 * @param {Function} onOne функция для ассоциации hasOne
-	 * @param {Function} onMany функция для ассоциации hasMany
-	 */
-	_onAllModels: function(onOne, onMany) {
-		var associations = this.model.associations.items,
-				i = 0, max = associations.length,
-				association;
-		for (; i < max; ++i) {
-			association = associations[i];
-			if (association.type === 'hasOne') {
-				onOne.apply(this, [association.model]);
-			} else { // Проверку не делаю, т.к. на данный момент у нас только два вида асоциации
-				onMany.apply(this, [association.name]);
-			}
-		}
 	},
 	/**
 	 * Инициализирует модель для формы, если глобальная модель не задана, то создается новая

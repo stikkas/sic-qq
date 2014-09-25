@@ -12,6 +12,8 @@ Ext.define('qqext.model.Coordination', (function() {
 	return {
 		alias: 'CoordinationModel',
 		extend: 'Ext.data.Model',
+		requires: ['Ext.data.proxy.Rest',
+			'Ext.data.validations'],
 		idProperty: 'id',
 		fields: [
 			{name: 'id', type: 'int', defaultValue: null, convert: null, isNull: true},
@@ -22,8 +24,10 @@ Ext.define('qqext.model.Coordination', (function() {
 						return new Date(v);
 				}}
 		],
-		belongsTo: 'qqext.model.Question',
-		requires: ['Ext.data.proxy.Rest'],
+		validations: [{type: 'presence', field: coor.stage[0], message: coor.stage[1] + ' должен быть указан'},
+			{type: 'presence', field: coor.date[0], message: coor.date[1] + ' должна быть указана'}
+		],
+		belongsTo: 'qqext.model.ExecutionInfo',
 		proxy: {
 			type: 'rest',
 			url: '/qq-web/rest/coordination',

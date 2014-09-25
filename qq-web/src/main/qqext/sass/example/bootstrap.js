@@ -1273,7 +1273,7 @@ Ext.Loader.addClassPathMappings({
   "hawk_common.store.UserLocalStorage": "../../packages/hawk_common/src/store/UserLocalStorage.js",
   "hawk_common.sys.Consts": "../../packages/hawk_common/src/sys/Consts.js",
   "hawk_common.sys.Utils": "../../packages/hawk_common/src/sys/Utils.js",
-  "qq.model.ControlledObject": "../../qqext/model/qq/ControlledObject.js",
+  "qq": "../../qqext",
   "qqext": "../../qqext"
 });
 Ext.ClassManager.addNameAlternateMappings({
@@ -2103,6 +2103,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.cmp.ComboBox": [],
   "qqext.cmp.Container": [],
   "qqext.cmp.Date": [],
+  "qqext.cmp.DisableButtons": [],
   "qqext.cmp.EditViewMode": [],
   "qqext.cmp.FieldContainer": [],
   "qqext.cmp.FieldSet": [],
@@ -2111,10 +2112,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.cmp.PanelEditViewMode": [],
   "qqext.cmp.Text": [],
   "qqext.cmp.TextArea": [],
-  "qqext.controller.LeftMenu": [],
   "qqext.controller.Main": [],
-  "qqext.controller.ParentController": [],
-  "qqext.controller.TitleMenu": [],
   "qqext.factory.Base": [],
   "qqext.factory.Checkbox": [],
   "qqext.factory.ComboBox": [],
@@ -2123,25 +2121,26 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.factory.HrefButton": [],
   "qqext.factory.Label": [],
   "qqext.factory.NumberField": [],
+  "qqext.factory.PanelGrid": [],
   "qqext.factory.TextArea": [],
   "qqext.factory.TextField": [],
-  "qqext.model.qq.Applicant": [],
-  "qqext.model.qq.AttachedFile": [],
-  "qqext.model.qq.Coordination": [],
-  "qqext.model.qq.DeliveryAction": [],
-  "qqext.model.qq.ExecutionInfo": [],
-  "qqext.model.qq.JournalItem": [],
-  "qqext.model.qq.Notification": [],
-  "qqext.model.qq.Question": [],
-  "qqext.model.qq.SearchCritery": [],
-  "qqext.model.qq.SearchResultItem": [],
-  "qqext.model.qq.SendAction": [],
-  "qqext.model.qq.Transmission": [],
-  "qqext.model.qq.UsedMaterial": [],
-  "qqext.model.qq.WayToSend": [],
+  "qqext.model.Applicant": [],
+  "qqext.model.AttachedFile": [],
+  "qqext.model.Coordination": [],
+  "qqext.model.DeliveryAction": [],
+  "qqext.model.ExecutionInfo": [],
+  "qqext.model.JournalItem": [],
+  "qqext.model.Notification": [],
+  "qqext.model.Question": [],
+  "qqext.model.SearchResultItem": [],
+  "qqext.model.SendAction": [],
+  "qqext.model.Transmission": [],
+  "qqext.model.UsedMaterial": [],
+  "qqext.model.WayToSend": [],
   "qqext.store.CustomStore": [],
   "qqext.store.DictValuesStore": [],
   "qqext.view.MainPage": [],
+  "qqext.view.StatusPanel": [],
   "qqext.view.StyledPanel": [],
   "qqext.view.VLeftMenu": [],
   "qqext.view.VTitleBar": [],
@@ -2152,8 +2151,6 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.view.exec.VDeliveryOfDocuments": [],
   "qqext.view.exec.VExecForm": [],
   "qqext.view.exec.VExecInfo": [],
-  "qqext.view.exec.cmp.ComboDateTrash": [],
-  "qqext.view.exec.cmp.DeliveryTypeCount": [],
   "qqext.view.journal.VJournalForm": [],
   "qqext.view.menu.ButtonMenu": [],
   "qqext.view.menu.HButtonMenu": [],
@@ -3155,6 +3152,7 @@ Ext.ClassManager.addNameAliasMappings({
     "DateField",
     "widget.datefieldcmp"
   ],
+  "qqext.cmp.DisableButtons": [],
   "qqext.cmp.EditViewMode": [],
   "qqext.cmp.FieldContainer": [
     "FieldContainer",
@@ -3179,10 +3177,7 @@ Ext.ClassManager.addNameAliasMappings({
   "qqext.cmp.TextArea": [
     "widget.textareafieldcmp"
   ],
-  "qqext.controller.LeftMenu": [],
   "qqext.controller.Main": [],
-  "qqext.controller.ParentController": [],
-  "qqext.controller.TitleMenu": [],
   "qqext.factory.Base": [],
   "qqext.factory.Checkbox": [
     "FCheckbox"
@@ -3205,52 +3200,52 @@ Ext.ClassManager.addNameAliasMappings({
   "qqext.factory.NumberField": [
     "FNumberField"
   ],
+  "qqext.factory.PanelGrid": [
+    "FPanelGrid"
+  ],
   "qqext.factory.TextArea": [
     "FTextArea"
   ],
   "qqext.factory.TextField": [
     "FTextField"
   ],
-  "qqext.model.qq.Applicant": [
+  "qqext.model.Applicant": [
     "ApplicantModel"
   ],
-  "qqext.model.qq.AttachedFile": [
+  "qqext.model.AttachedFile": [
     "AttachedFileModel"
   ],
-  "qqext.model.qq.Coordination": [
+  "qqext.model.Coordination": [
     "CoordinationModel"
   ],
-  "qqext.model.qq.DeliveryAction": [
+  "qqext.model.DeliveryAction": [
     "DeliveryActionModel"
   ],
-  "qqext.model.qq.ExecutionInfo": [
+  "qqext.model.ExecutionInfo": [
     "ExecutionInfoModel"
   ],
-  "qqext.model.qq.JournalItem": [
+  "qqext.model.JournalItem": [
     "JournalItemModel"
   ],
-  "qqext.model.qq.Notification": [
+  "qqext.model.Notification": [
     "NotificationModel"
   ],
-  "qqext.model.qq.Question": [
+  "qqext.model.Question": [
     "QuestionModel"
   ],
-  "qqext.model.qq.SearchCritery": [
-    "SearchCriteryModel"
-  ],
-  "qqext.model.qq.SearchResultItem": [
+  "qqext.model.SearchResultItem": [
     "SearchResultItemModel"
   ],
-  "qqext.model.qq.SendAction": [
+  "qqext.model.SendAction": [
     "SendActionModel"
   ],
-  "qqext.model.qq.Transmission": [
+  "qqext.model.Transmission": [
     "TransmissionModel"
   ],
-  "qqext.model.qq.UsedMaterial": [
+  "qqext.model.UsedMaterial": [
     "UsedMaterialModel"
   ],
-  "qqext.model.qq.WayToSend": [
+  "qqext.model.WayToSend": [
     "WayToSendModel"
   ],
   "qqext.store.CustomStore": [],
@@ -3259,6 +3254,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "qqext.view.MainPage": [
     "MainPage"
+  ],
+  "qqext.view.StatusPanel": [
+    "StatusPanel"
   ],
   "qqext.view.StyledPanel": [],
   "qqext.view.VLeftMenu": [
@@ -3288,10 +3286,6 @@ Ext.ClassManager.addNameAliasMappings({
   "qqext.view.exec.VExecInfo": [
     "VExecInfo"
   ],
-  "qqext.view.exec.cmp.ComboDateTrash": [
-    "ComboDateTrash"
-  ],
-  "qqext.view.exec.cmp.DeliveryTypeCount": [],
   "qqext.view.journal.VJournalForm": [
     "VJournalForm"
   ],
@@ -3344,7 +3338,6 @@ Ext.setVersion("ext-theme-base", "4.2.1");
 Ext.setVersion("ext-theme-neptune", "4.2.1");
 Ext.setVersion("ext-theme-neutral", "4.2.1");
 Ext.setVersion("hawk_common", "1.0.0");
-Ext.setVersion("qqtheme", "1.0.0");
 
 
 /**

@@ -19,6 +19,18 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 	],
 	title: 'Способ отправки',
 	/**
+	 * Проверяет правильность заполнения формы
+	 * @returns {Boolean} если ошибок нет то true
+	 */
+	isValid: function() {
+		var result = true;
+		if (!this.callParent())
+			result = false;
+		if (!this._sf.isValid())
+			result = false;
+		return result;
+	},
+	/**
 	 * Обновляет данные на сервере
 	 */
 	sync: function() {
@@ -39,7 +51,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 	 * из ассоциаций текущего запроса.
 	 */
 	setStorage: function() {
-		this._sf.reconfigure(qqext.request.sendactions());
+		this._sf.reconfigure(qqext.request.getExec().sendactions());
 	},
 	initComponent: function() {
 		var me = this,

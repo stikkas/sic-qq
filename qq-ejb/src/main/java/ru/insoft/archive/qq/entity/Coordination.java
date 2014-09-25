@@ -48,11 +48,6 @@ public class Coordination implements Serializable {
 	@NotNull
 	@Column(name = "QUESTION_ID")
 	private Long question;
-	/*
-	 @JoinColumn(name = "QUESTION_ID", referencedColumnName = "QUESTION_ID")
-	 @ManyToOne(fetch = FetchType.LAZY)
-	 private Question question;
-	 */
 
 	public Coordination() {
 	}

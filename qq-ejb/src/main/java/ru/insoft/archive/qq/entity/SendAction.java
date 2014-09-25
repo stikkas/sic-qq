@@ -48,12 +48,6 @@ public class SendAction implements Serializable {
 	@NotNull
 	@Column(name = "QUESTION_ID")
 	private Long question;
-	/*
-	 @JsonIgnore
-	 @JoinColumn(name = "QUESTION_ID", referencedColumnName = "QUESTION_ID")
-	 @ManyToOne(optional = false, fetch = FetchType.LAZY)
-	 private Question questionValue;
-	 */
 
 	public SendAction() {
 	}

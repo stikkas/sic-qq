@@ -7,6 +7,8 @@ Ext.define('qqext.model.SendAction', (function() {
 	return {
 		alias: 'SendActionModel',
 		extend: 'Ext.data.Model',
+		requires: ['Ext.data.proxy.Rest',
+			'Ext.data.validations'],
 		idProperty: 'id',
 		fields: [
 			{name: 'id', type: 'int', convert: null, defaultValue: null, isNull: true},
@@ -17,8 +19,10 @@ Ext.define('qqext.model.SendAction', (function() {
 						return new Date(v);
 				}}
 		],
-		requires: ['Ext.data.proxy.Rest'],
-		belongsTo: 'qqext.model.Question',
+		validations: [{type: 'presence', field: send.type[0], message: send.type[1] + ' должен быть указан'},
+			{type: 'presence', field: send.date[0], message: send.date[1] + ' должна быть указана'}
+		],
+		belongsTo: 'qqext.model.ExecutionInfo',
 		proxy: {
 			type: 'rest',
 			url: '/qq-web/rest/sendaction',

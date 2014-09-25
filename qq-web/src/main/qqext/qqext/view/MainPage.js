@@ -22,6 +22,13 @@ Ext.define('qqext.view.MainPage', {
 		'qqext.view.VLeftMenu'
 	],
 	layout: 'border',
+	listeners: {
+		activate: function() {
+			var menus = qqext.Menu;
+			menus.setEditMenu(0);
+			menus.setArticleMenu(0);
+		}
+	},
 	initComponent: function() {
 		var
 				ns = qqext,
@@ -74,4 +81,5 @@ Ext.define('qqext.view.MainPage', {
 		};
 	}
 });
+
 

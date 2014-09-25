@@ -161,10 +161,6 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 
 	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
-	private WayToSend wayToSend;
-
-	@JsonIgnore
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Applicant applicant;
 
 	@JsonIgnore
@@ -452,14 +448,6 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 
 	public void setTransmission(Transmission transmission) {
 		this.transmission = transmission;
-	}
-
-	public WayToSend getWayToSend() {
-		return wayToSend;
-	}
-
-	public void setWayToSend(WayToSend wayToSend) {
-		this.wayToSend = wayToSend;
 	}
 
 	public Applicant getApplicant() {

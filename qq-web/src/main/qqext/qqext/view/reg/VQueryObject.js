@@ -25,7 +25,8 @@ Ext.define('qqext.view.reg.VQueryObject', {
 				createCmp('FTextField', 'Имя', 'requestObjectName'),
 				createCmp('FTextField', 'Отчество', 'requestFatherName'),
 				createCmp('FNumberField', 'Год рождения', 'request_object_birthyear', {
-					width: 200
+					width: 230,
+                                        labelWidth:150
 				})
 			]
 		});

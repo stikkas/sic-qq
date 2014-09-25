@@ -47,7 +47,7 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 				me.datereg = createCmp('FDateField', 'Дата регистрации', 'regDate', true,
 						{viewOnly: true, allowBlank: true, width:250, labelWidth:150}), // Выставляется программно в модели
 				createCmp('FComboBox', 'Способ передачи', 'inboxDocDeliveryType', 'transferType'),
-				me.executor = createCmp('FComboBox', 'Исполняющая организация', 'inboxDocExecOrg', 'execOrg'),
+				me.executor = createCmp('FComboBox', 'Исполняющая организация', 'inboxDocExecOrg', 'execOrg', {width:650, labelWidth:150}),
 				me.registrator = createCmp('FComboBox', 'ФИО регистратора', 'allUsers', 'registrator', true,
 						{viewOnly: true, allowBlank: true, width:500, labelWidth:150})// Выставляется программно в модели
 			]

@@ -121,7 +121,7 @@ Ext.define('qqext.Menu', {
 					searchEdit = createCmp('HButtonMenu', [
 						{text: labels.add, action: add, name: btns.add},
 						{text: labels.search, action: find},
-						{text: labels.clean, action: clear}
+						{text: labels.clean, action: clear},
 					], 'ToolButton'),
 					// меню с подразделами поиска (основное)
 					searchMenu = createCmp('VButtonMenu', [

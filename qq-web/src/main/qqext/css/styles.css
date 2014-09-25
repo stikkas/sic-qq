@@ -3,6 +3,12 @@
     background-color:transparent;
     border-color:#2D446D !important;
 }
+/*.x-container .x-panel{
+    margin-bottom:10px;
+}*/
+.x-panel{
+    margin:0;
+}
 .x-panel-header-default{
     border:1px solid #38547B;
 }
@@ -74,6 +80,7 @@ label.journal_title_label{
     background:url(../images/vmenu_bg.png) no-repeat;
     background-size:100% 100%;
     border:1px solid #38547B;
+    width:250px;
 }
 .vmenu a{
     color:#2D446D;
@@ -233,3 +240,8 @@ div.collapse_section{
 .collapse_section .x-noborder-t{
     border:none !important;
 }
+
+
+/*.x-item-disabled{
+    display:none;
+}*/

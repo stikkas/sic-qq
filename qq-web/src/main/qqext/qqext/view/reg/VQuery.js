@@ -29,7 +29,9 @@ Ext.define('qqext.view.reg.VQuery', {
 								target.hide();
 							else
 								target.show();
-						}
+						},
+                                                width:330, 
+                                                labelWidth:150
 					}
 				}),
 				createCmp('FDateField', 'Плановая дата исполнения запроса', 'plannedFinishDate',{width:250, labelWidth:150}),

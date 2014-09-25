@@ -16,15 +16,21 @@ Ext.define('qqext.view.search.VSearchParams', {
 		var createCmp = Ext.create;
 		Ext.applyIf(this, {
 			items: [
-				createCmp('FComboBox', 'Архив исполнитель', 'inboxDocExecOrg', 'archiveId'),
-				createCmp('FComboBox', 'Вид запроса', 'queryType', 'queryTypeId'),
-				createCmp('FTextField', 'Содержание запроса', 'queryContent'),
-				createCmp('FComboBox', 'Тип заявителя', 'applicantType', 'applicantTypeId'),
-				createCmp('FComboBox', 'Категория заявителя', 'applicantCategory', 'applicantCategoryId'),
-				createCmp('FDateField', 'Дата регистрации', 'regDate'),
-				createCmp('FLabel', 'На кого запрос'),
+				createCmp('FComboBox', 'Архив исполнитель', 'inboxDocExecOrg', 'archiveId',
+                                {width:400, labelWidth:150}),
+				createCmp('FComboBox', 'Вид запроса', 'queryType', 'queryTypeId',
+                                {width:400, labelWidth:150}),
+				createCmp('FTextField', 'Содержание запроса', 'queryContent',
+                                {width:950, labelWidth:150}),
+				createCmp('FComboBox', 'Тип заявителя', 'applicantType', 'applicantTypeId',
+                                {width:400, labelWidth:150}),
+				createCmp('FComboBox', 'Категория заявителя', 'applicantCategory', 'applicantCategoryId',
+                                {width:400, labelWidth:150}),
+				createCmp('FDateField', 'Дата регистрации', 'regDate',
+                                {width:250, labelWidth:150}),
+				createCmp('FLabel', 'На кого запрос', {cls:'three_hor_lbl'}),
 				createCmp('FioFieldContainer', 'reqObjSurname', 'reqObjName', 'regObjFatherName'),
-				createCmp('FLabel', 'Заявитель'),
+				createCmp('FLabel', 'Заявитель', {cls:'three_hor_lbl'}),
 				createCmp('FioFieldContainer', 'applSurname', 'applName', 'applFatherName')
 			]
 		});

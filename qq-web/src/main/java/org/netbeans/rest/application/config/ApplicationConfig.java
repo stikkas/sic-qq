@@ -26,7 +26,7 @@ public class ApplicationConfig extends Application {
 		resources.add(ru.insoft.archive.qq.service.ApplicantFacadeREST.class);
 		resources.add(ru.insoft.archive.qq.service.AttachedFileFacadeREST.class);
         resources.add(ru.insoft.archive.qq.service.CoordinationFacadeREST.class);
-        resources.add(ru.insoft.archive.qq.service.DeliveryActionFacadeREST.class)resources.add(ru.insoft.archive.qq.service.DescriptorGroupFacadeREST.class);
+        resources.add(ru.insoft.archive.qq.service.DescriptorGroupFacadeREST.class);
 		resources.add(ru.insoft.archive.qq.service.DescriptorValueFacadeREST.class);
 		resources.add(ru.insoft.archive.qq.service.ExecutionFacadeREST.class);
 		resources.add(ru.insoft.archive.qq.service.NotificationFacadeREST.class);

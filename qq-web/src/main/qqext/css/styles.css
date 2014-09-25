@@ -165,8 +165,8 @@ label.journal_title_label{
 }
 
 /*labels*/
-.x-panel .x-box-inner label,
-.x-panel .x-box-inner .x-form-item-label{
+.x-panel .x-field label,
+.x-panel .x-field .x-form-item-label{
     color:#000;
     font: 1.1em "Lucida Sans Unicode", sans-serif;
     font-stretch:condensed;
@@ -175,10 +175,14 @@ label.journal_title_label{
     text-decoration:none;
     padding:0;
 }
-.x-panel .x-box-inner label{
+.three_hor_lbl{
     color:#2D446D;
     font-weight:bold;
+    font-size:1.1em;
     text-decoration:underline;
+    text-align:right;
+    display:block;
+    width:150px;
     padding:5px 0;
 }
 .two_col_fld .x-form-item-label.x-form-item-label{
@@ -197,7 +201,7 @@ label.journal_title_label{
 }
 div.collapse_section{
     border:1px solid #2D446D !important;
-    width: calc(100% - 30px);
+    //width: calc(100% - 30px);
 }
 .collapse_section legend,
 .collapse_section .x-panel-header{

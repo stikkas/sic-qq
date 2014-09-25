@@ -1,13 +1,24 @@
+/*panel*/
 .x-panel-body-default{
     background-color:transparent;
     border-color:#2D446D !important;
 }
+.x-panel-header-default{
+    border:1px solid #38547B;
+}
+.x-panel-header-text-container-default{
+    color:#2D446D;
+    font:bold 1.2em Arial, sans-serif;
+    padding-left:20px;
+}
+
 .x-border-layout-ct{
     background-image:-moz-linear-gradient(right bottom, #DDE1E8, #fff);
     background-image:-webkit-gradient(linear, right bottom, left top, from(#DDE1E8), to(#fff));
     background: -o-linear-gradient(left, #DDE1E8, #fff);
     background: -ms-linear-gradient(left, #DDE1E8, #fff);
 }
+
 .title_cls .x-panel-header-default{
     border:1px solid #38547B;
     background-color:#C1CEE1;
@@ -27,18 +38,10 @@ label.journal_title_label{
     background: -o-linear-gradient(left, #DDE3EB, #fff);
     background: -ms-linear-gradient(left, #DDE3EB, #fff);
 }
-.x-panel-header-default{
-    border:1px solid #38547B;
-}
 .journal_title_label{
     color:#6A84A6;
     text-align:center;
     padding:10px 0;
-}
-.x-panel-header-text-container-default{
-    color:#2D446D;
-    font:bold 1.2em Arial, sans-serif;
-    padding-left:20px;
 }
 .title_cls .x-panel-header-text-container-default{
     color:#fff;
@@ -46,6 +49,7 @@ label.journal_title_label{
     text-shadow:3px 2px 3px #000;
     margin-left:50px;
 }
+/*menu*/
 .hmenu{ 
     padding:0 30px;
     border:1px solid #38547B;
@@ -105,7 +109,8 @@ label.journal_title_label{
 .add_btn{
     background-image:url(../images/i_add.png);
 }
-
+/*-----*/
+/*sliders*/
 .x-form-date-trigger{
     background-image:url(../images/calendar.png);
     background-position: center left;
@@ -131,7 +136,6 @@ label.journal_title_label{
 .x-column-header-sort-DESC .x-column-header-text{
     background-image:url(../images/sortDESC.png);
 }
-
 /*table*/
 .x-column-header-over{
     background-color:transparent;
@@ -160,8 +164,6 @@ label.journal_title_label{
     background-color:#E2E7EE;
 }
 
-/*search*/
-
 /*labels*/
 .x-panel .x-box-inner label,
 .x-panel .x-box-inner .x-form-item-label{
@@ -186,6 +188,7 @@ label.journal_title_label{
     width:5px !important;
 }
 
+/*collapse section*/
 .collapse_section,
 .collapse_section .x-panel-header-default{
     width:100%;

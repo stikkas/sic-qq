@@ -10,9 +10,7 @@ Ext.define('qqext.model.ExecutionInfo', (function() {
 		alias: 'ExecutionInfoModel',
 		extend: 'Ext.data.Model',
 		idProperty: 'id',
-//	clientIdProperty: 'cliId',
 		fields: [
-//		{name: 'cliId', type: 'string'},
 			{name: 'id', type: 'int', defaultValue: null, convert: null},
 			{name: exec.date[0], type: 'date', convert: function(v) {
 					if (v)
@@ -23,6 +21,18 @@ Ext.define('qqext.model.ExecutionInfo', (function() {
 			{name: exec.category[0], type: 'int', defaultValue: null, convert: null}
 		],
 		belongsTo: 'qqext.model.Question',
+		associations: [
+			{type: 'hasMany', model: 'qqext.model.DeliveryAction',
+				name: 'deliveryactions', foreignKey: 'question'},
+			{type: 'hasMany', model: 'qqext.model.UsedMaterial',
+				name: 'usedmaterials', foreignKey: 'question'},
+			{type: 'hasMany', model: 'qqext.model.Coordination',
+				name: 'coordinations', foreignKey: 'question'},
+			{type: 'hasMany', model: 'qqext.model.SendAction',
+				name: 'sendactions', foreignKey: 'question'},
+			{type: 'hasOne', model: 'qqext.model.WayToSend', foreignKey: 'id',
+				setterName: 'setWay', getterName: 'getWay'}
+		],
 		requires: ['Ext.data.proxy.Rest'],
 		proxy: {
 			type: 'rest',

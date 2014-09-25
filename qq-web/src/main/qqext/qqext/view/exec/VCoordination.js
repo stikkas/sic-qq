@@ -18,12 +18,25 @@ Ext.define('qqext.view.exec.VCoordination', {
 	 * @private
 	 */
 	/**
+	 * Возвращает ошибки
+	 */
+	getErrors: function() {
+		return this._cf.getErrors();
+	},
+	/**
+	 * Проверяет правильность заполнения формы
+	 * @returns {Boolean} если ошибок нет то true
+	 */
+	isValid: function() {
+		return this._cf.isValid();
+	},
+	/**
 	 * Обновляет данные на сервере
 	 */
 	sync: function() {
 		var store = this._cf.getStore();
 		store.sync({callback: function() {
-				store.load()
+				store.load();
 			}});
 	},
 	/**
@@ -37,7 +50,7 @@ Ext.define('qqext.view.exec.VCoordination', {
 	 * из ассоциаций текущего запроса.
 	 */
 	setStorage: function() {
-		this._cf.reconfigure(qqext.request.coordinations());
+		this._cf.reconfigure(qqext.request.getExec().coordinations());
 	},
 	initComponent: function() {
 		var me = this,

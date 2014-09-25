@@ -23,14 +23,45 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 	 * @property {qqext.factory.PanelGrid} _uf Таблица для используемых материалов
 	 * @private
 	 */
+	/**
+	 * Возвращает ошибки
+	 */
+	getErrors: function() {
+		var me = this,
+				error = me._df.getErrors() + me._uf.getErrors();
+		if (me._errors.length)
+			error += "<p>" + me._errors.join('') + "</p>";
+		return error;
 
+
+	},
+	/**
+	 * Проверяет правильность заполнения формы
+	 * @returns {Boolean} если ошибок нет то true
+	 */
+	isValid: function() {
+		var me = this,
+				errors = me._errors = [],
+				result = true;
+		// проверяем все, только потом возвращаем результат
+		if (me._df.getStore().count() === 0) {
+			errors.push("Должен быть указан хоть один документ");
+			result = false;
+		}
+		if (!me._df.isValid())
+			result = false;
+		if (!me._uf.isValid())
+			result = false;
+
+		return result;
+	},
 	/**
 	 * Обновляет данные на сервере
 	 */
 	sync: function() {
 		[this._df.getStore(), this._uf.getStore()].forEach(function(v) {
 			v.sync({callback: function() {
-					v.load()
+					v.load();
 				}});
 		});
 	},
@@ -46,9 +77,9 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 	 * из ассоциаций текущего запроса.
 	 */
 	setStorage: function() {
-		var request = qqext.request;
-		this._df.reconfigure(request.deliveryactions());
-		this._uf.reconfigure(request.usedmaterials());
+		var model = qqext.request.getExec();
+		this._df.reconfigure(model.deliveryactions());
+		this._uf.reconfigure(model.usedmaterials());
 	},
 	initComponent: function() {
 		var me = this,
@@ -57,7 +88,6 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 				mat = ns.usedMaterial,
 				delAction = ns.delAction,
 				storeId = delAction.type[0];
-
 		Ext.applyIf(me, {
 			items: [me._df = createCmp('FPanelGrid', 'DeliveryActionModel', {
 					defaults: {

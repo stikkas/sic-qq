@@ -64,18 +64,8 @@ Ext.define('qqext.model.Question', {
 			setterName: 'setNoti', getterName: 'getNoti'},
 		{type: 'hasOne', model: 'qqext.model.ExecutionInfo', foreignKey: 'id',
 			setterName: 'setExec', getterName: 'getExec'},
-		{type: 'hasOne', model: 'qqext.model.WayToSend', foreignKey: 'id',
-			setterName: 'setWay', getterName: 'getWay'},
 		{type: 'hasMany', model: 'qqext.model.AttachedFile',
-			name: 'files', foreignKey: 'question'},
-		{type: 'hasMany', model: 'qqext.model.DeliveryAction',
-			name: 'deliveryactions', foreignKey: 'question'},
-		{type: 'hasMany', model: 'qqext.model.UsedMaterial',
-			name: 'usedmaterials', foreignKey: 'question'},
-		{type: 'hasMany', model: 'qqext.model.Coordination',
-			name: 'coordinations', foreignKey: 'question'},
-		{type: 'hasMany', model: 'qqext.model.SendAction',
-			name: 'sendactions', foreignKey: 'question'}
+			name: 'files', foreignKey: 'question'}
 	],
 	proxy: {
 		type: 'rest',

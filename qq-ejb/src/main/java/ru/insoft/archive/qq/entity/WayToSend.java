@@ -5,21 +5,14 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import ru.insoft.archive.extcommons.entity.HasId;
-import ru.insoft.archive.extcommons.json.JsonIn;
-import ru.insoft.archive.extcommons.json.JsonOut;
 
 /**
  * Способ отправки.
@@ -34,7 +27,7 @@ import ru.insoft.archive.extcommons.json.JsonOut;
 	@NamedQuery(name = "WayToSend.findByRemark", query = "SELECT w FROM WayToSend w WHERE w.remark = :remark"),
 	@NamedQuery(name = "WayToSend.findByIssueNumber", query = "SELECT w FROM WayToSend w WHERE w.issueNumber = :issueNumber"),
 	@NamedQuery(name = "WayToSend.findByRenewalNotice", query = "SELECT w FROM WayToSend w WHERE w.renewalNotice = :renewalNotice")})
-public class WayToSend implements Serializable, HasId, JsonIn, JsonOut {
+public class WayToSend implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
@@ -54,11 +47,6 @@ public class WayToSend implements Serializable, HasId, JsonIn, JsonOut {
 	@Column(name = "RENEWAL_NOTICE", columnDefinition = "DATE")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date renewalNotice;
-
-	@JsonIgnore
-	@JoinColumn(name = "QUESTION_ID", referencedColumnName = "QUESTION_ID", insertable = false, updatable = false)
-	@OneToOne(optional = false, fetch = FetchType.LAZY)
-	private Question question;
 
 	public WayToSend() {
 	}
@@ -97,14 +85,6 @@ public class WayToSend implements Serializable, HasId, JsonIn, JsonOut {
 
 	public void setRenewalNotice(Date renewalNotice) {
 		this.renewalNotice = renewalNotice;
-	}
-
-	public Question getQuestion() {
-		return question;
-	}
-
-	public void setQuestion(Question question) {
-		this.question = question;
 	}
 
 	@Override

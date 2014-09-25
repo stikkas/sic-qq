@@ -1,7 +1,8 @@
 /**
  * Используется для создания табличных данных в закладке "Исполнение запроса".
  * А именно: Выдача документов, Используемы материалы, Согласование документа,
- * Способ отправки
+ * Способ отправки.
+ * Имеет возможность проверки себя на валидность. Проверка проводится по модели.
  */
 
 Ext.define('qqext.factory.PanelGrid', {
@@ -15,6 +16,30 @@ Ext.define('qqext.factory.PanelGrid', {
 	alias: 'FPanelGrid',
 	maxHeight: 200,
 	overflowY: 'auto',
+	/**
+	 * Возвращает ошибки, которые записываются в _errors
+	 * @returns {String} описание ошибок
+	 */
+	getErrors: function() {
+		if (this._errors.length)
+			return "<p>" + this._errors.join('<br>') + "</p>";
+		return '';
+	},
+	/**
+	 * Проверяет правильность заполнения формы
+	 * @returns {Boolean} если ошибок нет то true
+	 */
+	isValid: function() {
+		var errors = this._errors = [];
+		this.getStore().data.each(function(item) {
+			item.validate().each(function(it) {
+				errors.push(it.message);
+				return true;
+			});
+			return true;
+		});
+		return !errors.length;
+	},
 	/**
 	 * Создает таблицу
 	 * @param {Ext.data.Model} model модель для использования в хранилище сетки

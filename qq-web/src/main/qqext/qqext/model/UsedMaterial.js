@@ -10,6 +10,8 @@ Ext.define('qqext.model.UsedMaterial', (function() {
 	return {
 		alias: 'UsedMaterialModel',
 		extend: 'Ext.data.Model',
+		requires: ['Ext.data.proxy.Rest',
+			'Ext.data.validations'],
 		idProperty: 'id',
 		fields: [
 			{name: 'id', type: 'int', convert: null, defaultValue: null, isNull: true},
@@ -20,8 +22,12 @@ Ext.define('qqext.model.UsedMaterial', (function() {
 			{name: mat.pages[0], type: 'string'},
 			{name: mat.remark[0], type: 'string'}
 		],
-		requires: ['Ext.data.proxy.Rest'],
-		belongsTo: 'qqext.model.Question',
+		validations: [{type: 'presence', field: mat.fond[0], message: mat.fond[1] + ' должен быть указан'},
+			{type: 'presence', field: mat.opis[0], message: mat.opis[1] + ' должен быть указан'},
+			{type: 'presence', field: mat.storage[0], message: mat.storage[1] + ' должен быть указан'},
+			{type: 'presence', field: mat.pages[0], message: mat.pages[1] + ' должен быть указан'}
+		],
+		belongsTo: 'qqext.model.ExecutionInfo',
 		proxy: {
 			type: 'rest',
 			url: '/qq-web/rest/usedmaterial',

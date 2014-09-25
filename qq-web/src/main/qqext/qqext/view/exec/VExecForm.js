@@ -15,7 +15,7 @@ Ext.define('qqext.view.exec.VExecForm', {
 	],
 	mixins: ['qqext.cmp.DisableButtons'],
 	overflowY: 'auto',
-	maxHeight: 1200,
+	maxHeight: 1300,
 	/**
 	 * Индекс, в соответствии с которым сопоставляется верхнее меню (см. qqext.Menu)
 	 * @private
@@ -28,12 +28,23 @@ Ext.define('qqext.view.exec.VExecForm', {
 			if (ns.request !== me.model) {
 				// Значит новый запрос (не тот который был до этого)
 				me.model = ns.request;
-				me.loadRecord();
-				me.setViewOnly(true);
 				me._disableButtons(true, 1, 2, 3);
 				me._disableButtons(!(ns.user.isAllowed(ns.rules.exec) &&
 						me.model.get('status') === ns.getStatusId(ns.stats.onexec)), 0);
-				me._dForm.createPanel();
+
+				[me._df, me._cf, me._mf].forEach(function(v) {
+					v.setStorage();
+				});
+
+				me.model.getExec({callback: function(r) {
+						me._ef.loadRecord(r);
+					}});
+				me.model.getWay({callback: function(r) {
+						me._mf.loadRecord(r);
+					}});
+				me._df.loadRecord();
+				me._cf.loadRecord();
+				me.setViewOnly(true);
 			}
 			ns.viewport.doLayout();
 		}
@@ -48,6 +59,14 @@ Ext.define('qqext.view.exec.VExecForm', {
 		 * @returns {undefined}
 		 */
 		function save() {
+			// TODO: Может стоит обновить дату и пользователя обновления запроса
+			var model = me.model;
+			me.updateRecord();
+			model.getExec().save();
+			model.getWay().save();
+			me._df.sync();
+			me._cf.sync();
+			me._mf.sync();
 		}
 		/**
 		 * Обрабатывает событие 'click' на кнопке "Удалить"
@@ -77,31 +96,24 @@ Ext.define('qqext.view.exec.VExecForm', {
 						'ToolButton', me);
 		Ext.applyIf(me, {
 			items: [
-				me._eForm = createCmp('VExecInfo'),
-				me._dForm = createCmp('VDeliveryOfDocuments')/*,
-				 createCmp('VCoordination'),
-				 createCmp('VDeliveryMethod')*/
+				me._ef = createCmp('VExecInfo'),
+				me._df = createCmp('VDeliveryOfDocuments'),
+				me._cf = createCmp('VCoordination'),
+				me._mf = createCmp('VDeliveryMethod')
 			]
 		});
 		me._btns = menu.items;
 		me.callParent();
 		ns.Menu.editReqMenu.insert(3, menu);
 	},
-	loadRecord: function() {
-		/*
-		 var me = this;
-		 me._eForm.loadRecord(me.model.getExec());
-		 me._dForm.loadRecord();
-		 */
-	},
 	updateRecord: function() {
-		/*
-		 var me = this;
-		 me._eForm.updateRecord(me.model.getExec());
-		 me._dForm.updateloadRecord();
-		 */
+		var me = this;
+		me._ef.updateRecord(me.model.getExec());
+		me._mf.updateRecord(me.model.getWay());
 	},
-	validate: function() {
-
+	isValid: function() {
+		return !this.items.some(function(v) {
+			return !v.isValid();
+		});
 	}
 });

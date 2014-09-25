@@ -9,9 +9,7 @@ Ext.define('qqext.model.WayToSend', (function() {
 		alias: 'WayToSendModel',
 		extend: 'Ext.data.Model',
 		idProperty: 'id',
-//	clientIdProperty: 'cliId',
 		fields: [
-			{name: 'cliId', type: 'string'},
 			{name: 'id', type: 'int'},
 			{name: way.notice[0], type: 'date', convert: function(v) {
 					if (v)

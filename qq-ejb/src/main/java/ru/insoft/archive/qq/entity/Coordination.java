@@ -5,19 +5,16 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import ru.insoft.archive.extcommons.entity.HasId;
-import ru.insoft.archive.extcommons.json.JsonIn;
-import ru.insoft.archive.extcommons.json.JsonOut;
 
 /**
  *
@@ -29,13 +26,14 @@ import ru.insoft.archive.extcommons.json.JsonOut;
 	@NamedQuery(name = "Coordination.findAll", query = "SELECT c FROM Coordination c"),
 	@NamedQuery(name = "Coordination.findById", query = "SELECT c FROM Coordination c WHERE c.id = :id"),
 	@NamedQuery(name = "Coordination.findByStageDate", query = "SELECT c FROM Coordination c WHERE c.stageDate = :stageDate")})
-public class Coordination implements Serializable, HasId, JsonIn, JsonOut {
+public class Coordination implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Basic(optional = false)
-	@NotNull
+	@GeneratedValue(generator = "coordinationGen", strategy = GenerationType.SEQUENCE)
+	@SequenceGenerator(name = "coordinationGen", sequenceName = "SEQ_QQ_COORDINATION",
+		allocationSize = 1)
 	@Column(name = "COORDINATION_ID")
 	private Long id;
 
@@ -46,9 +44,15 @@ public class Coordination implements Serializable, HasId, JsonIn, JsonOut {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date stageDate;
 
-	@JoinColumn(name = "QUESTION_ID", referencedColumnName = "QUESTION_ID")
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Question question;
+	@Basic(optional = false)
+	@NotNull
+	@Column(name = "QUESTION_ID")
+	private Long question;
+	/*
+	 @JoinColumn(name = "QUESTION_ID", referencedColumnName = "QUESTION_ID")
+	 @ManyToOne(fetch = FetchType.LAZY)
+	 private Question question;
+	 */
 
 	public Coordination() {
 	}
@@ -81,11 +85,11 @@ public class Coordination implements Serializable, HasId, JsonIn, JsonOut {
 		this.stageDate = stageDate;
 	}
 
-	public Question getQuestion() {
+	public Long getQuestion() {
 		return question;
 	}
 
-	public void setQuestion(Question question) {
+	public void setQuestion(Long question) {
 		this.question = question;
 	}
 

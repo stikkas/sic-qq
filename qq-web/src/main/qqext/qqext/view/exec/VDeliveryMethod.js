@@ -5,74 +5,83 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 	alias: 'VDeliveryMethod',
 	extend: 'qqext.view.StyledPanel',
 	requires: [
-		'qqext.view.exec.cmp.ComboDateTrash',
-		'qqext.factory.HandlerButton',
+		'Ext.form.field.ComboBox',
 		'qqext.model.SendAction',
 		'qqext.factory.TextArea',
 		'qqext.factory.TextField',
 		'qqext.factory.DateField',
+		'qqext.factory.PanelGrid',
 		'Ext.Component',
+		'Ext.Date',
 		'qqext.cmp.FieldSet',
-		'hawk_common.cmp.FileList'
+		'hawk_common.cmp.FileList',
+		'hawk_common.cmp.DateField'
 	],
 	title: 'Способ отправки',
-	mOdel: null,
-	minHeight: 60,
-	remove: function() {
-		var me = this;
-		var index = me.items.indexOf(arguments[0]);
-		var delSendMethod = me.mOdel.sendActions().getAt(index - 1);
-		me.mOdel.sendActions().remove(delSendMethod);
-		me.callParent(arguments);
+	/**
+	 * Обновляет данные на сервере
+	 */
+	sync: function() {
+		var store = this._sf.getStore();
+		store.sync({callback: function() {
+				store.load();
+			}});
 	},
+	/**
+	 * Загружает данные в форму
+	 */
 	loadRecord: function(model) {
-		var me = this;
-		me.mOdel = model;
-		for (var i = 0; i < me.mOdel.sendActions().getCount(); i++) {
-			var t = Ext.create('qqext.view.exec.cmp.ComboDateTrash',
-					me.comboTrashConfig);
-			me.insert(me.items.length - 5, t);
-			t.setComboValue(me.mOdel.sendActions().getAt(i)
-					.get('sendAction'));
-			t.setDateValue(me.mOdel.sendActions().getAt(i)
-					.get('sendDate'));
-		}
-		var wayToSend = model.getWayToSend();
-		arguments[0] = wayToSend;
-		me.callParent(arguments);
+		this._sf.getStore().load();
+		this.callParent([model]);
 	},
-	updateRecord: function() {
-		var me = this;
-		for (var i = 0; i < me.mOdel.sendActions().getCount(); i++) {
-			var curComboTrashDate = me.items.getAt(i + 1);
-			var curSendAction = me.mOdel.sendActions().getAt(i);
-			curSendAction.set('sendAction', curComboTrashDate
-					.getComboValue());
-			curSendAction.set('sendDate', curComboTrashDate
-					.getDateValue());
-		}
-		var wayToSend = arguments[0].getWayToSend();
-		arguments[0] = wayToSend;
-		me.callParent(arguments);
+	/**
+	 * Устанавливает хранилища для своих таблиц. Хранилища берутся
+	 * из ассоциаций текущего запроса.
+	 */
+	setStorage: function() {
+		this._sf.reconfigure(qqext.request.sendactions());
 	},
 	initComponent: function() {
 		var me = this,
 				createCmp = Ext.create,
 				way = qqext.wayToSend,
-				action = qqext.sendAction;
-
-		me.comboTrashConfig = {
-			store: 'answerForm',
-			comboLabel: action.type[1],
-			dateLabel: action.date[1]
-		};
+				action = qqext.sendAction,
+				storeId = 'answerForm';
 
 		Ext.apply(me, {
 			items: [
-				createCmp('FHandlerButton', 'add', function() {
-					var t = createCmp('ComboDateTrash', me.comboTrashConfig);
-					me.insert(me.items.length - 5, t);
-					me.mOdel.sendActions().add(createCmp('SendActionModel'));
+				me._sf = createCmp('FPanelGrid', 'SendActionModel', {
+					defaults: {
+						sortable: false,
+						menuDisabled: true
+					}, items: [
+						{
+							text: action.type[1],
+							dataIndex: action.type[0],
+							flex: 1,
+							editor: {
+								xtype: 'combobox',
+								store: storeId,
+								displayField: 'name',
+								valueField: 'id',
+								editable: false
+							},
+							renderer: function(value) {
+								var v = Ext.getStore(storeId).getById(value);
+								if (v)
+									return v.get('name');
+								return value;
+							}
+						},
+						{
+							text: action.date[1],
+							dataIndex: action.date[0],
+							editor: {xtype: 'hawkDateField'},
+							renderer: function(value) {
+								return Ext.Date.format(value, 'd.m.Y');
+							}
+						}
+					]
 				}),
 				createCmp('Ext.Component', {autoEl: 'hr'}),
 				createCmp('FDateField', way.notice[1], way.notice[0]),
@@ -84,6 +93,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 				createCmp('FieldSet', {
 					title: 'Ответ',
 					collapsible: true,
+					collapsed: true,
 					items: [createCmp('hawk_common.cmp.FileList')]
 				})
 			]

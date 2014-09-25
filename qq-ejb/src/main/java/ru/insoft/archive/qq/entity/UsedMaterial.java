@@ -4,18 +4,15 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import ru.insoft.archive.extcommons.entity.HasId;
-import ru.insoft.archive.extcommons.json.JsonIn;
-import ru.insoft.archive.extcommons.json.JsonOut;
 
 /**
  * Данные по используемым материалам. Закладка "исполнение запроса".
@@ -32,13 +29,14 @@ import ru.insoft.archive.extcommons.json.JsonOut;
 	@NamedQuery(name = "UsedMaterial.findBySeriesNumber", query = "SELECT u FROM UsedMaterial u WHERE u.seriesNumber = :seriesNumber"),
 	@NamedQuery(name = "UsedMaterial.findByStorageUnitNumber", query = "SELECT u FROM UsedMaterial u WHERE u.storageUnitNumber = :storageUnitNumber"),
 	@NamedQuery(name = "UsedMaterial.findByRemark", query = "SELECT u FROM UsedMaterial u WHERE u.remark = :remark")})
-public class UsedMaterial implements Serializable, HasId, JsonIn, JsonOut {
+public class UsedMaterial implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Basic(optional = false)
-	@NotNull
+	@GeneratedValue(generator = "usedMatGen", strategy = GenerationType.SEQUENCE)
+	@SequenceGenerator(name = "usedMatGen", sequenceName = "SEQ_QQ_USED_MATERIAL",
+		allocationSize = 1)
 	@Column(name = "USED_MATERIAL_ID")
 	private Long id;
 
@@ -62,9 +60,15 @@ public class UsedMaterial implements Serializable, HasId, JsonIn, JsonOut {
 	@Column(name = "REMARK")
 	private String remark;
 
-	@JoinColumn(name = "QUESTION_ID", referencedColumnName = "QUESTION_ID")
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	private Question question;
+	@Basic(optional = false)
+	@NotNull
+	@Column(name = "QUESTION_ID")
+	private Long question;
+	/*
+	 @JoinColumn(name = "QUESTION_ID", referencedColumnName = "QUESTION_ID")
+	 @ManyToOne(optional = false, fetch = FetchType.LAZY)
+	 private Question question;
+	 */
 
 	public UsedMaterial() {
 	}
@@ -121,11 +125,11 @@ public class UsedMaterial implements Serializable, HasId, JsonIn, JsonOut {
 		this.remark = remark;
 	}
 
-	public Question getQuestion() {
+	public Long getQuestion() {
 		return question;
 	}
 
-	public void setQuestion(Question question) {
+	public void setQuestion(Long question) {
 		this.question = question;
 	}
 

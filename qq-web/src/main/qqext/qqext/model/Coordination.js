@@ -14,7 +14,7 @@ Ext.define('qqext.model.Coordination', (function() {
 		extend: 'Ext.data.Model',
 		idProperty: 'id',
 		fields: [
-			{name: 'id', type: 'int'},
+			{name: 'id', type: 'int', defaultValue: null, convert: null, isNull: true},
 			{name: 'question', type: 'int'},
 			{name: coor.stage[0], type: 'int', defaultValue: null, convert: null},
 			{name: coor.date[0], type: 'date', convert: function(v) {

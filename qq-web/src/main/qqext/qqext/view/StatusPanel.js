@@ -11,9 +11,16 @@ Ext.define('qqext.view.StatusPanel', {
 		this.items = [this._label = Ext.create('Ext.form.Label')];
 		this.callParent();
 	},
-	setStatus: function() {
-		this._label.setText(Ext.getStore('Q_DICT_QUESTION_STATUSES').
-				getById(qqext.request.get('status')).get('name'));
+	/**
+	 *  Устанавливает надпись
+	 *  @param {String} label
+	 */
+	setStatus: function(label) {
+		if (label === undefined)
+			this._label.setText(Ext.getStore('Q_DICT_QUESTION_STATUSES').
+					getById(qqext.request.get('status')).get('name'));
+		else
+			this._label.setText(label);
 	}
 });
 

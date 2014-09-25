@@ -19,8 +19,6 @@ Ext.define('qqext.view.transmission.VTransmission', {
 	],
 	mixins: ['qqext.cmp.DisableButtons'],
 	title: 'Передача на исполнение',
-	height: 400,
-	maxHeight: 400,
 	fieldDefaults: {
 		validateOnChange: false,
 		blankText: 'Обязательно для заполнения'
@@ -46,9 +44,14 @@ Ext.define('qqext.view.transmission.VTransmission', {
 					}});
 
 			}
-			ns.viewport.doLayout();
+			me.collapseAdds();
+			me.doLayout();
 		}
 	},
+	/**
+	 * @property {qqext.cmp.FieldSet} _adds поля для "Дополнительные сведения"
+	 * @private
+	 */
 	initComponent: function() {
 		//----------обработчики для кнопок меню---------
 		//sc - контекст для обработчика
@@ -169,7 +172,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 				}),
 				createCmp('FCheckbox', trans.control[1], trans.control[0]),
 				createCmp('FDateField', trans.controlDate[1], trans.controlDate[0], {allowBlank: false}),
-				createCmp('FieldSet', {
+				me._adds = createCmp('FieldSet', {
 					collapsible: true,
 					title: 'Дополнительная информация',
 					layout: 'vbox',
@@ -185,5 +188,14 @@ Ext.define('qqext.view.transmission.VTransmission', {
 		me._btns = menus.items;
 		me.callParent();
 		ns.Menu.editReqMenu.insert(2, menus);
+	},
+	/**
+	 * Скрывает дополнительные сведения.
+	 * Изначально в конструкторе опция collapsed: true - не работает (extjs не может
+	 * правильно пересчитать размер), поэтому приходится делать это руками, после
+	 * того как форма будет активирована (afterrender тоже слишком рано)
+	 */
+	collapseAdds: function() {
+		this._adds.collapse();
 	}
 });

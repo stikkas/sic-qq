@@ -15,9 +15,7 @@ Ext.define('qqext.model.Transmission', (function() {
 		alias: 'TransmissionModel',
 		extend: 'Ext.data.Model',
 		idProperty: 'id',
-//	clientIdProperty: 'cliId',
 		fields: [
-//		{name: 'cliId', type: 'string'},
 			{name: 'id', type: 'int', defaultValue: null, convert: null},
 			{name: trans.bossExecutor[0], type: 'int', convert: null, defaultValue: null},
 			{name: trans.bossExecutionDate[0], type: 'date', convert: function(v) {

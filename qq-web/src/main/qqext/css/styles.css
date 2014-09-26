@@ -168,6 +168,10 @@ label.journal_title_label{
     background-color:#E2E7EE;
 }
 
+/*fields*/
+.x-form-type-text{
+    margin:5px;
+}
 /*labels*/
 .x-panel .x-field label,
 .x-panel .x-field .x-form-item-label{

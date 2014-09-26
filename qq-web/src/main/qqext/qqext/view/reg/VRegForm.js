@@ -225,13 +225,13 @@ Ext.define('qqext.view.reg.VRegForm', {
 					{text: labels.remove, action: remove},
 					{text: labels.register, action: book}],
 						'ToolButton', me);
-		me._forms = [me.inbox = createCmp('VInboxDoc'),
-			me.query = createCmp('VQuery'),
-			me.applicant = createCmp('VApplicant'),
-			me.target = createCmp('VQueryObject', {hidden: true}),
-			createCmp('VFiles')
-		];
-		Ext.applyIf(me, {items: me._forms});
+		Ext.applyIf(me, {items: [
+				me.inbox = createCmp('VInboxDoc'),
+				me.query = createCmp('VQuery'),
+				me.applicant = createCmp('VApplicant'),
+				me.target = createCmp('VQueryObject', {hidden: true}),
+				createCmp('VFiles')
+			]});
 		me._btns = menu.items;
 		me.callParent();
 		ns.Menu.editReqMenu.insert(0, menu);
@@ -312,16 +312,13 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 * @returns {Boolean} показывает ошибку и возвращает false в случае не правильного заполнения формы
 	 */
 	validate: function() {
-		var forms = this._forms,
-				i = 0,
-				max = forms.length,
-				errors = [], form;
-		for (; i < max; ++i) {
-			form = forms[i];
+		var errors = [];
+		this.items.each(function(form) {
 			if (!(form.isHidden() || form.isValid())) {
 				errors.push(form.getErrors());
 			}
-		}
+			return true;
+		});
 		if (errors.length > 0) {
 			qqext.showError("Форма заполнена неправильно", errors.join(''));
 			return false;
@@ -332,8 +329,10 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 * Сбрасывает все ошибки
 	 */
 	reset: function() {
-		for (var i = 0; i < this._forms.length; ++i)
-			this._forms[i].reset();
+		this.items.each(function(form) {
+			form.reset();
+			return true;
+		});
 	},
 	/**
 	 * Приводит форму к первоначальному состоянию,

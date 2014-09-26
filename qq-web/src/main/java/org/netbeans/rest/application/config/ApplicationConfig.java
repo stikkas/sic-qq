@@ -26,7 +26,8 @@ public class ApplicationConfig extends Application {
 		resources.add(ru.insoft.archive.qq.service.ApplicantFacadeREST.class);
 		resources.add(ru.insoft.archive.qq.service.AttachedFileFacadeREST.class);
         resources.add(ru.insoft.archive.qq.service.CoordinationFacadeREST.class);
-        resources.add(ru.insoft.archive.qq.service.DescriptorGroupFacadeREST.class);
+        resources.add(ru.insoft.archive.qq.service.DeliveryActionFacadeREST.class);
+		resources.add(ru.insoft.archive.qq.service.DescriptorGroupFacadeREST.class);
 		resources.add(ru.insoft.archive.qq.service.DescriptorValueFacadeREST.class);
 		resources.add(ru.insoft.archive.qq.service.ExecutionFacadeREST.class);
 		resources.add(ru.insoft.archive.qq.service.NotificationFacadeREST.class);
@@ -34,7 +35,7 @@ public class ApplicationConfig extends Application {
 		resources.add(ru.insoft.archive.qq.service.SendActionFacadeREST.class);
 		resources.add(ru.insoft.archive.qq.service.TransmissionFacadeREST.class);
 		resources.add(ru.insoft.archive.qq.service.UsedMaterialFacadeREST.class);
-		resources.add(ru.insoft.archive.qq.service.WayToSendFacadeREST.class);
+        resources.add(ru.insoft.archive.qq.service.WayToSendFacadeREST.class);
 	}
 
 }

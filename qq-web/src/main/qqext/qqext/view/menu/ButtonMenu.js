@@ -16,13 +16,17 @@ Ext.define('qqext.view.menu.ButtonMenu', {
 
 		Ext.applyIf(me, {
 			items: buttons.map(function(btn) {
-				var button = Ext.create(type, {
+				var button = {
 					text: btn.text,
 					listeners: {
 						click: btn.action,
 						scope: scope
 					}
-				});
+				};
+				for (var o in btn.opts)
+					button[o] = btn.opts[o];
+
+				button = Ext.create(type, button);
 
 				// Если кнопка понадобится дальше, то заносим ее в глобальный
 				// список кнопок
@@ -36,3 +40,4 @@ Ext.define('qqext.view.menu.ButtonMenu', {
 		me.callParent();
 	}
 });
+

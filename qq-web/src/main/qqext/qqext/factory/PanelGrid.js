@@ -34,9 +34,7 @@ Ext.define('qqext.factory.PanelGrid', {
 		this.getStore().data.each(function(item) {
 			item.validate().each(function(it) {
 				errors.push(it.message);
-				return true;
 			});
-			return true;
 		});
 		return !errors.length;
 	},

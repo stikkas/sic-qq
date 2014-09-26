@@ -8,14 +8,9 @@ Ext.define('qqext.model.Question', {
 		'qqext.model.Transmission',
 		'qqext.model.Applicant',
 		'Ext.data.AbstractStore',
-		'qqext.model.AttachedFile',
+		'qqext.model.ApplicantDoc',
 		'qqext.model.Notification',
 		'qqext.model.ExecutionInfo',
-		'qqext.model.DeliveryAction',
-		'qqext.model.UsedMaterial',
-		'qqext.model.Coordination',
-		'qqext.model.SendAction',
-		'qqext.model.WayToSend',
 		'Ext.data.proxy.Rest'
 	],
 	fields: [
@@ -64,7 +59,7 @@ Ext.define('qqext.model.Question', {
 			setterName: 'setNoti', getterName: 'getNoti'},
 		{type: 'hasOne', model: 'qqext.model.ExecutionInfo', foreignKey: 'id',
 			setterName: 'setExec', getterName: 'getExec'},
-		{type: 'hasMany', model: 'qqext.model.AttachedFile',
+		{type: 'hasMany', model: 'qqext.model.ApplicantDoc',
 			name: 'files', foreignKey: 'question'}
 	],
 	proxy: {

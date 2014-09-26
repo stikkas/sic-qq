@@ -96,13 +96,17 @@ Ext.define('qqext.view.reg.VRegForm', {
 										o.getError());
 								me.setViewOnly(false);
 								// Провал на втором уровне
-								if (fail2)
-									fail2();
+								fail2();
 							} else {
-								// Полный успех
-								if (success)
+								// Полный успех. Сохраняем файлы
+								me.files.save(function() {
 									success();
-								qqext.statusPanel.setStatus();
+									qqext.statusPanel.setStatus();
+								}, function() {
+									me.setViewOnly(false);
+									// Провал на втором уровне
+									fail2();
+								});
 							}
 						}
 					});
@@ -110,8 +114,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 					qqext.showError("Ошибка сохранения запроса", operation.getError());
 					me.setViewOnly(false);
 					// Провал на первом уровне
-					if (fail1)
-						fail1();
+					fail1();
 				}
 			}
 		});
@@ -162,6 +165,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 			me.model.destroy({
 				callback: function(recs, operation) {
 					if (operation.success) {
+						me.files.remove();
 						me.model = ns.request = null;
 						ns.getButton(ns.btns.toSearch).fireEvent('click');
 					} else {
@@ -230,43 +234,11 @@ Ext.define('qqext.view.reg.VRegForm', {
 				me.query = createCmp('VQuery'),
 				me.applicant = createCmp('VApplicant'),
 				me.target = createCmp('VQueryObject', {hidden: true}),
-				createCmp('VFiles')
+				me.files = createCmp('VFiles')
 			]});
 		me._btns = menu.items;
 		me.callParent();
 		ns.Menu.editReqMenu.insert(0, menu);
-	},
-	/**
-	 *
-	 * @param {Function} fn функция вызываемая при успешном сохранении
-	 * @returns {undefined}
-	 * @private
-	 */
-	_saveApplicant: function(fn) {
-		var me = this,
-				appl = me.model.getAppl();
-		appl.set('id', me.model.get('id'));
-		appl.save({callback: function(r, o, s) {
-				if (!s) {
-					me.showError("Ошибка при сохранении данных заявителя", o.getError());
-					me._disableButtons(false, 1, 2, 3);
-					me.setViewOnly(false);
-				} else {
-					fn.apply(me, []);
-				}
-			}
-		});
-	},
-	_loadApplicant: function() {
-		var me = this,
-				id = me.model.get('id');
-		qqext.model.Applicant.load(id, {callback: function(r, o, s) {
-				if (s) {
-					me.model.setAppl(r);
-					me.loadRecord();
-				}
-			}
-		});
 	},
 	/**
 	 * Метод для выполнения операций loadRecord и updateRecord
@@ -276,10 +248,12 @@ Ext.define('qqext.view.reg.VRegForm', {
 	_mAction: function(action) {
 		var me = this,
 				model = me.model;
-		[me.inbox, me.query, me.target].forEach(function(f) {
+		[me.inbox, me.query,
+			me.target].forEach(function(f) {
 			f[action](model);
 		});
 		me.applicant[action](model.getAppl());
+		me.files[action](model.files());
 	},
 	/**
 	 * Загружает данные из модели на форму
@@ -314,10 +288,8 @@ Ext.define('qqext.view.reg.VRegForm', {
 	validate: function() {
 		var errors = [];
 		this.items.each(function(form) {
-			if (!(form.isHidden() || form.isValid())) {
+			if (!(form.isHidden() || form.isValid()))
 				errors.push(form.getErrors());
-			}
-			return true;
 		});
 		if (errors.length > 0) {
 			qqext.showError("Форма заполнена неправильно", errors.join(''));
@@ -331,7 +303,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 	reset: function() {
 		this.items.each(function(form) {
 			form.reset();
-			return true;
 		});
 	},
 	/**

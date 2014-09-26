@@ -10,6 +10,14 @@ Ext.define('qqext.model.ExecutionInfo', (function() {
 		alias: 'ExecutionInfoModel',
 		extend: 'Ext.data.Model',
 		idProperty: 'id',
+		requires: [
+			'Ext.data.proxy.Rest',
+			'qqext.model.UsedMaterial',
+			'qqext.model.Coordination',
+			'qqext.model.SendAction',
+			'qqext.model.WayToSend',
+			'qqext.model.SendDoc'
+		],
 		fields: [
 			{name: 'id', type: 'int', defaultValue: null, convert: null},
 			{name: exec.date[0], type: 'date', convert: function(v) {
@@ -30,15 +38,16 @@ Ext.define('qqext.model.ExecutionInfo', (function() {
 				name: 'coordinations', foreignKey: 'question'},
 			{type: 'hasMany', model: 'qqext.model.SendAction',
 				name: 'sendactions', foreignKey: 'question'},
+			{type: 'hasMany', model: 'qqext.model.SendDoc',
+				name: 'files', foreignKey: 'question'},
 			{type: 'hasOne', model: 'qqext.model.WayToSend', foreignKey: 'id',
 				setterName: 'setWay', getterName: 'getWay'}
 		],
-		requires: ['Ext.data.proxy.Rest'],
 		proxy: {
 			type: 'rest',
 			url: '/qq-web/rest/execution',
 			reader: 'json',
 			writer: 'json'
 		}
-	}
+	};
 })());

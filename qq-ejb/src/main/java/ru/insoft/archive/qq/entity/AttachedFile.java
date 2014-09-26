@@ -5,17 +5,18 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import ru.insoft.archive.extcommons.entity.HasId;
-import ru.insoft.archive.extcommons.json.JsonIn;
-import ru.insoft.archive.extcommons.json.JsonOut;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  * Прикрепленные файлы. Могут быть в запросе и в ответе (два типа файлов)
@@ -27,13 +28,15 @@ import ru.insoft.archive.extcommons.json.JsonOut;
 @NamedQueries({
 	@NamedQuery(name = "AttachedFile.findAll", query = "SELECT a FROM AttachedFile a"),
 	@NamedQuery(name = "AttachedFile.findById", query = "SELECT a FROM AttachedFile a WHERE a.id = :id"),
-	@NamedQuery(name = "AttachedFile.findByFileName", query = "SELECT a FROM AttachedFile a WHERE a.fileName = :fileName")})
-public class AttachedFile implements Serializable, HasId, JsonIn, JsonOut {
+	@NamedQuery(name = "AttachedFile.findByName", query = "SELECT a FROM AttachedFile a WHERE a.name = :name")})
+public class AttachedFile implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
 	@Id
-	@Basic(optional = false)
-	@NotNull
+	@GeneratedValue(generator = "attachedGen", strategy = GenerationType.SEQUENCE)
+	@SequenceGenerator(name = "attachedGen", sequenceName = "SEQ_QQ_ATTACHED_FILE",
+		allocationSize = 1)
 	@Column(name = "ATTACHED_FILE_ID")
 	private Long id;
 
@@ -41,13 +44,20 @@ public class AttachedFile implements Serializable, HasId, JsonIn, JsonOut {
 	@NotNull
 	@Size(min = 1, max = 256)
 	@Column(name = "FILE_NAME")
-	private String fileName;
+	private String name;
 
 	@Basic(optional = false)
 	@NotNull
 	@Column(name = "FILE_TYPE_ID")
-	private Long fileType;
+	private Long type;
 
+	@Basic(optional = false)
+	@NotNull
+	@Size(min = 1, max = 256)
+	@Column(name = "FILE_LINK")
+	private String link;
+
+	@JsonIgnore
 	@JoinColumn(name = "QUESTION_ID", referencedColumnName = "QUESTION_ID")
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	private Question question;
@@ -59,9 +69,11 @@ public class AttachedFile implements Serializable, HasId, JsonIn, JsonOut {
 		this.id = id;
 	}
 
-	public AttachedFile(Long id, String fileName) {
+	public AttachedFile(Long id, String name, Long type, String link) {
 		this.id = id;
-		this.fileName = fileName;
+		this.name = name;
+		this.type = type;
+		this.link = link;
 	}
 
 	public Long getId() {
@@ -72,28 +84,28 @@ public class AttachedFile implements Serializable, HasId, JsonIn, JsonOut {
 		this.id = id;
 	}
 
-	public Long getFileType() {
-		return fileType;
+	public Long getType() {
+		return type;
 	}
 
-	public void setFileType(Long fileType) {
-		this.fileType = fileType;
+	public void setType(Long type) {
+		this.type = type;
 	}
 
-	public Long getAttachedFileId() {
-		return id;
+	public String getName() {
+		return name;
 	}
 
-	public void setAttachedFileId(Long id) {
-		this.id = id;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getFileName() {
-		return fileName;
+	public String getLink() {
+		return link;
 	}
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+	public void setLink(String link) {
+		this.link = link;
 	}
 
 	public Question getQuestion() {

@@ -102,7 +102,6 @@ Ext.define('qqext.view.exec.VExecForm', {
 		}
 		/**
 		 * Обрабатывает событие 'click' на кнопке "Регистрировать".
-		 * TODO реализовать метод
 		 * @private
 		 * @returns {undefined}
 		 */

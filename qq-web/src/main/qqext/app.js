@@ -55,6 +55,37 @@ Ext.application({
 				userStore.add(user);
 				userStore.sync();
 				Ext.create('Viewport', {});
+
+				// Загружаем настройки для прикрепленных файлов
+				var codes = ['QQ_ANSWER_DOC', 'QQ_APPLICANT_DOC', 'QQ_DOC_ROOT',
+					'URL_ROOT'];
+				Ext.Ajax.request({
+					url: '/qq-web/rest/coreparameter',
+					method: 'GET',
+					params: {code: codes},
+					success: function(result) {
+						var paths = ns.atpaths = {},
+								root, url;
+						Ext.decode(result.responseText).forEach(function(v) {
+							switch (v.code) {
+								case codes[0]:
+									paths.send = v.value;
+									break;
+								case codes[1]:
+									paths.appl = v.value;
+									break;
+								case codes[2]:
+									root = v.value;
+									break;
+								case codes[3]:
+									url = v.value;
+							}
+						});
+						url += root + "/";
+						paths.send = url + paths.send + "/";
+						paths.appl = url + paths.appl + "/";
+					}
+				});
 			},
 			failure: function(response) {
 				Ext.Msg.show({
@@ -136,6 +167,11 @@ Ext.application({
 		 * @property {qqext.view.transmission.VTransmission} transForm
 		 * Форма передачи на исполнение. Инициализируется в {@link qqext.view.MainPage#initComponent}.
 		 */
+		/**
+		 * @property {Object} atpaths
+		 * Параметры системы для прикрепляемых файлов(задаются в CORE_PARAMETER)
+		 */
+
 		/**
 		 * @property {qqext.view.exec.VExecForm} execForm
 		 * Форма исполнение запроса. Инициализируется в {@link qqext.view.MainPage#initComponent}.

@@ -480,6 +480,7 @@ Ext.application({
 		 * @param {Object} record запись, по которой щелкнули
 		 * @method openRequest
 		 */
+                
 		ns.openRequest = function(view, record) {
 			ns.model.Question.load(record.get('id'), {callback: function(r, o, s) {
 					if (s) {

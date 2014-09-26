@@ -19,7 +19,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	forceFit: true,
 	name: 'journalGridPanel',
 	overflowY: 'auto',
-	maxHeight: 300,
+	//maxHeight: 300,
 	draggable: false,
 	store: 'journal',
 	margin: '0 5 10 5',

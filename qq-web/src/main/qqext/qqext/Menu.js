@@ -119,9 +119,9 @@ Ext.define('qqext.Menu', {
 					createCmp = Ext.create,
 					// меню редактирования при выбранных подразделах: 'ЖВК', 'Поиск', 'Отчетные документы'
 					searchEdit = createCmp('HButtonMenu', [
-						{text: labels.add, action: add, name: btns.add},
-						{text: labels.search, action: find},
-						{text: labels.clean, action: clear},
+						{text: labels.add, action: add, name: btns.add, opts:{cls:'add_btn'}},
+						{text: labels.search, action: find, opts:{cls:'search_btn'}},
+						{text: labels.clean, action: clear, opts:{cls:'clean_btn'}},
 					], 'ToolButton'),
 					// меню с подразделами поиска (основное)
 					searchMenu = createCmp('VButtonMenu', [
@@ -141,8 +141,8 @@ Ext.define('qqext.Menu', {
 			ns.statusPanel = createCmp('StatusPanel');
 			requestMenu.add(ns.statusPanel);
 			menus.navigation = createCmp('HButtonMenu', [
-				{text: labels.toBegin, action: toStartPage},
-				{text: labels.quit, action: ns.quitAction}
+				{text: labels.toBegin, action: toStartPage, opts:{cls:'to_begin_btn'}},
+				{text: labels.quit, action: ns.quitAction, opts:{cls:'quit_btn'}}
 			], 'ToolButton');
 			// Инициализация пустого меню для редактирвания в режиме работы с запросом
 			menus.editReqMenu = createCardMenuPanel([]);
@@ -152,7 +152,8 @@ Ext.define('qqext.Menu', {
 					layout: 'hbox',
 					items: [createCmp('HButtonMenu', [{text: labels.toSearch, action: returnToSearch,
 								name: btns.toSearch}], 'ToolButton'),
-						menus.editReqMenu]
+						menus.editReqMenu], 
+                                        cls:'back_btn h'
 				})]);
 			menus.articleMenu = createCardMenuPanel([searchMenu, requestMenu]);
 			// Слои для переключения активных элементов картбоксов.

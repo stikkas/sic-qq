@@ -8,6 +8,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import ru.insoft.archive.core_model.table.desc.DescriptorValue;
+import ru.insoft.archive.qq.entity.AttachedFile;
 
 /**
  *
@@ -75,7 +76,7 @@ public abstract class AbstractFacade<T> {
 		for (Clause cl : clauses) {
 			// Находим id для заданного когда в таблице DESCRIPTOR_VALUE
 			CriteriaQuery<DescriptorValue> cqdv = cb.createQuery(DescriptorValue.class);
-			cqdv.where(cb.equal(cqdv.from(DescriptorValue.class).<Long>get("code"), cl.getFieldValue()));
+			cqdv.where(cb.equal(cqdv.from(DescriptorValue.class).<String>get("code"), cl.getFieldValue()));
 			DescriptorValue value = em.createQuery(cqdv).getSingleResult();
 
 			// Используем в нашем условии
@@ -98,14 +99,34 @@ public abstract class AbstractFacade<T> {
 		Root<T> root = cq.from(entityClass);
 		Clause cl = clauses[0];
 		Predicate expr = cb.equal(root.<String>get(cl.getFieldName()),
-			cl.getFieldValue());
+				cl.getFieldValue());
 
 		for (int i = 1; i < clauses.length; ++i) {
 			cl = clauses[i];
 			expr = cb.or(expr, cb.equal(root.<String>get(cl.getFieldName()),
-				cl.getFieldValue()));
+					cl.getFieldValue()));
 		}
 		cq.where(expr);
 		return em.createQuery(cq).getResultList();
+	}
+
+	/**
+	 * Удаляет все файлы принадлежащие ответу, когда удаляем {@code Execution}
+	 *
+	 * @param id идентификатор запроса
+	 */
+	void removeAttachedFiles(Long id) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<AttachedFile> cq = cb.createQuery(AttachedFile.class);
+
+		CriteriaQuery<DescriptorValue> cqdv = cb.createQuery(DescriptorValue.class);
+		cqdv.where(cb.equal(cqdv.from(DescriptorValue.class).<String>get("code"), "Q_VALUE_FILE_TYPE_ANSWER"));
+		Long typeId = em.createQuery(cqdv).getSingleResult().getId();
+
+		Root<AttachedFile> root = cq.from(AttachedFile.class);
+		cq.where(cb.and(cb.equal(root.<Long>get("type"), typeId), cb.equal(root.<Long>get("question"), id)));
+		for (AttachedFile file : em.createQuery(cq).getResultList()) {
+			em.remove(file);
+		}
 	}
 }

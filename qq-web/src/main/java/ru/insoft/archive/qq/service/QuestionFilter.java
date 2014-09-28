@@ -14,7 +14,8 @@ import javax.ws.rs.WebApplicationException;
  * <ul>
  * Чтобы получить свойство filter, а точнее его свойство value нужет этот класс
  * с конструктором, в который передается строка типа
- * [{"property":"question","value":152}]
+ * [{"property":"question","value":152}] или [{"property":"question"}] когда
+ * запросу еще не назначен id
  *
  * @author С. Благодатских
  */
@@ -39,9 +40,15 @@ public class QuestionFilter {
 	}
 
 	public QuestionFilter(String json) {
+		String value;
 		try {
-			id = Long.parseLong(json.substring(json.lastIndexOf(":") + 1,
-				json.lastIndexOf("}")));
+			value = json.substring(json.lastIndexOf(":") + 1,
+					json.lastIndexOf("}"));
+			if (value.equals("\"question\"")) {
+				id = -1L;
+			} else {
+				id = Long.parseLong(value);
+			}
 		} catch (Exception e) {
 			throw new WebApplicationException();
 		}

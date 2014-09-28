@@ -1,5 +1,5 @@
 /**
- * Основной контроллер (и единственный) нашего приложения.
+ * Основной контроллер нашего приложения.
  */
 Ext.define('qqext.controller.Main', {
 	extend: 'Ext.app.Controller',
@@ -17,7 +17,7 @@ Ext.define('qqext.controller.Main', {
 	 */
 	currentModel: null,
 	searchParams: null,
-	init: function() {
+	init: function () {
 		var createCmp = Ext.create,
 				kput = {
 					resultOfAnswer: 'Q_DICT_RESULT_ANSER',

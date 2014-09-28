@@ -17,14 +17,16 @@ Ext.application({
 		'qqext.Menu',
 		'qqext.store.DictValuesStore'
 	],
-	controllers: ['qqext.controller.Main'],
-	launch: function() {
+	controllers: ['qqext.controller.Main',
+		'qqext.controller.AttachedFiles'
+	],
+	launch: function () {
 		var me = this;
 		Ext.Ajax.request({
 			url: '/qq-web/Rules',
 			// Используется только в целях тестирования, в обход реальной аутентификации
 //			params: {username: 'ARCHIVE_USER'},
-			success: function(response) {
+			success: function (response) {
 				// Настраиваем глобальные переменные
 				me.initQQ();
 				var authRes = Ext.decode(response.responseText),
@@ -36,7 +38,7 @@ Ext.application({
 				Ext.create('DictValuesStore',
 						'inboxDocExecOrg', 'ORG_STRUCTURE', {
 							listeners: {
-								load: function(st, records) {
+								load: function (st, records) {
 									var record, max = records.length, i = 0;
 									for (; i < max; ++i) {
 										record = records[i];
@@ -58,36 +60,44 @@ Ext.application({
 
 				// Загружаем настройки для прикрепленных файлов
 				var codes = ['QQ_ANSWER_DOC', 'QQ_APPLICANT_DOC', 'QQ_DOC_ROOT',
-					'URL_ROOT'];
+					'URL_ROOT', 'DOCUMENT_ROOT'];
 				Ext.Ajax.request({
 					url: '/qq-web/rest/coreparameter',
 					method: 'GET',
 					params: {code: codes},
-					success: function(result) {
+					success: function (result) {
 						var paths = ns.atpaths = {},
-								root, url;
-						Ext.decode(result.responseText).forEach(function(v) {
+								applicationDir, urlRoot,
+								applicantDir, sendDir,
+								root;
+						Ext.decode(result.responseText).forEach(function (v) {
 							switch (v.code) {
 								case codes[0]:
-									paths.send = v.value;
+									sendDir = v.value + "/";
 									break;
 								case codes[1]:
-									paths.appl = v.value;
+									applicantDir = v.value + "/";
 									break;
 								case codes[2]:
-									root = v.value;
+									applicationDir = v.value + "/";
 									break;
 								case codes[3]:
-									url = v.value;
+									urlRoot = v.value;
+									break;
+								case codes[4]:
+									root = v.value + "/";
 							}
 						});
-						url += root + "/";
-						paths.send = url + paths.send + "/";
-						paths.appl = url + paths.appl + "/";
+						sendDir = applicationDir + sendDir;
+						applicantDir = applicationDir + applicantDir;
+						paths.fsend = root + sendDir;
+						paths.fappl = root + applicantDir;
+						paths.usend = urlRoot + sendDir;
+						paths.uappl = urlRoot + applicantDir;
 					}
 				});
 			},
-			failure: function(response) {
+			failure: function (response) {
 				Ext.Msg.show({
 					title: 'Ошибка',
 					msg: response.responseText,
@@ -99,7 +109,7 @@ Ext.application({
 			}
 		});
 	},
-	initQQ: function() {
+	initQQ: function () {
 		var ns = qqext;
 		// Глобальные переменные и константы для namespace qqext.
 		// Названо классом для того, чтобы jsduck задокументировал это.
@@ -196,7 +206,7 @@ Ext.application({
 		 * @returns {Obejct/undefined} если такая кнопка есть, то кнопку, иначе undefined
 		 * @method getButton
 		 */
-		var getButton = ns.getButton = function(name) {
+		var getButton = ns.getButton = function (name) {
 			var max = buttons.length,
 					i = 0,
 					btn;
@@ -212,7 +222,7 @@ Ext.application({
 		 * для редактирования.
 		 * @method edit
 		 */
-		ns.edit = function() {
+		ns.edit = function () {
 			var me = this;
 			me.setViewOnly(false);
 			me._disableButtons(false, 1, 2, 3);
@@ -226,7 +236,7 @@ Ext.application({
 		 * @param {Ext.button.Button} button сама кнопка
 		 * @method addButton
 		 */
-		ns.addButton = function(name, button) {
+		ns.addButton = function (name, button) {
 			if (!getButton(name))
 				buttons.push({name: name, body: button});
 		};
@@ -360,7 +370,7 @@ Ext.application({
 		 * @param {qqext.btns} Дополнительно передаются кнопки, которые необходимо выключить или включить
 		 * @method disableArticles
 		 */
-		ns.disableArticles = function(status) {
+		ns.disableArticles = function (status) {
 			for (var i = 1; i < arguments.length; ++i)
 				getButton(arguments[i]).setDisabled(status);
 		};
@@ -368,7 +378,7 @@ Ext.application({
 		 * Вызывается когда нажали на кнопку 'Выйти'
 		 * @method quitAction
 		 */
-		ns.quitAction = function() {
+		ns.quitAction = function () {
 			// молча, без выстерла событий, удаляем все данные из хранилища
 			qqext.userStore.removeAll(true);
 			window.location = urls.login;
@@ -480,9 +490,9 @@ Ext.application({
 		 * @param {Object} record запись, по которой щелкнули
 		 * @method openRequest
 		 */
-                
-		ns.openRequest = function(view, record) {
-			ns.model.Question.load(record.get('id'), {callback: function(r, o, s) {
+
+		ns.openRequest = function (view, record) {
+			ns.model.Question.load(record.get('id'), {callback: function (r, o, s) {
 					if (s) {
 						ns.request = r;
 						ns.disableArticles(true, buttonNames.notify, buttonNames.trans, buttonNames.exec);
@@ -501,7 +511,7 @@ Ext.application({
 		 * @param {String} message сообщение об ошибке
 		 * @method showError
 		 */
-		ns.showError = function(title, message) {
+		ns.showError = function (title, message) {
 			if (message instanceof Object) {
 				if (message.statusText) {
 					message = message.statusText;
@@ -526,10 +536,10 @@ Ext.application({
 		 * @param {String} code код для статуса
 		 * @returns {Number/undefined} номер id соответстующего коду
 		 */
-		ns.getStatusId = function(code) {
+		ns.getStatusId = function (code) {
 			var statusId;
 			Ext.getStore('Q_DICT_QUESTION_STATUSES').
-					findBy(function(record, id) {
+					findBy(function (record, id) {
 						if (record.get('code') === code) {
 							statusId = id;
 							return true;

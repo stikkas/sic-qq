@@ -1,8 +1,10 @@
 package ru.insoft.archive.qq.service;
 
+import java.util.Objects;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.persistence.NoResultException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -25,32 +27,53 @@ public class QuestionFacadeREST extends AbstractFacade<Question> {
 		super(Question.class);
 	}
 
+	/**
+	 * Проверяет есть ли в базе запись с таким же номером.
+	 *
+	 * @param entity запись для сохранения или обновления
+	 * @return Строку с описанием ошибки
+	 */
+	private Question exists(final Question entity) {
+		try {
+			return super.findEntityWhereAnd(new Clause[]{
+				new Clause<>("prefixNum", entity.getPrefixNum()),
+				new Clause<>("sufixNum", entity.getSufixNum())
+			});
+		} catch (NoResultException e) {
+			return null;
+		}
+	}
+
 	@POST
 	@Produces({"application/json"})
 	@Consumes({"application/json"})
-	public Long createEntity(Question entity) {
-		return super.create(entity).getId();
+	public Object createEntity(Question entity) {
+		Question check = exists(entity);
+		if (check == null) {
+			return super.create(entity).getId();
+		}
+		return "Запрос с таким номером уже существует";
 	}
 
 	@PUT
 	@Path("{id}")
 	@Consumes({"application/json"})
 	@Produces({"application/json"})
-	public Boolean edit(@PathParam("id") Long id, Question entity) {
-		super.edit(entity);
-		return true;
+	public Object edit(@PathParam("id") Long id, Question entity) {
+		Question check = exists(entity);
+		if (check == null || Objects.equals(check.getId(), id)) {
+			super.edit(entity);
+			return true;
+		}
+		return "Запрос с таким номером уже существует";
 	}
 
 	@DELETE
 	@Path("{id}")
-	@Produces({"application/json"})
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public Boolean remove(@PathParam("id") Long id) {
-		Question q = super.find(id);
-		if (q != null) {
-			super.remove(q);
-		}
-		return true;
+	@Override
+	public void remove(@PathParam("id") Long id) {
+		super.remove(id);
 	}
 
 	@GET

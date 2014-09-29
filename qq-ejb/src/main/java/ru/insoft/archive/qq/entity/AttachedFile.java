@@ -32,7 +32,7 @@ public class AttachedFile implements Serializable {
 	@Id
 	@GeneratedValue(generator = "attachedGen", strategy = GenerationType.SEQUENCE)
 	@SequenceGenerator(name = "attachedGen", sequenceName = "SEQ_QQ_ATTACHED_FILE",
-			allocationSize = 1)
+		allocationSize = 1)
 	@Column(name = "ATTACHED_FILE_ID")
 	private Long id;
 
@@ -63,6 +63,12 @@ public class AttachedFile implements Serializable {
 		this.id = id;
 		this.name = name;
 		this.type = type;
+	}
+
+	public AttachedFile(String name, Long type, Long question) {
+		this.name = name;
+		this.type = type;
+		this.question = question;
 	}
 
 	public Long getId() {

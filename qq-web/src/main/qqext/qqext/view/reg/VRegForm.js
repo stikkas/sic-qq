@@ -30,7 +30,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 */
 	_idx: 3,
 	listeners: {
-		activate: function (me, prev) {
+		activate: function(me, prev) {
 			var ns = qqext, model;
 			ns.Menu.setEditMenu(me._idx);
 			if (ns.request === null) {
@@ -63,7 +63,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 				me._disableButtons(true, 1, 2, 3);
 				me._disableButtons(!(ns.user.isAllowed(ns.rules.reg) &&
 						model.get('status') === ns.getStatusId(ns.stats.onreg)), 0);
-				model.getAppl({callback: function () {
+				model.getAppl({callback: function() {
 						me.setViewOnly(true);
 						me.loadRecord();
 					}});
@@ -79,39 +79,66 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 * @param {Function} fail2 будет вызвана в случае несохранения Applicant, т.е. Question сохранилось
 	 * @private
 	 */
-	_saveModel: function (success, fail1, fail2) {
+	_saveModel: function(success, fail1, fail2) {
 		var me = this, model = me.model,
-				applicant = model.getAppl();
-		model.save({callback: function (recs, operation, status) {
+				ns = qqext;
+		model.save({callback: function(recs, operation, status) {
 				if (status) {
-					if (!model.get('id')) {
-						var id = operation.response.responseText;
-						model.set('id', id);
-						applicant.set('id', id);
-						qqext.request = model;
-					}
-					applicant.save({callback: function (r, o, s) {
-							if (!s) {
-								qqext.showError("Данные о заявители не сохранены",
-										o.getError());
-								me.setViewOnly(false);
-								// Провал на втором уровне
-								fail2();
-							} else {
-								// Полный успех. Сохраняем файлы
-								me.files.save(model.get('id'), function () {
-									success();
-									qqext.statusPanel.setStatus();
-								}, function () {
+					if (!model.get('id')) { // Новая модель(загружаем, чтобы правильно работали ассоциации)
+						ns.model.Question.load(operation.response.responseText,
+								{success: function(record) {
+										record.getAppl().save({callback: function(r, o, s) {
+												if (!s) {
+													ns.showError("Данные о заявители не сохранены",
+															o.getError());
+													me.setViewOnly(false);
+													// Провал на втором уровне
+													fail2();
+												} else {
+													// Полный успех. Сохраняем файлы
+													me.files.loadRecord(record.files(), true);
+													me.files.save(record.get('id'), function() {
+														success();
+														ns.statusPanel.setStatus();
+													}, function() {
+														me.setViewOnly(false);
+														// Провал на втором уровне
+														fail2();
+													});
+												}
+											}});
+
+										ns.request = me.model = record;
+									},
+									failure: function(r, o) {
+										ns.showError("Ошибка загрузки нового запроса", o.getError());
+										me.setViewOnly(false);
+										fail2();
+									}});
+					} else {
+						model.getAppl().save({callback: function(r, o, s) {
+								if (!s) {
+									ns.showError("Данные о заявители не сохранены",
+											o.getError());
 									me.setViewOnly(false);
 									// Провал на втором уровне
 									fail2();
-								});
+								} else {
+									// Полный успех. Сохраняем файлы
+									me.files.save(model.get('id'), function() {
+										success();
+										ns.statusPanel.setStatus();
+									}, function() {
+										me.setViewOnly(false);
+										// Провал на втором уровне
+										fail2();
+									});
+								}
 							}
-						}
-					});
+						});
+					}
 				} else {
-					qqext.showError("Ошибка сохранения запроса", operation.getError());
+					ns.showError("Ошибка сохранения запроса", operation.getError());
 					me.setViewOnly(false);
 					// Провал на первом уровне
 					fail1();
@@ -119,7 +146,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 			}
 		});
 	},
-	initComponent: function () {
+	initComponent: function() {
 		//----------обработчики для кнопок меню---------
 		//sc - контекст для обработчика
 
@@ -147,11 +174,11 @@ Ext.define('qqext.view.reg.VRegForm', {
 			model.set('updateUser', userId);
 			model.set('updateDate', now);
 			model.set('status', ns.getStatusId(ns.stats.onreg));
-			me._saveModel(function () {
+			me._saveModel(function() {
 				me._disableButtons(false, 0);
-			}, function () {
+			}, function() {
 				me._disableButtons(false, 1, 3);
-			}, function () {
+			}, function() {
 				me._disableButtons(false, 1, 2, 3);
 			});
 		}
@@ -163,7 +190,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 		function remove() {
 			var me = this;
 			me.model.destroy({
-				callback: function (recs, operation) {
+				callback: function(recs, operation) {
 					if (operation.success) {
 						me.files.remove();
 						me.model = ns.request = null;
@@ -205,12 +232,12 @@ Ext.define('qqext.view.reg.VRegForm', {
 				model.set('updateDate', now);
 				model.set('registrator', userId);
 				model.set('regDate', now);
-				me._saveModel(function () {
-					me.loadRecord();
+				me._saveModel(function() {
+					me.loadRecord(true);
 					ns.turnOnArticles(ns.btns.notify, ns.btns.trans);
-				}, function () { // Не смогли сохранить ничего
+				}, function() { // Не смогли сохранить ничего
 					me._disableButtons(false, 1, 3);
-				}, function () { // Не смогли сохранить заявителя
+				}, function() { // Не смогли сохранить заявителя
 					me._disableButtons(false, 1, 2, 3);
 				});
 			} else { // Валидация не прошла
@@ -257,28 +284,31 @@ Ext.define('qqext.view.reg.VRegForm', {
 	/**
 	 * Метод для выполнения операций loadRecord и updateRecord
 	 * @param {String} action операция для выполнения
+	 * @param {Boolean} withoutFiles не загружать модель файлов
 	 * @private
 	 */
-	_mAction: function (action) {
+	_mAction: function(action, withoutFiles) {
 		var me = this,
 				model = me.model;
 		[me.inbox, me.query,
-			me.target].forEach(function (f) {
+			me.target].forEach(function(f) {
 			f[action](model);
 		});
 		me.applicant[action](model.getAppl());
-		me.files[action](model.files());
+		if (!withoutFiles)
+			me.files[action](model.files());
 	},
 	/**
 	 * Загружает данные из модели на форму
+	 * @param {Boolean} withoutFiles не загружать модель файлов
 	 */
-	loadRecord: function () {
-		this._mAction('loadRecord');
+	loadRecord: function(withoutFiles) {
+		this._mAction('loadRecord', withoutFiles);
 	},
 	/**
 	 * Сохраняет данные формы в модели
 	 */
-	updateRecord: function () {
+	updateRecord: function() {
 		this._mAction('updateRecord');
 	},
 	/**
@@ -286,7 +316,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 * @param {qqext.model.Question} model если задана то модель формы инициализируется ей
 	 * @returns {qqext.model.Question} модель
 	 */
-	initModel: function (model) {
+	initModel: function(model) {
 		var me = this;
 		if (model)
 			return me.model = model;
@@ -299,9 +329,9 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 * Проверяет форму на валидность (для прохождения регистрации).
 	 * @returns {Boolean} показывает ошибку и возвращает false в случае не правильного заполнения формы
 	 */
-	validate: function () {
+	validate: function() {
 		var errors = [];
-		this.items.each(function (form) {
+		this.items.each(function(form) {
 			if (!(form.isHidden() || form.isValid()))
 				errors.push(form.getErrors());
 		});
@@ -314,8 +344,8 @@ Ext.define('qqext.view.reg.VRegForm', {
 	/**
 	 * Сбрасывает все ошибки
 	 */
-	reset: function () {
-		this.items.each(function (form) {
+	reset: function() {
+		this.items.each(function(form) {
 			form.reset();
 		});
 	},
@@ -323,7 +353,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 * Приводит форму к первоначальному состоянию,
 	 * без данных
 	 */
-	clear: function () {
+	clear: function() {
 		var me = this;
 		me.reset();
 		me.target.hide();

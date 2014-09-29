@@ -39,8 +39,9 @@ public class ApplicantFacadeREST extends AbstractFacade<Applicant> {
 
 	@DELETE
 	@Path("{id}")
+	@Override
 	public void remove(@PathParam("id") Long id) {
-		super.remove(super.find(id));
+		super.remove(id);
 	}
 
 	@GET

@@ -66,6 +66,11 @@ Ext.define('qqext.model.Question', {
 		type: 'rest',
 		url: '/qq-web/rest/question',
 		reader: 'json',
-		writer: 'json'
+		writer: 'json',
+		listeners: {
+			exception: function(proxy, answer, operation) {
+				operation.error = answer.responseText;
+			}
+		}
 	}
 });

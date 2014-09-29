@@ -5,7 +5,7 @@ package ru.insoft.archive.qq.service;
  *
  * @author С. Благодатских
  */
-class Clause {
+class Clause<T> {
 
 	/**
 	 * Поле по которому будет искаться требуемая сущность
@@ -14,9 +14,9 @@ class Clause {
 	/**
 	 * Значение по которому будет определяться подходит эта сущность или нет
 	 */
-	private String fieldValue;
+	private T fieldValue;
 
-	public Clause(String fieldName, String fieldValue) {
+	public Clause(String fieldName, T fieldValue) {
 		this.fieldName = fieldName;
 		this.fieldValue = fieldValue;
 	}
@@ -25,7 +25,7 @@ class Clause {
 		return fieldName;
 	}
 
-	public String getFieldValue() {
+	public T getFieldValue() {
 		return fieldValue;
 	}
 

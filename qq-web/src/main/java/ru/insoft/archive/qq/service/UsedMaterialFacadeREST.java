@@ -40,8 +40,9 @@ public class UsedMaterialFacadeREST extends AbstractFacade<UsedMaterial> {
 
 	@DELETE
 	@Path("{id}")
+	@Override
 	public void remove(@PathParam("id") Long id) {
-		super.remove(super.find(id));
+		super.remove(id);
 	}
 
 	@GET

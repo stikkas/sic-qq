@@ -41,6 +41,7 @@ public class ExecutionFacadeREST extends AbstractFacade<Execution> {
 	@Path("{id}")
 	public void remove(@PathParam("id") Long id) {
 		super.remove(super.find(id));
+		super.removeAttachedFiles(id);
 	}
 
 	@GET

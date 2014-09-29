@@ -4,19 +4,15 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  * Прикрепленные файлы. Могут быть в запросе и в ответе (два типа файлов)
@@ -36,7 +32,7 @@ public class AttachedFile implements Serializable {
 	@Id
 	@GeneratedValue(generator = "attachedGen", strategy = GenerationType.SEQUENCE)
 	@SequenceGenerator(name = "attachedGen", sequenceName = "SEQ_QQ_ATTACHED_FILE",
-		allocationSize = 1)
+			allocationSize = 1)
 	@Column(name = "ATTACHED_FILE_ID")
 	private Long id;
 
@@ -53,14 +49,8 @@ public class AttachedFile implements Serializable {
 
 	@Basic(optional = false)
 	@NotNull
-	@Size(min = 1, max = 256)
-	@Column(name = "FILE_LINK")
-	private String link;
-
-	@JsonIgnore
-	@JoinColumn(name = "QUESTION_ID", referencedColumnName = "QUESTION_ID")
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	private Question question;
+	@Column(name = "QUESTION_ID")
+	private Long question;
 
 	public AttachedFile() {
 	}
@@ -69,11 +59,10 @@ public class AttachedFile implements Serializable {
 		this.id = id;
 	}
 
-	public AttachedFile(Long id, String name, Long type, String link) {
+	public AttachedFile(Long id, String name, Long type) {
 		this.id = id;
 		this.name = name;
 		this.type = type;
-		this.link = link;
 	}
 
 	public Long getId() {
@@ -100,19 +89,11 @@ public class AttachedFile implements Serializable {
 		this.name = name;
 	}
 
-	public String getLink() {
-		return link;
-	}
-
-	public void setLink(String link) {
-		this.link = link;
-	}
-
-	public Question getQuestion() {
+	public Long getQuestion() {
 		return question;
 	}
 
-	public void setQuestion(Question question) {
+	public void setQuestion(Long question) {
 		this.question = question;
 	}
 

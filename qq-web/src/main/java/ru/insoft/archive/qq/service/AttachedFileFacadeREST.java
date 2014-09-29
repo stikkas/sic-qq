@@ -1,5 +1,6 @@
 package ru.insoft.archive.qq.service;
 
+import java.io.File;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
@@ -32,6 +33,25 @@ public class AttachedFileFacadeREST extends AbstractFacade<AttachedFile> {
 		super.create(entity);
 	}
 
+	/**
+	 * Удаляет файлы из файловой системы. В базе никаких действий не производит.
+	 * Должен вызываться только при удалении запроса. После удалении файлов
+	 * удаляет директорию запроса.
+	 *
+	 * @param file данные передаваемые в теле запроса {@link FilesToDelete}
+	 */
+	@POST
+	@Path("delete")
+	@Consumes({"application/json"})
+	public void deleteFiles(FilesToDelete file) {
+		String dir = file.getDir();
+		System.out.println("dir = " + dir);
+		for (String name : file.getName()) {
+			new File(dir + name).delete();
+		}
+		new File(dir).delete();
+	}
+
 	@PUT
 	@Path("{id}")
 	@Consumes({"application/json"})
@@ -62,9 +82,10 @@ public class AttachedFileFacadeREST extends AbstractFacade<AttachedFile> {
 	@GET
 	@Path("execution")
 	@Produces({"application/json"})
-	public List<AttachedFile> filesForExecution(@QueryParam("id") QuestionFilter filter) {
-		return super.findByQuestionWhereAnd(filter.getId(),
-			new Clause[]{new Clause("type", "Q_VALUE_FILE_TYPE_ANSWER")});
+	public List<AttachedFile> filesForExecution(@QueryParam("filter") QuestionFilter filter) {
+		Long id = filter.getId();
+		return id == -1L ? null : super.findByQuestionWhereAnd(id,
+				new Clause[]{new Clause("type", "Q_VALUE_FILE_TYPE_ANSWER")});
 	}
 
 	/**
@@ -77,8 +98,9 @@ public class AttachedFileFacadeREST extends AbstractFacade<AttachedFile> {
 	@Path("question")
 	@Produces({"application/json"})
 	public List<AttachedFile> filesForQuestion(@QueryParam("filter") QuestionFilter filter) {
-		return super.findByQuestionWhereAnd(filter.getId(),
-			new Clause[]{new Clause("type", "Q_VALUE_FILE_TYPE_APP_DOCS")});
+		Long id = filter.getId();
+		return id == -1L ? null : super.findByQuestionWhereAnd(id,
+				new Clause[]{new Clause("type", "Q_VALUE_FILE_TYPE_APP_DOCS")});
 	}
 
 }

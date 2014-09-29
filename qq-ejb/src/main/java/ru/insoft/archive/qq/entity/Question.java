@@ -144,10 +144,6 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 	private Long objectBirthYear;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
-	private Set<Coordination> coordinations;
-
-	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Set<SendAction> sendActions;
 
@@ -165,10 +161,6 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
-	private Set<AttachedFile> attachedFiles;
-
-	@JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Set<DeliveryAction> deliveryActions;
 
 	@JsonIgnore
@@ -181,19 +173,19 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 
 	@JsonIgnore
 	@JoinColumn(name = "LITERA_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
-		insertable = false, updatable = false)
+			insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
 	private DescriptorValue literaValue;
 
 	@JsonIgnore
 	@JoinColumn(name = "STATUS_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
-		insertable = false, updatable = false)
+			insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
 	private DescriptorValue statusValue;
 
 	@JsonIgnore
 	@JoinColumn(name = "EXEC_ORG_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
-		insertable = false, updatable = false)
+			insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
 	private DescriptorValue execOrgValue;
 
@@ -418,14 +410,6 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 		this.objectBirthYear = objectBirthYear;
 	}
 
-	public Set<Coordination> getCoordinations() {
-		return coordinations;
-	}
-
-	public void setCoordinations(Set<Coordination> coordinations) {
-		this.coordinations = coordinations;
-	}
-
 	public Set<SendAction> getSendActions() {
 		return sendActions;
 	}
@@ -456,14 +440,6 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 
 	public void setApplicant(Applicant applicant) {
 		this.applicant = applicant;
-	}
-
-	public Set<AttachedFile> getAttachedFiles() {
-		return attachedFiles;
-	}
-
-	public void setAttachedFiles(Set<AttachedFile> attachedFiles) {
-		this.attachedFiles = attachedFiles;
 	}
 
 	public Set<DeliveryAction> getDeliveryActions() {

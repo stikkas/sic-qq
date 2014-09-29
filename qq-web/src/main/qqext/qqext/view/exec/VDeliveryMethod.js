@@ -11,6 +11,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 		'qqext.factory.TextField',
 		'qqext.factory.DateField',
 		'qqext.factory.PanelGrid',
+		'qqext.factory.AttachedFiles',
 		'Ext.Component',
 		'Ext.Date',
 		'qqext.cmp.FieldSet',
@@ -22,7 +23,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 	 * Проверяет правильность заполнения формы
 	 * @returns {Boolean} если ошибок нет то true
 	 */
-	isValid: function() {
+	isValid: function () {
 		var result = true;
 		if (!this.callParent())
 			result = false;
@@ -33,31 +34,43 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 	/**
 	 * Обновляет данные на сервере
 	 */
-	sync: function() {
+	sync: function () {
 		var store = this._sf.getStore();
-		store.sync({callback: function() {
+		store.sync({callback: function () {
 				store.load();
 			}});
 	},
+	save: function (id, success, fail) {
+		this.sync();
+		this._ff.save(id, success, fail);
+	},
+	remove: function () {
+		this._ff.remove();
+		this._ff.reset();
+	},
 	/**
 	 * Загружает данные в форму
+	 * @param {Ext.data.Store} files хранилище для файлов
+	 * @param {Ext.data.Model} model модель для остальных полей формы
 	 */
-	loadRecord: function(model) {
+	loadRecord: function (files, model) {
 		this._sf.getStore().load();
 		this.callParent([model]);
+		this._ff.loadRecord(files);
 	},
 	/**
 	 * Устанавливает хранилища для своих таблиц. Хранилища берутся
 	 * из ассоциаций текущего запроса.
 	 */
-	setStorage: function() {
+	setStorage: function () {
 		this._sf.reconfigure(qqext.request.getExec().sendactions());
 	},
-	initComponent: function() {
+	initComponent: function () {
 		var me = this,
+				ns = qqext,
 				createCmp = Ext.create,
-				way = qqext.wayToSend,
-				action = qqext.sendAction,
+				way = ns.wayToSend,
+				action = ns.sendAction,
 				storeId = 'answerForm';
 
 		Ext.apply(me, {
@@ -78,7 +91,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 								valueField: 'id',
 								editable: false
 							},
-							renderer: function(value) {
+							renderer: function (value) {
 								var v = Ext.getStore(storeId).getById(value);
 								if (v)
 									return v.get('name');
@@ -89,7 +102,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 							text: action.date[1],
 							dataIndex: action.date[0],
 							editor: {xtype: 'hawkDateField'},
-							renderer: function(value) {
+							renderer: function (value) {
 								return Ext.Date.format(value, 'd.m.Y');
 							}
 						}
@@ -106,7 +119,9 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 					title: 'Ответ',
 					collapsible: true,
 					collapsed: true,
-					items: [createCmp('hawk_common.cmp.FileList')]
+					items: [me._ff = createCmp('AttachedFiles', '',
+								'Q_VALUE_FILE_TYPE_ANSWER', ns.atpaths.fsend,
+								ns.atpaths.usend)]
 				})
 			]
 		});

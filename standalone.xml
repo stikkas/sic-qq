@@ -28,11 +28,6 @@
         <extension module="org.jboss.as.weld"/>
     </extensions>
 
-    <system-properties>
-        <property name="org.apache.catalina.STRICT_SERVLET_COMPLIANCE" value="false"/>
-        <property name="org.apache.tomcat.util.http.ServerCookie.FWD_SLASH_IS_SEPARATOR" value="false"/>
-    </system-properties>
- 
     <management>
         <security-realms>
             <security-realm name="ManagementRealm">
@@ -59,7 +54,7 @@
     <profile>
         <subsystem xmlns="urn:jboss:domain:logging:1.1">
             <console-handler name="CONSOLE">
-                <level name="TRACE"/>
+                <level name="INFO"/>
                 <formatter>
                     <pattern-formatter pattern="%d{HH:mm:ss,SSS} %-5p [%c] (%t) %s%E%n"/>
                 </formatter>
@@ -85,40 +80,10 @@
                 <level name="WARN"/>
             </logger>
             <logger category="jacorb.config">
-                <level name="WARN"/>
-            </logger>
-            <logger category="org.hibernate.ejb.Ejb3Configuration">
-                <level name="WARN"/>
-            </logger>
-            <logger category="org.jboss.as.jpa">
-                <level name="WARN"/>
-            </logger>
-            <logger category="org.hibernate.ejb">
-                <level name="WARN"/>
-            </logger>
-            <logger category="org.jboss.weld.bootstrap.Validator">
-                <level name="WARN"/>
-            </logger>
-            <logger category="org.hibernate.SQL">
                 <level name="ERROR"/>
-            </logger>
-            <logger category="ru.insoft">
-                <level name="INFO"/>
-            </logger>
-            <logger category="ru.insoft.ramlogin">
-                <level name="INFO"/>
-            </logger>
-            <logger category="org.apache.velocity">
-                <level name="WARN"/>
-            </logger>
-            <logger category="org.jboss.security.auth">
-                <level name="TRACE"/>
-            </logger>
-            <logger category="org.apache.catalina">
-                <level name="TRACE"/>
             </logger>
             <root-logger>
-                <level name="ERROR"/>
+                <level name="INFO"/>
                 <handlers>
                     <handler name="CONSOLE"/>
                     <handler name="FILE"/>
@@ -128,7 +93,15 @@
         <subsystem xmlns="urn:jboss:domain:configadmin:1.0"/>
         <subsystem xmlns="urn:jboss:domain:datasources:1.0">
             <datasources>
-                <datasource jta="true" jndi-name="java:jboss/SicDS" pool-name="sic" enabled="true" use-ccm="false">
+                <datasource jndi-name="java:jboss/datasources/ExampleDS" pool-name="ExampleDS" enabled="true" use-java-context="true">
+                    <connection-url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1</connection-url>
+                    <driver>h2</driver>
+                    <security>
+                        <user-name>sa</user-name>
+                        <password>sa</password>
+                    </security>
+                </datasource>
+                <datasource jta="true" jndi-name="java:jboss/SicDS" pool-name="SicDS" enabled="true" use-ccm="false">
                     <connection-url>jdbc:oracle:thin:@hawk.insoft03.lan:1521:hawkw</connection-url>
                     <driver-class>oracle.jdbc.OracleDriver</driver-class>
                     <driver>ojdbc7.jar</driver>
@@ -144,29 +117,13 @@
                         <share-prepared-statements>false</share-prepared-statements>
                     </statement>
                 </datasource>
-                <datasource jta="false" jndi-name="java:jboss/ArmAdminDS" pool-name="armAdmin" enabled="true" use-ccm="false">
+                <datasource jta="true" jndi-name="java:jboss/ArmAdminDS" pool-name="ArmAdminDS" enabled="true" use-ccm="false">
                     <connection-url>jdbc:oracle:thin:@hawk.insoft03.lan:1521:hawkw</connection-url>
                     <driver-class>oracle.jdbc.OracleDriver</driver-class>
                     <driver>ojdbc7.jar</driver>
                     <security>
                         <user-name>sic</user-name>
                         <password>archiv</password>
-                    </security>
-                    <validation>
-                        <validate-on-match>false</validate-on-match>
-                        <background-validation>false</background-validation>
-                    </validation>
-                    <statement>
-                        <share-prepared-statements>false</share-prepared-statements>
-                    </statement>
-                </datasource>
-                <datasource jta="true" jndi-name="java:jboss/RamenkiDS" pool-name="ramenkiDS" enabled="true" use-ccm="false">
-                    <connection-url>jdbc:postgresql://calypso.insoft03.lan:5432/postgres</connection-url>
-                    <driver-class>org.postgresql.Driver</driver-class>
-                    <driver>postgresql-9.3-1102.jdbc41.jar</driver>
-                    <security>
-                        <user-name>ramdoc_dev</user-name>
-                        <password>pinguin</password>
                     </security>
                     <validation>
                         <validate-on-match>false</validate-on-match>
@@ -184,7 +141,8 @@
             </datasources>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:deployment-scanner:1.1">
-            <deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="5000" auto-deploy-exploded="true"/>
+            <deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="5000"/>
+            <deployment-scanner name="my-external-ds" path="/tmp" scan-interval="5000"/>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:ee:1.0"/>
         <subsystem xmlns="urn:jboss:domain:ejb3:1.2">
@@ -215,8 +173,8 @@
             <remote connector-ref="remoting-connector" thread-pool-name="default"/>
             <thread-pools>
                 <thread-pool name="default">
-                    <max-threads count="30"/>
-                    <keepalive-time time="200" unit="milliseconds"/>
+                    <max-threads count="10"/>
+                    <keepalive-time time="100" unit="milliseconds"/>
                 </thread-pool>
             </thread-pools>
         </subsystem>
@@ -266,7 +224,6 @@
         <subsystem xmlns="urn:jboss:domain:jpa:1.0">
             <jpa default-datasource=""/>
         </subsystem>
-
         <subsystem xmlns="urn:jboss:domain:mail:1.0">
             <mail-session jndi-name="java:jboss/mail/Default">
                 <smtp-server outbound-socket-binding-ref="mail-smtp"/>
@@ -296,6 +253,19 @@
         <subsystem xmlns="urn:jboss:domain:sar:1.0"/>
         <subsystem xmlns="urn:jboss:domain:security:1.1">
             <security-domains>
+                <security-domain name="other" cache-type="default">
+                    <authentication>
+                        <login-module code="Remoting" flag="optional">
+                            <module-option name="password-stacking" value="useFirstPass"/>
+                        </login-module>
+                        <login-module code="RealmUsersRoles" flag="required">
+                            <module-option name="usersProperties" value="${jboss.server.config.dir}/application-users.properties"/>
+                            <module-option name="rolesProperties" value="${jboss.server.config.dir}/application-roles.properties"/>
+                            <module-option name="realm" value="ApplicationRealm"/>
+                            <module-option name="password-stacking" value="useFirstPass"/>
+                        </login-module>
+                    </authentication>
+                </security-domain>
                 <security-domain name="sic" cache-type="default">
                     <authentication>
                         <login-module code="Database" flag="required">
@@ -333,15 +303,14 @@
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:web:1.1" default-virtual-server="default-host" native="false">
             <connector name="http" protocol="HTTP/1.1" scheme="http" socket-binding="http"/>
-            <virtual-server name="default-host" enable-welcome-root="true">
+            <virtual-server name="default-host" enable-welcome-root="false" default-web-module="FILES">
                 <alias name="localhost"/>
                 <alias name="example.com"/>
-                <sso reauthenticate="false"/>
             </virtual-server>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:webservices:1.1">
             <modify-wsdl-address>true</modify-wsdl-address>
-            <wsdl-host>${jboss.bind.address:0.0.0.0}</wsdl-host>
+            <wsdl-host>${jboss.bind.address:127.0.0.1}</wsdl-host>
             <endpoint-config name="Standard-Endpoint-Config"/>
             <endpoint-config name="Recording-Endpoint-Config">
                 <pre-handler-chain name="recording-handlers" protocol-bindings="##SOAP11_HTTP ##SOAP11_HTTP_MTOM ##SOAP12_HTTP ##SOAP12_HTTP_MTOM">
@@ -357,10 +326,10 @@
             <inet-address value="${jboss.bind.address.management:127.0.0.1}"/>
         </interface>
         <interface name="public">
-            <inet-address value="${jboss.bind.address:0.0.0.0}"/>
+            <inet-address value="${jboss.bind.address:127.0.0.1}"/>
         </interface>
         <interface name="unsecure">
-            <inet-address value="${jboss.bind.address.unsecure:0.0.0.0}"/>
+            <inet-address value="${jboss.bind.address.unsecure:127.0.0.1}"/>
         </interface>
     </interfaces>
 
@@ -384,11 +353,8 @@
         <deployment name="ojdbc7.jar" runtime-name="ojdbc7.jar">
             <content sha1="a2348e4944956fac05235f7cd5d30bf872afb157"/>
         </deployment>
-        <deployment name="postgresql-9.3-1102.jdbc41.jar" runtime-name="postgresql-9.3-1102.jdbc41.jar">
-            <content sha1="de013bb55a400e83f18523d2b944fac199183796"/>
-        </deployment>
-        <deployment name="qq-0.0.1-SNAPSHOT.ear" runtime-name="qq-0.0.1-SNAPSHOT.ear">
-            <content sha1="ed588bf5d9939ab7cd0ba774ad08b48297fcead4"/>
+        <deployment name="arm-admin.war" runtime-name="arm-admin.war">
+            <content sha1="58e6dcf27a59c9eb30c8fa2b305a3e4afa2cee66"/>
         </deployment>
     </deployments>
 </server>

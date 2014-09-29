@@ -90,8 +90,8 @@ Ext.define('qqext.view.notify.VNotify', {
 				labels = ns.labels,
 				notf = ns.notification,
 				menu = createCmp('HButtonMenu', [
-					{text: labels.save, action: saveNotify},
-					{text: labels.edit, action: editNotify}
+					{text: labels.save, action: saveNotify, opts:{cls:'save_btn'}},
+					{text: labels.edit, action: editNotify, opts:{cls:'edit_btn'}}
 				], 'ToolButton', me);
 		Ext.applyIf(me, {
 			items: [

@@ -145,42 +145,62 @@ Ext.define('qqext.view.transmission.VTransmission', {
 					margin: '6 0 0 0'
 				},
 		menus = createCmp('HButtonMenu', [
-			{text: labels.edit, action: ns.edit},
-			{text: labels.save, action: save},
-			{text: labels.remove, action: remove},
-			{text: labels.register, action: book}],
+			{text: labels.edit, action: ns.edit, opts:{cls:'edit_btn'}},
+			{text: labels.save, action: save, opts:{cls:'save_btn'}},
+			{text: labels.remove, action: remove, opts:{cls:'remove_btn'}},
+			{text: labels.register, action: book, opts:{cls:'reg_btn'}}],
 				'ToolButton', me);
 		Ext.applyIf(me, {
 			items: [
 				createCmp('FieldContainer', {
 					layout: 'hbox',
+                                        cls:'right_date',
 					items: [
 						createCmp('FComboBox', trans.bossExecutor[1], 'allUsers',
-								trans.bossExecutor[0], {allowBlank: false}),
+								trans.bossExecutor[0], {allowBlank: false,
+                                                    width:450,
+                                                    labelWidth:150
+                                                }),
 						createCmp('FDateField', trans.bossExecutionDate[1], trans.bossExecutionDate[0],
-								configForDate)
+                                                            configForDate)
 					]
 				}),
 				createCmp('FieldContainer', {
 					layout: 'hbox',
+                                        cls:'right_date',
 					items: [
 						createCmp('FComboBox', trans.executor[1], 'allUsers', trans.executor[0],
-								{allowBlank: false}),
+								{allowBlank: false,
+                                                                    width:450,
+                                                                    labelWidth:150
+                                                                }),
 						createCmp('FDateField', trans.executionDate[1], trans.executionDate[0],
-								configForDate)
+							configForDate)
 					]
 				}),
 				createCmp('FCheckbox', trans.control[1], trans.control[0]),
-				createCmp('FDateField', trans.controlDate[1], trans.controlDate[0], {allowBlank: false}),
+				createCmp('FDateField', trans.controlDate[1], trans.controlDate[0], {allowBlank: false,
+                                                                    width:250,
+                                                                    labelWidth:150}),
 				me._adds = createCmp('FieldSet', {
 					collapsible: true,
 					title: 'Дополнительная информация',
+                                        cls:'collapse_section',
 					layout: 'vbox',
 					items: [
-						createCmp('FTextField', trans.resolutionAuthor[1], trans.resolutionAuthor[0]),
+						createCmp('FTextField', trans.resolutionAuthor[1], trans.resolutionAuthor[0],{
+                                                    width:450,
+                                                    labelWidth:150
+                                                }),
 						createCmp('FComboBox', trans.storageTerritory[1], 'storageTerritory',
-								trans.storageTerritory[0]),
-						createCmp('FTextField', trans.storageName[1], trans.storageName[0])
+								trans.storageTerritory[0],{
+                                                    width:450,
+                                                    labelWidth:150
+                                                }),
+						createCmp('FTextField', trans.storageName[1], trans.storageName[0],{
+                                                    width:450,
+                                                    labelWidth:150
+                                                })
 					]
 				})
 			]

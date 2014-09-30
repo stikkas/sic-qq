@@ -181,8 +181,23 @@ label.journal_title_label{
     text-align:right;
     width:150px !important;
     text-decoration:none;
+    margin-top:0;
     padding:0;
 }
+.x-form-type-checkbox .x-form-cb-wrap,
+.x-form-type-checkbox .x-form-item-body,
+.x-form-type-text .x-form-item-body{
+    vertical-align:middle;
+}
+.x-form-trigger-wrap[style*='visibility: hidden;'],
+.x-form-field[style*='visibility: hidden;']{
+    display:none !important;                                    //убираем скрытые поля 
+}
+/*.x-form-dirty .x-form-text{                                   //изменяем вид заполненных неактивных (это не так) полей
+    background-color:transparent !important;
+    //border:none;
+}*/
+
 .three_hor_lbl{
     color:#2D446D;
     font-weight:bold;
@@ -198,6 +213,13 @@ label.journal_title_label{
 }
 .small_lbl .x-form-item-label.x-form-item-label{
     width:5px !important;
+}
+
+.right_date .x-field-label-cell label.x-form-item-label-right{
+    width: 100px !important;
+}
+.right_date .x-hbox-form-item[style*='left: 460px;']{
+    width:200px !important;
 }
 
 /*collapse section*/

@@ -37,6 +37,8 @@ Ext.define('qqext.view.reg.VApplicant', {
 				me.appType = createCmp('FComboBox', applicant.applicantType[1],
 						applicant.applicantType[0], applicant.applicantType[0], {
 					allowBlank: false,
+                                        width: 450, 
+                                        labelWidth: 150,
 					listeners: {
 						change: function(cb, newv) {
 							if (newv)
@@ -61,12 +63,19 @@ Ext.define('qqext.view.reg.VApplicant', {
 						{width: 950, labelWidth: 150, allowBlank: false, hidden: true}),
 				createCmp('FComboBox', applicant.applicantCategory[1],
 						applicant.applicantCategory[0], applicant.applicantCategory[0], {
-					allowBlank: false
+					allowBlank: false,
+                                        width: 410, 
+                                        labelWidth: 150
 				}),
-				createCmp('FTextField', applicant.country[1], applicant.country[0]),
+				createCmp('FTextField', applicant.country[1], applicant.country[0],{
+                                    width: 350, 
+                                    labelWidth: 150
+                                }),
 				createCmp('FTextField', applicant.address[1], applicant.address[0], {
 					width: 950, labelWidth: 150}),
-				createCmp('FTextField', applicant.phone[1], applicant.phone[0]),
+				createCmp('FTextField', applicant.phone[1], applicant.phone[0], {
+                                        width: 350, 
+                                        labelWidth: 150}),
 				me._adds = createCmp('FieldSet', {
 					title: 'Дополнительные сведения',
 					collapsible: true,
@@ -78,7 +87,10 @@ Ext.define('qqext.view.reg.VApplicant', {
 						createCmp('FDateField', applicant.issueDocDate[1], applicant.issueDocDate[0], {
                                                     width:250, labelWidth:150
                                                 }),
-						createCmp('FTextField', applicant.fioJurPerson[1], applicant.fioJurPerson[0]),
+						createCmp('FTextField', applicant.fioJurPerson[1], applicant.fioJurPerson[0], {
+                                                    width: 350, 
+                                                    labelWidth: 150
+                                                }),
 						createCmp('FTextField', applicant.appends[1], applicant.appends[0],{
                                                     width:500, labelWidth:150
                                                 })

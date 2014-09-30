@@ -119,6 +119,7 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 					title: 'Используемые материалы',
 					collapsible: true,
 					collapsed: true,
+                                        cls:'collapse_section inner_section',
 					items: [
 						me._uf = createCmp('FPanelGrid', 'UsedMaterialModel', {
 							defaults: {

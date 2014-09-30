@@ -52,12 +52,14 @@ Ext.define('qqext.factory.PanelGrid', {
 				layout: 'hbox',
 				items: [createCmp('FHandlerButton', 'Добавить', function() {
 						me.getStore().add(createCmp(model));
-					}),
+					},
+                                        {cls:'add_small_btn'}),
 					createCmp('FHandlerButton', 'Удалить', function() {
 						var sm = me.getSelectionModel();
 						if (sm.hasSelection())
 							me.getStore().remove(sm.getSelection());
-					})
+					},
+                                        {cls:'del_small_btn'})
 				]
 			})];
 		me.columns = columns;

@@ -162,10 +162,10 @@ Ext.define('qqext.view.exec.VExecForm', {
 				labels = ns.labels,
 				createCmp = Ext.create,
 				menu = createCmp('HButtonMenu', [
-					{text: labels.edit, action: ns.edit},
-					{text: labels.save, action: save},
-					{text: labels.remove, action: remove},
-					{text: labels.register, action: book}],
+					{text: labels.edit, action: ns.edit, opts:{cls:'edit_btn'}},
+					{text: labels.save, action: save, opts:{cls:'save_btn'}},
+					{text: labels.remove, action: remove, opts:{cls:'remove_btn'}},
+					{text: labels.register, action: book, opts:{cls:'reg_btn'}}],
 						'ToolButton', me);
 		Ext.applyIf(me, {
 			items: [

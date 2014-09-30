@@ -44,6 +44,19 @@ label.journal_title_label{
     background: -o-linear-gradient(left, #DDE3EB, #fff);
     background: -ms-linear-gradient(left, #DDE3EB, #fff);
 }
+
+.big_title_panel.collapse_section legend{
+    //background-image:-moz-linear-gradient(left, #DDE3EB, #fff) !important;
+    background-color:#DDE3EB;
+    margin-left:0;
+    padding:10px 15px;
+    border-width:1px !important;
+    border-left:none;
+}
+/*.big_title_panel.collapse_section .x-fieldset-body{
+    margin:0 15px;
+}*/
+
 .journal_title_label{
     color:#6A84A6;
     text-align:center;
@@ -216,10 +229,10 @@ label.journal_title_label{
 }
 
 .right_date .x-field-label-cell label.x-form-item-label-right{
-    width: 100px !important;
+    width: 60px !important;
 }
 .right_date .x-hbox-form-item[style*='left: 460px;']{
-    width:200px !important;
+    width:150px !important;
 }
 
 /*collapse section*/
@@ -262,6 +275,13 @@ div.collapse_section{
 }
 .collapse_section .x-noborder-t{
     border:none !important;
+}
+
+.inner_section{
+    padding:10px;
+}
+.inner_section .x-fieldset-header{
+    margin:0;
 }
 
 /*buttons*/

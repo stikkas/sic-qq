@@ -19,13 +19,22 @@ Ext.define('qqext.view.exec.VExecInfo', {
 				exec = qqext.execInfo;
 		Ext.applyIf(this, {
 			items: [
-				createCmp('FDateField', exec.date[1], exec.date[0]),
+				createCmp('FDateField', exec.date[1], exec.date[0], {
+                                    width:270,
+                                    labelWidth:150
+                                }),
 				createCmp('FComboBox', exec.result[1], 'resultOfAnswer', exec.result[0],
-						{editable: false}),
+                                    {editable: false, 
+                                        width:400,
+                                        labelWidth:150
+                                    }),
 				createCmp('FComboBox', exec.tema[1], 'tematicOfAnswer', exec.tema[0],
-						{editable: false}),
+                                        {editable: false,
+                                            width:400,
+                                            labelWidth:150
+                                        }),
 				createCmp('FComboBox', exec.category[1], 'diffCategory', exec.category[0],
-						{width: 175, editable: false, allowBlank: true})
+						{width: 200, labelWidth:150, editable: false, allowBlank: true})
 			]
 		});
 		this.callParent();

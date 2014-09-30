@@ -55,3 +55,21 @@ a.quit_btn.x-btn{
     margin-right:0 !important;
     border-right:none !important;
 }
+.add_small_btn,
+.del_small_btn{
+    background-repeat:no-repeat;
+    background-position:left center;
+    background-color:transparent;
+    border:none;
+    width:17px;
+    height:17px;
+    padding-left:17px;
+    margin:2px 0 2px 3px;
+    overflow:hidden;
+}
+.add_small_btn{
+    background-image:url(../images/plus.png);
+}
+.del_small_btn{
+    background-image:url(../images/del.png);
+}

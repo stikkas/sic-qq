@@ -112,16 +112,23 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 					]
 				}),
 				createCmp('Ext.Component', {autoEl: 'hr'}),
-				createCmp('FDateField', way.notice[1], way.notice[0]),
-				createCmp('FTextField', way.number[1], way.number[0]),
+				createCmp('FDateField', way.notice[1], way.notice[0], {
+                                    width:270,
+                                    labelWidth:150
+                                }),
+				createCmp('FTextField', way.number[1], way.number[0], {
+                                    width:270,
+                                    labelWidth:150
+                                }),
 				createCmp('FTextArea', way.remark[1], way.remark[0], {
-					width: 600,
-					labelWidth: 100
+					width: 800,
+					labelWidth: 150
 				}),
 				createCmp('FieldSet', {
 					title: 'Ответ',
 					collapsible: true,
 					collapsed: true,
+                                        cls:'collapse_section',
 					items: [me._ff = createCmp('FAttachedFiles', '',
 								'Q_VALUE_FILE_TYPE_ANSWER', ns.atpaths.fsend,
 								ns.atpaths.usend)]

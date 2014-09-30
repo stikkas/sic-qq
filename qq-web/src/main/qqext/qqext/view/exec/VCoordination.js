@@ -63,6 +63,7 @@ Ext.define('qqext.view.exec.VCoordination', {
 			items: [createCmp('FieldSet', {
 					collapsible: true,
 					collapsed: true,
+                                        cls:'collapse_section big_title_panel',
 					title: 'Согласование документа',
 					items: [me._cf = createCmp('FPanelGrid', 'CoordinationModel', {
 							defaults: {

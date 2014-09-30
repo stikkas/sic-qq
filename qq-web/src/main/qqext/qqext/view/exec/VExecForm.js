@@ -24,7 +24,7 @@ Ext.define('qqext.view.exec.VExecForm', {
 	 */
 	_idx: 6,
 	listeners: {
-		activate: function (me, prev) {
+		activate: function(me, prev) {
 			var ns = qqext;
 			ns.Menu.setEditMenu(me._idx);
 			if (ns.request !== me.model) {
@@ -40,38 +40,41 @@ Ext.define('qqext.view.exec.VExecForm', {
 			ns.viewport.doLayout();
 		}
 	},
-	_initData: function () {
+	_initData: function() {
 		var me = this,
 				model = me.model;
 		// Очистим все ошибки
-		me.items.each(function (it) {
+		me.items.each(function(it) {
 			it.reset();
 		});
-		model.getExec({callback: function (r1) {
+		model.getExec({callback: function(r1) {
 				me._ef.loadRecord(r1);
-				r1.getWay({callback: function (r2) {
+				r1.getWay({callback: function(r2) {
 						me._mf.loadRecord(r1.files(), r2);
 					}});
 			}});
-		[me._df, me._cf, me._mf].forEach(function (v) {
+		[me._df, me._cf, me._mf].forEach(function(v) {
 			v.setStorage();
 		});
 		me._df.loadRecord();
 		me._cf.loadRecord();
 	},
-	_saveData: function (success, failure) {
+	_saveData: function(success, failure) {
 		// TODO: Может стоит обновить дату и пользователя обновления запроса
 		var me = this;
 		me.setViewOnly(true);
 		me._disableButtons(true, 0, 1, 2, 3);
 		var model = me.model.getExec();
 		me.updateRecord();
-		model.save({callback: function (r, o, s) {
+		model.save({callback: function(r, o, s) {
 				if (s) {
-					model.getWay().save({callback: function (rec, op, st) {
+					console.log("into save");
+					model.getWay().save({callback: function(rec, op, st) {
 							if (st) {
 								me._df.sync();
+								console.log("after _df.sync");
 								me._cf.sync();
+								console.log("after _cf.sync");
 								me._mf.save(model.get('id'), success, failure);
 							} else {
 								qqext.showError("Ошибка сохранение данных", o.getError());
@@ -89,7 +92,7 @@ Ext.define('qqext.view.exec.VExecForm', {
 			}
 		});
 	},
-	initComponent: function () {
+	initComponent: function() {
 		//----------обработчики для кнопок меню---------
 		//sc - контекст для обработчика
 
@@ -99,10 +102,11 @@ Ext.define('qqext.view.exec.VExecForm', {
 		 * @returns {undefined}
 		 */
 		function save() {
-			me._saveData(function () {
+			me._saveData(function() {
 				me._disableButtons(false, 0);
-			}, function () {
+			}, function() {
 				me._disableButtons(false, 1, 2, 3);
+				me.setViewOnly(false);
 			});
 		}
 		/**
@@ -112,7 +116,7 @@ Ext.define('qqext.view.exec.VExecForm', {
 		 */
 		function remove() {
 			var model = me.model;
-			model.getExec().destroy({callback: function (r, o) {
+			model.getExec().destroy({callback: function(r, o) {
 					if (o.success) {
 						me._mf.remove();
 						model.setExec(createCmp('ExecutionInfoModel', {id: model.get('id')}));
@@ -137,9 +141,9 @@ Ext.define('qqext.view.exec.VExecForm', {
 			}
 
 			if (me.validate()) {
-				me._saveData(function () {
+				me._saveData(function() {
 					me.model.set('status', ns.getStatusId(ns.stats.exec));
-					me.model.save({callback: function (r, o, s) {
+					me.model.save({callback: function(r, o, s) {
 							if (s) {
 								ns.statusPanel.setStatus();
 							} else {
@@ -175,7 +179,7 @@ Ext.define('qqext.view.exec.VExecForm', {
 		me.callParent();
 		ns.Menu.editReqMenu.insert(3, menu);
 	},
-	updateRecord: function () {
+	updateRecord: function() {
 		var me = this, model = me.model.getExec();
 		me._ef.updateRecord(model);
 		me._mf.updateRecord(model.getWay());
@@ -184,7 +188,7 @@ Ext.define('qqext.view.exec.VExecForm', {
 	 * Проверяет форму на валидность (для прохождения регистрации).
 	 * @returns {Boolean} показывает ошибку и возвращает false в случае не правильного заполнения формы
 	 */
-	validate: function () {
+	validate: function() {
 		var forms = this.items,
 				i = 0,
 				max = forms.length,

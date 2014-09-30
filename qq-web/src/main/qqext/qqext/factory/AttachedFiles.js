@@ -4,7 +4,7 @@
  */
 
 Ext.define('qqext.factory.AttachedFiles', {
-	alias: 'AttachedFiles',
+	alias: 'FAttachedFiles',
 	xtype: 'attachedfiles',
 	extend: 'Ext.form.Panel',
 	requires: [
@@ -95,6 +95,7 @@ Ext.define('qqext.factory.AttachedFiles', {
 	showFiles: function() {
 		var me = this,
 				store = me._st;
+		me._fl.clearFiles();
 		if (store.count()) {
 			var path = me._url + store.getAt(0).get('question')
 					+ "/";

@@ -261,7 +261,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 				me.query = createCmp('VQuery'),
 				me.applicant = createCmp('VApplicant'),
 				me.target = createCmp('VQueryObject', {hidden: true}),
-				me.files = createCmp('AttachedFiles', 'Документы заявителя',
+				me.files = createCmp('FAttachedFiles', 'Документы заявителя',
 						'Q_VALUE_FILE_TYPE_APP_DOCS', ns.atpaths.fappl,
 						ns.atpaths.uappl, {
 							border: true,

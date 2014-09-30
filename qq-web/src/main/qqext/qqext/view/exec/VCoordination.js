@@ -6,6 +6,7 @@ Ext.define('qqext.view.exec.VCoordination', {
 	extend: 'qqext.view.StyledPanel',
 	requires: [
 		'qqext.factory.PanelGrid',
+		'qqext.factory.ComboRenderer',
 		'qqext.model.Coordination',
 		'Ext.form.field.ComboBox',
 		'Ext.form.field.Date',
@@ -79,12 +80,7 @@ Ext.define('qqext.view.exec.VCoordination', {
 										valueField: 'id',
 										editable: false
 									},
-									renderer: function(value) {
-										var v = Ext.getStore(storeId).getById(value);
-										if (v)
-											return v.get('name');
-										return value;
-									}
+									renderer: createCmp('FComboRenderer', storeId)
 								},
 								{
 									text: coor.date[1],

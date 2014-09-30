@@ -1,13 +1,13 @@
 package ru.insoft.archive.qq.service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -24,13 +24,6 @@ public class AttachedFileFacadeREST extends AbstractFacade<AttachedFile> {
 
 	public AttachedFileFacadeREST() {
 		super(AttachedFile.class);
-	}
-
-	@POST
-	@Path("{id}")
-	@Consumes({"application/json"})
-	public void create(@PathParam("id") Long id, AttachedFile entity) {
-		super.create(entity);
 	}
 
 	/**
@@ -52,17 +45,11 @@ public class AttachedFileFacadeREST extends AbstractFacade<AttachedFile> {
 		new File(dir).delete();
 	}
 
-	@PUT
-	@Path("{id}")
-	@Consumes({"application/json"})
-	public void edit(@PathParam("id") Long id, AttachedFile entity) {
-		super.edit(entity);
-	}
-
 	@DELETE
 	@Path("{id}")
+	@Override
 	public void remove(@PathParam("id") Long id) {
-		super.remove(super.find(id));
+		super.remove(id);
 	}
 
 	@GET
@@ -84,8 +71,8 @@ public class AttachedFileFacadeREST extends AbstractFacade<AttachedFile> {
 	@Produces({"application/json"})
 	public List<AttachedFile> filesForExecution(@QueryParam("filter") QuestionFilter filter) {
 		Long id = filter.getId();
-		return id == -1L ? null : super.findByQuestionWhereAnd(id,
-				new Clause[]{new Clause("type", "Q_VALUE_FILE_TYPE_ANSWER")});
+		return id == -1L ? new ArrayList<AttachedFile>() : super.findByQuestionWhereAnd(id,
+			new Clause[]{new Clause("type", "Q_VALUE_FILE_TYPE_ANSWER")});
 	}
 
 	/**
@@ -99,8 +86,8 @@ public class AttachedFileFacadeREST extends AbstractFacade<AttachedFile> {
 	@Produces({"application/json"})
 	public List<AttachedFile> filesForQuestion(@QueryParam("filter") QuestionFilter filter) {
 		Long id = filter.getId();
-		return id == -1L ? null : super.findByQuestionWhereAnd(id,
-				new Clause[]{new Clause("type", "Q_VALUE_FILE_TYPE_APP_DOCS")});
+		return id == -1L ? new ArrayList<AttachedFile>() : super.findByQuestionWhereAnd(id,
+			new Clause[]{new Clause("type", "Q_VALUE_FILE_TYPE_APP_DOCS")});
 	}
 
 }

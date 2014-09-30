@@ -40,7 +40,7 @@ public class TransmissionFacadeREST extends AbstractFacade<Transmission> {
 	@DELETE
 	@Path("{id}")
 	public void remove(@PathParam("id") Long id) {
-		super.remove(super.find(id));
+		super.remove(id);
 	}
 
 	@GET

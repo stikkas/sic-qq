@@ -27,7 +27,7 @@ public class CoreParameterFacadeREST extends AbstractFacade<CoreParameter> {
 	public List<CoreParameter> findRange(@QueryParam("code") String[] codes) {
 		Clause[] clauses = new Clause[codes.length];
 		for (int i = 0; i < codes.length; ++i) {
-			clauses[i] = new Clause("code", codes[i]);
+			clauses[i] = new Clause<>("code", codes[i]);
 		}
 		return super.coreParametersByCode(clauses);
 	}

@@ -16,7 +16,11 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import org.apache.commons.fileupload.FileItem;
 import ru.insoft.archive.extcommons.ejb.CommonDBHandler;
 import ru.insoft.archive.extcommons.ejb.FileUploadBean;
@@ -58,28 +62,50 @@ public class AttachedFileHandler extends FileUploadBean {
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	protected void processUploadedFile(FileItem item, Map<String, String> params)
-			throws Exception {
-		String questionId = params.get("question");
+		throws Exception {
+		Long question = Long.parseLong(params.get("question"));
+		String name = StringUtils.convertFileName(item.getName());
+		Long type = getFileTypeId(params.get("type"));
 
-		AttachedFile attachedFile = new AttachedFile();
-		attachedFile.setQuestion(Long.parseLong(questionId));
-		attachedFile.setType(getFileTypeId(params.get("type")));
-		attachedFile.setName(StringUtils.convertFileName(item.getName()));
-
-		String path = params.get("path") + questionId;
+		em.persist(createEntity(name, type, question));
+		String path = params.get("path") + question;
 		try {
 			File dir = new File(path);
 			if (!dir.isDirectory()) {
 				dir.mkdirs();
 			}
 
-			Path p = FileSystems.getDefault().getPath(path, attachedFile.getName());
+			Path p = FileSystems.getDefault().getPath(path, name);
 			Files.write(p, item.get(), StandardOpenOption.CREATE);
 		} catch (IOException e) {
-			throw new RuntimeException("Ошибка при сохранении файла в " + path);
+			throw new RuntimeException("Ошибка при сохранении файла '"
+				+ name + "' в " + path);
 		}
 
-		em.persist(attachedFile);
+	}
+
+	/**
+	 * Проверяет есть ли в базе файл с таким же именем, такого же типа, и
+	 * принадлежащий этому же запросу.
+	 *
+	 * @param entity файл для сохранения или обновления
+	 * @return сущность для вставки в таблицу
+	 */
+	private AttachedFile createEntity(String name, Long type, Long question) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<AttachedFile> cq = cb.createQuery(AttachedFile.class);
+
+		Root<AttachedFile> root = cq.from(AttachedFile.class);
+		cq.where(cb.and(cb.and(
+			cb.equal(root.get("name"), name),
+			cb.equal(root.get("type"), type)),
+			cb.equal(root.get("question"), question)));
+		try {
+			em.createQuery(cq).getSingleResult();
+			throw new RuntimeException("Файл с именем '" + name + "' уже существует");
+		} catch (NoResultException e) {
+			return new AttachedFile(name, type, question);
+		}
 	}
 
 	@Override
@@ -88,9 +114,9 @@ public class AttachedFileHandler extends FileUploadBean {
 
 		for (Long id : jsonTools.parseLongList(params.get("deletedFiles"))) {
 			AttachedFile entity = em.find(AttachedFile.class, id);
-			if (em != null) {
-				em.remove(entity);
+			if (entity != null) {
 				new File(path + "/" + entity.getName()).delete();
+				em.remove(entity);
 			}
 		}
 	}

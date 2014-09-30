@@ -39,6 +39,13 @@ public abstract class AbstractFacade<T> {
 		em.remove(entity);
 	}
 
+	public void remove(Long id) {
+		T entity = find(id);
+		if (entity != null) {
+			remove(entity);
+		}
+	}
+
 	public T find(Long id) {
 		return em.find(entityClass, id);
 	}
@@ -87,6 +94,33 @@ public abstract class AbstractFacade<T> {
 	}
 
 	/**
+	 * Находит сущность с заданными параметрами. Искать нужно только по
+	 * уникальным ключам, т.е. предполагается, что если есть сущность с
+	 * заданными параметрами, то она одна.
+	 *
+	 * @param clauses условия поиска
+	 * @return cущность либо null
+	 */
+	T findEntityWhereAnd(Clause[] clauses) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<T> cq = cb.createQuery(entityClass);
+		Root<T> root = cq.from(entityClass);
+
+		if (clauses.length > 0) {
+			Predicate expr = cb.equal(root.<String>get(clauses[0].getFieldName()),
+				clauses[0].getFieldValue());
+			for (int i = 0; i < clauses.length; ++i) {
+				expr = cb.and(expr, cb.equal(root.get(clauses[i].getFieldName()),
+					clauses[i].getFieldValue()));
+			}
+			cq.where(expr);
+			return em.createQuery(cq).getSingleResult();
+		} else { // без условий не работаем
+			return null;
+		}
+	}
+
+	/**
 	 * Возвращает список параметров системы с заданными кодами
 	 *
 	 * @param clauses коды параметров
@@ -99,12 +133,12 @@ public abstract class AbstractFacade<T> {
 		Root<T> root = cq.from(entityClass);
 		Clause cl = clauses[0];
 		Predicate expr = cb.equal(root.<String>get(cl.getFieldName()),
-				cl.getFieldValue());
+			cl.getFieldValue());
 
 		for (int i = 1; i < clauses.length; ++i) {
 			cl = clauses[i];
 			expr = cb.or(expr, cb.equal(root.<String>get(cl.getFieldName()),
-					cl.getFieldValue()));
+				cl.getFieldValue()));
 		}
 		cq.where(expr);
 		return em.createQuery(cq).getResultList();

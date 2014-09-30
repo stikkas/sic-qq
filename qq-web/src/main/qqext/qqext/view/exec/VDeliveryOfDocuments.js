@@ -9,6 +9,7 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 		'qqext.model.DeliveryAction',
 		'qqext.model.UsedMaterial',
 		'qqext.factory.PanelGrid',
+		'qqext.factory.ComboRenderer',
 		'qqext.cmp.FieldSet',
 		'Ext.form.field.ComboBox',
 		'Ext.form.field.Text',
@@ -105,12 +106,7 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 								valueField: 'id',
 								editable: false
 							},
-							renderer: function(value) {
-								var v = Ext.getStore(storeId).getById(value);
-								if (v)
-									return v.get('name');
-								return value;
-							}
+							renderer: createCmp('FComboRenderer', storeId)
 						},
 						{
 							text: delAction.count[1],

@@ -12,6 +12,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 		'qqext.factory.DateField',
 		'qqext.factory.PanelGrid',
 		'qqext.factory.AttachedFiles',
+		'qqext.factory.ComboRenderer',
 		'Ext.Component',
 		'Ext.Date',
 		'qqext.cmp.FieldSet',
@@ -23,7 +24,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 	 * Проверяет правильность заполнения формы
 	 * @returns {Boolean} если ошибок нет то true
 	 */
-	isValid: function () {
+	isValid: function() {
 		var result = true;
 		if (!this.callParent())
 			result = false;
@@ -32,19 +33,26 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 		return result;
 	},
 	/**
-	 * Обновляет данные на сервере
+	 * Обновляет данные на сервере для таблицы
 	 */
-	sync: function () {
+	sync: function() {
 		var store = this._sf.getStore();
-		store.sync({callback: function () {
+		store.sync({callback: function() {
 				store.load();
+				console.log("into _mf.save");
 			}});
 	},
-	save: function (id, success, fail) {
+	/**
+	 * Сохраняет данные из таблицы и прикрепленных файлов на сервер
+	 * @param {Number/String} id идентификатор запроса
+	 * @param {Function} success функция для вызова в случае удачного сохранения файлов
+	 * @param {Function} fail функция для вызова в случае ошибки при сохранении файлов
+	 */
+	save: function(id, success, fail) {
 		this.sync();
 		this._ff.save(id, success, fail);
 	},
-	remove: function () {
+	remove: function() {
 		this._ff.remove();
 		this._ff.reset();
 	},
@@ -53,7 +61,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 	 * @param {Ext.data.Store} files хранилище для файлов
 	 * @param {Ext.data.Model} model модель для остальных полей формы
 	 */
-	loadRecord: function (files, model) {
+	loadRecord: function(files, model) {
 		this._sf.getStore().load();
 		this.callParent([model]);
 		this._ff.loadRecord(files);
@@ -62,10 +70,10 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 	 * Устанавливает хранилища для своих таблиц. Хранилища берутся
 	 * из ассоциаций текущего запроса.
 	 */
-	setStorage: function () {
+	setStorage: function() {
 		this._sf.reconfigure(qqext.request.getExec().sendactions());
 	},
-	initComponent: function () {
+	initComponent: function() {
 		var me = this,
 				ns = qqext,
 				createCmp = Ext.create,
@@ -91,18 +99,13 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 								valueField: 'id',
 								editable: false
 							},
-							renderer: function (value) {
-								var v = Ext.getStore(storeId).getById(value);
-								if (v)
-									return v.get('name');
-								return value;
-							}
+							renderer: createCmp('FComboRenderer', storeId)
 						},
 						{
 							text: action.date[1],
 							dataIndex: action.date[0],
 							editor: {xtype: 'hawkDateField'},
-							renderer: function (value) {
+							renderer: function(value) {
 								return Ext.Date.format(value, 'd.m.Y');
 							}
 						}
@@ -119,7 +122,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 					title: 'Ответ',
 					collapsible: true,
 					collapsed: true,
-					items: [me._ff = createCmp('AttachedFiles', '',
+					items: [me._ff = createCmp('FAttachedFiles', '',
 								'Q_VALUE_FILE_TYPE_ANSWER', ns.atpaths.fsend,
 								ns.atpaths.usend)]
 				})

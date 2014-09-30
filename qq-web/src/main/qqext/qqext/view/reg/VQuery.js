@@ -30,11 +30,11 @@ Ext.define('qqext.view.reg.VQuery', {
 							else
 								target.show();
 						},
-                                                width:330, 
+                                                width:370, 
                                                 labelWidth:150
 					}
 				}),
-				createCmp('FDateField', 'Плановая дата исполнения запроса', 'plannedFinishDate',{width:250, labelWidth:150}),
+				createCmp('FDateField', 'Плановая дата исполнения запроса', 'plannedFinishDate',{width:270, labelWidth:150}),
 				createCmp('FTextArea', 'Содержание запроса', 'content', {width: 950, labelWidth:150}),
 				createCmp('FComboBox', 'Форма выдачи ответа', 'answerForm', 'answerFormType'),
 				createCmp('FCheckbox', 'Мотивированный отказ', 'motivatedRefusal')

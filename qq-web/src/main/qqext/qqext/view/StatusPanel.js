@@ -7,6 +7,7 @@ Ext.define('qqext.view.StatusPanel', {
 	alias: 'StatusPanel',
 	requires: ['qqext.factory.ImageLabel'],
 	layout: 'vbox',
+        cls:'reg_panel',
 	initComponent: function() {
 		var createCmp = Ext.create,
 				ns = qqext,

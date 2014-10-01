@@ -27,8 +27,11 @@ Ext.define('qqext.view.WelcomePage', {
 
 		Ext.applyIf(this, {
 			items: [
-				createCmp('FHrefButton', labels.app1, urls.app1, {cls: cls}),
-				createCmp('FHrefButton', labels.app2, urls.app2, {cls: cls}),
+				createCmp('FHandlerButton', labels.storage, function() {
+					window.open(urls.storage, "_self");
+					console.log(storeplaces);
+				}, {cls: cls}),
+				createCmp('FHrefButton', labels.admin, urls.admin, {cls: cls}),
 				createCmp('FHandlerButton', labels.asq, function() {
 					ns.setActivePage(1);
 				}, {cls: cls})

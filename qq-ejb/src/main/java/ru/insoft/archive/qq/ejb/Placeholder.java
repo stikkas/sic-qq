@@ -49,7 +49,7 @@ public class Placeholder implements Constants {
 	@EJB
 	private CommonDBHandler cdbh;
 
-	@PersistenceContext
+	@PersistenceContext(unitName = "SicEntityManager")
 	private EntityManager em;
 
 	private Logger logger;

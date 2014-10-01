@@ -9,6 +9,7 @@
 	<modules>
 		<module>qq-ejb/</module>
 		<module>qq-web/</module>
+		<module>sic-storage/sic-storage-web</module>
 		<module>qq/</module>
 		<module>ext-commons/</module>
 		<module>core-model/</module>

@@ -1,6 +1,8 @@
 Ext.Loader.setConfig({
 	enabled: true,
-	paths: {qqext: 'qqext'}
+	paths: {qqext: 'qqext',
+		sicstorage: '../qq-web-0.0.1-SNAPSHOT.war-96b2ec24a84fb96e'
+	}
 });
 /*
  * Стандартная точка входя для ExtJS приложения.
@@ -24,8 +26,6 @@ Ext.application({
 		var me = this;
 		Ext.Ajax.request({
 			url: '/qq-web/Rules',
-			// Используется только в целях тестирования, в обход реальной аутентификации
-//			params: {username: 'ARCHIVE_USER'},
 			success: function(response) {
 				// Настраиваем глобальные переменные
 				me.initQQ();
@@ -261,8 +261,8 @@ Ext.application({
 			complete: "Исполнение запроса",
 			toBegin: "В начало",
 			quit: "Выйти",
-			app1: "Подсистема 1",
-			app2: "Подсистема 2",
+			storage: "База данных о местах хранения",
+			admin: "АРМ-Администратор",
 			asq: "АС Запросы"
 		};
 		/**
@@ -271,8 +271,8 @@ Ext.application({
 		var urls = ns.urls = {
 			welcome: "/qq-web/",
 			login: "/qq-web/Auth?action=logout&redirect=1",
-			app1: "#",
-			app2: "#"
+			storage: "/sic-storage/index.html",
+			admin: "/arm-admin/index.jsf"
 		};
 		/**
 		 * @property {Object} btns
@@ -367,7 +367,7 @@ Ext.application({
 		/**
 		 * Выключает/Включает кнопки левого меню
 		 * @param {Boolean} status true - сделать неактивным
-		 * @param {qqext.btns} Дополнительно передаются кнопки, которые необходимо выключить или включить
+		 * @param {qqext.btns} btns Дополнительно передаются кнопки, которые необходимо выключить или включить
 		 * @method disableArticles
 		 */
 		ns.disableArticles = function(status) {
@@ -380,7 +380,7 @@ Ext.application({
 		 */
 		ns.quitAction = function() {
 			// молча, без выстерла событий, удаляем все данные из хранилища
-			qqext.userStore.removeAll(true);
+			ns.userStore.removeAll(true);
 			window.location = urls.login;
 		};
 		/**
@@ -490,7 +490,6 @@ Ext.application({
 		 * @param {Object} record запись, по которой щелкнули
 		 * @method openRequest
 		 */
-
 		ns.openRequest = function(view, record) {
 			ns.model.Question.load(record.get('id'), {callback: function(r, o, s) {
 					if (s) {

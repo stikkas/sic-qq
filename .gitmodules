@@ -7,3 +7,6 @@
 [submodule "qq-web/src/main/qqext/packages/hawk_common"]
 	path = qq-web/src/main/qqext/packages/hawk_common
 	url = http://buntic.insoft03.lan/git/archive/ext-commons-js.git
+[submodule "sic-storage"]
+	path = sic-storage
+	url = http://buntic.insoft03.lan/git/archive/sic-storage.git

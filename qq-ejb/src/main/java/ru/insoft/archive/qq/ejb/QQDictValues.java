@@ -35,7 +35,7 @@ import ru.insoft.archive.qq.entity.Transmission;
 @Stateless
 public class QQDictValues {
 
-	@PersistenceContext
+	@PersistenceContext(unitName = "SicEntityManager")
 	EntityManager em;
 
 	@EJB
@@ -169,4 +169,3 @@ public class QQDictValues {
 	}
 
 }
-

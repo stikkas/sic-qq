@@ -37,7 +37,7 @@ import ru.insoft.archive.qq.webmodel.SearchResultItem;
 @Stateless
 public class QQSearch extends LoggedBean {
 
-	@PersistenceContext
+	@PersistenceContext(unitName = "SicEntityManager")
 	private EntityManager em;
 
 	@EJB

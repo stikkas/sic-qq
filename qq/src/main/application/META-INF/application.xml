@@ -17,6 +17,13 @@
 	</module>
 
 	<module>
+		<web>
+			<web-uri>sic-storage-web-0.0.2-SNAPSHOT.war</web-uri>
+			<context-root>/sic-storage</context-root>
+		</web>
+	</module>
+
+	<module>
 		<ejb>ext-commons-0.1.0.jar</ejb>
 	</module>
 	<library-directory>lib/</library-directory>

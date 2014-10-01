@@ -9,7 +9,7 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 		'qqext.model.DeliveryAction',
 		'qqext.model.UsedMaterial',
 		'qqext.factory.PanelGrid',
-		'qqext.factory.ComboRenderer',
+		'qqext.factory.ComboColumn',
 		'qqext.cmp.FieldSet',
 		'Ext.form.field.ComboBox',
 		'Ext.form.field.Text',
@@ -87,27 +87,15 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 				createCmp = Ext.create,
 				ns = qqext,
 				mat = ns.usedMaterial,
-				delAction = ns.delAction,
-				storeId = delAction.type[0];
+				delAction = ns.delAction;
 		Ext.applyIf(me, {
 			items: [me._df = createCmp('FPanelGrid', 'DeliveryActionModel', {
 					defaults: {
 						sortable: false,
 						menuDisabled: true
 					}, items: [
-						{
-							text: delAction.type[1],
-							dataIndex: delAction.type[0],
-							flex: 1,
-							editor: {
-								xtype: 'combobox',
-								store: storeId,
-								displayField: 'name',
-								valueField: 'id',
-								editable: false
-							},
-							renderer: createCmp('FComboRenderer', storeId)
-						},
+						createCmp('ComboColumn', delAction.type[1], delAction.type[0],
+								delAction.type[0], 1),
 						{
 							text: delAction.count[1],
 							dataIndex: delAction.count[0],
@@ -119,7 +107,7 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 					title: 'Используемые материалы',
 					collapsible: true,
 					collapsed: true,
-                                        cls:'collapse_section inner_section',
+					cls: 'collapse_section inner_section',
 					items: [
 						me._uf = createCmp('FPanelGrid', 'UsedMaterialModel', {
 							defaults: {

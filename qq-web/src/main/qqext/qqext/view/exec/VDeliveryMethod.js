@@ -12,7 +12,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 		'qqext.factory.DateField',
 		'qqext.factory.PanelGrid',
 		'qqext.factory.AttachedFiles',
-		'qqext.factory.ComboRenderer',
+		'qqext.factory.ComboColumn',
 		'Ext.Component',
 		'Ext.Date',
 		'qqext.cmp.FieldSet',
@@ -78,8 +78,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 				ns = qqext,
 				createCmp = Ext.create,
 				way = ns.wayToSend,
-				action = ns.sendAction,
-				storeId = 'answerForm';
+				action = ns.sendAction;
 
 		Ext.apply(me, {
 			items: [
@@ -88,19 +87,8 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 						sortable: false,
 						menuDisabled: true
 					}, items: [
-						{
-							text: action.type[1],
-							dataIndex: action.type[0],
-							flex: 1,
-							editor: {
-								xtype: 'combobox',
-								store: storeId,
-								displayField: 'name',
-								valueField: 'id',
-								editable: false
-							},
-							renderer: createCmp('FComboRenderer', storeId)
-						},
+						createCmp('ComboColumn', action.type[1], action.type[0],
+								'answerForm', 1),
 						{
 							text: action.date[1],
 							dataIndex: action.date[0],
@@ -113,13 +101,13 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 				}),
 				createCmp('Ext.Component', {autoEl: 'hr'}),
 				createCmp('FDateField', way.notice[1], way.notice[0], {
-                                    width:270,
-                                    labelWidth:150
-                                }),
+					width: 270,
+					labelWidth: 150
+				}),
 				createCmp('FTextField', way.number[1], way.number[0], {
-                                    width:270,
-                                    labelWidth:150
-                                }),
+					width: 270,
+					labelWidth: 150
+				}),
 				createCmp('FTextArea', way.remark[1], way.remark[0], {
 					width: 800,
 					labelWidth: 150
@@ -128,7 +116,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 					title: 'Ответ',
 					collapsible: true,
 					collapsed: true,
-                                        cls:'collapse_section',
+					cls: 'collapse_section',
 					items: [me._ff = createCmp('FAttachedFiles', '',
 								'Q_VALUE_FILE_TYPE_ANSWER', ns.atpaths.fsend,
 								ns.atpaths.usend)]

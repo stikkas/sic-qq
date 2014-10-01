@@ -6,7 +6,7 @@ Ext.define('qqext.view.exec.VCoordination', {
 	extend: 'qqext.view.StyledPanel',
 	requires: [
 		'qqext.factory.PanelGrid',
-		'qqext.factory.ComboRenderer',
+		'qqext.factory.ComboColumn',
 		'qqext.model.Coordination',
 		'Ext.form.field.ComboBox',
 		'Ext.form.field.Date',
@@ -56,33 +56,21 @@ Ext.define('qqext.view.exec.VCoordination', {
 	initComponent: function() {
 		var me = this,
 				createCmp = Ext.create,
-				coor = qqext.coordination,
-				storeId = 'coordinationStage';
+				coor = qqext.coordination;
 
 		Ext.applyIf(me, {
 			items: [createCmp('FieldSet', {
 					collapsible: true,
 					collapsed: true,
-                                        cls:'collapse_section big_title_panel',
+					cls: 'collapse_section big_title_panel',
 					title: 'Согласование документа',
 					items: [me._cf = createCmp('FPanelGrid', 'CoordinationModel', {
 							defaults: {
 								sortable: false,
 								menuDisabled: true
 							}, items: [
-								{
-									text: coor.stage[1],
-									dataIndex: coor.stage[0],
-									flex: 1,
-									editor: {
-										xtype: 'combobox',
-										store: storeId,
-										displayField: 'name',
-										valueField: 'id',
-										editable: false
-									},
-									renderer: createCmp('FComboRenderer', storeId)
-								},
+								createCmp('ComboColumn', coor.stage[1], coor.stage[0],
+										'coordinationStage', 1),
 								{
 									text: coor.date[1],
 									dataIndex: coor.date[0],

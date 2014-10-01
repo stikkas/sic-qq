@@ -1,6 +1,6 @@
 /**
  * Панелька "Документы заявителя" формы "Регистрация запроса"
- * TODO: Обновить документацию по FilesList
+ *
  */
 
 Ext.define('qqext.factory.AttachedFiles', {

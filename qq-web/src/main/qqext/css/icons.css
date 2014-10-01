@@ -73,3 +73,20 @@ a.quit_btn.x-btn{
 .del_small_btn{
     background-image:url(../images/del.png);
 }
+
+.attached_section .x-btn{
+    background-color:transparent;
+    background-repeat:no-repeat;
+    border:none;
+}
+.attach .x-btn{
+    background-image:url(../images/attached.png);
+    background-repeat:no-repeat;
+    background-position:left center;
+    margin-left:20px;
+    padding:3px 20px;
+}
+.garbage{
+    background-image:url(../images/attach_del.png);
+    margin-left:10px;
+}

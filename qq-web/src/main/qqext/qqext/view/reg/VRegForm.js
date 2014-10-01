@@ -271,7 +271,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 							animCollapse: true,
 							hideCollapseTool: true,
 							disabledCls: '',
-							cls: 'collapse_section',
+							cls: 'collapse_section attached_section',
 							header: {
 								icon: 'images/transp.png'
 							}

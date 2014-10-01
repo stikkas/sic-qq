@@ -297,3 +297,27 @@ div.collapse_section{
 .x-btn-focus{
     background-color:transparent;
 }
+
+.attach{
+    width:100%;
+    border-bottom:2px solid #2D446D;
+    margin:0 15px 15px 0;
+    padding: 10px 0;
+}
+.attach .x-btn-default-small .x-btn-inner{
+    color:#000;
+    font:1em "Lucida Sans Unicode", sans-serif;
+    height:20px;
+}
+.attach .x-btn-default-small .x-btn-button{
+    height:20px;
+}
+
+.attached_section {
+    padding:0 15px;    
+}
+.attached_section legend,
+.attached_section .x-panel-header{
+    margin-left:0;
+    margin-bottom:5px;
+}

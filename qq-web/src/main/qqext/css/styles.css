@@ -46,16 +46,12 @@ label.journal_title_label{
 }
 
 .big_title_panel.collapse_section legend{
-    //background-image:-moz-linear-gradient(left, #DDE3EB, #fff) !important;
     background-color:#DDE3EB;
     margin-left:0;
     padding:10px 15px;
     border-width:1px !important;
     border-left:none;
 }
-/*.big_title_panel.collapse_section .x-fieldset-body{
-    margin:0 15px;
-}*/
 
 .journal_title_label{
     color:#6A84A6;
@@ -185,6 +181,14 @@ label.journal_title_label{
 .x-form-type-text{
     margin:5px;
 }
+
+                                            /*fields in table*/
+.x-grid table.x-form-type-text{           
+    margin-left: 0 !important;
+    border:none;
+}
+
+
 /*labels*/
 .x-panel .x-field label,
 .x-panel .x-field .x-form-item-label{

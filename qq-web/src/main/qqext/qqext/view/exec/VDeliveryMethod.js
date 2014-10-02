@@ -116,7 +116,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 					title: 'Ответ',
 					collapsible: true,
 					collapsed: true,
-					cls: 'collapse_section attached_section',
+					cls: 'collapse_section attached_section legend70',
 					items: [me._ff = createCmp('FAttachedFiles', '',
 								'Q_VALUE_FILE_TYPE_ANSWER', ns.atpaths.fsend,
 								ns.atpaths.usend)]

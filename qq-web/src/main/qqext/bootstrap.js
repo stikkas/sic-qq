@@ -920,20 +920,24 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.cmp.PanelEditViewMode": [],
   "qqext.cmp.Text": [],
   "qqext.cmp.TextArea": [],
+  "qqext.controller.AttachedFiles": [],
   "qqext.controller.Main": [],
+  "qqext.factory.AttachedFiles": [],
   "qqext.factory.Base": [],
   "qqext.factory.Checkbox": [],
   "qqext.factory.ComboBox": [],
+  "qqext.factory.ComboColumn": [],
   "qqext.factory.DateField": [],
   "qqext.factory.HandlerButton": [],
   "qqext.factory.HrefButton": [],
+  "qqext.factory.ImageLabel": [],
   "qqext.factory.Label": [],
   "qqext.factory.NumberField": [],
   "qqext.factory.PanelGrid": [],
   "qqext.factory.TextArea": [],
   "qqext.factory.TextField": [],
   "qqext.model.Applicant": [],
-  "qqext.model.AttachedFile": [],
+  "qqext.model.ApplicantDoc": [],
   "qqext.model.Coordination": [],
   "qqext.model.DeliveryAction": [],
   "qqext.model.ExecutionInfo": [],
@@ -942,6 +946,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.model.Question": [],
   "qqext.model.SearchResultItem": [],
   "qqext.model.SendAction": [],
+  "qqext.model.SendDoc": [],
   "qqext.model.Transmission": [],
   "qqext.model.UsedMaterial": [],
   "qqext.model.WayToSend": [],
@@ -965,7 +970,6 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.view.menu.VButtonMenu": [],
   "qqext.view.notify.VNotify": [],
   "qqext.view.reg.VApplicant": [],
-  "qqext.view.reg.VFiles": [],
   "qqext.view.reg.VInboxDoc": [],
   "qqext.view.reg.VQuery": [],
   "qqext.view.reg.VQueryObject": [],
@@ -1985,13 +1989,21 @@ Ext.ClassManager.addNameAliasMappings({
   "qqext.cmp.TextArea": [
     "widget.textareafieldcmp"
   ],
+  "qqext.controller.AttachedFiles": [],
   "qqext.controller.Main": [],
+  "qqext.factory.AttachedFiles": [
+    "FAttachedFiles",
+    "widget.attachedfiles"
+  ],
   "qqext.factory.Base": [],
   "qqext.factory.Checkbox": [
     "FCheckbox"
   ],
   "qqext.factory.ComboBox": [
     "FComboBox"
+  ],
+  "qqext.factory.ComboColumn": [
+    "ComboColumn"
   ],
   "qqext.factory.DateField": [
     "FDateField"
@@ -2001,6 +2013,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "qqext.factory.HrefButton": [
     "FHrefButton"
+  ],
+  "qqext.factory.ImageLabel": [
+    "ImageLabel"
   ],
   "qqext.factory.Label": [
     "FLabel"
@@ -2020,8 +2035,8 @@ Ext.ClassManager.addNameAliasMappings({
   "qqext.model.Applicant": [
     "ApplicantModel"
   ],
-  "qqext.model.AttachedFile": [
-    "AttachedFileModel"
+  "qqext.model.ApplicantDoc": [
+    "ApplicantDocModel"
   ],
   "qqext.model.Coordination": [
     "CoordinationModel"
@@ -2046,6 +2061,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "qqext.model.SendAction": [
     "SendActionModel"
+  ],
+  "qqext.model.SendDoc": [
+    "SendDocModel"
   ],
   "qqext.model.Transmission": [
     "TransmissionModel"
@@ -2089,7 +2107,8 @@ Ext.ClassManager.addNameAliasMappings({
     "VDeliveryOfDocuments"
   ],
   "qqext.view.exec.VExecForm": [
-    "VExecForm"
+    "VExecForm",
+    "widget.vexecform"
   ],
   "qqext.view.exec.VExecInfo": [
     "VExecInfo"
@@ -2110,9 +2129,6 @@ Ext.ClassManager.addNameAliasMappings({
   "qqext.view.reg.VApplicant": [
     "VApplicant"
   ],
-  "qqext.view.reg.VFiles": [
-    "VFiles"
-  ],
   "qqext.view.reg.VInboxDoc": [
     "VInboxDoc"
   ],
@@ -2123,7 +2139,8 @@ Ext.ClassManager.addNameAliasMappings({
     "VQueryObject"
   ],
   "qqext.view.reg.VRegForm": [
-    "VRegForm"
+    "VRegForm",
+    "widget.vregform"
   ],
   "qqext.view.search.FioFieldContainer": [
     "FioFieldContainer",

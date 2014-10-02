@@ -272,7 +272,7 @@ Ext.application({
 			welcome: "/qq-web/",
 			login: "/qq-web/Auth?action=logout&redirect=1",
 			storage: "/sic-storage/index.html",
-			admin: "/arm-admin/index.jsf"
+			admin: "/arm-admin/login.jsf"
 		};
 		/**
 		 * @property {Object} btns

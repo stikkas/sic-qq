@@ -29,7 +29,6 @@ Ext.define('qqext.view.WelcomePage', {
 			items: [
 				createCmp('FHandlerButton', labels.storage, function() {
 					window.open(urls.storage, "_self");
-					console.log(storeplaces);
 				}, {cls: cls}),
 				createCmp('FHrefButton', labels.admin, urls.admin, {cls: cls}),
 				createCmp('FHandlerButton', labels.asq, function() {

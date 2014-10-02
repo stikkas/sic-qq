@@ -10,3 +10,6 @@
 [submodule "sic-storage"]
 	path = sic-storage
 	url = http://buntic.insoft03.lan/git/archive/sic-storage.git
+[submodule "arm-admin"]
+	path = arm-admin
+	url = http://buntic.insoft03.lan/git/archive/arm-admin.git

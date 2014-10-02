@@ -30,11 +30,13 @@ Ext.define('qqext.view.WelcomePage', {
 				createCmp('FHandlerButton', labels.storage, function() {
 					window.open(urls.storage, "_self");
 					console.log(storeplaces);
-				}, {cls: cls}),
-				createCmp('FHrefButton', labels.admin, urls.admin, {cls: cls}),
+				}, {cls: cls, icon:'images/books.png'}),
+				createCmp('FHrefButton', labels.admin, urls.admin, {cls: cls, 
+                                            icon:'images/adm_icon.png',
+                                            margin:'150 0 0 0'}),
 				createCmp('FHandlerButton', labels.asq, function() {
 					ns.setActivePage(1);
-				}, {cls: cls})
+				}, {cls: cls, icon:'images/documents.png'})
 			],
 			buttons: [createCmp('FHandlerButton', labels.quit, ns.quitAction)]
 		});

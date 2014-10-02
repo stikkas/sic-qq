@@ -1,0 +1,51 @@
+.welcomecontainer{
+    background-image:url(../images/main_page_bg.jpg) !important;
+    background-size:100% 100%;
+    background-position:center bottom;
+}
+.welcomecontainer .x-box-inner{
+    width:600px !important;
+    margin:auto;
+    margin-top:25%;
+}
+.welcomebutton{
+    background-image:none;
+    background-color:transparent;
+    border:none;
+}
+.welcomebutton span{
+    height:200px !important;
+}
+.welcomebutton .x-btn-inner{
+    color:#230F07;
+    font:bold 1.2em Arial, sans-serif;
+    text-decoration:underline;
+    display: block;
+    width:200px;
+    padding-top:90px;
+    white-space:normal;
+    word-wrap:break-word;
+}
+.welcomebutton .x-btn-icon-el{
+    width:80px;
+    background-position:top center;
+    margin-left:calc(50% - 35px);
+}
+.welcomepage .x-toolbar-footer{
+    background-color:#E5DCC5;
+}
+.welcomepage .x-toolbar-footer .x-btn{
+    background-image:url(../images/key.png);
+    background-repeat:no-repeat;
+    background-color:transparent;
+    border:none;
+    padding:7px 20px 7px 30px;
+}
+.welcomepage .x-toolbar-footer .x-btn-button{
+    height:20px;
+}
+.welcomepage .x-toolbar-footer .x-btn-inner{
+    color:#230F07;
+    font: bold 1.1em Arial, sans-serif;
+    text-decoration:underline;
+}

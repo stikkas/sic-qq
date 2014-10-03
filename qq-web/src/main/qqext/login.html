@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Старница авторизации</title>
+        <meta charset="utf-8">
+		<link rel="stylesheet" href="resources/login.css"/>
+    </head>
+    <body>
+		<div id="zagolovok">АС Запросы</div>
+		<div id="subzagolovok">Система управления документами</div>
+        <form method="POST" action="j_security_check">
+			<fieldset>
+				<legend>Введите учетные данные</legend>
+				<label>Логин:<input type="text" name="j_username"/></label>
+				<label>Пароль:<input type="password" name="j_password"/></label>
+			</fieldset>
+			<div id="loginbutton"><input type="submit" value="Вход в систему"/></div>
+        </form>
+	</body>
+</html>

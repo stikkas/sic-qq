@@ -14,7 +14,8 @@
 		<module>qq/</module>
 		<module>ext-commons/</module>
 		<module>core-model/</module>
-	</modules>
+    <module>dialect</module>
+  </modules>
 
 	<build>
 		<pluginManagement>

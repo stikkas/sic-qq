@@ -42,6 +42,12 @@
 			<version>0.1.0</version>
 			<type>ejb</type>
 		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>dialect</artifactId>
+			<version>${project.version}</version>
+			<type>ejb</type>
+		</dependency>
 
 	</dependencies>
 	<properties>

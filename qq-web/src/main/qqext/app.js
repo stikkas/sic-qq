@@ -1,8 +1,6 @@
 Ext.Loader.setConfig({
 	enabled: true,
-	paths: {qqext: 'qqext',
-		sicstorage: '../qq-web-0.0.1-SNAPSHOT.war-96b2ec24a84fb96e'
-	}
+	paths: {qqext: 'qqext'}
 });
 /*
  * Стандартная точка входя для ExtJS приложения.

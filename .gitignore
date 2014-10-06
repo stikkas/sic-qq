@@ -1,2 +1,11 @@
-/qq-login/target/
-/qq-web/src/main/qqext/nbproject/private/
+/ext-commons/target
+/qq-web/target
+/qq-web/src/main/qqext/ext/src/fx/target
+/sic-storage/sic-storage-web/target
+/sic-storage/sic-storage-web/target/sic-storage-web/ext/src/fx/target
+/sic-storage/sic-storage-web/src/main/webapp/ext/src/fx/target
+/arm-admin/target
+/qq-ejb/target
+/core-model/target
+/qq-web/src/main/qqext/nbproject
+/dialect/target/

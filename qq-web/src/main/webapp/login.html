@@ -5,14 +5,14 @@
         <meta charset="utf-8">
 		<link rel="stylesheet" href="resources/login.css"/>
     </head>
-    <body>
+    <body class="welcomecontainer">
 		<div id="zagolovok">АС Запросы</div>
 		<div id="subzagolovok">Система управления документами</div>
-        <form method="POST" action="j_security_check">
+        <form method="POST" action="j_security_check" class="login_panel">
 			<fieldset>
-				<legend>Введите учетные данные</legend>
-				<label>Логин:<input type="text" name="j_username"/></label>
-				<label>Пароль:<input type="password" name="j_password"/></label>
+				<legend align="center">Вход в систему</legend>
+				<label>Логин:</label><input type="text" name="j_username"/>
+				<label>Пароль:</label><input type="password" name="j_password"/>
 			</fieldset>
 			<div id="loginbutton"><input type="submit" value="Вход в систему"/></div>
         </form>

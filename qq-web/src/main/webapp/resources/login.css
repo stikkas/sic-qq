@@ -1,19 +1,56 @@
-body {
-	width: 35%;
-	margin: auto;
-	text-align: center;
+@import "/css/mainPages.css";
+.welcomecontainer{
+    background-repeat:no-repeat;
+}
+#zagolovok,
+#subzagolovok{
+    color:#742708;
+    font:bold 2em Arial, sans-serif;
+    text-align:center;
+    text-shadow:2px 3px 5px #864D2D;
+}
+#zagolovok{
+    margin-top:20%;
+    margin-bottom:20px;
+}
+#subzagolovok{
+    font-size:1.8em;
+    margin-bottom:90px;
+}
+.login_panel{
+    background-image:url("/images/log_box.png");
+    background-repeat: no-repeat;
+    background-size:253px 165px;
+    background-position:center;
+    //width:800px;
+    margin:auto;
+}
+legend{
+    color:#732607;
+    font:bold 1.2em Arial, sans-serif;
+    text-align:center;
+    background-image:url("/images/line_log.png");
+    background-repeat: no-repeat;
+    background-size:100%;
+    background-position: center center;
+    //width:800px;
+    margin-top:-50px;
+}
+.login_panel fieldset{
+    border:none;
+    width:253px;
+    margin:auto;
+}
+fieldset label {
+    display: inline-block;
+    width:80px;
+    margin: 5px;
+}
+fieldset input {
+    width:150px;
 }
 
-#zagolovok {
-	font-size: 3em;
-	margin: 15px;
-}
-#subzagolovok {
-	font-size: 1.5em;
-	margin-top: 15px;
-	margin-bottom: 15px;
-	text-align: left;
-	font-style: oblique;
+/*
 }
 
 fieldset legend {
@@ -21,17 +58,8 @@ fieldset legend {
 	font-weight: bold;
 }
 
-fieldset label {
-	display: block;
-	text-align: right;
-	margin: 5px;
-}
 
-fieldset label input {
-	width: 75%;
-	margin-left: 20px;
-}
 #loginbutton {
 	margin-top: 10px;
 	text-align: right;
-}
+}*/

@@ -23,6 +23,20 @@ public class ApplicationConfig extends Application {
 	 * out calling this method in getClasses().
 	 */
 	private void addRestResourceClasses(Set<Class<?>> resources) {
+        resources.add(ru.insoft.archive.qq.service.ApplicantFacadeREST.class);
+        resources.add(ru.insoft.archive.qq.service.AttachedFileFacadeREST.class);
+        resources.add(ru.insoft.archive.qq.service.CoordinationFacadeREST.class);
+        resources.add(ru.insoft.archive.qq.service.CoreParameterFacadeREST.class);
+        resources.add(ru.insoft.archive.qq.service.DeliveryActionFacadeREST.class);
+        resources.add(ru.insoft.archive.qq.service.DescriptorGroupFacadeREST.class);
+        resources.add(ru.insoft.archive.qq.service.DescriptorValueFacadeREST.class);
+        resources.add(ru.insoft.archive.qq.service.ExecutionFacadeREST.class);
+        resources.add(ru.insoft.archive.qq.service.NotificationFacadeREST.class);
+        resources.add(ru.insoft.archive.qq.service.QuestionFacadeREST.class);
+        resources.add(ru.insoft.archive.qq.service.SendActionFacadeREST.class);
+        resources.add(ru.insoft.archive.qq.service.TransmissionFacadeREST.class);
+        resources.add(ru.insoft.archive.qq.service.UsedMaterialFacadeREST.class);
+        resources.add(ru.insoft.archive.qq.service.WayToSendFacadeREST.class);
 	}
 
 }

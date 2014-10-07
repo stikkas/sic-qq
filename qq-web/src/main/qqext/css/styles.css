@@ -220,7 +220,6 @@ label.journal_title_label{
 }
 
 /*изменяем вид заполненных неактивных (это не так) полей*/
-.x-form-dirty .x-form-text,
 div.x-form-text{                                   
     background-color:transparent !important;
     /*border:none;*/

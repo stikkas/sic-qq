@@ -229,6 +229,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					{
 						text: 'Исполнитель',
 						dataIndex: 'executor',
+                                                cls:'width150',
 						items: [
 							createCmp('FComboBox', '', 'journalExecutors', {
 								width: 150,

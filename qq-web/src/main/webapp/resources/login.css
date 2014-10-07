@@ -1,6 +1,7 @@
 @import "/css/mainPages.css";
 .welcomecontainer{
     background-repeat:no-repeat;
+    overflow:hidden;
 }
 #zagolovok,
 #subzagolovok{
@@ -10,7 +11,7 @@
     text-shadow:2px 3px 5px #864D2D;
 }
 #zagolovok{
-    margin-top:20%;
+    margin-top:15%;
     margin-bottom:20px;
 }
 #subzagolovok{
@@ -18,48 +19,55 @@
     margin-bottom:90px;
 }
 .login_panel{
+    color:#230F07;
+    font:bold 1em Arial, sans-serif;
     background-image:url("/images/log_box.png");
     background-repeat: no-repeat;
     background-size:253px 165px;
     background-position:center;
     //width:800px;
     margin:auto;
+    margin-bottom:25%;
 }
 legend{
     color:#732607;
-    font:bold 1.2em Arial, sans-serif;
+    font:bold 1.1em Arial, sans-serif;
     text-align:center;
     background-image:url("/images/line_log.png");
     background-repeat: no-repeat;
     background-size:100%;
     background-position: center center;
-    //width:800px;
-    margin-top:-50px;
+    margin:0px 0 30px 0;
 }
 .login_panel fieldset{
     border:none;
-    width:253px;
-    margin:auto;
+    width:240px;
+    height:165px;
+    margin:20px auto;
 }
 fieldset label {
+    font-size:0.9em;
     display: inline-block;
-    width:80px;
-    margin: 5px;
+    width:70px;
+    margin: 10px 10px;
 }
 fieldset input {
-    width:150px;
+    width:130px;
 }
-
-/*
-}
-
-fieldset legend {
-	font-size: 0.8em;
-	font-weight: bold;
-}
-
-
 #loginbutton {
-	margin-top: 10px;
-	text-align: right;
-}*/
+    text-align: center;
+    text-decoration:underline;
+    background-image:url("/images/key.png");
+    background-repeat:no-repeat;
+    width:70px;
+    height:30px;
+    padding-left:30px;
+    margin: 10px auto;
+}
+#loginbutton input{
+    font-size:1em;
+    background-color:transparent;
+    border:none;
+    padding:5px 3px;
+    cursor:pointer;
+}

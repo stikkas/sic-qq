@@ -7,7 +7,7 @@
 		</web-resource-collection>
 		<web-resource-collection>
 			<web-resource-name>resources files</web-resource-name>
-			<url-pattern>*.css</url-pattern>
+			<url-pattern>/resources/login.css</url-pattern>
 		</web-resource-collection>
 	</security-constraint>
 	<security-constraint>

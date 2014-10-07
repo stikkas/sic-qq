@@ -34,6 +34,12 @@
 			<version>4.2.6.Final</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>ext-commons</artifactId>
+			<version>0.1.0</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -1,0 +1,38 @@
+За сохраниение файлов на файловой системе отвечает приложение. За отображение файлов по щелчку на ссылке отвечает сервер приложений (jboss).
+Прикрепляемые файлы сохраняются в файловой системе по пути который строится следующим образом:
+для файлов заявителя:
+ SIC.CORE_PARAMETER.DOCUMENT_ROOT + '/' + SIC.CORE_PARAMETER.QQ_DOC_ROOT + '/' + SIC.CORE_PARAMETER.QQ_APPLICANT_DOC +
+ '/' + SIC.QQ_QUESTION.QUESTION_ID + '/' + имя_файла
+для файлов отправленных заявителю:
+ SIC.CORE_PARAMETER.DOCUMENT_ROOT + '/' + SIC.CORE_PARAMETER.QQ_DOC_ROOT + '/' + SIC.CORE_PARAMETER.QQ_ANSWER_DOC +
+ '/' + SIC.QQ_QUESTION.QUESTION_ID + '/' + имя_файла
+
+SIC - база данных, в которой есть таблицы CORE_PARAMETER и QQ_QUESTION, остальные названия - это поля данных таблиц.
+Для настройки необходимо:
+1. прописать в таблице CORE_PARAMETER значение для поля DOCUMENT_ROOT в соответствии с целевой файловой системой. 
+   Значение это должно быть в формате path_to_save/target_dir.war 
+   Название лучше писать латиницой (кирилицей не проверялось) без пробелов.
+   Например: C:/Storage/Files.war
+2. в файле standalone/configuration/standalone.xml, который находится в папке установки jboss:
+
+   a) добавить в подсекцию <subsystem xmlns="urn:jboss:domain:deployment-scanner:1.1">:
+       <deployment-scanner name="my-external-ds" path="path_to_save" scan-interval="5000"/>
+   Например: 
+       <deployment-scanner name="my-external-ds" path="C:/Storage" scan-interval="5000"/>
+
+   б) в подсекции <subsystem xmlns="urn:jboss:domain:web:1.1" default-virtual-server="default-host" native="false">
+    определить виртуальный сервер по умолчанию следующим образом:
+      <virtual-server name="default-host" enable-welcome-root="false" default-web-module="target_dir">                                                    
+         <alias name="localhost"/>                                      
+         <alias name="example.com"/>
+         <sso reauthenticate="false"/>                            
+      </virtual-server> 
+    Например:
+      <virtual-server name="default-host" enable-welcome-root="false" default-web-module="Files">                                                    
+         <alias name="localhost"/>                                      
+         <alias name="example.com"/>
+         <sso reauthenticate="false"/>                            
+      </virtual-server>     
+3. Создать директорию path_to_save/target_dir.war, например, C:/Storage/Files.war
+4. Создать пустой файл path_to_save/target_dir.war.deployed, например, C:/Storage/Files.war.deployed
+5. Если сервер jboss был запущен, то его надо перезапустить.

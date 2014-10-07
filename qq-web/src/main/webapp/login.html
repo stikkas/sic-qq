@@ -11,8 +11,10 @@
         <form method="POST" action="j_security_check" class="login_panel">
 			<fieldset>
 				<legend align="center">Вход в систему</legend>
-				<label>Логин:</label><input type="text" name="j_username"/>
-				<label>Пароль:</label><input type="password" name="j_password"/>
+                                <div class="log_fields">
+                                    <label>Логин:</label><input type="text" name="j_username"/>
+                                    <label>Пароль:</label><input type="password" name="j_password"/>
+                                </div>
 			</fieldset>
 			<div id="loginbutton"><input type="submit" value="Вход"/></div>
         </form>

@@ -17,6 +17,7 @@ Ext.define('qqext.view.WelcomePage', {
 	layout: 'hbox',
 	bodyCls: 'welcomecontainer',
 	cls: 'welcomepage',
+        html:'АИС Справочно-информационного центра',                                
 	initComponent: function() {
 		var
 				ns = qqext,
@@ -26,16 +27,23 @@ Ext.define('qqext.view.WelcomePage', {
 				cls = 'welcomebutton';
 
 		Ext.applyIf(this, {
-			items: [
-				createCmp('FHandlerButton', labels.storage, function() {
+			items: [createCmp('FHandlerButton', labels.storage, function() {
 					window.open(urls.storage, "_self");
-				}, {cls: cls, icon:'images/books.png'}),
+				}, {cls: cls, 
+                                    icon:'images/books.png',
+                                    width:220
+                                }),
 				createCmp('FHrefButton', labels.admin, urls.admin, {cls: cls, 
                                             icon:'images/adm_icon.png',
-                                            margin:'150 0 0 0'}),
+                                            margin:'220 0 0 0',
+                                            width:340
+                                        }),
 				createCmp('FHandlerButton', labels.asq, function() {
 					ns.setActivePage(1);
-				}, {cls: cls, icon:'images/documents.png'})
+				}, {cls: cls, 
+                                    icon:'images/documents.png',
+                                    width:220
+                                })
 			],
 			buttons: [createCmp('FHandlerButton', labels.quit, ns.quitAction)]
 		});

@@ -216,12 +216,15 @@ label.journal_title_label{
 }
 .x-form-trigger-wrap[style*='visibility: hidden;'],
 .x-form-field[style*='visibility: hidden;']{
-    display:none !important;                                    //убираем скрытые поля 
+    display:none !important;                                    /*убираем скрытые поля */
 }
-/*.x-form-dirty .x-form-text{                                   //изменяем вид заполненных неактивных (это не так) полей
+
+/*изменяем вид заполненных неактивных (это не так) полей*/
+.x-form-dirty .x-form-text,
+div.x-form-text{                                   
     background-color:transparent !important;
-    //border:none;
-}*/
+    /*border:none;*/
+}
 
 .three_hor_lbl{
     color:#2D446D;

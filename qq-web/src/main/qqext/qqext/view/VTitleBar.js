@@ -23,19 +23,12 @@ Ext.define('qqext.view.VTitleBar', {
 					{
 						xtype: 'label',
 						text: 'АС Запросы',
-						flex: 4,
-						style: {
-							'font-size': '2em'
-						}
+						flex: 4
 					},
 					{
 						xtype: 'label',
 						text: qqext.user.get('name'),
-						style: {
-							'margin-right': '0',
-							'padding-right': '0',
-							'font-size': '0.9em'
-						}
+                                                cls:'user_name'
 					}
 				]
 			}

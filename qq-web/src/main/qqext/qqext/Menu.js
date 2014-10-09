@@ -39,9 +39,10 @@ Ext.define('qqext.Menu', {
 		 * -----------
 		 * regEdit представляет собой простую панель с layout = 'hbox' и содержащей элементы:
 		 * ------------------------------
-		 * | backToSearch | editReqMenu |
+		 * | backToSearch | add | editReqMenu |
 		 * ------------------------------
 		 * backToSearch - кнопка, открытого доступа нет.
+		 * add - добавить новый запрос.
 		 * editReqMenu - панель с layout = 'card'. Содержит кнопки для работы с запросом на разных этапах.
 		 */
 		/**
@@ -151,7 +152,10 @@ Ext.define('qqext.Menu', {
 				createCmp('Ext.panel.Panel', {
 					layout: 'hbox',
 					items: [createCmp('HButtonMenu', [{text: labels.toSearch, action: returnToSearch,
-								name: btns.toSearch}], 'ToolButton'),
+								name: btns.toSearch},
+							{text: labels.add, action: function() {
+									add(true);
+								}, opts: {cls: 'add_btn'}}], 'ToolButton'),
 						menus.editReqMenu],
 					cls: 'back_btn h'
 				})]);
@@ -196,12 +200,16 @@ Ext.define('qqext.Menu', {
 
 			/**
 			 * Обрабатывает событие 'click' на кнопке "Добавить"
+			 * @param {Boolean} force если true, то переключаем на jvk и обратно
 			 * @private
 			 * @returns {undefined}
 			 */
-			function add() {
+			function add(force) {
 				// Только с ролью регистратор можно добавлять запрос
 				if (ns.user.isAllowed(ns.rules.reg)) {
+					if (force === true) {
+						ns.setCurrentForm(0);
+					}
 					ns.request = null;
 					// Переключаем форму, дальше все выполняется в форме по событию
 					// 'activate'
@@ -289,7 +297,7 @@ Ext.define('qqext.Menu', {
 			 * @returns {undefined}
 			 */
 			function transmitToComplete() {
-				ns.setCurrentForm(5)
+				ns.setCurrentForm(5);
 			}
 
 			/**

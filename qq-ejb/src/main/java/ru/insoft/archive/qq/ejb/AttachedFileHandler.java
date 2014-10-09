@@ -64,7 +64,8 @@ public class AttachedFileHandler extends FileUploadBean {
 	protected void processUploadedFile(FileItem item, Map<String, String> params)
 		throws Exception {
 		Long question = Long.parseLong(params.get("question"));
-		String name = StringUtils.convertFileName(item.getName());
+//		String name = StringUtils.convertFileName(item.getName());
+		String name = item.getName();
 		Long type = getFileTypeId(params.get("type"));
 
 		em.persist(createEntity(name, type, question));

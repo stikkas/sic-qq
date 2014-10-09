@@ -67,7 +67,7 @@ public class Placeholder implements Constants {
 	 * Этот мегаметод выполняет работу по инициализации справочников и их
 	 * значений
 	 */
-	@PostConstruct
+//	@PostConstruct
 	public void init() {
 		logger.fine("Инициализация справочников подсистемы QQ..");
 		if (!isWorkNeeded()) {

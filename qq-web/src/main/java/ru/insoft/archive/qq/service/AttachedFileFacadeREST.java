@@ -38,7 +38,6 @@ public class AttachedFileFacadeREST extends AbstractFacade<AttachedFile> {
 	@Consumes({"application/json"})
 	public void deleteFiles(FilesToDelete file) {
 		String dir = file.getDir();
-		System.out.println("dir = " + dir);
 		for (String name : file.getName()) {
 			new File(dir + name).delete();
 		}

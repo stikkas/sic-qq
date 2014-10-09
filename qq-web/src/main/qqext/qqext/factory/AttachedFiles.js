@@ -73,6 +73,7 @@ Ext.define('qqext.factory.AttachedFiles', {
 			Ext.ComponentQuery.query('button', me).forEach(function(b) {
 				b.setDisabled(status);
 			});
+			Ext.ComponentQuery.query('filefield', me)[0].setDisabled(status);
 			me._mode = status;
 		}
 	},

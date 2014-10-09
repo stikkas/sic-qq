@@ -5,18 +5,41 @@ Ext.define('qqext.view.VTitleBar', {
 	alias: 'VTitleBar',
 	extend: 'Ext.panel.Panel',
 	requires: [
+		'Ext.panel.Header',
 		'qqext.Menu'
 	],
-	title: 'АС Запросы',
 	region: 'north',
 	layout: 'hbox',
 	margin: '0 0 10 0',
-        cls:'title_cls',
+	cls: 'title_cls',
 	initComponent: function() {
 		var me = this,
 				menus = qqext.Menu;
 		Ext.applyIf(me, {
-			items: [menus.editMenu, menus.navigation]});
+			items: [menus.editMenu, menus.navigation],
+			header: {
+				layout: 'hbox',
+				items: [
+					{
+						xtype: 'label',
+						text: 'АС Запросы',
+						flex: 4,
+						style: {
+							'font-size': '2em'
+						}
+					},
+					{
+						xtype: 'label',
+						text: qqext.user.get('name'),
+						style: {
+							'margin-right': '0',
+							'padding-right': '0',
+							'font-size': '0.9em'
+						}
+					}
+				]
+			}
+		});
 		me.callParent(arguments);
 	}
 });

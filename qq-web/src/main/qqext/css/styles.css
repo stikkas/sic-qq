@@ -219,8 +219,9 @@ label.journal_title_label{
     display:none !important;                                    /*убираем скрытые поля */
 }
 
-/*изменяем вид заполненных неактивных (это не так) полей*/
-div.x-form-text{                                   
+/*изменяем вид полей при просмотре*/
+div.x-form-text,
+textarea[disabled=""]{                                   
     background-color:transparent !important;
     /*border:none;*/
 }

@@ -1,0 +1,67 @@
+.welcomecontainer{
+background-image:url(../images/main_page_bg.jpg) !important;
+background-size:100% 100%;
+background-position:center bottom;
+}
+.welcomecontainer .x-box-inner{
+    color:#742708;
+    font:bold 2em Arial, sans-serif;
+    font-stretch:semi-condensed;
+    text-align:center;
+    text-shadow:3px 5px 5px #864D2D;
+    width:800px !important;
+    margin:auto;
+    margin-top:15%;
+}
+.welcomecontainer .x-box-target{
+    background-image: url("../images/line_log.png");
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    background-size: 100% auto;
+    height: 70px;
+    width: 800px !important;
+}
+.welcomebutton{
+    text-shadow:none;
+    background-image:none;
+    background-color:transparent;
+    border:none;
+    margin-top:100px;
+}
+.welcomebutton span{
+height:200px !important;
+}
+.welcomebutton .x-btn-inner{
+    color:#230F07;
+    font:bold 0.7em Arial, sans-serif;
+    text-decoration:underline;
+    display: block;
+    padding-top:90px;
+    padding-left:5px;
+    white-space:normal;
+    word-wrap:break-word;
+}
+.welcomebutton .x-btn-icon-el{
+width:80px;
+background-position:top center;
+margin-left:calc(50% - 35px);
+}
+.welcomepage .x-toolbar-footer{
+background-color:#E5DCC5;
+}
+.welcomepage .x-toolbar-footer .x-btn{
+background-image:url(../images/key.png);
+background-repeat:no-repeat;
+background-color:transparent;
+border:none;
+padding:7px 20px 7px 30px;
+}
+.welcomepage .x-toolbar-footer .x-btn-button{
+height:20px;
+}
+.welcomepage .x-toolbar-footer .x-btn-inner{
+color:#230F07;
+font: bold 1.1em Arial, sans-serif;
+text-decoration:underline;
+}
+

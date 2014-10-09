@@ -1,4 +1,4 @@
-@import "/css/mainPages.css";
+@import "mainPages.css";
 .welcomecontainer{
     background-repeat:no-repeat;
     overflow:hidden;
@@ -21,7 +21,7 @@
 .login_panel{
     color:#230F07;
     font:bold 1em Arial, sans-serif;
-    background-image:url("/images/log_box.png");
+    background-image:url("../images/log_box.png");
     background-repeat: no-repeat;
     background-size:253px 165px;
     background-position:center;
@@ -32,7 +32,7 @@ legend{
     color:#732607;
     font:bold 1.1em Arial, sans-serif;
     text-align:center;
-    background-image:url("/images/line_log.png");
+    background-image:url("../images/line_log.png");
     background-repeat: no-repeat;
     background-size:100%;
     background-position: center center;
@@ -62,7 +62,7 @@ fieldset input {
 #loginbutton {
     text-align: center;
     text-decoration:underline;
-    background-image:url("/images/key.png");
+    background-image:url("../images/key.png");
     background-repeat:no-repeat;
     width:70px;
     height:30px;

@@ -69,52 +69,50 @@ public class Placeholder implements Constants {
 	 */
 	@PostConstruct
 	public void init() {
-		/*
-		 logger.fine("Инициализация справочников подсистемы QQ..");
-		 if (!isWorkNeeded()) {
-		 logger.fine("Инициализация не требуется, справочники и значения созданы ранее");
-		 return;
-		 }
-		 // try{
-		 initSubsystemNumb();
-		 logger.fine("Инициализация справочника: Способ передачи");
-		 initModeOfTransmission();
+		logger.fine("Инициализация справочников подсистемы QQ..");
+		if (!isWorkNeeded()) {
+			logger.fine("Инициализация не требуется, справочники и значения созданы ранее");
+			return;
+		}
+		// try{
+		initSubsystemNumb();
+		logger.fine("Инициализация справочника: Способ передачи");
+		initModeOfTransmission();
 
-		 logger.fine("Инициализация справочника: Вид запроса");
-		 initQuestionType();
-		 logger.fine("Инициализация справочника: Форма выдачи ответа");
-		 initAnswerForm();
-		 logger.fine("Инициализация справочника: Тип заявителя");
-		 initApplicantType();
-		 logger.fine("Инициализация справочника: Категория заявителя");
-		 initApplicantCategory();
-		 logger.fine("Инициализация справочника: Тип документов");
-		 initDocTypes();
-		 logger.fine("Инициализация справочника: Этап согласования документа");
-		 initTheEndorsement();
-		 logger.fine("Инициализация справочника: Способ отправки");
-		 initDeliveryMethod();
-		 logger.fine("Инициализация справочника: Территория хранилища");
-		 initStorage();
-		 logger.fine("Инициализация справочника: Результат ответа");
-		 initAnswerResult();
-		 logger.fine("Инициализация справочника: Тематика ответа");
-		 initThematicAnswer();
-		 logger.fine("Инициализация справочника: Категория сложности");
-		 initDifficultCategory();
-		 logger.fine("Инициализация справочника: Тип элемента организационной структуры");
-		 initOrgStrucureType();
-		 logger.fine("Инициализация справочника: Организационная структура");
-		 initMembers();
-		 logger.fine("Инициализация справочника: Тип прикрепленного файла");
-		 initAttachedFileTypes();
-		 logger.fine("Инициализация справочника: состояния запроса");
-		 initQuestionStatuses();
-		 logger.fine("Создание справочников и значений успешно завершено");
-		 logger.fine("Инициализация ролей подсистемы");
-		 initRoles();
-		 fixEnd();
-		 */
+		logger.fine("Инициализация справочника: Вид запроса");
+		initQuestionType();
+		logger.fine("Инициализация справочника: Форма выдачи ответа");
+		initAnswerForm();
+		logger.fine("Инициализация справочника: Тип заявителя");
+		initApplicantType();
+		logger.fine("Инициализация справочника: Категория заявителя");
+		initApplicantCategory();
+		logger.fine("Инициализация справочника: Тип документов");
+		initDocTypes();
+		logger.fine("Инициализация справочника: Этап согласования документа");
+		initTheEndorsement();
+		logger.fine("Инициализация справочника: Способ отправки");
+		initDeliveryMethod();
+		logger.fine("Инициализация справочника: Территория хранилища");
+		initStorage();
+		logger.fine("Инициализация справочника: Результат ответа");
+		initAnswerResult();
+		logger.fine("Инициализация справочника: Тематика ответа");
+		initThematicAnswer();
+		logger.fine("Инициализация справочника: Категория сложности");
+		initDifficultCategory();
+		logger.fine("Инициализация справочника: Тип элемента организационной структуры");
+		initOrgStrucureType();
+		logger.fine("Инициализация справочника: Организационная структура");
+		initMembers();
+		logger.fine("Инициализация справочника: Тип прикрепленного файла");
+		initAttachedFileTypes();
+		logger.fine("Инициализация справочника: состояния запроса");
+		initQuestionStatuses();
+		logger.fine("Создание справочников и значений успешно завершено");
+		logger.fine("Инициализация ролей подсистемы");
+		initRoles();
+		fixEnd();
 	}
 
 	/**

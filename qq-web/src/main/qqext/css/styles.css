@@ -70,7 +70,7 @@ label.journal_title_label{
 }
 /*menu*/
 .hmenu{ 
-    padding:0 30px;
+    //padding:0 30px;
     border:none;
     border-bottom:1px solid #38547B;
 }
@@ -343,3 +343,9 @@ div.collapse_section{
 .width150 .x-form-type-text.x-gridcolumn-form-item{
     width:150px !important;
 }
+
+/**/
+/*.hmenu .x-btn-disabled{
+    display: none;
+    width:0 !important;
+}*/

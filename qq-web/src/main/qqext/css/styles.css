@@ -131,8 +131,13 @@ label.journal_title_label{
 .vmenu .reg_panel .x-box-inner{
     margin:5px auto;
 }
+.vmenu .reg_panel .x-box-inner label{
+    max-width:150px;
+    word-spacing:normal;
+}
 .vmenu .reg_panel .x-box-inner .x-box-item{
     margin:5px 3px;
+    vertical-align:middle;
 }
 
 /*sliders*/

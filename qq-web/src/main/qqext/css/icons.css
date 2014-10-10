@@ -90,3 +90,8 @@ a.quit_btn.x-btn{
     background-image:url(../images/attach_del.png);
     margin-left:10px;
 }
+
+/*прячем счетчик у полей вроде Года рождения*/
+div.x-form-spinner-up, div.x-form-spinner-down{
+    display:none;
+}

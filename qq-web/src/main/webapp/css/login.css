@@ -76,3 +76,11 @@ fieldset input {
     padding:5px 3px;
     cursor:pointer;
 }
+/*сообщение об ошибке*/
+#popup_container.style_1 #popup_panel input[type="button"]{
+    background-image:-moz-linear-gradient(top, #E5DCC5, #AA866D);
+    background-image:-webkit-gradient(linear, top center, top center, from(#E5DCC5), to(#AA866D));
+    background-image:-o-linear-gradient(top, #E5DCC5, #AA866D);
+    background-image:-ms-linear-gradient(top, #E5DCC5, #AA866D);
+    cursor:pointer;
+}

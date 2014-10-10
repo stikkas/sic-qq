@@ -107,10 +107,12 @@ Ext.define('qqext.factory.AttachedFiles', {
 					link: path + name});
 			});
 		}
-		if (me._mode) // Режим только просмотра
+		if (me._mode) {// Режим только просмотра
 			Ext.ComponentQuery.query('button', me).forEach(function(b) {
 				b.setDisabled(true);
 			});
+			Ext.ComponentQuery.query('filefield', me)[0].setDisabled(status);
+		}
 	},
 	/**
 	 * Нужна для поддержания общего интерфейса. Ничего не делает

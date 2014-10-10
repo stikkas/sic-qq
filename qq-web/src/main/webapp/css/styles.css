@@ -58,11 +58,15 @@ label.journal_title_label{
     text-align:center;
     padding:10px 0;
 }
-.title_cls .x-panel-header-text-container-default{
+.title_cls .x-panel-header label{
     color:#fff;
     font: bold 1.8em Arial, sans-serif;
     text-shadow:3px 2px 3px #000;
     margin-left:50px;
+}
+.title_cls label.user_name{
+    font-size:1em;
+    left:85% !important;
 }
 /*menu*/
 .hmenu{ 
@@ -219,8 +223,9 @@ label.journal_title_label{
     display:none !important;                                    /*убираем скрытые поля */
 }
 
-/*изменяем вид заполненных неактивных (это не так) полей*/
-div.x-form-text{                                   
+/*изменяем вид полей при просмотре*/
+div.x-form-text,
+textarea[disabled=""]{                                   
     background-color:transparent !important;
     /*border:none;*/
 }

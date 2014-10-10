@@ -108,11 +108,11 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 
 	@Size(max = 20)
 	@Column(name = "PREFIX_NUM")
-	private String prefixNum;
+	private String prefixNum = "";
 
 	@Size(max = 20)
 	@Column(name = "SUFIX_NUM")
-	private String sufixNum;
+	private String sufixNum = "";
 
 	@Column(name = "MOTIVATED_REFUSAL")
 	private Boolean motivatedRefusal;
@@ -173,19 +173,19 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 
 	@JsonIgnore
 	@JoinColumn(name = "LITERA_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
-			insertable = false, updatable = false)
+		insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
 	private DescriptorValue literaValue;
 
 	@JsonIgnore
 	@JoinColumn(name = "STATUS_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
-			insertable = false, updatable = false)
+		insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
 	private DescriptorValue statusValue;
 
 	@JsonIgnore
 	@JoinColumn(name = "EXEC_ORG_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
-			insertable = false, updatable = false)
+		insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
 	private DescriptorValue execOrgValue;
 

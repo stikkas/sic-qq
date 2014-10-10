@@ -349,7 +349,8 @@ Ext.application({
 					case buttonNames.trans:
 						if (user.isAllowed([rules.crd, rules.exec])) {
 							var status = request.get('status');
-							if (status === registered || status === onexec || status === exec)
+							if (status === registered || status === onexec
+									|| status === exec || status === notify)
 								ns.disableArticles(false, buttonNames.trans);
 						}
 						break;

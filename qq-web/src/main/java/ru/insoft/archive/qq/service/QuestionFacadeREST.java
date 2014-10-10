@@ -13,6 +13,10 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.Response.Status;
 import ru.insoft.archive.qq.entity.Question;
 
 /**
@@ -37,7 +41,8 @@ public class QuestionFacadeREST extends AbstractFacade<Question> {
 		try {
 			return super.findEntityWhereAnd(new Clause[]{
 				new Clause<>("prefixNum", entity.getPrefixNum()),
-				new Clause<>("sufixNum", entity.getSufixNum())
+				new Clause<>("sufixNum", entity.getSufixNum()),
+				new Clause<>("litera", entity.getLitera())
 			});
 		} catch (NoResultException e) {
 			return null;
@@ -52,20 +57,27 @@ public class QuestionFacadeREST extends AbstractFacade<Question> {
 		if (check == null) {
 			return super.create(entity).getId();
 		}
-		return "Запрос с таким номером уже существует";
+
+		ResponseBuilder builder = Response.status(Status.NOT_FOUND);
+		builder.header("Content-Type", "text/html; charset=utf-8");
+		builder.entity("<h4>Запрос с таким номером уже существует</h4>");
+		throw new WebApplicationException(builder.build());
 	}
 
 	@PUT
 	@Path("{id}")
 	@Consumes({"application/json"})
 	@Produces({"application/json"})
-	public Object edit(@PathParam("id") Long id, Question entity) {
+	public void edit(@PathParam("id") Long id, Question entity) {
 		Question check = exists(entity);
 		if (check == null || Objects.equals(check.getId(), id)) {
 			super.edit(entity);
-			return true;
+		} else {
+			ResponseBuilder builder = Response.status(Status.NOT_FOUND);
+			builder.header("Content-Type", "text/html; charset=utf-8");
+			builder.entity("<h4>Запрос с таким номером уже существует</h4>");
+			throw new WebApplicationException(builder.build());
 		}
-		return "Запрос с таким номером уже существует";
 	}
 
 	@DELETE

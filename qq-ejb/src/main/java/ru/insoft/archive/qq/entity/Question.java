@@ -13,8 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
@@ -36,19 +34,6 @@ import ru.insoft.archive.extcommons.json.JsonOut;
  */
 @Entity
 @Table(name = "QQ_QUESTION")
-@NamedQueries({
-	@NamedQuery(name = "Question.findAll", query = "SELECT q FROM Question q"),
-	@NamedQuery(name = "Question.findById", query = "SELECT q FROM Question q WHERE q.id = :id"),
-	@NamedQuery(name = "Question.findByInsertDate", query = "SELECT q FROM Question q WHERE q.insertDate = :insertDate"),
-	@NamedQuery(name = "Question.findByUpdateDate", query = "SELECT q FROM Question q WHERE q.updateDate = :updateDate"),
-	@NamedQuery(name = "Question.findByContent", query = "SELECT q FROM Question q WHERE q.content = :content"),
-	@NamedQuery(name = "Question.findByMotivatedRefusal", query = "SELECT q FROM Question q WHERE q.motivatedRefusal = :motivatedRefusal"),
-	@NamedQuery(name = "Question.findByPlannedFinishDate", query = "SELECT q FROM Question q WHERE q.plannedFinishDate = :plannedFinishDate"),
-	@NamedQuery(name = "Question.findByRegDate", query = "SELECT q FROM Question q WHERE q.regDate = :regDate"),
-	@NamedQuery(name = "Question.findByObjectMName", query = "SELECT q FROM Question q WHERE q.objectMName = :objectMName"),
-	@NamedQuery(name = "Question.findByObjectFName", query = "SELECT q FROM Question q WHERE q.objectFName = :objectFName"),
-	@NamedQuery(name = "Question.findByObjectLName", query = "SELECT q FROM Question q WHERE q.objectLName = :objectLName"),
-	@NamedQuery(name = "Question.findByObjectBirthYear", query = "SELECT q FROM Question q WHERE q.objectBirthYear = :objectBirthYear")})
 public class Question implements Serializable, HasId, JsonIn, JsonOut {
 
 	private static final long serialVersionUID = 1L;
@@ -108,11 +93,11 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 
 	@Size(max = 20)
 	@Column(name = "PREFIX_NUM")
-	private String prefixNum = "";
+	private String prefixNum;
 
 	@Size(max = 20)
 	@Column(name = "SUFIX_NUM")
-	private String sufixNum = "";
+	private String sufixNum;
 
 	@Column(name = "MOTIVATED_REFUSAL")
 	private Boolean motivatedRefusal;
@@ -219,6 +204,9 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 	}
 
 	public String getPrefixNum() {
+		if (prefixNum == null) {
+			return "";
+		}
 		return prefixNum;
 	}
 
@@ -227,6 +215,9 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 	}
 
 	public String getSufixNum() {
+		if (sufixNum == null) {
+			return "";
+		}
 		return sufixNum;
 	}
 

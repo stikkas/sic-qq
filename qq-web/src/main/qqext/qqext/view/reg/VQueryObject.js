@@ -17,19 +17,20 @@ Ext.define('qqext.view.reg.VQueryObject', {
 	disabledCls: '',
 	formBind: true,
 	initComponent: function() {
-		var createCmp = Ext.create;
+		var createCmp = Ext.create,
+            year;
 
 		Ext.applyIf(this, {
 			items: [
 				createCmp('FTextField', 'Фамилия', 'objectLName'),
 				createCmp('FTextField', 'Имя', 'objectFName'),
 				createCmp('FTextField', 'Отчество', 'objectMName'),
-				createCmp('FNumberField', 'Год рождения', 'objectBirthYear', {
+				year = createCmp('FNumberField', 'Год рождения', 'objectBirthYear', {
 					width: 230,
 					labelWidth: 150,
 					spinDownEnabled: false,
 					spinUpEnabled: false
-				})
+                })
 			]
 		});
 

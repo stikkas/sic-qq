@@ -45,6 +45,8 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	reset: function() {
 		var store = this.getStore();
 		store.filters.clear();
+		if (qqext.orgFilter)
+			store.addFilter(qqext.orgFilter);
 		this.clearCriterias();
 		store.loadPage(1);
 	},
@@ -52,7 +54,10 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	 * Запускает процесс поиска данных на сервере
 	 */
 	exec: function() {
-		this.getStore().reload();
+		var store = this.getStore();
+		if (qqext.orgFilter)
+			store.addFilter(qqext.orgFilter);
+		store.reload();
 	},
 	applyFilter: function() {
 		var me = this,
@@ -76,6 +81,8 @@ Ext.define('qqext.view.journal.VJournalForm', {
 				}));
 			}
 		}
+		if (qqext.orgFilter)
+			filters.push(qqext.orgFilter);
 		store.filters.clear();
 		store.addFilter(filters, true);
 	},
@@ -83,8 +90,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 		field.ownerCt.ownerCt.ownerCt.applyFilter();
 	},
 	_filterComboSelected: function(combo, records, eopts) {
-		var grid = combo.ownerCt.ownerCt.ownerCt;
-		grid.applyFilter();
+		combo.ownerCt.ownerCt.ownerCt.applyFilter();
 	},
 	_render: function(comp, eopts) {
 		comp.getEl().addListener('click', function() {
@@ -229,7 +235,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					{
 						text: 'Исполнитель',
 						dataIndex: 'executor',
-                                                cls:'width150',
+						cls: 'width150',
 						items: [
 							createCmp('FComboBox', '', 'journalExecutors', {
 								width: 150,

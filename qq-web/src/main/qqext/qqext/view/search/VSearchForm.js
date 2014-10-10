@@ -16,13 +16,19 @@ Ext.define('qqext.view.search.VSearchForm', {
 	_idx: 1,
 	id: 'VSearchForm',
 	initComponent: function() {
-		Ext.applyIf(this, {
+		var me = this;
+		Ext.applyIf(me, {
 			items: [
-				this._form = Ext.create('VSearchParams'),
+				me._form = Ext.create('VSearchParams'),
 				Ext.create('VSearchResult')
 			]
 		});
-		this.callParent();
+		me.callParent();
+		if (!qqext.isSIC) {
+			var combo = me._form.items.getAt(0);
+			combo.setValue(qqext.user.get('organization'));
+			combo.hide();
+		}
 	},
 	/**
 	 * Очищает все поля формы

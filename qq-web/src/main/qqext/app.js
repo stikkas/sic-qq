@@ -15,7 +15,8 @@ Ext.application({
 		'hawk_common.store.UserLocalStorage',
 		'qqext.view.Viewport',
 		'qqext.Menu',
-		'qqext.store.DictValuesStore'
+		'qqext.store.DictValuesStore',
+		'Ext.util.Filter'
 	],
 	controllers: ['qqext.controller.Main',
 		'qqext.controller.AttachedFiles'
@@ -44,6 +45,19 @@ Ext.application({
 											ns.sicId = record.get('id');
 									}
 									ns.isSIC = ns.sicId === authRes.organization;
+									if (!ns.isSIC) {
+										ns.orgFilter = Ext.create('Ext.util.Filter', {
+											property: 'organization',
+											value: authRes.organization
+										});
+
+										Ext.getStore('journal').addFilter(ns.orgFilter);
+										/*
+										 var combo = ns.searchForm._form.items.getAt(0);
+										 combo.setValue(authRes.organization);
+										 combo.setViewOnly(true);
+										 */
+									}
 								}
 							}
 						});
@@ -55,6 +69,7 @@ Ext.application({
 				userStore.add(user);
 				userStore.sync();
 				Ext.create('Viewport', {});
+
 
 				// Загружаем настройки для прикрепленных файлов
 				var codes = ['QQ_ANSWER_DOC', 'QQ_APPLICANT_DOC', 'QQ_DOC_ROOT',
@@ -191,6 +206,11 @@ Ext.application({
 		/**
 		 * @property {Ext.data.Model} request
 		 * Текущий запрос (модель Question)
+		 */
+		/**
+		 * @poperty {Ext.util.Filter} orgFilter
+		 * Дополнительный фильтр для поиска, ограничение по организации, к которой принадлежит
+		 * пользователь
 		 */
 		/*
 		 * Различные кнопки, на которые нужно иметь ссылки по ходу дела. Обращаться к ним

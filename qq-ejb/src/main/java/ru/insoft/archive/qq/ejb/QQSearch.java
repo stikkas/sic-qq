@@ -122,8 +122,9 @@ public class QQSearch extends LoggedBean {
 							jTr.get("executor"), executor);
 						expressions.add(equalExecutor);
 						break;
-					default:
-						break;
+					case "organization":
+						Long organization = (Long) fb.getValue();
+						expressions.add(cb.equal(root.<Long>get("execOrg"), organization));
 				}
 			}
 		}

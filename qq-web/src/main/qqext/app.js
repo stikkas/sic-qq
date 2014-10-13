@@ -16,6 +16,7 @@ Ext.application({
 		'qqext.view.Viewport',
 		'qqext.Menu',
 		'qqext.store.DictValuesStore',
+		'qqext.store.DictStore',
 		'Ext.util.Filter'
 	],
 	controllers: ['qqext.controller.Main',
@@ -26,8 +27,6 @@ Ext.application({
 		Ext.Ajax.request({
 			url: '/qq-web/Rules',
 			success: function(response) {
-				// Настраиваем глобальные переменные
-				me.initQQ();
 				var authRes = Ext.decode(response.responseText),
 						ns = qqext,
 						user = ns.user = Ext.create('hawk_common.model.User'),
@@ -61,6 +60,10 @@ Ext.application({
 								}
 							}
 						});
+				// загружаем справочники
+				me.initStores(authRes.organization);
+				// Настраиваем глобальные переменные
+				me.initQQ();
 				user.set('id', 'current');
 				user.set('name', authRes.msg);
 				user.set('access', authRes.access);
@@ -573,6 +576,16 @@ Ext.application({
 
 		// создаем все меню
 		ns.Menu.init();
+	},
+	initStores: function(organization) {
+		var ns = qqext,
+				create = Ext.create,
+				ids = ns.stIds = {
+					litera: 'litera',
+					users: 'users'
+				};
+		create('DictStore', ids.litera, ids.litera, organization);
+		create('DictStore', ids.users, ids.users, organization);
 	}
 });
 

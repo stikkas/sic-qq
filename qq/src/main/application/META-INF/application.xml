@@ -25,13 +25,14 @@
 		</web>
 	</module>
 
+  <!--
 	<module>
 		<web>
 			<web-uri>arm-admin-2.0.0-SNAPSHOT.war</web-uri>
 			<context-root>/arm-admin</context-root>
 		</web>
 	</module>
-
+  -->
 	<module>
 		<ejb>ext-commons-0.1.0.jar</ejb>
 	</module>

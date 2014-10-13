@@ -2143,6 +2143,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.model.UsedMaterial": [],
   "qqext.model.WayToSend": [],
   "qqext.store.CustomStore": [],
+  "qqext.store.DictStore": [],
   "qqext.store.DictValuesStore": [],
   "qqext.view.MainPage": [],
   "qqext.view.StatusPanel": [],
@@ -3267,6 +3268,9 @@ Ext.ClassManager.addNameAliasMappings({
     "WayToSendModel"
   ],
   "qqext.store.CustomStore": [],
+  "qqext.store.DictStore": [
+    "DictStore"
+  ],
   "qqext.store.DictValuesStore": [
     "DictValuesStore"
   ],

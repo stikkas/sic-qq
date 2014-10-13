@@ -203,7 +203,7 @@ public class QQSearch extends LoggedBean {
 						break;
 					case "executor":
 						Join<Question, Transmission> jTr = root.join("transmission", JoinType.LEFT);
-						Join<Transmission, AdmUser> admUserJoin = jTr.join("executorName", JoinType.LEFT);
+						Join<Transmission, AdmUser> admUserJoin = jTr.join("executorValue", JoinType.LEFT);
 						if (ou.asc()) {
 							o = cb.asc(admUserJoin.get("name"));
 						} else {

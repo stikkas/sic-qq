@@ -592,6 +592,7 @@ $include-qqext-model-transmission: true;
 $include-qqext-model-usedmaterial: true;
 $include-qqext-model-waytosend: true;
 $include-qqext-store-customstore: true;
+$include-qqext-store-dictstore: true;
 $include-qqext-store-dictvaluesstore: true;
 $include-qqext-view-mainpage: true;
 $include-qqext-view-statuspanel: true;

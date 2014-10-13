@@ -9,10 +9,10 @@ and open the template in the editor.
 */
 .hmenu .x-btn{
     background-repeat:no-repeat;
-    background-position:left center;
-    padding-left:35px;
+    background-position:20px center;
+    padding-left:55px;
     padding-right:15px;
-    margin-right:30px;
+    margin-left:0;
     border-right:1px inset #506A8C !important;
 }
 a.add_btn.x-btn{
@@ -89,4 +89,9 @@ a.quit_btn.x-btn{
 .garbage{
     background-image:url(../images/attach_del.png);
     margin-left:10px;
+}
+
+/*прячем счетчик у полей вроде Года рождения*/
+div.x-form-spinner-up, div.x-form-spinner-down{
+    display:none;
 }

@@ -375,3 +375,9 @@ div.collapse_section{
     display: none;
     width:0 !important;
 }*/
+
+.x-message-box.err_msg {
+  overflow-x: auto !important;
+  overflow-y: auto !important;
+}
+

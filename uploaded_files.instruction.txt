@@ -1,4 +1,4 @@
-За сохраниение файлов на файловой системе отвечает приложение. За отображение файлов по щелчку на ссылке отвечает сервер приложений (jboss).
+За сохранение файлов на файловой системе отвечает приложение. За отображение файлов по щелчку на ссылке отвечает сервер приложений (jboss).
 Прикрепляемые файлы сохраняются в файловой системе по пути который строится следующим образом:
 для файлов заявителя:
  SIC.CORE_PARAMETER.DOCUMENT_ROOT + '/' + SIC.CORE_PARAMETER.QQ_DOC_ROOT + '/' + SIC.CORE_PARAMETER.QQ_APPLICANT_DOC +
@@ -32,7 +32,14 @@ SIC - база данных, в которой есть таблицы CORE_PARA
          <alias name="localhost"/>                                      
          <alias name="example.com"/>
          <sso reauthenticate="false"/>                            
-      </virtual-server>     
+      </virtual-server>   
+      
+   в) добавить после секции   <extensions>
+       <system-properties>
+        <property name="org.apache.catalina.connector.URI_ENCODING" value="UTF-8"/>
+       </system-properties>
+       для работы с кириллистическими названиями файлов.
+       
 3. Создать директорию path_to_save/target_dir.war, например, C:/Storage/Files.war
 4. Создать пустой файл path_to_save/target_dir.war.deployed, например, C:/Storage/Files.war.deployed
 5. Если сервер jboss был запущен, то его надо перезапустить.

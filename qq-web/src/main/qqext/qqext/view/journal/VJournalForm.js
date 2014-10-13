@@ -121,7 +121,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						dataIndex: 'litera',
 						width: 50,
 						items: [
-							createCmp('FComboBox', '', 'literas', 'filterLiteraCombo', {
+							createCmp('FComboBox', '', ns.stIds.litera, 'filterLiteraCombo', {
 								itemId: 'filterLiteraCombo',
 								width: '90%',
 								listeners: {
@@ -237,14 +237,14 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						dataIndex: 'executor',
 						cls: 'width150',
 						items: [
-							createCmp('FComboBox', '', 'journalExecutors', {
+							createCmp('FComboBox', '', qqext.stIds.users, 'requestExecutorCombo', {
 								width: 150,
-								select: me._filterComboSelected,
-								render: me._render,
-								queryMode: 'local',
+//								select: me._filterComboSelected,
+//								queryMode: 'local',
 								listeners: {
-									specialkey: me._specialKeyStop,
-									select: me._filterComboSelected
+									select: me._filterComboSelected,
+									render: me._render,
+									specialkey: me._specialKeyStop
 								}
 							})
 						]

@@ -28,28 +28,28 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 				createCmp('FieldContainer', {
 					layout: 'hbox',
 					items: [
-						me.litera = createCmp('FComboBox', 'Литера', 'literas', 'litera', true, {width: 240,
-                                                        labelWidth:150,
+						me.litera = createCmp('FComboBox', 'Литера', qqext.stIds.litera, 'litera', true, {width: 240,
+							labelWidth: 150,
 							viewOnly: true}),
 						createCmp('FTextField', '№ Входящего документа', 'prefixNum', {
 							labelAlign: 'right',
 							width: 245,
-                                                        labelWidth:200,
-                                                        cls:'two_col_fld'
+							labelWidth: 200,
+							cls: 'two_col_fld'
 						}),
 						createCmp('FTextField', '/', 'sufixNum', {
 							labelWidth: 5,
 							width: 50,
-                                                        cls:'small_lbl'
+							cls: 'small_lbl'
 						})
 					]
 				}),
 				me.datereg = createCmp('FDateField', 'Дата регистрации', 'regDate', true,
-						{viewOnly: true, allowBlank: true, width:250, labelWidth:150}), // Выставляется программно в модели
+						{viewOnly: true, allowBlank: true, width: 250, labelWidth: 150}), // Выставляется программно в модели
 				createCmp('FComboBox', 'Способ передачи', 'inboxDocDeliveryType', 'transferType'),
-				me.executor = createCmp('FComboBox', 'Исполняющая организация', 'inboxDocExecOrg', 'execOrg', {width:650, labelWidth:150}),
-				me.registrator = createCmp('FComboBox', 'ФИО регистратора', 'allUsers', 'registrator', true,
-						{viewOnly: true, allowBlank: true, width:500, labelWidth:150})// Выставляется программно в модели
+				me.executor = createCmp('FComboBox', 'Исполняющая организация', 'inboxDocExecOrg', 'execOrg', {width: 650, labelWidth: 150}),
+				me.registrator = createCmp('FComboBox', 'ФИО регистратора', qqext.stIds.users, 'registrator', true,
+						{viewOnly: true, allowBlank: true, width: 500, labelWidth: 150})// Выставляется программно в модели
 			]
 		});
 		me.callParent();

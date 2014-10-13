@@ -87,7 +87,10 @@ Ext.define('qqext.view.reg.VRegForm', {
 					if (!model.get('id')) { // Новая модель(загружаем, чтобы правильно работали ассоциации)
 						ns.model.Question.load(operation.response.responseText,
 								{success: function(record) {
-										record.getAppl().save({callback: function(r, o, s) {
+										ns.request = me.model = record;
+										var appl = record.getAppl();
+										me.applicant.updateRecord(appl);
+										appl.save({callback: function(r, o, s) {
 												if (!s) {
 													ns.showError("Данные о заявители не сохранены",
 															o.getError());
@@ -294,9 +297,10 @@ Ext.define('qqext.view.reg.VRegForm', {
 			me.target].forEach(function(f) {
 			f[action](model);
 		});
-		me.applicant[action](model.getAppl());
-		if (!withoutFiles)
+		if (!withoutFiles) {
+			me.applicant[action](model.getAppl());
 			me.files[action](model.files());
+		}
 	},
 	/**
 	 * Загружает данные из модели на форму

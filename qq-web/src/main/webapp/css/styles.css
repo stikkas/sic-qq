@@ -70,7 +70,7 @@ label.journal_title_label{
 }
 /*menu*/
 .hmenu{ 
-    padding:0 30px;
+    //padding:0 30px;
     border:none;
     border-bottom:1px solid #38547B;
 }
@@ -131,8 +131,13 @@ label.journal_title_label{
 .vmenu .reg_panel .x-box-inner{
     margin:5px auto;
 }
+.vmenu .reg_panel .x-box-inner label{
+    max-width:150px;
+    word-spacing:normal;
+}
 .vmenu .reg_panel .x-box-inner .x-box-item{
     margin:5px 3px;
+    vertical-align:middle;
 }
 
 /*sliders*/
@@ -312,8 +317,29 @@ div.collapse_section{
     background-color:transparent !important;
 }
 .x-btn-over,
-.x-btn-focus{
+.x-btn-focus,
+.x-window .x-btn{
     background-color:transparent;
+}
+        /*модальные окна, сообщения (кнопки)*/
+.x-window{
+    border-color:#758FAF;
+}
+.x-window .x-btn{
+    background-image:-moz-linear-gradient(bottom, #758FAF, #DEE2E9);
+    background-image:-webkit-gradient(linear, bottom center, top center, from(#758FAF), to(#DEE2E9));
+    background-image:-o-linear-gradient(bottom, #758FAF, #DEE2E9);
+    background-image:-ms-linear-gradient(bottom, #758FAF, #DEE2E9);
+}
+.x-window .x-btn-over{
+    background-image:-moz-linear-gradient(top, #758FAF, #DEE2E9);
+    background-image:-webkit-gradient(linear, top center, top center, from(#758FAF), to(#DEE2E9));
+    background-image:-o-linear-gradient(top, #758FAF, #DEE2E9);
+    background-image:-ms-linear-gradient(top, #758FAF, #DEE2E9);
+}
+.x-window-header-default-top{
+    background-color:#758FAF;
+    border-color:#758FAF;
 }
  /*прикрепление файлов*/
 .attached_section {
@@ -343,3 +369,15 @@ div.collapse_section{
 .width150 .x-form-type-text.x-gridcolumn-form-item{
     width:150px !important;
 }
+
+/**/
+/*.hmenu .x-btn-disabled{
+    display: none;
+    width:0 !important;
+}*/
+
+.x-message-box.err_msg {
+  overflow-x: auto !important;
+  overflow-y: auto !important;
+}
+

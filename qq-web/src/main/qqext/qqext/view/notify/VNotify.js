@@ -90,27 +90,27 @@ Ext.define('qqext.view.notify.VNotify', {
 				labels = ns.labels,
 				notf = ns.notification,
 				menu = createCmp('HButtonMenu', [
-					{text: labels.save, action: saveNotify, opts:{cls:'save_btn'}},
-					{text: labels.edit, action: editNotify, opts:{cls:'edit_btn'}}
+					{text: labels.save, action: saveNotify, opts: {cls: 'save_btn'}},
+					{text: labels.edit, action: editNotify, opts: {cls: 'edit_btn'}}
 				], 'ToolButton', me);
 		Ext.applyIf(me, {
 			items: [
-				createCmp('FComboBox', notf.executor[1], 'allUsers', notf.executor[0], {
-                                    width: 450, 
-                                    labelWidth:150
-                                }),
-				createCmp('FComboBox', notf.docType[1], 'docType', notf.docType[0],{
-                                    width: 450, 
-                                    labelWidth:150
-                                }),
+				createCmp('FComboBox', notf.executor[1], ns.stIds.users, notf.executor[0], {
+					width: 450,
+					labelWidth: 150
+				}),
+				createCmp('FComboBox', notf.docType[1], 'docType', notf.docType[0], {
+					width: 450,
+					labelWidth: 150
+				}),
 				createCmp('FComboBox', notf.deliveryType[1], 'answerForm', notf.deliveryType[0], {
-                                    width: 270, 
-                                    labelWidth:150
-                                }),
+					width: 270,
+					labelWidth: 150
+				}),
 				createCmp('FDateField', notf.notificationDate[1], notf.notificationDate[0], {
-                                    width: 270, 
-                                    labelWidth:150
-                                })
+					width: 270,
+					labelWidth: 150
+				})
 			]
 		});
 		me._btns = menu.items;

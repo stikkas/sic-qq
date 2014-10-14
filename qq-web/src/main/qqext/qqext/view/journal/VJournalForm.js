@@ -25,6 +25,12 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	margin: '0 5 10 5',
 	border: true,
 	/**
+	 * @property {Ext.util.Filter[]} fltrs
+	 * Фильтры, которые будут применяться в зависимости от пользователя, который работает с системой
+	 * @private
+	 */
+	_fltrs: [],
+	/**
 	 * Индекс, в соответствии с которым сопоставляется верхнее меню (см. qqext.Menu)
 	 * @private
 	 */
@@ -32,7 +38,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	/**
 	 * Очищает поля поиска
 	 */
-	clearCriterias: function() {
+	clearCriterias: function () {
 		var columns = this.columns,
 				max = columns.length, i = 0;
 		for (; i < max; ++i) {
@@ -42,24 +48,32 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	/**
 	 * Приводит форму в первоначальное состояние
 	 */
-	reset: function() {
+	reset: function () {
 		var store = this.getStore();
 		store.filters.clear();
-		if (qqext.orgFilter)
-			store.addFilter(qqext.orgFilter);
+		store.addFilter(this._fltrs);
 		this.clearCriterias();
 		store.loadPage(1);
 	},
 	/**
 	 * Запускает процесс поиска данных на сервере
 	 */
-	exec: function() {
+	exec: function () {
 		var store = this.getStore();
-		if (qqext.orgFilter)
-			store.addFilter(qqext.orgFilter);
+		this._fltrs.forEach(function (fltr) {
+			var exists = false;
+			store.filters.each(function (f) {
+				if (f.property === fltr.property) {
+					exists = true;
+					return false;
+				}
+			});
+			if (!exists)
+				store.addFilter(fltr);
+		});
 		store.reload();
 	},
-	applyFilter: function() {
+	applyFilter: function () {
 		var me = this,
 				filters = [],
 				columns = me.columns,
@@ -81,33 +95,59 @@ Ext.define('qqext.view.journal.VJournalForm', {
 				}));
 			}
 		}
-		if (qqext.orgFilter)
-			filters.push(qqext.orgFilter);
+		filters = filters.concat(me._fltrs);
 		store.filters.clear();
 		store.addFilter(filters, true);
 	},
-	_filterDateSelected: function(field, value, eopts) {
+	_filterDateSelected: function (field, value, eopts) {
 		field.ownerCt.ownerCt.ownerCt.applyFilter();
 	},
-	_filterComboSelected: function(combo, records, eopts) {
+	_filterComboSelected: function (combo, records, eopts) {
 		combo.ownerCt.ownerCt.ownerCt.applyFilter();
 	},
-	_render: function(comp, eopts) {
-		comp.getEl().addListener('click', function() {
+	_render: function (comp, eopts) {
+		comp.getEl().addListener('click', function () {
 			comp.focus();
 		});
 	},
-	_specialKeyStop: function(comp, event, eopts) {
+	_specialKeyStop: function (comp, event, eopts) {
 		event.stopPropagation();
 	},
-	initComponent: function() {
+	initComponent: function () {
 		var me = this,
 				createCmp = Ext.create,
 				ns = qqext,
-				rules = ns.rules;
+				rules = ns.rules,
+				user = ns.user,
+				execStore = ns.stIds.users;
 
-		if (ns.user.isAllowed([rules.reg, rules.crd, rules.exec]))
+		if (user.isAllowed(rules.exec) && !user.isAllowed(rules.crd)
+				&& !user.isAllowed(rules.reg)) {
+			var userId = user.get('userId');
+			execStore = createCmp('Ext.data.store', {
+				fields: ['id', 'name'],
+				data: [{id: userId, name: user.get('name')}]
+			});
+			me._fltrs.push(createCmp('Ext.util.Filter', {
+				property: 'executor',
+				value: userId
+			}));
+		}
+
+		if (user.isAllowed([rules.reg, rules.crd, rules.exec]))
 			me.listeners = {itemdblclick: ns.openRequest};
+
+		if (ns.isSIC) {
+			me._fltrs.push(createCmp('Ext.util.Filter', {
+				property: 'litera',
+				value: user.get('organization')
+			}));
+		} else {
+			me._fltrs.push(createCmp('Ext.util.Filter', {
+				property: 'organization',
+				value: user.get('organization')
+			}));
+		}
 
 		Ext.applyIf(me, {
 			columns: {
@@ -140,7 +180,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 							createCmp('FTextField', '', 'docNumberTextField', {
 								width: '90%',
 								listeners: {
-									specialkey: function(tf, event, eopts) {
+									specialkey: function (tf, event, eopts) {
 										event.stopPropagation();
 										if (event.getKey() === event.ENTER) {
 											var grid = tf.ownerCt.ownerCt.ownerCt;
@@ -168,7 +208,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 								listeners: {
 									select: me._filterDateSelected,
 									render: me._render,
-									specialkey: function(tf, event, eopts) {
+									specialkey: function (tf, event, eopts) {
 										event.stopPropagation();
 										if (event.getKey() === event.ENTER) {
 											var grid = tf.ownerCt.ownerCt.ownerCt;
@@ -193,7 +233,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 								listeners: {
 									select: me._filterDateSelected,
 									render: me._render,
-									specialkey: function(tf, event, eopts) {
+									specialkey: function (tf, event, eopts) {
 										event.stopPropagation();
 										if (event.getKey() === event.ENTER) {
 											var grid = tf.ownerCt.ownerCt.ownerCt;
@@ -237,10 +277,8 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						dataIndex: 'executor',
 						cls: 'width150',
 						items: [
-							createCmp('FComboBox', '', qqext.stIds.users, 'requestExecutorCombo', {
+							createCmp('FComboBox', '', execStore, 'requestExecutorCombo', {
 								width: 150,
-//								select: me._filterComboSelected,
-//								queryMode: 'local',
 								listeners: {
 									select: me._filterComboSelected,
 									render: me._render,
@@ -263,5 +301,8 @@ Ext.define('qqext.view.journal.VJournalForm', {
 			]
 		});
 		me.callParent();
+
+		me.store.addFilter(me._fltrs);
+		me.store.sort([{property: 'inboxDocNum', direction: 'DESC'}]);
 	}
 });

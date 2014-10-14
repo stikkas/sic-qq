@@ -30,21 +30,6 @@ import ru.insoft.archive.extcommons.json.JsonOut;
  */
 @Entity
 @Table(name = "QQ_APPLICANT")
-@NamedQueries({
-	@NamedQuery(name = "Applicant.findAll", query = "SELECT a FROM Applicant a"),
-	@NamedQuery(name = "Applicant.findById", query = "SELECT a FROM Applicant a WHERE a.id = :id"),
-	@NamedQuery(name = "Applicant.findByAppends", query = "SELECT a FROM Applicant a WHERE a.appends = :appends"),
-	@NamedQuery(name = "Applicant.findByAddress", query = "SELECT a FROM Applicant a WHERE a.address = :address"),
-	@NamedQuery(name = "Applicant.findByOrganization", query = "SELECT a FROM Applicant a WHERE a.organization = :organization"),
-	@NamedQuery(name = "Applicant.findByBirthYear", query = "SELECT a FROM Applicant a WHERE a.birthYear = :birthYear"),
-	@NamedQuery(name = "Applicant.findByCountry", query = "SELECT a FROM Applicant a WHERE a.country = :country"),
-	@NamedQuery(name = "Applicant.findByMiddleName", query = "SELECT a FROM Applicant a WHERE a.middleName = :middleName"),
-	@NamedQuery(name = "Applicant.findByIssueDocDate", query = "SELECT a FROM Applicant a WHERE a.issueDocDate = :issueDocDate"),
-	@NamedQuery(name = "Applicant.findByIssueDocNum", query = "SELECT a FROM Applicant a WHERE a.issueDocNum = :issueDocNum"),
-	@NamedQuery(name = "Applicant.findByFirstName", query = "SELECT a FROM Applicant a WHERE a.firstName = :firstName"),
-	@NamedQuery(name = "Applicant.findByFioJurPerson", query = "SELECT a FROM Applicant a WHERE a.fioJurPerson = :fioJurPerson"),
-	@NamedQuery(name = "Applicant.findByPhone", query = "SELECT a FROM Applicant a WHERE a.phone = :phone"),
-	@NamedQuery(name = "Applicant.findByLastName", query = "SELECT a FROM Applicant a WHERE a.lastName = :lastName")})
 public class Applicant implements Serializable, HasId, JsonIn, JsonOut {
 
 	private static final long serialVersionUID = 1L;

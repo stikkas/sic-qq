@@ -15,12 +15,12 @@ Ext.define('qqext.view.search.VSearchForm', {
 	 */
 	_idx: 1,
 	id: 'VSearchForm',
-	initComponent: function() {
+	initComponent: function () {
 		var me = this;
 		Ext.applyIf(me, {
 			items: [
 				me._form = Ext.create('VSearchParams'),
-				Ext.create('VSearchResult')
+				me._grid = Ext.create('VSearchResult')
 			]
 		});
 		me.callParent();
@@ -34,9 +34,10 @@ Ext.define('qqext.view.search.VSearchForm', {
 	 * Очищает все поля формы
 	 * и результаты поиска. Приводит форму в первоначальное состояние.
 	 */
-	reset: function() {
-		Ext.getStore('searchResults').removeAll();
+	reset: function () {
+		Ext.getStore('searchResults').loadData([], false);
 		this._form.getForm().reset();
+		this._grid.dockedItems.getAt(2).onLoad();
 	},
 	/**
 	 * Запускает поиск по параметрам первого элемента контейнера
@@ -44,9 +45,12 @@ Ext.define('qqext.view.search.VSearchForm', {
 	 * так что при обновлении данных в хранилище (по вызову load) будут обновляться данные и
 	 * в сетке.
 	 */
-	exec: function() {
+	exec: function () {
+		var values = this._form.getValues(false, true);
+		if (qqext.isSIC)
+			values.litera = qqext.user.get('organization');
 		Ext.getStore('searchResults').loadPage(1, {
-			params: {q: Ext.encode(this._form.getValues(false, true))}
+			params: {q: Ext.encode(values)}
 		});
 	}
 });

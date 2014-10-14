@@ -82,7 +82,7 @@ Ext.define('qqext.Menu', {
 		 * Устанавливает верхнее меню в соответствии с отображаемой формой
 		 * @param {Number} idx индекс меню
 		 */
-		setEditMenu: function(idx) {
+		setEditMenu: function (idx) {
 			var menus = qqext.Menu;
 			if (idx < 3)
 				menus._layout1.setActiveItem(menus._forms[idx]);
@@ -110,7 +110,7 @@ Ext.define('qqext.Menu', {
 		/**
 		 * Этот статический метод необходимо вызвать перед запуском приложения.
 		 */
-		init: function() {
+		init: function () {
 			var
 					ns = qqext,
 					menus = ns.Menu,
@@ -153,7 +153,7 @@ Ext.define('qqext.Menu', {
 					layout: 'hbox',
 					items: [createCmp('HButtonMenu', [{text: labels.toSearch, action: returnToSearch,
 								name: btns.toSearch},
-							{text: labels.add, action: function() {
+							{text: labels.add, action: function () {
 									add(true);
 								}, opts: {cls: 'add_btn'}}], 'ToolButton'),
 						menus.editReqMenu],
@@ -166,7 +166,7 @@ Ext.define('qqext.Menu', {
 					editReqMenuLayout = menus._layout2 = menus.editReqMenu.getLayout(),
 					articleMenuLayout = menus.articleMenu.getLayout();
 
-			menus.setArticleMenu = function(idx) {
+			menus.setArticleMenu = function (idx) {
 				articleMenuLayout.setActiveItem(idx);
 			};
 //----------Вспомогательные функции-----------------
@@ -187,15 +187,17 @@ Ext.define('qqext.Menu', {
 
 			/**
 			 * Обрабатывает событие 'click' на кнопке 'Вернуться в поиск'
+			 * @param {Ext.button.Button} btn кнопка, по которой жмакнули
 			 * @private
 			 * @returns {undefined}
 			 */
-			function returnToSearch() {
+			function returnToSearch(btn) {
 				// Удаляем ссылку на запрос, с которым работали
 				ns.request = null;
 				editMenuLayout.setActiveItem(0);
 				articleMenuLayout.setActiveItem(0);
-				getButton(btns.jvk).fireEvent('click');
+				ns.setCurrentForm(btn.form);
+//				getButton(btns.jvk).fireEvent('click');
 			}
 
 			/**
@@ -209,6 +211,8 @@ Ext.define('qqext.Menu', {
 				if (ns.user.isAllowed(ns.rules.reg)) {
 					if (force === true) {
 						ns.setCurrentForm(0);
+					} else {
+						getButton(btns.toSearch).form = ns.getCurrentForm();
 					}
 					ns.request = null;
 					// Переключаем форму, дальше все выполняется в форме по событию

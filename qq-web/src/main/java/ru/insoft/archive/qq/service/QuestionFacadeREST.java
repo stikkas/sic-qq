@@ -40,9 +40,9 @@ public class QuestionFacadeREST extends AbstractFacade<Question> {
 	private Question exists(final Question entity) {
 		try {
 			return super.findEntityWhereAnd(new Clause[]{
-				new Clause<>("prefixNum", entity.getPrefixNum()),
-				new Clause<>("sufixNum", entity.getSufixNum()),
-				new Clause<>("litera", entity.getLitera())
+				new Clause<Long>("prefixNum", entity.getPrefixNum()),
+				new Clause<Long>("sufixNum", entity.getSufixNum()),
+				new Clause<Long>("litera", entity.getLitera())
 			});
 		} catch (NoResultException e) {
 			return null;
@@ -60,7 +60,7 @@ public class QuestionFacadeREST extends AbstractFacade<Question> {
 
 		ResponseBuilder builder = Response.status(Status.NOT_FOUND);
 		builder.header("Content-Type", "text/html; charset=utf-8");
-		builder.entity("<h4>Запрос с таким номером уже существует</h4>");
+		builder.entity("<p>Запрос с таким номером уже существует</p>");
 		throw new WebApplicationException(builder.build());
 	}
 
@@ -75,7 +75,7 @@ public class QuestionFacadeREST extends AbstractFacade<Question> {
 		} else {
 			ResponseBuilder builder = Response.status(Status.NOT_FOUND);
 			builder.header("Content-Type", "text/html; charset=utf-8");
-			builder.entity("<h4>Запрос с таким номером уже существует</h4>");
+			builder.entity("<p>Запрос с таким номером уже существует</p>");
 			throw new WebApplicationException(builder.build());
 		}
 	}
@@ -93,6 +93,21 @@ public class QuestionFacadeREST extends AbstractFacade<Question> {
 	@Produces({"application/json"})
 	public Question findById(@PathParam("id") Long id) {
 		return super.find(id);
+	}
+
+	@GET
+	@Path("allowedid/{litera}/{sufix}")
+	@Produces({"application/json"})
+	public Long getAllowedId(@PathParam("litera") Long litera,
+		@PathParam("sufix") Long sufix) {
+		Question entity = super.<Long>getMaximumValue(new Clause[]{
+			new Clause<Long>("litera", litera),
+			new Clause<Long>("sufixNum", sufix)
+		}, "prefixNum");
+		if (entity != null) {
+			return entity.getPrefixNum() + 1;
+		}
+		return 1L;
 	}
 
 }

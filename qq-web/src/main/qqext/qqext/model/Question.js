@@ -15,20 +15,20 @@ Ext.define('qqext.model.Question', {
 	],
 	fields: [
 		{name: 'id', type: 'int', defaultValue: null, convert: null, isNull: true},
-		{name: 'insertDate', type: 'date', convert: function(v) {
+		{name: 'insertDate', type: 'date', convert: function (v) {
 				if (v)
 					return new Date(v);
 			}},
-		{name: 'updateDate', type: 'date', convert: function(v) {
+		{name: 'updateDate', type: 'date', convert: function (v) {
 				if (v)
 					return new Date(v);
 			}},
 		{name: 'status', type: 'int', defaultValue: null, convert: null},
 		{name: 'createOrg', type: 'int', defaultValue: null, convert: null},
 		{name: 'litera', type: 'int', defaultValue: null, convert: null},
-		{name: 'prefixNum', type: 'string'},
-		{name: 'sufixNum', type: 'string'},
-		{name: 'regDate', type: 'date', convert: function(v) {
+		{name: 'prefixNum', type: 'int', defaultValue: null, convert: null},
+		{name: 'sufixNum', type: 'int', defaultValue: null, convert: null},
+		{name: 'regDate', type: 'date', convert: function (v) {
 				if (v)
 					return new Date(v);
 			}},
@@ -38,7 +38,7 @@ Ext.define('qqext.model.Question', {
 		{name: 'updateUser', type: 'int', defaultValue: null, convert: null},
 		{name: 'questionType', type: 'int', defaultValue: null, convert: null},
 		{name: 'registrator', type: 'int', defaultValue: null, convert: null},
-		{name: 'plannedFinishDate', type: 'date', convert: function(v) {
+		{name: 'plannedFinishDate', type: 'date', convert: function (v) {
 				if (v)
 					return new Date(v);
 			}},
@@ -68,7 +68,7 @@ Ext.define('qqext.model.Question', {
 		reader: 'json',
 		writer: 'json',
 		listeners: {
-			exception: function(proxy, answer, operation) {
+			exception: function (proxy, answer, operation) {
 				operation.error = answer.responseText;
 			}
 		}

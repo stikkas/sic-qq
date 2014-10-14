@@ -13,27 +13,27 @@ Ext.define('qqext.view.search.FioFieldContainer', {
 	height: 30,
 	/**
 	 * Создает объект типа FioFieldContainer
-	 * @param {String} (required) surname фамилия
-	 * @param {String} (required) name имя
-	 * @param {String} (required) fathername отчество
+	 * @param {String} (required) lastname фамилия
+	 * @param {String} (required) firstname имя
+	 * @param {String} (required) middlename отчество
 	 * @param {Boolean} viewmode режим просмотра
 	 * @param {Object} opts дополнительные параметры
 	 */
-	constructor: function(surname, name, fathername, viewmode, opts) {
+	constructor: function (lastname, firstname, middlename, viewmode, opts) {
 		var me = this;
-		me.surName = surname;
-		me.name = name;
-		me.fatherName = fathername;
+		me.lastname = lastname;
+		me.firstname = firstname;
+		me.middlename = middlename;
 		me._config(viewmode, opts);
 	},
-	initComponent: function() {
+	initComponent: function () {
 		var me = this,
 				createCmp = Ext.create;
 		Ext.applyIf(me, {
 			items: [
-				createCmp('FTextField', 'Фамилия', me.surName),
-				createCmp('FTextField', 'Имя', me.name, {labelAlign: 'right'}),
-				createCmp('FTextField', 'Отчество', me.fatherName, {labelAlign: 'right'})
+				createCmp('FTextField', 'Фамилия', me.lastname),
+				createCmp('FTextField', 'Имя', me.firstname, {labelAlign: 'right'}),
+				createCmp('FTextField', 'Отчество', me.middlename, {labelAlign: 'right'})
 			]
 		});
 		me.callParent();

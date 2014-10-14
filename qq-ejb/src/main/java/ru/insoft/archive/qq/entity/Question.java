@@ -91,13 +91,11 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 	@Column(name = "REGISTRATOR_ID")
 	private Long registrator;
 
-	@Size(max = 20)
 	@Column(name = "PREFIX_NUM")
-	private String prefixNum;
+	private Long prefixNum;
 
-	@Size(max = 20)
 	@Column(name = "SUFIX_NUM")
-	private String sufixNum;
+	private Long sufixNum;
 
 	@Column(name = "MOTIVATED_REFUSAL")
 	private Boolean motivatedRefusal;
@@ -203,25 +201,19 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 		this.statusValue = statusValue;
 	}
 
-	public String getPrefixNum() {
-		if (prefixNum == null) {
-			return "";
-		}
+	public Long getPrefixNum() {
 		return prefixNum;
 	}
 
-	public void setPrefixNum(String prefixNum) {
+	public void setPrefixNum(Long prefixNum) {
 		this.prefixNum = prefixNum;
 	}
 
-	public String getSufixNum() {
-		if (sufixNum == null) {
-			return "";
-		}
+	public Long getSufixNum() {
 		return sufixNum;
 	}
 
-	public void setSufixNum(String sufixNum) {
+	public void setSufixNum(Long sufixNum) {
 		this.sufixNum = sufixNum;
 	}
 

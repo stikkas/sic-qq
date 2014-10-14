@@ -48,15 +48,14 @@ public class DictREST {
 	@Path("litera")
 	@Produces({"application/json"})
 	public List<Dict> getLiteras(@QueryParam("organization") Long organization) {
-		String strQuery = "SELECT NEW ru.insoft.archive.qq.service.Dict(v.id, a.value, v.code)"
-			+ " from DescriptorValueAttr a, DescriptorGroupAttr g, DescriptorValue v"
-			+ " where a.attrId = g.id and a.valueId = v.id and g.code = 'MEMBER_LETTER'";
-		if (!sicId.equals(organization)) {
-			strQuery += " and v.id in (" + sicId + "," + organization + ")";
-		}
-
 		try {
-			return em.createQuery(strQuery).getResultList();
+			return em.createQuery("SELECT NEW ru.insoft.archive.qq.service.Dict(v.id, a.value, v.code)"
+				+ " from DescriptorValueAttr a, DescriptorGroupAttr g, DescriptorValue v"
+				+ " where a.attrId = g.id and a.valueId = v.id and g.code = 'MEMBER_LETTER'"
+				+ " and v.id in (:sicId,:org)")
+				.setParameter("sicId", sicId)
+				.setParameter("org", organization)
+				.getResultList();
 		} catch (RuntimeException e) {
 			return new ArrayList<>();
 		}

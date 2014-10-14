@@ -20,7 +20,7 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 	disabledCls: '',
 	maskOnDisable: false,
 	title: 'Входящий документ',
-	initComponent: function() {
+	initComponent: function () {
 		var me = this,
 				createCmp = Ext.create;
 		Ext.applyIf(me, {
@@ -28,16 +28,20 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 				createCmp('FieldContainer', {
 					layout: 'hbox',
 					items: [
-						me.litera = createCmp('FComboBox', 'Литера', qqext.stIds.litera, 'litera', true, {width: 240,
-							labelWidth: 150,
-							viewOnly: true}),
-						createCmp('FTextField', '№ Входящего документа', 'prefixNum', {
+						me.litera = createCmp('FComboBox', 'Литера', qqext.stIds.litera, 'litera',
+								true, {width: 240,
+									labelWidth: 150,
+									viewOnly: true}),
+						me.prefix = createCmp('FTextField', '№ Входящего документа', 'prefixNum', {
+							maskRe: /\d/,
 							labelAlign: 'right',
 							width: 245,
 							labelWidth: 200,
 							cls: 'two_col_fld'
 						}),
-						createCmp('FTextField', '/', 'sufixNum', {
+						createCmp('FTextField', '/', 'sufixNum', true, {
+//							maskRe: /\d/,
+							viewOnly: true,
 							labelWidth: 5,
 							width: 50,
 							cls: 'small_lbl'

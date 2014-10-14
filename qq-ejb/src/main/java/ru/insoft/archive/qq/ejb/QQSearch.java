@@ -7,7 +7,6 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.json.Json;
-import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
 import javax.persistence.EntityManager;
@@ -74,12 +73,18 @@ public class QQSearch extends LoggedBean {
 						String filterValue = fb.getValue().toString();
 						logger.info("Фильтр входящий номер: значение: "
 							+ filterValue);
-						Expression<String> number
-							= cb.concat(cb.concat(root.<String>get("prefixNum"), "/"),
-								root.<String>get("sufixNum"));
-						Expression<Boolean> numLike = cb.like(cb.lower(number), filterValue);
-
-						expressions.add(numLike);
+						String[] number = filterValue.split("/");
+						Long prefix,
+						 sufix;
+						try {
+							prefix = Long.parseLong(number[0]);
+							sufix = Long.parseLong(number[1]);
+						} catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+							prefix = sufix = -1L;
+						}
+						expressions.add(cb.and(
+							cb.equal(root.<Long>get("prefixNum"), prefix),
+							cb.equal(root.<Long>get("sufixNum"), sufix)));
 						break;
 					case "regDate":
 						Date d1 = jsonTools.parseBadStringDate((String) fb.getValue());
@@ -145,9 +150,11 @@ public class QQSearch extends LoggedBean {
 						break;
 					case "inboxDocNum":
 						if (ou.asc()) {
-							o = cb.asc(root.get("inboxNum"));
+							jpaOrders.add(cb.asc(root.<Long>get("sufixNum")));
+							o = cb.asc(root.<Long>get("prefixNum"));
 						} else {
-							o = cb.desc(root.get("inboxNum"));
+							jpaOrders.add(cb.desc(root.<Long>get("sufixNum")));
+							o = cb.desc(root.<Long>get("prefixNum"));
 						}
 						jpaOrders.add(o);
 						break;
@@ -173,14 +180,14 @@ public class QQSearch extends LoggedBean {
 						//Сортируются сначала по Юридическим лицам, потом по физическим
 						Join<Question, Applicant> aplJoin = root.join("applicant");
 						Expression<String> concat = cb.concat(
-							aplJoin.<String>get("surname"), " ");
-						concat = cb.concat(concat, aplJoin.<String>get("name"));
+							aplJoin.<String>get("lastName"), " ");
+						concat = cb.concat(concat, aplJoin.<String>get("firstName"));
 						concat = cb.concat(concat, " ");
 						concat = cb.concat(concat,
-							aplJoin.<String>get("fatherName"));
+							aplJoin.<String>get("middleName"));
 						concat = cb.lower(concat);
 						Expression<String> jur = cb.lower(aplJoin
-							.<String>get("applicantObject"));
+							.<String>get("organization"));
 						Order jurOrder = null;
 						Order phyzOrder = null;
 						if (ou.asc()) {
@@ -275,19 +282,19 @@ public class QQSearch extends LoggedBean {
 				expressions.add(applCatExp);
 			}
 
-			String applName = query.getApplName();
+			String applName = query.getApplFirstName();
 			if (applName != null) {
-				expressions.add(getLikeExp(applName, "name", join));
+				expressions.add(getLikeExp(applName, "firstName", join));
 			}
 
-			String applSurname = query.getApplSurname();
+			String applSurname = query.getApplLastName();
 			if (applSurname != null) {
-				expressions.add(getLikeExp(applSurname, "surname", join));
+				expressions.add(getLikeExp(applSurname, "lastName", join));
 			}
 
-			String applFather = query.getApplFatherName();
+			String applFather = query.getApplMiddleName();
 			if (applFather != null) {
-				expressions.add(getLikeExp(applFather, "fatherName", join));
+				expressions.add(getLikeExp(applFather, "middleName", join));
 			}
 		}
 
@@ -320,34 +327,27 @@ public class QQSearch extends LoggedBean {
 				regDate));
 		}
 
-		String reqObjSurname = query.getReqObjSurname();
-		if (reqObjSurname != null) {
-			reqObjSurname = reqObjSurname.toUpperCase();
-			reqObjSurname += "%";
-			Expression<Boolean> objSurname = cb.equal(
-				cb.upper(root.<String>get("requestObjectSurname")),
-				reqObjSurname);
-			expressions.add(objSurname);
+		String name = query.getReqLastName();
+		if (name != null) {
+			expressions.add(cb.like(cb.upper(root.<String>get("objectLName")),
+				name.toUpperCase() + "%"));
 		}
 
-		String rqObjName = query.getReqObjName();
-		if (rqObjName != null) {
-			rqObjName = rqObjName.toUpperCase();
-			rqObjName += "%";
-			Expression<Boolean> requestObjectName = cb
-				.equal(cb.upper(root.<String>get("requestObjectName")),
-					rqObjName);
-			expressions.add(requestObjectName);
+		name = query.getReqFirstName();
+		if (name != null) {
+			expressions.add(cb.like(cb.upper(root.<String>get("objectFName")),
+				name.toUpperCase() + "%"));
 		}
 
-		String rqObjFather = query.getReqObjFatherName();
-		if (rqObjFather != null) {
-			rqObjFather = rqObjFather.toUpperCase();
-			rqObjFather += "%";
-			Expression<Boolean> rqFather = cb.equal(
-				cb.upper(root.<String>get("requestFatherName")),
-				rqObjFather);
-			expressions.add(rqFather);
+		name = query.getReqMiddleName();
+		if (name != null) {
+			expressions.add(cb.like(cb.upper(root.<String>get("objectMName")),
+				name.toUpperCase() + "%"));
+		}
+
+		Long litera = query.getLitera();
+		if (litera != null) {
+			expressions.add(cb.equal(root.<Long>get("litera"), litera));
 		}
 
 		Expression<Boolean> finalExpression = null;

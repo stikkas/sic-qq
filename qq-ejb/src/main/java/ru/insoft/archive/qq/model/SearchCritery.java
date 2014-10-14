@@ -14,6 +14,8 @@ public class SearchCritery implements JsonIn {
 
 	private Long archiveId;
 
+	private Long litera;
+
 	private Long queryTypeId;
 
 	private String queryContent;
@@ -24,17 +26,17 @@ public class SearchCritery implements JsonIn {
 
 	private Date regDate;
 
-	private String reqObjName;
+	private String reqFirstName;
 
-	private String reqObjSurname;
+	private String reqLastName;
 
-	private String reqObjFatherName;
+	private String reqMiddleName;
 
-	private String applName;
+	private String applFirstName;
 
-	private String applSurname;
+	private String applLastName;
 
-	private String applFatherName;
+	private String applMiddleName;
 
 	/**
 	 * Позволяет определить, содержатся ли в критериях поиска атрибуты из
@@ -50,13 +52,13 @@ public class SearchCritery implements JsonIn {
 		if (applicantCategoryId != null) {
 			return true;
 		}
-		if (applName != null) {
+		if (applFirstName != null) {
 			return true;
 		}
-		if (applSurname != null) {
+		if (applLastName != null) {
 			return true;
 		}
-		if (applFatherName != null) {
+		if (applMiddleName != null) {
 			return true;
 		}
 		return false;
@@ -110,51 +112,60 @@ public class SearchCritery implements JsonIn {
 		this.regDate = regDate;
 	}
 
-	public String getReqObjName() {
-		return reqObjName;
+	public String getReqFirstName() {
+		return reqFirstName;
 	}
 
-	public void setReqObjName(String reqObjName) {
-		this.reqObjName = reqObjName;
+	public void setReqFirstName(String reqFirstName) {
+		this.reqFirstName = reqFirstName;
 	}
 
-	public String getReqObjSurname() {
-		return reqObjSurname;
+	public String getReqLastName() {
+		return reqLastName;
 	}
 
-	public void setReqObjSurname(String reqObjSurname) {
-		this.reqObjSurname = reqObjSurname;
+	public void setReqLastName(String reqLastName) {
+		this.reqLastName = reqLastName;
 	}
 
-	public String getReqObjFatherName() {
-		return reqObjFatherName;
+	public String getReqMiddleName() {
+		return reqMiddleName;
 	}
 
-	public void setReqObjFatherName(String reqObjFatherName) {
-		this.reqObjFatherName = reqObjFatherName;
+	public void setReqMiddleName(String reqMiddleName) {
+		this.reqMiddleName = reqMiddleName;
 	}
 
-	public String getApplName() {
-		return applName;
+	public String getApplFirstName() {
+		return applFirstName;
 	}
 
-	public void setApplName(String applName) {
-		this.applName = applName;
+	public void setApplFirstName(String applFirstName) {
+		this.applFirstName = applFirstName;
 	}
 
-	public String getApplSurname() {
-		return applSurname;
+	public String getApplLastName() {
+		return applLastName;
 	}
 
-	public void setApplSurname(String applSurname) {
-		this.applSurname = applSurname;
+	public void setApplLastName(String applLastName) {
+		this.applLastName = applLastName;
 	}
 
-	public String getApplFatherName() {
-		return applFatherName;
+	public String getApplMiddleName() {
+		return applMiddleName;
 	}
 
-	public void setApplFatherName(String applFatherName) {
-		this.applFatherName = applFatherName;
+	public void setApplMiddleName(String applMiddleName) {
+		this.applMiddleName = applMiddleName;
 	}
+
+	public Long getLitera() {
+		return litera;
+	}
+
+	public void setLitera(Long litera) {
+		this.litera = litera;
+	}
+
 }

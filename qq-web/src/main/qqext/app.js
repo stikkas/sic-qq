@@ -22,11 +22,11 @@ Ext.application({
 	controllers: ['qqext.controller.Main',
 		'qqext.controller.AttachedFiles'
 	],
-	launch: function() {
+	launch: function () {
 		var me = this;
 		Ext.Ajax.request({
 			url: '/qq-web/Rules',
-			success: function(response) {
+			success: function (response) {
 				var authRes = Ext.decode(response.responseText),
 						ns = qqext,
 						user = ns.user = Ext.create('hawk_common.model.User'),
@@ -36,7 +36,7 @@ Ext.application({
 				Ext.create('DictValuesStore',
 						'inboxDocExecOrg', 'ORG_STRUCTURE', {
 							listeners: {
-								load: function(st, records) {
+								load: function (st, records) {
 									var record, max = records.length, i = 0;
 									for (; i < max; ++i) {
 										record = records[i];
@@ -44,26 +44,10 @@ Ext.application({
 											ns.sicId = record.get('id');
 									}
 									ns.isSIC = ns.sicId === authRes.organization;
-									if (!ns.isSIC) {
-										ns.orgFilter = Ext.create('Ext.util.Filter', {
-											property: 'organization',
-											value: authRes.organization
-										});
-
-										Ext.getStore('journal').addFilter(ns.orgFilter);
-										/*
-										 var combo = ns.searchForm._form.items.getAt(0);
-										 combo.setValue(authRes.organization);
-										 combo.setViewOnly(true);
-										 */
-									}
 								}
 							}
 						});
-				// загружаем справочники
-				me.initStores(authRes.organization);
-				// Настраиваем глобальные переменные
-				me.initQQ();
+
 				user.set('id', 'current');
 				user.set('name', authRes.msg);
 				user.set('access', authRes.access);
@@ -71,6 +55,10 @@ Ext.application({
 				user.set('organization', authRes.organization);
 				userStore.add(user);
 				userStore.sync();
+				// загружаем справочники
+				me.initStores(authRes.organization, user);
+				// Настраиваем глобальные переменные
+				me.initQQ();
 				Ext.create('Viewport', {});
 
 
@@ -81,12 +69,12 @@ Ext.application({
 					url: '/qq-web/rest/coreparameter',
 					method: 'GET',
 					params: {code: codes},
-					success: function(result) {
+					success: function (result) {
 						var paths = ns.atpaths = {},
 								applicationDir, urlRoot,
 								applicantDir, sendDir,
 								root;
-						Ext.decode(result.responseText).forEach(function(v) {
+						Ext.decode(result.responseText).forEach(function (v) {
 							switch (v.code) {
 								case codes[0]:
 									sendDir = v.value + "/";
@@ -113,7 +101,7 @@ Ext.application({
 					}
 				});
 			},
-			failure: function(response) {
+			failure: function (response) {
 				Ext.Msg.show({
 					title: 'Ошибка',
 					msg: response.responseText,
@@ -125,7 +113,7 @@ Ext.application({
 			}
 		});
 	},
-	initQQ: function() {
+	initQQ: function () {
 		var ns = qqext;
 		// Глобальные переменные и константы для namespace qqext.
 		// Названо классом для того, чтобы jsduck задокументировал это.
@@ -210,11 +198,6 @@ Ext.application({
 		 * @property {Ext.data.Model} request
 		 * Текущий запрос (модель Question)
 		 */
-		/**
-		 * @poperty {Ext.util.Filter} orgFilter
-		 * Дополнительный фильтр для поиска, ограничение по организации, к которой принадлежит
-		 * пользователь
-		 */
 		/*
 		 * Различные кнопки, на которые нужно иметь ссылки по ходу дела. Обращаться к ним
 		 * только через интерфейс {@link #getButton} и {@link #addButton}.
@@ -227,7 +210,7 @@ Ext.application({
 		 * @returns {Obejct/undefined} если такая кнопка есть, то кнопку, иначе undefined
 		 * @method getButton
 		 */
-		var getButton = ns.getButton = function(name) {
+		var getButton = ns.getButton = function (name) {
 			var max = buttons.length,
 					i = 0,
 					btn;
@@ -243,7 +226,7 @@ Ext.application({
 		 * для редактирования.
 		 * @method edit
 		 */
-		ns.edit = function() {
+		ns.edit = function () {
 			var me = this;
 			me.setViewOnly(false);
 			me._disableButtons(false, 1, 2, 3);
@@ -257,7 +240,7 @@ Ext.application({
 		 * @param {Ext.button.Button} button сама кнопка
 		 * @method addButton
 		 */
-		ns.addButton = function(name, button) {
+		ns.addButton = function (name, button) {
 			if (!getButton(name))
 				buttons.push({name: name, body: button});
 		};
@@ -346,6 +329,7 @@ Ext.application({
 		 */
 		ns.turnOnArticles = function toa() {
 			var
+					rules = ns.rules,
 					user = ns.user,
 					request = ns.request,
 					// TODO: сделать что-то чтобы проверять по кодам статуса а не по ID из таблицы
@@ -392,7 +376,7 @@ Ext.application({
 		 * @param {qqext.btns} btns Дополнительно передаются кнопки, которые необходимо выключить или включить
 		 * @method disableArticles
 		 */
-		ns.disableArticles = function(status) {
+		ns.disableArticles = function (status) {
 			for (var i = 1; i < arguments.length; ++i)
 				getButton(arguments[i]).setDisabled(status);
 		};
@@ -400,7 +384,7 @@ Ext.application({
 		 * Вызывается когда нажали на кнопку 'Выйти'
 		 * @method quitAction
 		 */
-		ns.quitAction = function() {
+		ns.quitAction = function () {
 			// молча, без выстерла событий, удаляем все данные из хранилища
 			ns.userStore.removeAll(true);
 			window.location = urls.login;
@@ -512,13 +496,14 @@ Ext.application({
 		 * @param {Object} record запись, по которой щелкнули
 		 * @method openRequest
 		 */
-		ns.openRequest = function(view, record) {
-			ns.model.Question.load(record.get('id'), {callback: function(r, o, s) {
+		ns.openRequest = function (view, record) {
+			ns.model.Question.load(record.get('id'), {callback: function (r, o, s) {
 					if (s) {
 						ns.request = r;
 						ns.disableArticles(true, buttonNames.notify, buttonNames.trans, buttonNames.exec);
 						ns.turnOnArticles();
 						ns.Menu.setArticleMenu(1);
+						getButton(buttonNames.toSearch).form = ns.getCurrentForm();
 						getButton(buttonNames.reg).fireEvent('click');
 						ns.statusPanel.setStatus();
 					} else {
@@ -532,7 +517,7 @@ Ext.application({
 		 * @param {String} message сообщение об ошибке
 		 * @method showError
 		 */
-		ns.showError = function(title, message) {
+		ns.showError = function (title, message) {
 			if (message instanceof Object) {
 				if (message.statusText) {
 					message = message.statusText;
@@ -557,10 +542,10 @@ Ext.application({
 		 * @param {String} code код для статуса
 		 * @returns {Number/undefined} номер id соответстующего коду
 		 */
-		ns.getStatusId = function(code) {
+		ns.getStatusId = function (code) {
 			var statusId;
 			Ext.getStore('Q_DICT_QUESTION_STATUSES').
-					findBy(function(record, id) {
+					findBy(function (record, id) {
 						if (record.get('code') === code) {
 							statusId = id;
 							return true;
@@ -577,7 +562,7 @@ Ext.application({
 		// создаем все меню
 		ns.Menu.init();
 	},
-	initStores: function(organization) {
+	initStores: function (organization) {
 		var ns = qqext,
 				create = Ext.create,
 				ids = ns.stIds = {

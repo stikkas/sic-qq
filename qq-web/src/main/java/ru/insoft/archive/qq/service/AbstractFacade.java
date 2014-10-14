@@ -163,4 +163,30 @@ public abstract class AbstractFacade<T> {
 			em.remove(file);
 		}
 	}
+
+	/**
+	 * Возвращает сущность с максимальным значением определенного поля
+	 *
+	 * @param clause параметры, которые ограничивают выбор
+	 * @param fieldName названия поля, значение которого нам интересно
+	 * @param <U> тип данных поля
+	 * @return идентификатор
+	 */
+	<U> T getMaximumValue(Clause[] clauses, String fieldName) {
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<T> cq = cb.createQuery(entityClass);
+		Root<T> root = cq.from(entityClass);
+		Predicate expr = cb.equal(root.get(clauses[0].getFieldName()), clauses[0].getFieldValue());
+		for (int i = 1; i < clauses.length; ++i) {
+			expr = cb.and(cb.equal(root.get(clauses[i].getFieldName()),
+				clauses[i].getFieldValue()), expr);
+		}
+		cq.where(expr);
+		cq.orderBy(cb.desc(root.<U>get(fieldName)));
+		List<T> results = em.createQuery(cq).setMaxResults(1).getResultList();
+		if (results != null && !results.isEmpty()) {
+			return results.get(0);
+		}
+		return null;
+	}
 }

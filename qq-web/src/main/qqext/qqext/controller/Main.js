@@ -17,7 +17,7 @@ Ext.define('qqext.controller.Main', {
 	 */
 	currentModel: null,
 	searchParams: null,
-	init: function() {
+	init: function () {
 		var createCmp = Ext.create,
 				kput = {
 					resultOfAnswer: 'Q_DICT_RESULT_ANSER',
@@ -32,7 +32,7 @@ Ext.define('qqext.controller.Main', {
 					diffCategory: 'Q_DICT_DIFF_CATEGORY',
 					coordinationStage: 'Q_DICT_THE_EHDORSEMENT',
 //					literas: 'QQ_ORG_STRUCT_LITERAS',
-					allUsers: 'QQ_USERS',
+//					allUsers: 'QQ_USERS',
 					journalApplicantFilterStore: 'QQ_JOURNAL_APPLICANT_FILTER',
 					journalExecutors: 'QQ_JOURNAL_EXECUTOR',
 					Q_DICT_QUESTION_STATUSES: 'Q_DICT_QUESTION_STATUSES'
@@ -44,7 +44,7 @@ Ext.define('qqext.controller.Main', {
 		createCmp('qqext.store.CustomStore', {
 			storeId: 'searchResults',
 			url: '/qq-web/api/Search',
-			pageSize: 15,
+			pageSize: 12,
 			model: 'qqext.model.SearchResultItem'
 		});
 		createCmp('qqext.store.CustomStore', {

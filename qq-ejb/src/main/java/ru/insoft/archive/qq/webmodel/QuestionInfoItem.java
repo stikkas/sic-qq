@@ -20,7 +20,7 @@ public class QuestionInfoItem {
 				}
 			}
 		}
-		inboxDocNum = q.getPrefixNum() + "/" + q.getSufixNum();
+		inboxDocNum = String.valueOf(q.getPrefixNum()) + "/" + String.valueOf(q.getSufixNum());
 		regDate = q.getRegDate();
 
 		Applicant a = q.getApplicant();

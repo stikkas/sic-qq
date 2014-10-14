@@ -7,7 +7,7 @@ Ext.define('qqext.view.search.VSearchResult', {
 	title: 'Результаты поиска',
 	requires: ['Ext.toolbar.Paging'],
 	margin: '0 10 0 0',
-//	maxHeight: 600,
+	maxHeight: 450,
 	overflowY: 'auto',
 	store: 'searchResults',
 	columns: [{
@@ -56,7 +56,7 @@ Ext.define('qqext.view.search.VSearchResult', {
 			store: 'searchResults'
 		}
 	],
-	initComponent: function() {
+	initComponent: function () {
 		var ns = qqext,
 				rules = ns.rules;
 

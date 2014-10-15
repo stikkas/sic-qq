@@ -20,10 +20,7 @@ public class JournalItem extends QuestionInfoItem implements JsonOut {
 	public JournalItem(Question q) {
 		super(q);
 
-		Execution ei = q.getExecution();
-		if (ei != null) {
-			this.execDate = ei.getExecDate();
-		}
+		this.execDate = q.getPlannedFinishDate();
 
 		DescriptorValue statusdv = q.getStatusValue();
 		if (statusdv != null) {

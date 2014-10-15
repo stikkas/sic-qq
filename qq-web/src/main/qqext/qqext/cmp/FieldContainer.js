@@ -5,6 +5,7 @@
 Ext.define('qqext.cmp.FieldContainer', {
 	alias: 'FieldContainer',
 	extend: 'Ext.form.FieldContainer',
-	mixins: ['qqext.cmp.PanelEditViewMode'],
+	mixins: ['qqext.cmp.PanelEditViewMode',
+		'qqext.cmp.ErrorGetter'],
 	xtype: 'fieldcontainercmp'
 });

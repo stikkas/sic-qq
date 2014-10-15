@@ -46,9 +46,17 @@ Ext.define('qqext.view.search.VSearchForm', {
 	 * в сетке.
 	 */
 	exec: function () {
-		var values = this._form.getValues(false, true);
-		if (qqext.isSIC)
-			values.litera = qqext.user.get('organization');
+		var values = this._form.getValues(false, true),
+				ns = qqext,
+				user = ns.user,
+				rules = ns.rules;
+		if (ns.isSIC)
+			values.litera = ns.user.get('organization');
+
+		if (user.isAllowed(rules.exec) && !user.isAllowed(rules.crd)
+				&& !user.isAllowed(rules.reg))
+			values.executor = user.get('userId');
+
 		Ext.getStore('searchResults').loadPage(1, {
 			params: {q: Ext.encode(values)}
 		});

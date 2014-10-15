@@ -20,7 +20,7 @@ Ext.define('qqext.factory.PanelGrid', {
 	 * Возвращает ошибки, которые записываются в _errors
 	 * @returns {String} описание ошибок
 	 */
-	getErrors: function() {
+	getErrors: function () {
 		if (this._errors.length)
 			return "<p>" + this._errors.join('<br>') + "</p>";
 		return '';
@@ -29,10 +29,10 @@ Ext.define('qqext.factory.PanelGrid', {
 	 * Проверяет правильность заполнения формы
 	 * @returns {Boolean} если ошибок нет то true
 	 */
-	isValid: function() {
+	isValid: function () {
 		var errors = this._errors = [];
-		this.getStore().data.each(function(item) {
-			item.validate().each(function(it) {
+		this.getStore().data.each(function (item) {
+			item.validate().each(function (it) {
 				errors.push(it.message);
 			});
 		});
@@ -43,23 +43,27 @@ Ext.define('qqext.factory.PanelGrid', {
 	 * @param {Ext.data.Model} model модель для использования в хранилище сетки
 	 * @param {Object[]} columns колонки для сетки, см. Ext.grid.Panel
 	 */
-	constructor: function(model, columns) {
+	constructor: function (model, columns) {
 		var me = this,
 				createCmp = Ext.create;
-		me.plugins = 'cellediting';
+		me.plugins = [{ptype: 'cellediting', clicksToEdit: 1}];
+//		me.plugins = 'cellediting';
 		me.dockedItems = [
 			createCmp('Ext.container.Container', {
 				layout: 'hbox',
-				items: [createCmp('FHandlerButton', 'Добавить', function() {
+				items: [createCmp('FHandlerButton', 'Добавить', function () {
 						me.getStore().add(createCmp(model));
+//						me.getSelectionModel().select(record).fireEvent('click');
+//						var editor = me.getEditor(record);
+//						editor.startedit(record, 0);
 					},
-                                        {cls:'add_small_btn'}),
-					createCmp('FHandlerButton', 'Удалить', function() {
+							{cls: 'add_small_btn'}),
+					createCmp('FHandlerButton', 'Удалить', function () {
 						var sm = me.getSelectionModel();
 						if (sm.hasSelection())
 							me.getStore().remove(sm.getSelection());
 					},
-                                        {cls:'del_small_btn'})
+							{cls: 'del_small_btn'})
 				]
 			})];
 		me.columns = columns;
@@ -70,10 +74,10 @@ Ext.define('qqext.factory.PanelGrid', {
 	 * Обработчик события beforeedit в режиме просмотра
 	 * @returns {Boolean} false - запретить редактирование
 	 */
-	_bh: function() {
+	_bh: function () {
 		return false;
 	},
-	setViewOnly: function(state) {
+	setViewOnly: function (state) {
 		var me = this;
 		// 0 - заголовки таблицы, 1 - контейнер с кнопками
 		me.dockedItems.getAt(1).setDisabled(state);

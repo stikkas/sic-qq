@@ -354,7 +354,7 @@ Ext.application({
 						}
 						break;
 					case buttonNames.trans:
-						if (user.isAllowed([rules.crd, rules.exec])) {
+						if (user.isAllowed([rules.crd, rules.exec, rules.reg])) {
 							var status = request.get('status');
 							if (status === registered || status === onexec
 									|| status === exec || status === notify)
@@ -362,7 +362,7 @@ Ext.application({
 						}
 						break;
 					case buttonNames.exec:
-						if (user.isAllowed(rules.exec)) {
+						if (user.isAllowed([rules.exec, rules.crd, rules.reg])) {
 							var status = request.get('status');
 							if (status === onexec || status === exec)
 								ns.disableArticles(false, buttonNames.exec);
@@ -531,7 +531,7 @@ Ext.application({
 				msg: message,
 				buttons: Ext.Msg.OK,
 				icon: Ext.Msg.ERROR,
-				cls: 'err_msg',
+//				cls: 'err_msg',
 				maxWidth: 800
 			});
 

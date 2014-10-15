@@ -18,6 +18,8 @@ public class SearchCritery implements JsonIn {
 
 	private Long queryTypeId;
 
+	private Long executor;
+
 	private String queryContent;
 
 	private Long applicantTypeId;
@@ -166,6 +168,14 @@ public class SearchCritery implements JsonIn {
 
 	public void setLitera(Long litera) {
 		this.litera = litera;
+	}
+
+	public Long getExecutor() {
+		return executor;
+	}
+
+	public void setExecutor(Long executor) {
+		this.executor = executor;
 	}
 
 }

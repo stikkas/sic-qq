@@ -27,7 +27,7 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 	/**
 	 * Возвращает ошибки
 	 */
-	getErrors: function() {
+	getErrors: function () {
 		var me = this,
 				error = me._df.getErrors() + me._uf.getErrors();
 		if (me._errors.length)
@@ -40,7 +40,7 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 	 * Проверяет правильность заполнения формы
 	 * @returns {Boolean} если ошибок нет то true
 	 */
-	isValid: function() {
+	isValid: function () {
 		var me = this,
 				errors = me._errors = [],
 				result = true;
@@ -59,9 +59,9 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 	/**
 	 * Обновляет данные на сервере
 	 */
-	sync: function() {
-		[this._df.getStore(), this._uf.getStore()].forEach(function(v) {
-			v.sync({callback: function() {
+	sync: function () {
+		[this._df.getStore(), this._uf.getStore()].forEach(function (v) {
+			v.sync({callback: function () {
 					v.load();
 				}});
 		});
@@ -69,7 +69,7 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 	/**
 	 * Загружает данные в форму
 	 */
-	loadRecord: function() {
+	loadRecord: function () {
 		this._df.getStore().load();
 		this._uf.getStore().load();
 	},
@@ -77,12 +77,12 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 	 * Устанавливает хранилища для своих таблиц. Хранилища берутся
 	 * из ассоциаций текущего запроса.
 	 */
-	setStorage: function() {
+	setStorage: function () {
 		var model = qqext.request.getExec();
 		this._df.reconfigure(model.deliveryactions());
 		this._uf.reconfigure(model.usedmaterials());
 	},
-	initComponent: function() {
+	initComponent: function () {
 		var me = this,
 				createCmp = Ext.create,
 				ns = qqext,

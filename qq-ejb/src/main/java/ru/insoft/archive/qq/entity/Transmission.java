@@ -30,15 +30,6 @@ import ru.insoft.archive.extcommons.json.JsonOut;
  */
 @Entity
 @Table(name = "QQ_TRANSMISSION")
-@NamedQueries({
-	@NamedQuery(name = "Transmission.findAll", query = "SELECT t FROM Transmission t"),
-	@NamedQuery(name = "Transmission.findById", query = "SELECT t FROM Transmission t WHERE t.id = :id"),
-	@NamedQuery(name = "Transmission.findByControl", query = "SELECT t FROM Transmission t WHERE t.control = :control"),
-	@NamedQuery(name = "Transmission.findByControlDate", query = "SELECT t FROM Transmission t WHERE t.controlDate = :controlDate"),
-	@NamedQuery(name = "Transmission.findByExecutionDate", query = "SELECT t FROM Transmission t WHERE t.executionDate = :executionDate"),
-	@NamedQuery(name = "Transmission.findByResolutionAuthor", query = "SELECT t FROM Transmission t WHERE t.resolutionAuthor = :resolutionAuthor"),
-	@NamedQuery(name = "Transmission.findByBossExecutionDate", query = "SELECT t FROM Transmission t WHERE t.bossExecutionDate = :bossExecutionDate"),
-	@NamedQuery(name = "Transmission.findByStorageName", query = "SELECT t FROM Transmission t WHERE t.storageName = :storageName")})
 public class Transmission implements Serializable, HasId, JsonIn, JsonOut {
 
 	private static final long serialVersionUID = 1L;

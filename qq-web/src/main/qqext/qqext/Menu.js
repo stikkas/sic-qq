@@ -120,7 +120,9 @@ Ext.define('qqext.Menu', {
 					createCmp = Ext.create,
 					// меню редактирования при выбранных подразделах: 'ЖВК', 'Поиск', 'Отчетные документы'
 					searchEdit = createCmp('HButtonMenu', [
-						{text: labels.add, action: add, name: btns.add, opts: {cls: 'add_btn'}},
+						{text: labels.add, action: add, name: btns.add, opts: {
+								disabled: !ns.user.isAllowed(ns.rules.reg),
+								cls: 'add_btn'}},
 						{text: labels.search, action: find, opts: {cls: 'search_btn'}},
 						{text: labels.clean, action: clear, opts: {cls: 'clean_btn'}}
 					], 'ToolButton'),
@@ -155,7 +157,8 @@ Ext.define('qqext.Menu', {
 								name: btns.toSearch},
 							{text: labels.add, action: function () {
 									add(true);
-								}, opts: {cls: 'add_btn'}}], 'ToolButton'),
+								}, opts: {disabled: !ns.user.isAllowed(ns.rules.reg),
+									cls: 'add_btn'}}], 'ToolButton'),
 						menus.editReqMenu],
 					cls: 'back_btn h'
 				})]);

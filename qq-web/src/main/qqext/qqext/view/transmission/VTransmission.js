@@ -29,18 +29,27 @@ Ext.define('qqext.view.transmission.VTransmission', {
 	 */
 	_idx: 5,
 	listeners: {
-		activate: function(me, prev) {
+		activate: function (me, prev) {
 			var ns = qqext;
 			ns.Menu.setEditMenu(me._idx);
 			if (ns.request !== me.model) {
 				// Значит новый запрос (не тот который был до этого)
 				var model = me.model = ns.request;
-				model.getTrans({callback: function(r) {
+				model.getTrans({callback: function (r) {
 						me.loadRecord(r);
 						me.setViewOnly(true);
 						me._disableButtons(true, 1, 2, 3);
-						me._disableButtons(!(ns.user.isAllowed(ns.rules.crd) &&
-								model.get('status') === ns.getStatusId(ns.stats.reg)), 0);
+						var stats = ns.stats,
+								status = model.get('status');
+						if (ns.user.isAllowed(ns.rules.crd) &&
+								(status === ns.getStatusId(stats.reg) ||
+										(status === ns.getStatusId(stats.notify) ||
+												status === ns.getStatusId(stats.trans)) &&
+										!ns.isSIC))
+							me._disableButtons(false, 0);
+						else
+							me._disableButtons(true, 0);
+
 					}});
 
 			}
@@ -52,7 +61,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 	 * @property {qqext.cmp.FieldSet} _adds поля для "Дополнительные сведения"
 	 * @private
 	 */
-	initComponent: function() {
+	initComponent: function () {
 		//----------обработчики для кнопок меню---------
 		//sc - контекст для обработчика
 
@@ -67,7 +76,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 			me._disableButtons(true, 1, 2, 3);
 			me.setViewOnly(true);
 			me.updateRecord(trans);
-			trans.save({callback: function(rec, op, suc) {
+			trans.save({callback: function (rec, op, suc) {
 					if (suc) {
 						me._disableButtons(false, 0);
 					} else {
@@ -85,7 +94,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 		 * @returns {undefined}
 		 */
 		function remove() {
-			me.model.getTrans().destroy({callback: function(recs, operation) {
+			me.model.getTrans().destroy({callback: function (recs, operation) {
 					if (!operation.success)
 						ns.showError("Ошибка удаления данных", operation.getError());
 					else
@@ -107,10 +116,10 @@ Ext.define('qqext.view.transmission.VTransmission', {
 			me.setViewOnly(true);
 			if (me.isValid()) {
 				me.updateRecord(trans);
-				trans.save({callback: function(r, o, s) {
+				trans.save({callback: function (r, o, s) {
 						if (s) {
 							model.set('status', ns.getStatusId(ns.stats.onexec));
-							model.save({callback: function(rec, op, suc) {
+							model.save({callback: function (rec, op, suc) {
 									if (suc) {
 										ns.statusPanel.setStatus();
 										ns.turnOnArticles(ns.btns.exec);
@@ -178,8 +187,14 @@ Ext.define('qqext.view.transmission.VTransmission', {
 								configForDate)
 					]
 				}),
-				createCmp('FCheckbox', trans.control[1], trans.control[0]),
-				createCmp('FDateField', trans.controlDate[1], trans.controlDate[0], {allowBlank: false,
+				createCmp('FCheckbox', trans.control[1], trans.control[0], {
+					listeners: {
+						change: function (cb, value) {
+							me._cd.allowBlank = !value;
+						}
+					}
+				}),
+				me._cd = createCmp('FDateField', trans.controlDate[1], trans.controlDate[0], {
 					width: 250,
 					labelWidth: 150}),
 				me._adds = createCmp('FieldSet', {
@@ -215,7 +230,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 	 * правильно пересчитать размер), поэтому приходится делать это руками, после
 	 * того как форма будет активирована (afterrender тоже слишком рано)
 	 */
-	collapseAdds: function() {
+	collapseAdds: function () {
 		this._adds.collapse();
 	}
 });

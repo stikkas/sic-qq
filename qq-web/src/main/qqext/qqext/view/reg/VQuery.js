@@ -17,29 +17,44 @@ Ext.define('qqext.view.reg.VQuery', {
 	},
 	title: 'Запрос',
 	disabledCls: '',
-	initComponent: function() {
-		var createCmp = Ext.create;
-		Ext.applyIf(this, {
+	initComponent: function () {
+		var createCmp = Ext.create,
+				me = this,
+				ns = qqext;
+		Ext.applyIf(me, {
 			items: [
-				createCmp('FComboBox', 'Вид запроса', 'queryType', 'questionType', {
+				me.vz = createCmp('FComboBox', 'Вид запроса', 'queryType', 'questionType', {
 					listeners: {
-						change: function(box, value) {
-							var target = qqext.regForm.target;
-							if (box.getStore().getById(value).get('code') === 'Q_VALUE_QUEST_TYPE_TEMATIC')
+						change: function (box, value) {
+							var target = ns.regForm.target,
+									code = box.getStore().getById(value).get('code');
+							if (code === 'Q_VALUE_QUEST_TYPE_TEMATIC')
 								target.hide();
 							else
 								target.show();
-						},
-                                                width:370, 
-                                                labelWidth:150
-					}
+							if (ns.regForm.inbox.executor.getValue() !== ns.sicId) {
+								if (code === 'Q_VALUE_QUEST_TYPE_SOCIAL') {
+									me.pd.setViewOnly(true);
+									me.pd.viewOnly = true;
+									me.vz.social = true;
+								} else {
+									me.pd.viewOnly = false;
+									me.pd.setViewOnly(me.vz._viewMode);
+									me.vz.social = false;
+								}
+							}
+						}
+					},
+					width: 370,
+					labelWidth: 150
 				}),
-				createCmp('FDateField', 'Плановая дата исполнения запроса', 'plannedFinishDate',{width:270, labelWidth:150}),
-				createCmp('FTextArea', 'Содержание запроса', 'content', {width: 950, labelWidth:150}),
+				me.pd = createCmp('FDateField', 'Плановая дата исполнения запроса', 'plannedFinishDate', {
+					width: 270, labelWidth: 150}),
+				createCmp('FTextArea', 'Содержание запроса', 'content', {width: 950, labelWidth: 150}),
 				createCmp('FComboBox', 'Форма выдачи ответа', 'answerForm', 'answerFormType'),
-				createCmp('FCheckbox', 'Мотивированный отказ', 'motivatedRefusal')
+				me.mr = createCmp('FCheckbox', 'Мотивированный отказ', 'motivatedRefusal')
 			]
 		});
-		this.callParent();
+		me.callParent();
 	}
 });

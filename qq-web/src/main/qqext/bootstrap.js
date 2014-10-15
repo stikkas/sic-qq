@@ -913,6 +913,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.cmp.Date": [],
   "qqext.cmp.DisableButtons": [],
   "qqext.cmp.EditViewMode": [],
+  "qqext.cmp.ErrorGetter": [],
   "qqext.cmp.FieldContainer": [],
   "qqext.cmp.FieldSet": [],
   "qqext.cmp.Number": [],
@@ -1967,6 +1968,7 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "qqext.cmp.DisableButtons": [],
   "qqext.cmp.EditViewMode": [],
+  "qqext.cmp.ErrorGetter": [],
   "qqext.cmp.FieldContainer": [
     "FieldContainer",
     "widget.fieldcontainercmp"

@@ -36,7 +36,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 			if (ns.request === null) {
 				// Значит событие случилось по нажатию на кнопку "Добавить"
 				var
-						inbox = me.inbox,
 						user = ns.user,
 						orgId = user.get('organization'),
 						year = new Date().getYear() + 1900;
@@ -58,12 +57,8 @@ Ext.define('qqext.view.reg.VRegForm', {
 						me.inbox.prefix.setValue(answer.responseText);
 					}
 				});
-				if (!ns.isSIC) {
-					var executor = inbox.executor;
-					executor.setViewOnly(true);
-					executor.viewOnly = true;
+				if (!ns.isSIC)
 					model.set('execOrg', orgId);
-				}
 				me.loadRecord();
 			} else if (prev === ns.searchForm || prev === ns.jvkForm) {
 // Значит пришли по двойному клику на существуещем запросе, (открыли существующий запрос)
@@ -71,12 +66,20 @@ Ext.define('qqext.view.reg.VRegForm', {
 				model = me.initModel(ns.request);
 				me._disableButtons(true, 1, 2, 3);
 				me._disableButtons(!(ns.user.isAllowed(ns.rules.reg) &&
-						model.get('status') === ns.getStatusId(ns.stats.onreg)), 0);
+						model.get('status') === ns.getStatusId(ns.stats.onreg)
+						&& (ns.isSIC || model.get('litera') === model.get('execOrg'))), 0);
 				model.getAppl({callback: function () {
 						me.setViewOnly(true);
 						me.loadRecord();
 					}});
 			}
+
+			if (!ns.isSIC) {
+				var executor = me.inbox.executor;
+				executor.setViewOnly(true);
+				executor.viewOnly = true;
+			}
+
 		}
 	},
 	/**
@@ -223,10 +226,17 @@ Ext.define('qqext.view.reg.VRegForm', {
 			// Кнопки сохранить, удалить и регистрировать
 			me._disableButtons(true, 1, 2, 3);
 			me.setViewOnly(true);
+			me._setPD();
 			var model = me.model, status;
 			if (me.validate()) {
 				var userId = ns.user.get('userId'),
 						now = new Date();
+				if (me.query.mr.getValue()) { // Добавляем один день к плановой дате, если отказ
+					var plannedDateCombo = me.query.pd,
+							plannedDate = plannedDateCombo.getValue();
+					plannedDate.setDate(plannedDate.getDate() + 1);
+					plannedDateCombo.setValue(plannedDate)
+				}
 				me.updateRecord();
 				// Заполняем обязательные поля:
 
@@ -374,5 +384,31 @@ Ext.define('qqext.view.reg.VRegForm', {
 		me.applicant.collapseAdds();
 		qqext.statusPanel.setStatus('');
 		me.doLayout();
+	},
+	/**
+	 * Устанавливает плановую дату исполнения запроса.
+	 * Вызывается только при регистрации запроса, перед проверкой.
+	 * @private
+	 */
+	_setPD: function () {
+		var me = this,
+				date,
+				pd = me.query.pd,
+				vz = me.query.vz,
+				value;
+		if (me.inbox.executor.getValue() === qqext.sicId) {
+			date = new Date();
+			date.setDate(date.getDate() + 7);
+			pd.setValue(date);
+		}
+		else {
+			value = vz.getValue();
+			if (value &&
+					vz.getStore().getById(value).get('code') === 'Q_VALUE_QUEST_TYPE_SOCIAL') {
+				date = new Date();
+				date.setDate(date.getDate() + 30);
+				pd.setValue(date);
+			}
+		}
 	}
 });

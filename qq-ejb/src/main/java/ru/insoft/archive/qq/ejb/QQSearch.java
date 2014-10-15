@@ -93,24 +93,21 @@ public class QQSearch extends LoggedBean {
 						expressions.add(dateEqual);
 						break;
 					case "execDate":
-						Join<Question, Execution> eiJoin = root.join("execution");
 						Date d2 = jsonTools.parseBadStringDate(fb.getValue().toString());
-						Expression<Boolean> exDateExp = cb.equal(
-							cb.function("trunc", Date.class, eiJoin.get("execDate")), d2);
-						expressions.add(exDateExp);
+						expressions.add(cb.equal(cb.function("trunc", Date.class,
+							root.get("plannedFinishDate")), d2));
 						break;
 					case "fioOrg":
 						String applicant = (String) fb.getValue();
 						Join<Question, Applicant> aplJoin = root.join("applicant");
-						Expression<String> fio = cb.concat(cb.concat(cb.concat(
-							aplJoin.<String>get("lastName"), " "),
-							cb.concat(aplJoin.<String>get("firstName"), " ")),
-							aplJoin.<String>get("middleName"));
-						Expression<Boolean> phyzLike = cb.like(cb.lower(fio), applicant.toLowerCase());
-						Expression<String> jur = cb.lower(aplJoin
-							.<String>get("organization"));
-						Expression<Boolean> jyrLike = cb.like(jur,
-							applicant.toLowerCase());
+//						Expression<String> fio = cb.concat(cb.concat(cb.concat(
+//							aplJoin.<String>get("lastName"), " "),
+//							cb.concat(aplJoin.<String>get("firstName"), " ")),
+//							aplJoin.<String>get("middleName"));
+						Expression<Boolean> phyzLike = cb.like(cb.lower(aplJoin.<String>get("lastName")),
+							"%" + applicant.toLowerCase() + "%");
+						Expression<Boolean> jyrLike = cb.like(aplJoin.<String>get("organization"),
+							"%" + applicant.toLowerCase() + "%");
 						Expression<Boolean> finalOr = cb.or(phyzLike, jyrLike);
 						expressions.add(finalOr);
 						break;
@@ -348,6 +345,12 @@ public class QQSearch extends LoggedBean {
 		Long litera = query.getLitera();
 		if (litera != null) {
 			expressions.add(cb.equal(root.<Long>get("litera"), litera));
+		}
+
+		Long executor = query.getExecutor();
+		if (executor != null) {
+			expressions.add(cb.equal(root.join("transmission")
+				.<Long>get("executor"), executor));
 		}
 
 		Expression<Boolean> finalExpression = null;

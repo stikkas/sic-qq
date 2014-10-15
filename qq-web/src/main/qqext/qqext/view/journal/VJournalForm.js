@@ -6,6 +6,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	alias: 'VJournalForm',
 	extend: 'Ext.grid.Panel',
 	requires: [
+		'Ext.data.Store',
 		'Ext.grid.column.Date',
 		'Ext.util.Filter',
 		'qqext.factory.ComboBox',
@@ -124,7 +125,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 		if (user.isAllowed(rules.exec) && !user.isAllowed(rules.crd)
 				&& !user.isAllowed(rules.reg)) {
 			var userId = user.get('userId');
-			execStore = createCmp('Ext.data.store', {
+			execStore = createCmp('Ext.data.Store', {
 				fields: ['id', 'name'],
 				data: [{id: userId, name: user.get('name')}]
 			});
@@ -220,16 +221,16 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					},
 					{
 						xtype: 'datecolumn',
-						text: 'Дата исполнения контрольная',
+						text: 'Дата исполнения плановая',
 						width: 100,
 						dataIndex: 'execDate',
-						itemId: 'execDateControl',
+						itemId: 'planDateExec',
 						format: 'd.m.Y',
 						items: [{
 								width: '90%',
 								xtype: 'hawkDateField',
 								focusOnToFront: false,
-								name: 'execDateControl',
+								name: 'planDateExec',
 								listeners: {
 									select: me._filterDateSelected,
 									render: me._render,
@@ -243,17 +244,36 @@ Ext.define('qqext.view.journal.VJournalForm', {
 								}
 							}]
 					},
+//					{
+//						text: 'От кого поступил',
+//						dataIndex: 'fioOrg',
+//						items: [
+//							createCmp('FComboBox', '', 'journalApplicantFilterStore', 'requestFromCombo', {
+//								width: '90%',
+//								queryMode: 'local',
+//								listeners: {
+//									select: me._filterComboSelected,
+//									render: me._render,
+//									specialkey: me._specialKeyStop
+//								}
+//							})
+//						]
+//					},
 					{
 						text: 'От кого поступил',
 						dataIndex: 'fioOrg',
 						items: [
-							createCmp('FComboBox', '', 'journalApplicantFilterStore', 'requestFromCombo', {
+							createCmp('FTextField', '', 'applicantField', {
 								width: '90%',
-								queryMode: 'local',
 								listeners: {
-									select: me._filterComboSelected,
-									render: me._render,
-									specialkey: me._specialKeyStop
+									specialkey: function (tf, event) {
+										event.stopPropagation();
+										if (event.getKey() === event.ENTER) {
+											var grid = tf.ownerCt.ownerCt.ownerCt;
+											grid.applyFilter();
+										}
+									},
+									render: me._render
 								}
 							})
 						]

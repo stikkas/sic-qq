@@ -14,8 +14,7 @@ Ext.define('qqext.Menu', {
 		'qqext.model.Notification',
 		'qqext.model.Applicant',
 		'qqext.model.ExecutionInfo',
-		'qqext.model.WayToSend',
-		'qqext.view.StatusPanel'
+		'qqext.model.WayToSend'
 	],
 	statics: {
 		/**

@@ -1,16 +1,23 @@
+/**
+ * Общий интерфейс для получения ошибок от элементов, которые имеют
+ * у себя в списке элементов элементы с методом getErrors
+ */
 Ext.define('qqext.cmp.ErrorGetter', {
 	getErrors: function () {
-		console.log(this.$className);
 		var items = this.items,
 				length = items.length,
-				i = 0, error = '', tmp;
+				i = 0, error = '', tmp, el;
 		for (; i < length; ++i) {
-			try { // На случай если присутсвуют элементы не имеющие getErrors
-				tmp = items.getAt(i).getErrors();
+			el = items.getAt(i);
+			if (el.getErrors instanceof Function) {
+//			try { // На случай если присутсвуют элементы не имеющие getErrors
+//				tmp = items.getAt(i).getErrors();
+				tmp = el.getErrors();
 				if (tmp) // Чтобы не попадали udefined
 					error += tmp;
-			} catch (e) {
 			}
+//			} catch (e) {
+//			}
 		}
 		return error;
 	}

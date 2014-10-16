@@ -25,6 +25,29 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	store: 'journal',
 	margin: '0 5 10 5',
 	border: true,
+	viewConfig: {
+		getRowClass: function (record) {
+			var ns = qqext,
+					statsId = ns.statsId,
+					stats = ns.stats,
+					status = record.get('status');
+			var date = record.get('execDate');
+			if (date &&
+					((ns.isSIC && (
+							status === statsId[stats.reg] ||
+							status === statsId[stats.onexec])) ||
+							(!ns.isSIC && !(
+									status === statsId[stats.onreg] ||
+									status === statsId[stats.exec])))) {
+				var delta = Math.ceil((date - new Date()) / qqext.msPday);
+				if (delta <= 1)
+					return 'immediate';
+				if (delta < 4)
+					return 'urgent';
+			}
+			return '';
+		}
+	},
 	/**
 	 * @property {Ext.util.Filter[]} fltrs
 	 * Фильтры, которые будут применяться в зависимости от пользователя, который работает с системой
@@ -284,7 +307,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						dataIndex: 'status',
                                                 width:150,
 						items: [
-							createCmp('FComboBox', '', 'Q_DICT_QUESTION_STATUSES', 'requestStatusCombo', {
+							createCmp('FComboBox', '', ns.stIds.stats, 'requestStatusCombo', {
 								width: '90%',
 								listeners: {
 									select: me._filterComboSelected,

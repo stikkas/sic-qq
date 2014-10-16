@@ -24,13 +24,13 @@ Ext.define('qqext.view.notify.VNotify', {
 	 */
 	_idx: 4,
 	listeners: {
-		activate: function(me, prev) {
+		activate: function (me, prev) {
 			var ns = qqext;
 			ns.Menu.setEditMenu(me._idx);
 			if (ns.request !== me.model) {
 				// Значит новый запрос (не тот который был до этого)
 				var model = me.model = ns.request;
-				model.getNoti({callback: function(r) {
+				model.getNoti({callback: function (r) {
 						me.loadRecord(r);
 						me.setViewOnly(true);
 						me._disableButtons(true, 0);
@@ -40,7 +40,7 @@ Ext.define('qqext.view.notify.VNotify', {
 			ns.viewport.doLayout();
 		}
 	},
-	initComponent: function() {
+	initComponent: function () {
 		//----------Обработчики кнопок меню----------
 		function saveNotify() {
 			var model = me.model,
@@ -50,11 +50,11 @@ Ext.define('qqext.view.notify.VNotify', {
 			me.setViewOnly(true);
 			me.updateRecord(noti);
 
-			noti.save({callback: function(rec, op, suc) {
+			noti.save({callback: function (rec, op, suc) {
 					if (suc) {
-						model.set('status', ns.getStatusId(ns.stats.notify));
+						model.set('status', ns.statsId[ns.stats.notify]);
 						// Обновляем модель запроса (статус)
-						model.save({callback: function(record, operation, success) {
+						model.save({callback: function (record, operation, success) {
 								if (success) {
 									me._disableButtons(false, 1);
 									ns.statusPanel.setStatus();

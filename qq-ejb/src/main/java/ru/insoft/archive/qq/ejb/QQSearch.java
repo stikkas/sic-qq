@@ -106,7 +106,7 @@ public class QQSearch extends LoggedBean {
 //							aplJoin.<String>get("middleName"));
 						Expression<Boolean> phyzLike = cb.like(cb.lower(aplJoin.<String>get("lastName")),
 							"%" + applicant.toLowerCase() + "%");
-						Expression<Boolean> jyrLike = cb.like(aplJoin.<String>get("organization"),
+						Expression<Boolean> jyrLike = cb.like(cb.lower(aplJoin.<String>get("organization")),
 							"%" + applicant.toLowerCase() + "%");
 						Expression<Boolean> finalOr = cb.or(phyzLike, jyrLike);
 						expressions.add(finalOr);
@@ -310,8 +310,7 @@ public class QQSearch extends LoggedBean {
 
 		String content = query.getQueryContent();
 		if (content != null) {
-			content = content.toUpperCase();
-			content += "%";
+			content = "%" + content.toUpperCase() + "%";
 			Expression<Boolean> contentExp = cb.like(
 				cb.upper(root.<String>get("content")), content);
 			expressions.add(contentExp);

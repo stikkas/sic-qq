@@ -31,7 +31,7 @@ Ext.define('qqext.view.WelcomePage', {
 					window.open(urls.storage, "_self");
 				}, {cls: cls,
 					icon: 'images/books.png',
-					width: 220
+					width: 400
 				}),
 //				createCmp('FHrefButton', labels.admin, urls.admin, {cls: cls,
 //                                            icon:'images/adm_icon.png',
@@ -42,7 +42,7 @@ Ext.define('qqext.view.WelcomePage', {
 					ns.setActivePage(1);
 				}, {cls: cls,
 					icon: 'images/documents.png',
-					width: 220
+					width: 400
 				})
 			],
 			buttons: [createCmp('FHandlerButton', labels.quit, ns.quitAction)]

@@ -22,7 +22,7 @@ Ext.define('qqext.view.VTitleBar', {
 				items: [
 					{
 						xtype: 'label',
-						text: 'АС Запросы',
+						text: 'АИС Запросы',
 						flex: 4
 					},
 					{

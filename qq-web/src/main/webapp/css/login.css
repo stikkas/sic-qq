@@ -11,12 +11,13 @@
     text-shadow:2px 3px 5px #864D2D;
 }
 #zagolovok{
-    margin-top:15%;
+    margin-top:10%;
     margin-bottom:20px;
 }
 #subzagolovok{
     font-size:1.8em;
-    margin-bottom:90px;
+    width:800px;
+    margin:0 auto 70px auto;
 }
 .login_panel{
     color:#230F07;
@@ -26,7 +27,7 @@
     background-size:253px 165px;
     background-position:center;
     margin:auto;
-    margin-bottom:25%;
+    margin-bottom:32%;
 }
 legend{
     color:#732607;

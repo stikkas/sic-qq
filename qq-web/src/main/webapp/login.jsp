@@ -50,8 +50,8 @@
 			password = password == null ? "" : password;
 			String path = request.getRequestURL().toString();
 		%>
-		<div id="zagolovok">АС Запросы</div>
-		<div id="subzagolovok">Система управления документами</div>
+		<div id="zagolovok">АИС Запросы</div>
+		<div id="subzagolovok">Справочно-информационный центр федеральных государственных архивов</div>
         <form method="POST" action="j_security_check" class="login_panel">
 			<fieldset>
 				<legend align="center">Вход в систему</legend>

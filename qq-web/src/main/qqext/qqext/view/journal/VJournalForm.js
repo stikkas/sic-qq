@@ -261,6 +261,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 //					},
 					{
 						text: 'От кого поступил',
+                                                width:200,
 						dataIndex: 'fioOrg',
 						items: [
 							createCmp('FTextField', '', 'applicantField', {
@@ -281,6 +282,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					{
 						text: 'Состояние запроса',
 						dataIndex: 'status',
+                                                width:150,
 						items: [
 							createCmp('FComboBox', '', 'Q_DICT_QUESTION_STATUSES', 'requestStatusCombo', {
 								width: '90%',

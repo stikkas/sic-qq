@@ -35,7 +35,7 @@ Ext.define('qqext.controller.Main', {
 //					allUsers: 'QQ_USERS',
 					journalApplicantFilterStore: 'QQ_JOURNAL_APPLICANT_FILTER',
 					journalExecutors: 'QQ_JOURNAL_EXECUTOR',
-					Q_DICT_QUESTION_STATUSES: 'Q_DICT_QUESTION_STATUSES'
+//					Q_DICT_QUESTION_STATUSES: 'Q_DICT_QUESTION_STATUSES'
 				};
 
 		for (var key in kput)

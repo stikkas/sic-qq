@@ -66,7 +66,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 				model = me.initModel(ns.request);
 				me._disableButtons(true, 1, 2, 3);
 				me._disableButtons(!(ns.user.isAllowed(ns.rules.reg) &&
-						model.get('status') === ns.getStatusId(ns.stats.onreg)
+						model.get('status') === ns.statsId[ns.stats.onreg]
 						&& (ns.isSIC || model.get('litera') === model.get('execOrg'))), 0);
 				model.getAppl({callback: function () {
 						me.setViewOnly(true);
@@ -188,7 +188,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 			}
 			model.set('updateUser', userId);
 			model.set('updateDate', now);
-			model.set('status', ns.getStatusId(ns.stats.onreg));
+			model.set('status', ns.statsId[ns.stats.onreg]);
 			me._saveModel(function () {
 				me._disableButtons(false, 0);
 			}, function () {
@@ -231,12 +231,14 @@ Ext.define('qqext.view.reg.VRegForm', {
 			if (me.validate()) {
 				var userId = ns.user.get('userId'),
 						now = new Date();
-				if (me.query.mr.getValue()) { // Добавляем один день к плановой дате, если отказ
-					var plannedDateCombo = me.query.pd,
-							plannedDate = plannedDateCombo.getValue();
-					plannedDate.setDate(plannedDate.getDate() + 1);
-					plannedDateCombo.setValue(plannedDate)
-				}
+				/*
+				 if (me.query.mr.getValue()) { // Добавляем один день к плановой дате, если отказ
+				 var plannedDateCombo = me.query.pd,
+				 plannedDate = plannedDateCombo.getValue();
+				 plannedDate.setDate(plannedDate.getDate() + 1);
+				 plannedDateCombo.setValue(plannedDate)
+				 }
+				 */
 				me.updateRecord();
 				// Заполняем обязательные поля:
 
@@ -244,7 +246,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 					status = ns.stats.trans;
 				else
 					status = ns.stats.reg;
-				model.set('status', ns.getStatusId(status));
+				model.set('status', ns.statsId[status]);
 				if (!ns.request) {// Еще не сохраненная модель
 					model.set('insertUser', userId);
 					model.set('insertDate', now);

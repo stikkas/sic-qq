@@ -35,17 +35,23 @@ Ext.define('qqext.view.transmission.VTransmission', {
 			if (ns.request !== me.model) {
 				// Значит новый запрос (не тот который был до этого)
 				var model = me.model = ns.request;
+				if (ns.isSIC && model.get('execOrg') !== ns.sicId) {
+					me._be.bindStore(ns.stIds.allusers);
+					me._ex.bindStore(ns.stIds.allusers);
+				}
 				model.getTrans({callback: function (r) {
 						me.loadRecord(r);
 						me.setViewOnly(true);
 						me._disableButtons(true, 1, 2, 3);
 						var stats = ns.stats,
+								statsId = ns.statsId,
 								status = model.get('status');
 						if (ns.user.isAllowed(ns.rules.crd) &&
-								(status === ns.getStatusId(stats.reg) ||
-										(status === ns.getStatusId(stats.notify) ||
-												status === ns.getStatusId(stats.trans)) &&
-										!ns.isSIC))
+								(status === statsId[stats.reg] ||
+										((status === statsId[stats.notify] ||
+												status === statsId[stats.trans]) &&
+												!ns.isSIC))
+								)
 							me._disableButtons(false, 0);
 						else
 							me._disableButtons(true, 0);
@@ -118,7 +124,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 				me.updateRecord(trans);
 				trans.save({callback: function (r, o, s) {
 						if (s) {
-							model.set('status', ns.getStatusId(ns.stats.onexec));
+							model.set('status', ns.statsId[ns.stats.onexec]);
 							model.save({callback: function (rec, op, suc) {
 									if (suc) {
 										ns.statusPanel.setStatus();
@@ -165,7 +171,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 					layout: 'hbox',
 					cls: 'right_date',
 					items: [
-						createCmp('FComboBox', trans.bossExecutor[1], ns.stIds.users,
+						me._be = createCmp('FComboBox', trans.bossExecutor[1], ns.stIds.users,
 								trans.bossExecutor[0], {allowBlank: false,
 							width: 450,
 							labelWidth: 150
@@ -178,7 +184,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 					layout: 'hbox',
 					cls: 'right_date',
 					items: [
-						createCmp('FComboBox', trans.executor[1], ns.stIds.users, trans.executor[0],
+						me._ex = createCmp('FComboBox', trans.executor[1], ns.stIds.users, trans.executor[0],
 								{allowBlank: false,
 									width: 450,
 									labelWidth: 150

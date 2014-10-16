@@ -17,7 +17,8 @@ Ext.application({
 		'qqext.Menu',
 		'qqext.store.DictValuesStore',
 		'qqext.store.DictStore',
-		'Ext.util.Filter'
+		'Ext.util.Filter',
+		'qqext.view.StatusPanel'
 	],
 	controllers: ['qqext.controller.Main',
 		'qqext.controller.AttachedFiles'
@@ -60,6 +61,18 @@ Ext.application({
 				// Настраиваем глобальные переменные
 				me.initQQ();
 				Ext.create('Viewport', {});
+
+				Ext.Ajax.on('requestexception', function (conn, response, options) {
+					if (response.status === 403) {
+						console.log("Connection:");
+						console.log(conn);
+						console.log("Options:");
+						console.log(options);
+						console.log("Response:");
+						console.log(response);
+//				window.location = 'login';
+					}
+				});
 
 
 				// Загружаем настройки для прикрепленных файлов
@@ -198,6 +211,11 @@ Ext.application({
 		 * @property {Ext.data.Model} request
 		 * Текущий запрос (модель Question)
 		 */
+		/**
+		 * @property {Number} msPday
+		 * кол-во миллисекунд в дне
+		 */
+		ns.msPday = 1000 * 60 * 60 * 24;
 		/*
 		 * Различные кнопки, на которые нужно иметь ссылки по ходу дела. Обращаться к ним
 		 * только через интерфейс {@link #getButton} и {@link #addButton}.
@@ -303,6 +321,10 @@ Ext.application({
 			exec: 'Q_RULE_EXECUTOR'
 		};
 		/**
+		 * @property {Object} statsId
+		 * соотношения кодов статуса к его идентификаторам
+		 */
+		/**
 		 * @property {Object} stats
 		 * кодовые значения статусов заросов
 		 */
@@ -332,13 +354,14 @@ Ext.application({
 					rules = ns.rules,
 					user = ns.user,
 					request = ns.request,
+					statsId = ns.statsId,
 					// TODO: сделать что-то чтобы проверять по кодам статуса а не по ID из таблицы
-					onreg = toa.onreg || (toa.onreg = ns.getStatusId(statuses.onreg)),
-					registered = toa.reg || (toa.reg = ns.getStatusId(statuses.reg)),
-					onexec = toa.onexec || (toa.onexec = ns.getStatusId(statuses.onexec)),
-					exec = toa.exec || (toa.exec = ns.getStatusId(statuses.exec)),
-					trans = toa.trans || (toa.trans = ns.getStatusId(statuses.trans)),
-					notify = toa.notify || (toa.notify = ns.getStatusId(statuses.notify)),
+					onreg = toa.onreg || (toa.onreg = statsId[statuses.onreg]),
+					registered = toa.reg || (toa.reg = statsId[statuses.reg]),
+					onexec = toa.onexec || (toa.onexec = statsId[statuses.onexec]),
+					exec = toa.exec || (toa.exec = statsId[statuses.exec]),
+					trans = toa.trans || (toa.trans = statsId[statuses.trans]),
+					notify = toa.notify || (toa.notify = statsId[statuses.notify]),
 					status,
 					buttons = arguments.length > 0 ? arguments : [
 						buttonNames.notify, buttonNames.trans, buttonNames.exec],
@@ -356,7 +379,7 @@ Ext.application({
 					case buttonNames.trans:
 						if (user.isAllowed([rules.crd, rules.exec, rules.reg])) {
 							var status = request.get('status');
-							if (status === registered || status === onexec
+							if (status === registered || status === trans
 									|| status === exec || status === notify)
 								ns.disableArticles(false, buttonNames.trans);
 						}
@@ -536,24 +559,6 @@ Ext.application({
 			});
 
 		};
-		// Пока так, в будущем, когда буду дорабатывать программу, надо обязательно переделать
-		/**
-		 * Возвращает id статуса запроса для заданного кодового значения
-		 * @param {String} code код для статуса
-		 * @returns {Number/undefined} номер id соответстующего коду
-		 */
-		ns.getStatusId = function (code) {
-			var statusId;
-			Ext.getStore('Q_DICT_QUESTION_STATUSES').
-					findBy(function (record, id) {
-						if (record.get('code') === code) {
-							statusId = id;
-							return true;
-						}
-						return false;
-					});
-			return statusId;
-		};
 		/**
 		 * Идентификатор СИЦ
 		 * @property {Number} sicId
@@ -567,10 +572,24 @@ Ext.application({
 				create = Ext.create,
 				ids = ns.stIds = {
 					litera: 'litera',
-					users: 'users'
+					users: 'users',
+					allusers: 'allusers',
+					stats: 'statuses'
 				};
 		create('DictStore', ids.litera, ids.litera, organization);
 		create('DictStore', ids.users, ids.users, organization);
+		create('DictStore', ids.allusers, ids.users);
+		create('DictStore', ids.stats, ids.stats, {
+			listeners: {
+				load: function (st, records) {
+					ns.statsId = {};
+					records.forEach(function (r) {
+						ns.statsId[r.get('code')] = r.get('id');
+					});
+					ns.statusPanel.fill();
+				}
+			}
+		});
 	}
 });
 

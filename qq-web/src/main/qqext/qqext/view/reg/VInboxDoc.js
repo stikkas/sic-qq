@@ -68,7 +68,7 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 								}
 							}
 						}),
-				me.registrator = createCmp('FComboBox', 'ФИО регистратора', ns.stIds.users,
+				me.registrator = createCmp('FComboBox', 'ФИО регистратора', ns.stIds.allusers,
 						'registrator', true,
 						{viewOnly: true, allowBlank: true, width: 500, labelWidth: 150})// Выставляется программно в модели
 			]

@@ -28,7 +28,7 @@ public class JournalItem extends QuestionInfoItem implements JsonOut {
 		}
 
 		Transmission t = q.getTransmission();
-		if (t != null) {
+		if (t != null && t.getExecutor() != null) {
 			this.executor = t.getExecutorValue().getName();
 		}
 

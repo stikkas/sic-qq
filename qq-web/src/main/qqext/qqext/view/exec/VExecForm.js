@@ -33,7 +33,7 @@ Ext.define('qqext.view.exec.VExecForm', {
 				me._disableButtons(true, 1, 2, 3);
 				me._disableButtons(!(ns.user.isAllowed(ns.rules.exec) &&
 						ns.user.get('organization') === me.model.get('execOrg') &&
-						me.model.get('status') === ns.getStatusId(ns.stats.onexec)), 0);
+						me.model.get('status') === ns.statsId[ns.stats.onexec]), 0);
 
 				me.setViewOnly(true);
 				me._initData();
@@ -146,7 +146,7 @@ Ext.define('qqext.view.exec.VExecForm', {
 			}
 			if (me.validate()) {
 				me._saveData(function () {
-					model.set('status', ns.getStatusId(ns.stats.exec));
+					model.set('status', ns.statsId[ns.stats.exec]);
 					model.save({callback: function (r, o, s) {
 							if (s) {
 								ns.statusPanel.setStatus();

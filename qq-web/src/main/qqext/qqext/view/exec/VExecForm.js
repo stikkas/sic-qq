@@ -63,6 +63,8 @@ Ext.define('qqext.view.exec.VExecForm', {
 	_saveData: function (success, failure) {
 		// TODO: Может стоит обновить дату и пользователя обновления запроса
 		var me = this;
+		if (!qqext.checkDates([me._ef.df, me._mf.df]))
+			return;
 		me.setViewOnly(true);
 		me._disableButtons(true, 0, 1, 2, 3);
 		var model = me.model.getExec();

@@ -23,7 +23,7 @@ Ext.define('qqext.view.reg.VApplicant', {
 	 * @property {qqext.cmp.FieldSet} _adds поля для "Дополнительные сведения"
 	 * @private
 	 */
-	initComponent: function() {
+	initComponent: function () {
 		var
 				me = this,
 				ns = qqext,
@@ -40,11 +40,11 @@ Ext.define('qqext.view.reg.VApplicant', {
 					width: 450,
 					labelWidth: 150,
 					listeners: {
-						change: function(cb, newv) {
+						change: function (cb, newv) {
 							if (newv)
 								switchTypeUser(cb.getStore().getById(newv).get('code'));
 							else
-								allusers.forEach(function(v) {
+								allusers.forEach(function (v) {
 									v.hide();
 								});
 						}
@@ -84,7 +84,7 @@ Ext.define('qqext.view.reg.VApplicant', {
 						createCmp('FTextField', applicant.issueDocNum[1], applicant.issueDocNum[0], {
 							width: 250, labelWidth: 150
 						}),
-						createCmp('FDateField', applicant.issueDocDate[1], applicant.issueDocDate[0], {
+						me.dt = createCmp('FDateField', applicant.issueDocDate[1], applicant.issueDocDate[0], {
 							width: 250, labelWidth: 150
 						}),
 						createCmp('FTextField', applicant.fioJurPerson[1], applicant.fioJurPerson[0], {
@@ -104,22 +104,22 @@ Ext.define('qqext.view.reg.VApplicant', {
 		// Переключает тип пользователя
 		function switchTypeUser(type) {
 			if (typef === type) { // Выбрано физическое лицо
-				fisic.forEach(function(v) {
+				fisic.forEach(function (v) {
 					v.show();
 					v.allowBlank = false;
 				});
-				uric.forEach(function(u) {
+				uric.forEach(function (u) {
 					u.hide();
 					u.setValue();
 					u.allowBlank = true;
 				});
 			} else {  // Выбрано юридическое лицо
-				fisic.forEach(function(v) {
+				fisic.forEach(function (v) {
 					v.hide();
 					v.setValue('');
 					v.allowBlank = true;
 				});
-				uric.forEach(function(u) {
+				uric.forEach(function (u) {
 					u.show();
 					u.allowBlank = false;
 				});
@@ -133,7 +133,7 @@ Ext.define('qqext.view.reg.VApplicant', {
 	 * правильно пересчитать размер), поэтому приходится делать это руками, после
 	 * того как форма будет активирована (afterrender тоже слишком рано)
 	 */
-	collapseAdds: function() {
+	collapseAdds: function () {
 		this._adds.collapse();
 	}
 });

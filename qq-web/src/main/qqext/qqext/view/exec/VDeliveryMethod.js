@@ -100,7 +100,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 					]
 				}),
 				createCmp('Ext.Component', {autoEl: 'hr'}),
-				createCmp('FDateField', way.notice[1], way.notice[0], {
+				me.df = createCmp('FDateField', way.notice[1], way.notice[0], {
 					width: 270,
 					labelWidth: 150
 				}),

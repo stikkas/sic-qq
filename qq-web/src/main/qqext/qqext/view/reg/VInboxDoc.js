@@ -63,6 +63,7 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 										plannedDateCombo.viewOnly = true;
 									} else if (!ns.regForm.query.vz.social) {
 										plannedDateCombo.viewOnly = false;
+										plannedDateCombo._viewMode = !me._sp._viewMode;
 										plannedDateCombo.setViewOnly(me._sp._viewMode);
 									}
 								}

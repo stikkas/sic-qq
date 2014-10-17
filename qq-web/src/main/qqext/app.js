@@ -562,6 +562,26 @@ Ext.application({
 		 * @property {Number} sicId
 		 */
 
+		/**
+		 * Проверяет значения полей дат на допустимые.
+		 * Исползуется формат 'd.m.Y'.
+		 * @param {Ext.form.field.Date[]} dates компоненты дат
+		 * @return {Boolean} если все хорошо, то true, иначе false
+		 * @method checkDates
+		 */
+		ns.checkDates = function (dates) {
+			var wrongDates = [];
+			dates.forEach(function (v) {
+				var date = v.getValue();
+				if (date && !Ext.Date.format(date, 'd.m.Y'))
+					wrongDates.push(v.fieldLabel + ": Неправильная дата");
+			});
+			if (wrongDates.length) {
+				ns.showError("Ошибка", wrongDates.join("<br>"));
+				return false;
+			}
+			return true;
+		};
 		// создаем все меню
 		ns.Menu.init();
 	},

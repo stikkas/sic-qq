@@ -26,7 +26,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 	overflowX: 'hidden',
 	/**
 	 * Индекс, в соответствии с которым сопоставляется верхнее меню (см. qqext.Menu)
-	 * @private
+	 * @private;
 	 */
 	_idx: 3,
 	listeners: {
@@ -171,8 +171,11 @@ Ext.define('qqext.view.reg.VRegForm', {
 		 * @returns {undefined}
 		 */
 		function save() {
-			var me = this,
-					model = me.model,
+//			var me = this;
+			if (!ns.checkDates([me.query.pd, me.applicant.dt]))
+				return;
+
+			var model = me.model,
 					user = ns.user,
 					userId = user.get('userId'),
 					now = new Date();
@@ -203,7 +206,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 		 * @returns {undefined}
 		 */
 		function remove() {
-			var me = this;
+//			var me = this;
 			me.model.destroy({
 				callback: function (recs, operation) {
 					if (operation.success) {
@@ -223,6 +226,8 @@ Ext.define('qqext.view.reg.VRegForm', {
 		 * @returns {undefined}
 		 */
 		function book() {
+			if (!ns.checkDates([me.query.pd, me.applicant.dt]))
+				return;
 			// Кнопки сохранить, удалить и регистрировать
 			me._disableButtons(true, 1, 2, 3);
 			me.setViewOnly(true);

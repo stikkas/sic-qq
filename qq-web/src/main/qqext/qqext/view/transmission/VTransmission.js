@@ -76,8 +76,11 @@ Ext.define('qqext.view.transmission.VTransmission', {
 		 * @private
 		 */
 		function save() {
-			var me = this,
-					trans = me.model.getTrans();
+			var me = this;
+			if (!qqext.checkDates([me._df1, me._df2, me._cd]))
+				return;
+
+			var trans = me.model.getTrans();
 			// Кнопки сохранить, удалить и регистрировать
 			me._disableButtons(true, 1, 2, 3);
 			me.setViewOnly(true);
@@ -103,8 +106,10 @@ Ext.define('qqext.view.transmission.VTransmission', {
 			me.model.getTrans().destroy({callback: function (recs, operation) {
 					if (!operation.success)
 						ns.showError("Ошибка удаления данных", operation.getError());
-					else
+					else {
 						me._disableButtons(true, 2);
+						me.getForm().reset();
+					}
 				}
 			});
 		}
@@ -115,8 +120,11 @@ Ext.define('qqext.view.transmission.VTransmission', {
 		 * @returns {undefined}
 		 */
 		function book() {
-			var me = this,
-					model = me.model,
+			var me = this;
+			if (!qqext.checkDates([me._df1, me._df2, me._cd]))
+				return;
+
+			var model = me.model,
 					trans = model.getTrans();
 			me._disableButtons(true, 1, 2, 3);
 			me.setViewOnly(true);
@@ -176,7 +184,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 							width: 450,
 							labelWidth: 150
 						}),
-						createCmp('FDateField', trans.bossExecutionDate[1], trans.bossExecutionDate[0],
+						me._df1 = createCmp('FDateField', trans.bossExecutionDate[1], trans.bossExecutionDate[0],
 								configForDate)
 					]
 				}),
@@ -189,7 +197,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 									width: 450,
 									labelWidth: 150
 								}),
-						createCmp('FDateField', trans.executionDate[1], trans.executionDate[0],
+						me._df2 = createCmp('FDateField', trans.executionDate[1], trans.executionDate[0],
 								configForDate)
 					]
 				}),

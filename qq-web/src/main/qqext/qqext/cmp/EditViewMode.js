@@ -52,7 +52,7 @@ Ext.define('qqext.cmp.EditViewMode', {
 	 * Включает или выключает режим просмотра
 	 * @param {Boolean} mode true - режим просмотра , false - обычный режим (редактирование)
 	 */
-	setViewOnly: function(mode) {
+	setViewOnly: function (mode) {
 		var me = this;
 		// выполняется только первый раз для созданного объекта
 		me._initLabel();
@@ -66,7 +66,7 @@ Ext.define('qqext.cmp.EditViewMode', {
 	 * @private
 	 * @param {Boolean} mode
 	 */
-	_setViewOnly: function(mode) {
+	_setViewOnly: function (mode) {
 		if (mode !== this._viewMode) {
 			if (mode)
 				this._setViewMode();
@@ -100,7 +100,7 @@ Ext.define('qqext.cmp.EditViewMode', {
 	 * Устанавливает режим для редактирования
 	 * @private
 	 */
-	_setEditMode: function() {
+	_setEditMode: function () {
 		var me = this;
 		if (!me.viewOnly) {
 			me._label.style.display = 'none';
@@ -114,7 +114,7 @@ Ext.define('qqext.cmp.EditViewMode', {
 	 * выставляется пустое значение, нужно это или нет?
 	 * @private
 	 */
-	_setViewMode: function() {
+	_setViewMode: function () {
 		var me = this,
 				lbl = me._label;
 		lbl.style.display = '';
@@ -126,14 +126,14 @@ Ext.define('qqext.cmp.EditViewMode', {
 	 * Делает видимым элемент ввода. Стандартный для большинства, но бывают и исключения (Checkbox)
 	 * @private
 	 */
-	_showInput: function() {
+	_showInput: function () {
 		this[this._before].setVisible(true);
 	},
 	/**
 	 * Делает невидимым элемент ввода. Стандартный для большинства, но бывают и исключения (Checkbox)
 	 * @private
 	 */
-	_hideInput: function() {
+	_hideInput: function () {
 		this[this._before].setVisible(false);
 	},
 	/**
@@ -141,7 +141,7 @@ Ext.define('qqext.cmp.EditViewMode', {
 	 * FIXME: может стоит подумать о назначении стилевых классов этой метке.
 	 * @private
 	 */
-	_initLabel: function() {
+	_initLabel: function () {
 		var me = this,
 				label = document.createElement('div');
 		label.setAttribute('class', 'x-form-field x-form-text');// me.inputEl.dom.getAttribute('class'));
@@ -155,7 +155,7 @@ Ext.define('qqext.cmp.EditViewMode', {
 	 * @private
 	 * @returns {Object}
 	 */
-	_getValue: function() {
+	_getValue: function () {
 		return this.getValue();
 	},
 	/**
@@ -167,7 +167,7 @@ Ext.define('qqext.cmp.EditViewMode', {
 	 * @param {Number/String} value значение для поля
 	 * @private
 	 */
-	_setValueV: function(value) {
+	_setValueV: function (value) {
 		var me = this;
 		me._setValueE(value);
 		me._label.innerHTML = me.isValid() ? me._getValue() : '';

@@ -43,6 +43,9 @@ Ext.define('qqext.view.notify.VNotify', {
 	initComponent: function () {
 		//----------Обработчики кнопок меню----------
 		function saveNotify() {
+			if (!ns.checkDates([me._df]))
+				return;
+
 			var model = me.model,
 					noti = model.getNoti();
 
@@ -107,7 +110,7 @@ Ext.define('qqext.view.notify.VNotify', {
 					width: 270,
 					labelWidth: 150
 				}),
-				createCmp('FDateField', notf.notificationDate[1], notf.notificationDate[0], {
+				me._df = createCmp('FDateField', notf.notificationDate[1], notf.notificationDate[0], {
 					width: 270,
 					labelWidth: 150
 				})

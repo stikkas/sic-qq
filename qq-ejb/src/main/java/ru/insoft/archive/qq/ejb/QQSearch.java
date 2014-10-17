@@ -164,12 +164,10 @@ public class QQSearch extends LoggedBean {
 						jpaOrders.add(o);
 						break;
 					case "execDate":
-						Join<Question, Execution> eiJoin = root
-							.join("execution", JoinType.LEFT);
 						if (ou.asc()) {
-							o = cb.asc(eiJoin.get("execDate"));
+							o = cb.asc(root.get("plannedFinishDate"));
 						} else {
-							o = cb.desc(eiJoin.get("execDate"));
+							o = cb.desc(root.get("plannedFinishDate"));
 						}
 						jpaOrders.add(o);
 						break;

@@ -1,7 +1,8 @@
 .welcomecontainer{
-background-image:url(../images/main_page_bg.jpg) !important;
-background-size:100% 100%;
-background-position:center bottom;
+    background-image:url(../images/main_page_bg.jpg) !important;
+    background-size:100% 100%;
+    background-position:center bottom;
+    background-color:#E4D9C1;
 }
 .welcomecontainer .x-box-inner{
     color:#742708;

@@ -10,7 +10,7 @@ Ext.define('qqext.view.Viewport', {
 		'qqext.view.MainPage'
 	],
 	layout: 'card',
-	initComponent: function() {
+	initComponent: function () {
 		var
 				me = this,
 				layout = me.getLayout(),
@@ -23,20 +23,27 @@ Ext.define('qqext.view.Viewport', {
 		 * Переключает страницы
 		 * @param {type} idx индекс требуемой страницы
 		 */
-		ns.setActivePage = function(idx) {
+		ns.setActivePage = function (idx) {
 			// Вызываем первый раз. При первом вызове idx всегда равен 1.
 			// Если это где-то получится не так то надо переделать метод.
-			var jvk = ns.btns.jvk;
+			var jvk = ns.btns.jvk,
+					title = Ext.getDoc().dom.title;
 			me.add(Ext.create('MainPage'));
-			layout.setActiveItem(idx);
-			ns.getButton(jvk).fireEvent('click');
+
+//			layout.setActiveItem(idx);
+//			ns.getButton(jvk).fireEvent('click');
 
 			// Для последующих вызовов
-			ns.setActivePage = function(idx) {
-				layout.setActiveItem(idx);
-				if (idx === 1)
+			ns.setActivePage = function (i) {
+				layout.setActiveItem(i);
+				if (i === 1) {
+					Ext.getDoc().dom.title = 'АИС "Запросы"';
 					ns.getButton(jvk).fireEvent('click');
-			}
-		}
+				} else {
+					Ext.getDoc().dom.title = title;
+				}
+			};
+			ns.setActivePage(idx);
+		};
 	}
 });

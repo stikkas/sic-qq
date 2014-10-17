@@ -22,14 +22,12 @@
 			<type>war</type>
 		</dependency>
 
-    <!--
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>sic-storage-web</artifactId>
 			<version>0.0.2-SNAPSHOT</version>
 			<type>war</type>
 		</dependency>
-    -->
     <!--
 		<dependency>
 			<groupId>ru.insoft</groupId>
@@ -79,12 +77,10 @@
 							<groupId>${project.groupId}</groupId>
 							<artifactId>qq-web</artifactId>
 						</webModule>
-            <!--
 						<webModule>
 							<groupId>${project.groupId}</groupId>
 							<artifactId>sic-storage-web</artifactId>
 						</webModule>
-            -->
             <!--
 						<webModule>
 							<groupId>ru.insoft</groupId>

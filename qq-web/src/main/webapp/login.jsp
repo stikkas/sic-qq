@@ -12,7 +12,6 @@
         <title>Страница авторизации</title>
 		<link rel="stylesheet" href="css/login.css"/>
 		<script src="jquery-1.11.1.min.js" type="text/javascript"></script>
-		<!--		<script src="jquery.ui.draggable.js" type="text/javascript"></script> -->
 		<script src="jquery.alerts.js" type="text/javascript"></script>
 		<link href="css/jquery.alerts.css" rel="stylesheet" type="text/css" media="screen" />
 		<style>
@@ -50,7 +49,7 @@
 			password = password == null ? "" : password;
 			String path = request.getRequestURL().toString();
 		%>
-		<div id="zagolovok">АИС Запросы</div>
+		<!--		<div id="zagolovok">АИС Запросы</div> -->
 		<div id="subzagolovok">Справочно-информационный центр федеральных государственных архивов</div>
         <form method="POST" action="j_security_check" class="login_panel">
 			<fieldset>

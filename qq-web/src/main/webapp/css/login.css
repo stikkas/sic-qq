@@ -3,21 +3,17 @@
     background-repeat:no-repeat;
     overflow:hidden;
 }
-#zagolovok,
+/*#zagolovok, был удален из макета*/
 #subzagolovok{
     color:#742708;
     font:bold 2em Arial, sans-serif;
     text-align:center;
     text-shadow:2px 3px 5px #864D2D;
 }
-#zagolovok{
-    margin-top:10%;
-    margin-bottom:20px;
-}
 #subzagolovok{
     font-size:1.8em;
     width:800px;
-    margin:0 auto 70px auto;
+    margin:10% auto 70px auto;
 }
 .login_panel{
     color:#230F07;

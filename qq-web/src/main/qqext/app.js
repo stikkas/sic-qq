@@ -62,18 +62,10 @@ Ext.application({
 				me.initQQ();
 				Ext.create('Viewport', {});
 
-				Ext.Ajax.on('requestexception', function (conn, response, options) {
-					if (response.status === 403) {
-						console.log("Connection:");
-						console.log(conn);
-						console.log("Options:");
-						console.log(options);
-						console.log("Response:");
-						console.log(response);
-//				window.location = 'login';
-					}
+				Ext.Ajax.on('requestexception', function (conn, response) {
+					if (response.status === 403)
+						ns.quitAction();
 				});
-
 
 				// Загружаем настройки для прикрепленных файлов
 				var codes = ['QQ_ANSWER_DOC', 'QQ_APPLICANT_DOC', 'QQ_DOC_ROOT',
@@ -323,6 +315,10 @@ Ext.application({
 		/**
 		 * @property {Object} statsId
 		 * соотношения кодов статуса к его идентификаторам
+		 */
+		/**
+		 * @property {Object} statsName
+		 * соотношения кодов статуса к их описаниям
 		 */
 		/**
 		 * @property {Object} stats
@@ -601,8 +597,11 @@ Ext.application({
 			listeners: {
 				load: function (st, records) {
 					ns.statsId = {};
+					ns.statsName = {};
 					records.forEach(function (r) {
-						ns.statsId[r.get('code')] = r.get('id');
+						var code = r.get('code');
+						ns.statsId[code] = r.get('id');
+						ns.statsName[code] = r.get('name');
 					});
 					ns.statusPanel.fill();
 				}

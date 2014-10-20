@@ -26,19 +26,19 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	margin: '0 5 10 5',
 	border: true,
 	viewConfig: {
-		getRowClass: function (record) {
+		getRowClass: function (record) { // Здесь статус - описание статуса на не код
 			var ns = qqext,
-					statsId = ns.statsId,
+					statsName = ns.statsName,
 					stats = ns.stats,
 					status = record.get('status');
 			var date = record.get('execDate');
 			if (date &&
 					((ns.isSIC && (
-							status === statsId[stats.reg] ||
-							status === statsId[stats.onexec])) ||
+							status === statsName[stats.reg] ||
+							status === statsName[stats.onexec])) ||
 							(!ns.isSIC && !(
-									status === statsId[stats.onreg] ||
-									status === statsId[stats.exec])))) {
+									status === statsName[stats.onreg] ||
+									status === statsName[stats.exec])))) {
 				var delta = Math.ceil((date - new Date()) / qqext.msPday);
 				if (delta <= 1)
 					return 'immediate';
@@ -284,7 +284,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 //					},
 					{
 						text: 'От кого поступил',
-                                                width:200,
+						width: 200,
 						dataIndex: 'fioOrg',
 						items: [
 							createCmp('FTextField', '', 'applicantField', {
@@ -305,7 +305,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					{
 						text: 'Состояние запроса',
 						dataIndex: 'status',
-                                                width:150,
+						width: 150,
 						items: [
 							createCmp('FComboBox', '', ns.stIds.stats, 'requestStatusCombo', {
 								width: '90%',

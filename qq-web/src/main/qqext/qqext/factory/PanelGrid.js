@@ -15,6 +15,8 @@ Ext.define('qqext.factory.PanelGrid', {
 	],
 	alias: 'FPanelGrid',
 	maxHeight: 200,
+        width:650,
+        cls:'tbl_cls',
 	overflowY: 'auto',
 	/**
 	 * Возвращает ошибки, которые записываются в _errors

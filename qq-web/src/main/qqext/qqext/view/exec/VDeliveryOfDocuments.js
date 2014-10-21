@@ -93,7 +93,8 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 					defaults: {
 						sortable: false,
 						menuDisabled: true
-					}, items: [
+					}, 
+                                        items: [
 						createCmp('ComboColumn', delAction.type[1], delAction.type[0],
 								delAction.type[0], 1),
 						{

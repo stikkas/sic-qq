@@ -167,13 +167,18 @@ label.journal_title_label{
     background-image:url(../images/sortDESC.png);
 }
 /*table*/
+.x-panel.x-grid-with-row-lines.x-panel-default.x-grid {
+    //width: 95% !important;
+}
 .x-column-header-over{
     background-color:transparent;
 }
 .x-grid-header-ct .x-column-header{
-    background-color: #90A4BE;
+    background-color: #C5D1E0;
+    border:1px solid;
     border-color:#AABDD9;
-    color:#fff;
+    //border-color:#2D446D;
+    color:#2D446D;
     text-align:center;
 }
 .x-grid-header-ct .x-column-header .x-column-header-text{
@@ -272,7 +277,7 @@ div.collapse_section{
 }
 .collapse_section legend,
 .collapse_section .x-panel-header{
-    background:url(../images/line.png) right center no-repeat;
+    //background:url(../images/line.png) right center no-repeat;
     background-size:calc(100% - 240px) 1px;;
     border-bottom:2px solid #2D446D !important;
     width:100%;
@@ -306,6 +311,7 @@ div.collapse_section{
 
 .inner_section{
     padding:10px;
+    margin-top:10px;
 }
 .inner_section .x-fieldset-header{
     margin:0;

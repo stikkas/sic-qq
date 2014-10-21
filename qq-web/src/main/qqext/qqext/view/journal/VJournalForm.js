@@ -245,7 +245,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					{
 						xtype: 'datecolumn',
 						text: 'Дата исполнения плановая',
-						width: 100,
+						width: 110,
 						dataIndex: 'execDate',
 						itemId: 'planDateExec',
 						format: 'd.m.Y',
@@ -320,10 +320,10 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					{
 						text: 'Исполнитель',
 						dataIndex: 'executor',
-						cls: 'width150',
+                                                width:100,
 						items: [
 							createCmp('FComboBox', '', execStore, 'requestExecutorCombo', {
-								width: 150,
+								width: '90%',
 								listeners: {
 									select: me._filterComboSelected,
 									render: me._render,

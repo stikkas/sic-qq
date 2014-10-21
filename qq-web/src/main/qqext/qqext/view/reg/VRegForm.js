@@ -32,6 +32,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 	listeners: {
 		activate: function (me, prev) {
 			var ns = qqext, model;
+			ns.switchArticleButton(ns.getButton(ns.btns.reg));
 			ns.Menu.setEditMenu(me._idx);
 			if (ns.request === null) {
 				// Значит событие случилось по нажатию на кнопку "Добавить"

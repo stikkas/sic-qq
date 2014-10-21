@@ -16,6 +16,7 @@ Ext.define('qqext.view.MainPage', {
 		'qqext.view.exec.VExecForm',
 		'Ext.panel.Panel',
 		'Ext.layout.container.Card',
+		'qqext.view.report.VReportForm',
 		'qqext.view.journal.VJournalForm',
 		'Ext.container.Container',
 		'qqext.view.VTitleBar',
@@ -23,13 +24,13 @@ Ext.define('qqext.view.MainPage', {
 	],
 	layout: 'border',
 	listeners: {
-		activate: function() {
+		activate: function () {
 			var menus = qqext.Menu;
 			menus.setEditMenu(0);
 			menus.setArticleMenu(0);
 		}
 	},
-	initComponent: function() {
+	initComponent: function () {
 		var
 				ns = qqext,
 				createCmp = Ext.create,
@@ -42,7 +43,7 @@ Ext.define('qqext.view.MainPage', {
 			items: [
 				ns.jvkForm = createCmp('VJournalForm'),
 				ns.searchForm = createCmp('VSearchForm'),
-				createCmp('Ext.container.Container', {html: '<h1>Отчетные документы</h1>'}),
+				ns.reportForm = createCmp('VReportForm'),
 				ns.regForm = createCmp('VRegForm'),
 				ns.notifyForm = createCmp('VNotify'),
 				ns.transForm = createCmp('VTransmission'),
@@ -69,14 +70,14 @@ Ext.define('qqext.view.MainPage', {
 		 * @return {Object/Boolean} в случае если форма поменялась, то возвращается активная форма,
 		 * иначе false
 		 */
-		ns.setCurrentForm = function(idx) {
+		ns.setCurrentForm = function (idx) {
 			return mainPanelLayout.setActiveItem(idx);
 		};
 		/*
 		 * Возвращает активную форму
 		 * @return {Object}
 		 */
-		ns.getCurrentForm = function() {
+		ns.getCurrentForm = function () {
 			return mainPanelLayout.getActiveItem();
 		};
 	}

@@ -25,6 +25,12 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	store: 'journal',
 	margin: '0 5 10 5',
 	border: true,
+	listeners: {
+		activate: function () {
+			var ns = qqext;
+			ns.switchArticleButton(ns.getButton(ns.btns.jvk));
+		}
+	},
 	viewConfig: {
 		getRowClass: function (record) { // Здесь статус - описание статуса на не код
 			var ns = qqext,
@@ -159,7 +165,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 		}
 
 		if (user.isAllowed([rules.reg, rules.crd, rules.exec]))
-			me.listeners = {itemdblclick: ns.openRequest};
+			me.listeners.itemdblclick = ns.openRequest;
 
 		if (ns.isSIC) {
 			me._fltrs.push(createCmp('Ext.util.Filter', {

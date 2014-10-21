@@ -345,7 +345,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					displayInfo: true,
 					store: 'journal'
 				},
-				createCmp('FLabel', 'СИЦ/Архив', {
+				createCmp('FLabel', 'СИЦ / Архив', {
 					dock: 'top',
 					cls: 'journal_title_label'
 				})

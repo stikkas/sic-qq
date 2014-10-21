@@ -976,6 +976,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.view.reg.VQuery": [],
   "qqext.view.reg.VQueryObject": [],
   "qqext.view.reg.VRegForm": [],
+  "qqext.view.report.VReportForm": [],
   "qqext.view.search.FioFieldContainer": [],
   "qqext.view.search.VSearchForm": [],
   "qqext.view.search.VSearchParams": [],
@@ -2147,6 +2148,9 @@ Ext.ClassManager.addNameAliasMappings({
   "qqext.view.reg.VRegForm": [
     "VRegForm",
     "widget.vregform"
+  ],
+  "qqext.view.report.VReportForm": [
+    "VReportForm"
   ],
   "qqext.view.search.FioFieldContainer": [
     "FioFieldContainer",

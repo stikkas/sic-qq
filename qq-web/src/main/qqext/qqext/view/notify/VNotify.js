@@ -26,6 +26,7 @@ Ext.define('qqext.view.notify.VNotify', {
 	listeners: {
 		activate: function (me, prev) {
 			var ns = qqext;
+			ns.switchArticleButton(ns.getButton(ns.btns.notify));
 			ns.Menu.setEditMenu(me._idx);
 			if (ns.request !== me.model) {
 				// Значит новый запрос (не тот который был до этого)

@@ -26,6 +26,7 @@ Ext.define('qqext.view.exec.VExecForm', {
 	listeners: {
 		activate: function (me, prev) {
 			var ns = qqext;
+			ns.switchArticleButton(ns.getButton(ns.btns.exec));
 			ns.Menu.setEditMenu(me._idx);
 			if (ns.request !== me.model) {
 				// Значит новый запрос (не тот который был до этого)

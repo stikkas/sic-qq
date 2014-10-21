@@ -146,7 +146,7 @@ Ext.application({
 		 *
 		 * - 0 - qqext.view.journal.VJournalForm журнал входящей корреспонденции
 		 * - 1 - qqext.view.search.VSearchForm форма поиска заявок
-		 * - 2 - Отчетные документы
+		 * - 2 - qqext.view.report.VReportForm Отчетные документы
 		 * - 3 - qqext.view.reg.VRegForm форма регистрации заявки
 		 * - 4 - qqext.view.notify.VNotify форма уведомления заявителю
 		 * - 5 - qqext.view.transmission.VTransmission форма передачи на исполнение
@@ -173,6 +173,10 @@ Ext.application({
 		/**
 		 * @property {qqext.view.search.VSearchForm} searchForm
 		 * Форма поиска. Инициализируется в {@link qqext.view.MainPage#initComponent}.
+		 */
+		/**
+		 * @property {qqext.view.report.VReportForm} reportForm
+		 * Форма отчетов. Инициализируется в {@link qqext.view.MainPage#initComponent}.
 		 */
 		/**
 		 * @property {qqext.view.reg.VRegForm} regForm
@@ -213,6 +217,11 @@ Ext.application({
 		 * только через интерфейс {@link #getButton} и {@link #addButton}.
 		 */
 		var buttons = [];
+		/**
+		 * @property {Ext.button.Button} articles
+		 * кнопки разделов, нужны для переключения активной кнопки
+		 */
+		var articles = ns.articles = [];
 		/**
 		 * Возвращает кнопку из зарегестрированных, по заданному имени. Необходим для
 		 * программного нажатия на кнопку.
@@ -301,7 +310,8 @@ Ext.application({
 			notify: 5, // Кнопка "Уведомление заявителю"
 			trans: 6, // Кнопка "Передача на исполнение"
 			exec: 7, // Кнопка "Исполнение запроса"
-			toSearch: 8 // Кнопка "Вернуться в поиск"
+			toSearch: 8, // Кнопка "Вернуться в поиск"
+			report: 9 // Кнопка "Отчетные документы"
 		};
 		/**
 		 * @property {Object} rules
@@ -527,6 +537,16 @@ Ext.application({
 						ns.showError("Ошибка загрузки данных", o.getError());
 					}
 				}});
+		};
+		/**
+		 * Выставляет активную кнопку раздела, с предыдущей снимает выделение
+		 * @param {Ext.button.Button} button кнопка, которую нужно сделать активной
+		 */
+		ns.switchArticleButton = function (button) {
+			var cls = 'active-article';
+			for (var i = 0, max = articles.length; i < max; ++i)
+				articles[i].removeCls(cls);
+			button.addCls(cls);
 		};
 		/**
 		 * Показывает ошибки в диалоговом окне

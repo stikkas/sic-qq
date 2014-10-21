@@ -31,6 +31,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 	listeners: {
 		activate: function (me, prev) {
 			var ns = qqext;
+			ns.switchArticleButton(ns.getButton(ns.btns.trans));
 			ns.Menu.setEditMenu(me._idx);
 			if (ns.request !== me.model) {
 				// Значит новый запрос (не тот который был до этого)

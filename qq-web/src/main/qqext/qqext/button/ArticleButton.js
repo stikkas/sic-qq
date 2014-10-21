@@ -8,6 +8,11 @@ Ext.define('qqext.button.ArticleButton', {
 	alias: 'ArticleButton',
 	extend: 'Ext.button.Button',
 	xtype: 'articlebutton',
-	cls: 'article-btn'
+	cls: 'article-btn',
+	// Конструктор выполняет добавление всех кнопок в один массив
+	constructor: function () {
+		qqext.articles.push(this);
+		this.callParent(arguments);
+	}
 })
 

@@ -15,6 +15,12 @@ Ext.define('qqext.view.search.VSearchForm', {
 	 */
 	_idx: 1,
 	id: 'VSearchForm',
+	listeners: {
+		activate: function () {
+			var ns = qqext;
+			ns.switchArticleButton(ns.getButton(ns.btns.search));
+		}
+	},
 	initComponent: function () {
 		var me = this;
 		Ext.applyIf(me, {

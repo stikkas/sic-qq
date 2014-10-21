@@ -129,7 +129,7 @@ Ext.define('qqext.Menu', {
 					searchMenu = createCmp('VButtonMenu', [
 						{text: labels.jvk, action: jvk, name: btns.jvk},
 						{text: labels.search, action: search, name: btns.search},
-						{text: labels.reports, action: documents}
+						{text: labels.reports, action: documents, name: btns.report}
 					], 'ArticleButton'),
 					// меню с подразделами запроса
 					requestMenu = createCmp('VButtonMenu', [

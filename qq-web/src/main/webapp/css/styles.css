@@ -9,6 +9,9 @@
 .x-panel{
     margin:0;
 }
+.panel_style{
+    margin-bottom:10px;
+}
 .x-panel-header-default{
     border:1px solid #38547B;
 }
@@ -37,7 +40,7 @@
 label.journal_title_label{
     font:bold 1.2em Arial, sans-serif;
     border:1px solid #38547B !important;
-    padding:5px;
+    padding:5px 5px;
     background-color:#C1CEE1;
     background-image:-moz-linear-gradient(left, #DDE3EB, #fff);
     background-image:-webkit-gradient(linear, left center, right center, from(#DDE3EB), to(#fff));
@@ -117,22 +120,13 @@ label.journal_title_label{
     font:bold 0.8em 'Lucida Sans Unicode', sans-serif;
     text-align:left;
 }
-.vmenu a.x-focus{
-    background-image:-moz-linear-gradient(top, #59769C, #768EAE, #59769C);
-    background-image:-webkit-gradient(linear, center top, center bottom, from(#59769C), to(#59769C), color-stop(50%, #768EAE));
-    background: -o-linear-gradient(top, #59769C, #768EAE, #59769C);
-    background: -ms-linear-gradient(top, #59769C, #768EAE, #59769C);
-}
-
 .vmenu a.active-article {
     background-image:-moz-linear-gradient(top, #59769C, #768EAE, #59769C);
     background-image:-webkit-gradient(linear, center top, center bottom, from(#59769C), to(#59769C), color-stop(50%, #768EAE));
     background: -o-linear-gradient(top, #59769C, #768EAE, #59769C);
     background: -ms-linear-gradient(top, #59769C, #768EAE, #59769C);
-	color: white;
 }
-
-.vmenu a.x-focus .x-btn-inner{
+.vmenu a.active-article .x-btn-inner{
     color:#fff;
 }
 
@@ -152,7 +146,7 @@ label.journal_title_label{
 /*sliders*/
 .x-form-date-trigger{
     background-image:url(../images/calendar.png);
-    background-position: center left;
+    background-position: center left !important;
     background-repeat: no-repeat;
 }
 .x-trigger-cell{
@@ -184,9 +178,11 @@ label.journal_title_label{
 }
 .x-grid-header-ct .x-column-header{
     background-color: #C5D1E0;
-    border:1px solid;
-    border-color:#AABDD9;
-    //border-color:#2D446D;
+    border-right:none;
+    border-top:none;
+    border-left:1px solid;
+    //border-color:#AABDD9;
+    border-color:#2D446D;
     color:#2D446D;
     text-align:center;
 }
@@ -200,12 +196,51 @@ label.journal_title_label{
 .x-grid-header-ct .x-column-header .x-box-inner{
     margin-left:5%;
 }
+.x-grid-body{
+    border:1px solid #2D446D !important;
+    border-top-width:0 !important;
+}
 .x-grid-cell{
     border-left:1px solid #AABDD9;
     border-bottom:1px solid #738BAC;
 }
 .x-grid-row-alt .x-grid-td{
     background-color:#E2E7EE;
+}
+.tbl_cls{
+    margin:5px 10px 0 10px;
+}
+.inner_section .tbl_cls{
+    margin:5px;
+}
+.tbl_cls .x-grid-header-ct{
+    margin-top:3px;    
+    border:1px solid #2D446D !important;
+    border-right-width:0 !important;
+}
+.tbl_cls .x-grid-header-ct .x-column-header{
+    border:none;
+    border-right:1px solid;
+}
+.tbl_cls .x-grid-header-ct,
+.tbl_cls .x-grid-header-ct .x-column-header{
+    background-color:transparent;
+}
+.tbl_cls .x-grid-view{
+    overflow-x: hidden !important;
+}
+.tbl_cls .x-mask{
+    background-color:transparent;
+}
+
+.table_style .tbl_cls{
+    width:97% !important;
+}
+.table_style .tbl_cls > .x-container,
+.table_style .tbl_cls > .x-grid-header-ct,
+.table_style .tbl_cls > .x-grid-header-ct .x-box-inner,
+.table_style .tbl_cls > .x-grid-header-ct .x-box-inner .x-box-target{
+    width:100% !important;
 }
 
 /*fields*/
@@ -287,6 +322,8 @@ div.collapse_section{
 .collapse_section legend,
 .collapse_section .x-panel-header{
     //background:url(../images/line.png) right center no-repeat;
+    background-image: none;
+    background-color:transparent;
     background-size:calc(100% - 240px) 1px;;
     border-bottom:2px solid #2D446D !important;
     width:100%;

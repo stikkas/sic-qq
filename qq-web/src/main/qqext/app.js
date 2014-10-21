@@ -544,10 +544,8 @@ Ext.application({
 		 */
 		ns.switchArticleButton = function (button) {
 			var cls = 'active-article';
-			articles.forEach(function (b) {
-				b.removeCls(cls);
-				console.log("removed from " + b.text);
-			});
+			for (var i = 0, max = articles.length; i < max; ++i)
+				articles[i].removeCls(cls);
 			button.addCls(cls);
 		};
 		/**

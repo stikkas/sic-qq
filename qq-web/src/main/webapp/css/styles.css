@@ -177,13 +177,14 @@ label.journal_title_label{
     background-color:transparent;
 }
 .x-grid-header-ct .x-column-header{
-    background-color: #C5D1E0;
+    background-color: #98AAC2;
     border-right:none;
     border-top:none;
     border-left:1px solid;
-    //border-color:#AABDD9;
-    border-color:#2D446D;
-    color:#2D446D;
+    border-color:#AABDD9;
+    //border-color:#2D446D;
+    //color:#2D446D;
+    color:#fff;
     text-align:center;
 }
 .x-grid-header-ct .x-column-header .x-column-header-text{
@@ -220,7 +221,8 @@ label.journal_title_label{
 }
 .tbl_cls .x-grid-header-ct .x-column-header{
     border:none;
-    border-right:1px solid;
+    border-right:1px solid #2D446D;
+    color:#2D446D;
 }
 .tbl_cls .x-grid-header-ct,
 .tbl_cls .x-grid-header-ct .x-column-header{
@@ -348,7 +350,7 @@ div.collapse_section{
 .collapse_section .x-fieldset-header-text,
 .collapse_section .x-panel-header-text-container-default{
     color:#2D446D;
-    font:bold 1.1em Arial, sans-serif;
+    font:bold 15px Arial, sans-serif;
     padding-left:0;
 }
 .collapse_section .x-noborder-t{

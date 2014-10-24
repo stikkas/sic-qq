@@ -5,6 +5,7 @@
 Ext.define('qqext.view.search.VSearchForm', {
 	alias: 'VSearchForm',
 	extend: 'Ext.container.Container',
+        cls:'srch',
 	requires: [
 		'qqext.view.search.VSearchParams',
 		'qqext.view.search.VSearchResult'

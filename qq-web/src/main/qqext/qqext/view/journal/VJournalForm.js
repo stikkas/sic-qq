@@ -24,6 +24,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	draggable: false,
 	store: 'journal',
 	margin: '0 5 10 5',
+        cls:'journal_st',
 	border: true,
 	listeners: {
 		activate: function () {

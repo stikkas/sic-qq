@@ -565,7 +565,7 @@ Ext.application({
 					return;
 				}
 			}
-			if (message.search("<!DOCTYPE") === 0) {
+			if (!~message.search(/<!DOCTYPE/i)) { // Если rest вернул страницу авторизации
 				ns.quitAction();
 				return;
 			}

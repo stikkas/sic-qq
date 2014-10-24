@@ -16,7 +16,7 @@ Ext.define('qqext.view.search.VSearchParams', {
 		var createCmp = Ext.create;
 		Ext.applyIf(this, {
 			items: [
-				createCmp('FComboBox', 'Архив исполнитель', 'inboxDocExecOrg', 'archiveId',
+				createCmp('FComboBox', 'Архив исполнитель', qqext.stIds.execOrgs, 'archiveId',
 						{width: 650, labelWidth: 150}),
 				createCmp('FComboBox', 'Вид запроса', 'queryType', 'queryTypeId',
 						{width: 400, labelWidth: 150}),

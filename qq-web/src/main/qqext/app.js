@@ -32,22 +32,6 @@ Ext.application({
 						ns = qqext,
 						user = ns.user = Ext.create('hawk_common.model.User'),
 						userStore = ns.userStore = Ext.create('hawk_common.store.UserLocalStorage');
-				// нужно инициализировать хранилище для информации об организациях
-				// и установить принадлежность пользователся к СИЦ
-				Ext.create('DictValuesStore',
-						'inboxDocExecOrg', 'ORG_STRUCTURE', {
-							listeners: {
-								load: function (st, records) {
-									var record, max = records.length, i = 0;
-									for (; i < max; ++i) {
-										record = records[i];
-										if (record.get('code') === 'Q_VALUE_MEMBER_SIC')
-											ns.sicId = record.get('id');
-									}
-									ns.isSIC = ns.sicId === authRes.organization;
-								}
-							}
-						});
 
 				user.set('id', 'current');
 				user.set('name', authRes.msg);
@@ -293,9 +277,8 @@ Ext.application({
 		 */
 		var urls = ns.urls = {
 			welcome: "/qq-web/",
-			login: "/qq-web/Auth?action=logout&redirect=1",
-			storage: "/sic-storage/index.html",
-			admin: "/arm-admin/login.jsf"
+			login: "/qq-web/Auth?action=logout",
+			storage: "/sic-storage/index.html"
 		};
 		/**
 		 * @property {Object} btns
@@ -414,7 +397,10 @@ Ext.application({
 		ns.quitAction = function () {
 			// молча, без выстерла событий, удаляем все данные из хранилища
 			ns.userStore.removeAll(true);
-			window.location = urls.login;
+			Ext.Ajax.request({url: urls.login,
+				success: function () {
+					window.location = urls.welcome;
+				}});
 		};
 		/**
 		 * @property {Obejct} applicant
@@ -516,6 +502,22 @@ Ext.application({
 		 * Панель для отображения статуса запроса.
 		 * Инициализируется в qqext.Menu.
 		 */
+		/**
+		 * @porperty {Boolean} infoChanged
+		 * Флаг сигнализирующий о том что информация в каком-то запросе изменилась
+		 * и требуется обновление данных в ЖВК и Поиск
+		 */
+		/**
+		 * Обновляет информацию в ЖВК и поиске, после сохранения
+		 * @method updateInfo
+		 */
+		ns.updateInfo = function () {
+			if (ns.infoChanged) {
+				ns.jvkForm.exec();
+				ns.searchForm.exec();
+				ns.infoChanged = false;
+			}
+		};
 
 		/**
 		 * Открывает существующий запрос. Срабатывает по двойному щелчку в поиске или ЖВК
@@ -563,6 +565,10 @@ Ext.application({
 					return;
 				}
 			}
+			if (message.search("<!DOCTYPE") === 0) {
+				ns.quitAction();
+				return;
+			}
 			Ext.Msg.show({
 				title: title,
 				msg: message,
@@ -608,8 +614,24 @@ Ext.application({
 					litera: 'litera',
 					users: 'users',
 					allusers: 'allusers',
-					stats: 'statuses'
+					stats: 'statuses',
+					execOrgs: 'organizations'
 				};
+		// нужно инициализировать хранилище для информации об организациях
+		// и установить принадлежность пользователся к СИЦ
+		create('DictStore', ids.execOrgs, ids.execOrgs, {
+			listeners: {
+				load: function (st, records) {
+					var record, max = records.length, i = 0;
+					for (; i < max; ++i) {
+						record = records[i];
+						if (record.get('code') === 'Q_VALUE_MEMBER_SIC')
+							ns.sicId = record.get('id');
+					}
+					ns.isSIC = ns.sicId === organization;
+				}
+			}
+		});
 		create('DictStore', ids.litera, ids.litera, organization);
 		create('DictStore', ids.users, ids.users, organization);
 		create('DictStore', ids.allusers, ids.users);

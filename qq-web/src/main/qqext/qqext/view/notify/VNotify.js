@@ -62,6 +62,7 @@ Ext.define('qqext.view.notify.VNotify', {
 								if (success) {
 									me._disableButtons(false, 1);
 									ns.statusPanel.setStatus();
+									ns.infoChanged = true;
 								} else {
 									ns.showError("Ошибка сохранения", operation.getError());
 									me.setViewOnly(false);

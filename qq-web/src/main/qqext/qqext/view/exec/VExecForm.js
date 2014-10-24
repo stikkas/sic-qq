@@ -77,6 +77,7 @@ Ext.define('qqext.view.exec.VExecForm', {
 								me._df.sync();
 								me._cf.sync();
 								me._mf.save(model.get('id'), success, failure);
+								qqext.infoChanged = true;
 							} else {
 								qqext.showError("Ошибка сохранение данных", o.getError());
 								failure();
@@ -124,6 +125,7 @@ Ext.define('qqext.view.exec.VExecForm', {
 						me._disableButtons(true, 0, 2);
 						me._disableButtons(false, 1, 3);
 						me._initData();
+						ns.infoChanged = true;
 					} else {
 						ns.showError("Ошибка удаления записи", o.getError());
 					}

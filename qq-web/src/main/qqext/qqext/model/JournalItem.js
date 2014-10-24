@@ -15,7 +15,11 @@ Ext.define('qqext.model.JournalItem', {
 			name: 'inboxDocNum',
 			type: 'string',
 			defaultValue: null,
-			convert: null
+			convert: function (v) {
+				if (v === 'null/null')
+					return '';
+				return v;
+			}
 		}, {
 			name: 'regDate',
 			type: 'date',

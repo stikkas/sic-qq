@@ -38,8 +38,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 				// Значит событие случилось по нажатию на кнопку "Добавить"
 				var
 						user = ns.user,
-						orgId = user.get('organization'),
-						year = new Date().getYear() + 1900;
+						orgId = user.get('organization');
 				me.clear();
 				model = me.initModel();
 				//Кнопки "Редактировать" и "Удалить"
@@ -50,14 +49,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 				me.setViewOnly(false);
 				// Литера
 				model.set('litera', orgId);
-				model.set('sufixNum', year);
-				Ext.Ajax.request({
-					url: '/qq-web/rest/question/allowedid/' + orgId + '/' + year,
-					success: function (answer) {
-						model.set('prefixNum', answer.responseText);
-						me.inbox.prefix.setValue(answer.responseText);
-					}
-				});
 				if (!ns.isSIC)
 					model.set('execOrg', orgId);
 				me.loadRecord();
@@ -116,6 +107,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 													me.files.save(record.get('id'), function () {
 														success();
 														ns.statusPanel.setStatus();
+														ns.infoChanged = true;
 													}, function () {
 														me.setViewOnly(false);
 														// Провал на втором уровне
@@ -144,6 +136,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 									me.files.save(model.get('id'), function () {
 										success();
 										ns.statusPanel.setStatus();
+										ns.infoChanged = true;
 									}, function () {
 										me.setViewOnly(false);
 										// Провал на втором уровне
@@ -213,6 +206,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 					if (operation.success) {
 						me.files.remove();
 						me.model = ns.request = null;
+						ns.infoChanged = true;
 						ns.getButton(ns.btns.toSearch).fireEvent('click');
 					} else {
 						ns.showError("Ошибка удаления записи", operation.getError());
@@ -236,7 +230,8 @@ Ext.define('qqext.view.reg.VRegForm', {
 			var model = me.model, status;
 			if (me.validate()) {
 				var userId = ns.user.get('userId'),
-						now = new Date();
+						now = new Date(),
+						year = now.getYear() + 1900;
 				/*
 				 if (me.query.mr.getValue()) { // Добавляем один день к плановой дате, если отказ
 				 var plannedDateCombo = me.query.pd,
@@ -262,13 +257,24 @@ Ext.define('qqext.view.reg.VRegForm', {
 				model.set('updateDate', now);
 				model.set('registrator', userId);
 				model.set('regDate', now);
-				me._saveModel(function () {
-					me.loadRecord(true);
-					ns.turnOnArticles(ns.btns.notify, ns.btns.trans);
-				}, function () { // Не смогли сохранить ничего
-					me._disableButtons(false, 1, 3);
-				}, function () { // Не смогли сохранить заявителя
-					me._disableButtons(false, 1, 2, 3);
+				model.set('sufixNum', year);
+				Ext.Ajax.request({
+					url: '/qq-web/rest/question/allowedid/' + ns.user.get('organization') + '/' + year,
+					success: function (answer) {
+						model.set('prefixNum', answer.responseText);
+						me.inbox.prefix.setValue(answer.responseText);
+						me._saveModel(function () {
+							me.loadRecord(true);
+							ns.turnOnArticles(ns.btns.notify, ns.btns.trans);
+						}, function () { // Не смогли сохранить ничего
+							me._disableButtons(false, 1, 3);
+						}, function () { // Не смогли сохранить заявителя
+							me._disableButtons(false, 1, 2, 3);
+						});
+					},
+					failure: function () {
+						ns.showError("Ошибка", "Невозможно присвоить номер запросу");
+					}
 				});
 			} else { // Валидация не прошла
 				me._disableButtons(false, 1, 2, 3);

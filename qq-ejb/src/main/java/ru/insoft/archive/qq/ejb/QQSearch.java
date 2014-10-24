@@ -18,6 +18,7 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
 import ru.insoft.archive.core_model.table.adm.AdmUser;
@@ -26,7 +27,6 @@ import ru.insoft.archive.extcommons.ejb.JsonTools;
 import ru.insoft.archive.extcommons.webmodel.FilterBy;
 import ru.insoft.archive.extcommons.webmodel.OrderBy;
 import ru.insoft.archive.qq.entity.Applicant;
-import ru.insoft.archive.qq.entity.Execution;
 import ru.insoft.archive.qq.entity.Question;
 import ru.insoft.archive.qq.model.SearchCritery;
 import ru.insoft.archive.qq.entity.Transmission;
@@ -251,8 +251,8 @@ public class QQSearch extends LoggedBean {
 		return result;
 	}
 
-	public JsonObject getSearchResult(Integer start, Integer limit, SearchCritery query)
-		throws Exception {
+	public JsonObject getSearchResult(Integer start, Integer limit,
+		SearchCritery query, List<OrderBy> orders) throws Exception {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Question> searchQuery = cb.createQuery(Question.class);
 
@@ -349,7 +349,68 @@ public class QQSearch extends LoggedBean {
 			expressions.add(cb.equal(root.join("transmission")
 				.<Long>get("executor"), executor));
 		}
-
+		ArrayList<Order> jpaOrders = new ArrayList<>();
+		if (orders != null) {
+			for (OrderBy ou : orders) {
+				String orderField = ou.getField();
+				Order o = null;
+				switch (orderField) {
+					case "litera":
+						Path<String> p = root.join("litera", JoinType.LEFT).get("value");
+						jpaOrders.add(ou.asc() ? cb.asc(p) : cb.desc(p));
+						break;
+					case "inboxDocNum":
+						Path<Long> p1 = root.get("sufixNum");
+						Path<Long> p2 = root.get("prefixNum");
+						if (ou.asc()) {
+							jpaOrders.add(cb.asc(p1));
+							jpaOrders.add(cb.asc(p2));
+						} else {
+							jpaOrders.add(cb.desc(p1));
+							jpaOrders.add(cb.desc(p2));
+						}
+						break;
+					case "regDate":
+						Path<Date> d = root.get("regDate");
+						jpaOrders.add(ou.asc() ? cb.asc(d) : cb.desc(d));
+						break;
+					case "fioOrg":
+						//Сортируются сначала по Юридическим лицам, потом по физическим
+						Join<Question, Applicant> aplJoin = root.join("applicant");
+						Expression<String> concat = cb.concat(
+							aplJoin.<String>get("lastName"), " ");
+						concat = cb.concat(concat, aplJoin.<String>get("firstName"));
+						concat = cb.concat(concat, " ");
+						concat = cb.concat(concat,
+							aplJoin.<String>get("middleName"));
+						concat = cb.lower(concat);
+						Expression<String> jur = cb.lower(aplJoin
+							.<String>get("organization"));
+						Order jurOrder = null;
+						Order phyzOrder = null;
+						if (ou.asc()) {
+							jurOrder = cb.asc(jur);
+							phyzOrder = cb.asc(concat);
+						} else {
+							jurOrder = cb.desc(jur);
+							phyzOrder = cb.desc(concat);
+						}
+						jpaOrders.add(jurOrder);
+						jpaOrders.add(phyzOrder);
+						break;
+					case "answerTematic":
+						Path<String> ei = root.join("execution", JoinType.LEFT).get("usageAnswer");
+						jpaOrders.add(ou.asc() ? cb.asc(ei) : cb.desc(ei));
+						break;
+					case "answerResult":
+						Path<String> ra = root.join("execution", JoinType.LEFT).get("answerResult");
+						jpaOrders.add(ou.asc() ? cb.asc(ra) : cb.desc(ra));
+						break;
+					default:
+						logger.warning("unknown sort field " + orderField);
+				}
+			}
+		}
 		Expression<Boolean> finalExpression = null;
 		if (expressions.size() > 0) {
 			finalExpression = expressions.get(0);
@@ -360,7 +421,9 @@ public class QQSearch extends LoggedBean {
 		if (finalExpression != null) {
 			searchQuery.where(finalExpression);
 		}
-
+		if (jpaOrders.size() > 0) {
+			searchQuery.orderBy(jpaOrders);
+		}
 		@SuppressWarnings("unchecked")
 		Integer total = em.createQuery(searchQuery).getResultList().size();
 

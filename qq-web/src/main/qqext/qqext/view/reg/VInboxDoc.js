@@ -33,8 +33,10 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 								true, {width: 240,
 									labelWidth: 150,
 									viewOnly: true}),
-						me.prefix = createCmp('FTextField', '№ Входящего документа', 'prefixNum', {
-							maskRe: /\d/,
+						me.prefix = createCmp('FTextField', '№ Входящего документа', 'prefixNum', true, {
+//							maskRe: /\d/,
+							viewOnly: true,
+							allowBlank: true,
 							labelAlign: 'right',
 							width: 245,
 							labelWidth: 200,
@@ -43,6 +45,7 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 						createCmp('FTextField', '/', 'sufixNum', true, {
 //							maskRe: /\d/,
 							viewOnly: true,
+							allowBlank: true,
 							labelWidth: 5,
 							width: 50,
 							cls: 'small_lbl'
@@ -53,7 +56,7 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 						{viewOnly: true, allowBlank: true, width: 250, labelWidth: 150}), // Выставляется программно в модели
 				me._sp = createCmp('FComboBox', 'Способ передачи', 'inboxDocDeliveryType', 'transferType'),
 				me.executor = createCmp('FComboBox', 'Исполняющая организация',
-						'inboxDocExecOrg', 'execOrg', {
+						ns.stIds.execOrgs, 'execOrg', {
 							width: 650, labelWidth: 150,
 							listeners: {
 								change: function (combo, value) {

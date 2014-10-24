@@ -89,6 +89,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 			trans.save({callback: function (rec, op, suc) {
 					if (suc) {
 						me._disableButtons(false, 0);
+						ns.infoChanged = true;
 					} else {
 						qqext.showError("Ошибка сохранения данных", op.getError());
 						me.setViewOnly(false);
@@ -110,6 +111,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 					else {
 						me._disableButtons(true, 2);
 						me.getForm().reset();
+						ns.infoChanged = true;
 					}
 				}
 			});
@@ -138,6 +140,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 									if (suc) {
 										ns.statusPanel.setStatus();
 										ns.turnOnArticles(ns.btns.exec);
+										ns.infoChanged = true;
 									} else {
 										ns.showError("Ошибка обновления статуса", op.getError());
 										trans.destroy();
@@ -158,7 +161,6 @@ Ext.define('qqext.view.transmission.VTransmission', {
 			}
 		}
 //----------------------------------------------
-// scope for buttons
 		var me = this,
 				ns = qqext,
 				labels = ns.labels,
@@ -205,12 +207,17 @@ Ext.define('qqext.view.transmission.VTransmission', {
 				createCmp('FCheckbox', trans.control[1], trans.control[0], {
 					listeners: {
 						change: function (cb, value) {
+							if (value)
+								me._cd.show();
+							else
+								me._cd.hide();
 							me._cd.allowBlank = !value;
 						}
 					}
 				}),
 				me._cd = createCmp('FDateField', trans.controlDate[1], trans.controlDate[0], {
 					width: 250,
+					hidden: true,
 					labelWidth: 150}),
 				me._adds = createCmp('FieldSet', {
 					collapsible: true,

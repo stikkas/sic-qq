@@ -1,6 +1,8 @@
 package ru.insoft.archive.qq.servlet;
 
+import java.util.List;
 import javax.ejb.EJB;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -8,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import ru.insoft.archive.extcommons.servlet.AbstractServlet;
+import ru.insoft.archive.extcommons.webmodel.OrderBy;
 import ru.insoft.archive.qq.ejb.QQSearch;
 import ru.insoft.archive.qq.model.SearchCritery;
 
@@ -46,9 +49,13 @@ public class Search extends AbstractServlet {
 		if (limitSt != null) {
 			limit = Integer.parseInt(limitSt);
 		}
-
+		List<OrderBy> orders = null;
+		if (req.getParameter("sort") != null) {
+			JsonArray orderJson = jsonTools.getJsonArray(req.getParameter("sort"));
+			orders = jsonTools.parseEntitiesList(orderJson, OrderBy.class);
+		}
 		SearchCritery q = jsonTools.parseEntity(jsonParams, SearchCritery.class);
-		JsonObject searchResult = search.getSearchResult(start, limit, q);
+		JsonObject searchResult = search.getSearchResult(start, limit, q, orders);
 		resp.getWriter().write(searchResult.toString());
 	}
 

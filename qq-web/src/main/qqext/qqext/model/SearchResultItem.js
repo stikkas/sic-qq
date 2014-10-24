@@ -18,7 +18,11 @@ Ext.define('qqext.model.SearchResultItem', {
 			name: 'inboxDocNum',
 			type: 'string',
 			defaultValue: null,
-			convert: null
+			convert: function (v) {
+				if (v === 'null/null')
+					return '';
+				return v;
+			}
 		}, {
 			name: 'regDate',
 			type: 'date',

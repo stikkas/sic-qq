@@ -26,9 +26,10 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	margin: '0 5 10 5',
 	border: true,
 	listeners: {
-		activate: function () {
+		activate: function (me, prev) {
 			var ns = qqext;
 			ns.switchArticleButton(ns.getButton(ns.btns.jvk));
+			ns.updateInfo();
 		}
 	},
 	viewConfig: {
@@ -179,6 +180,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 			}));
 		}
 
+		var labelForTable;
 		Ext.applyIf(me, {
 			columns: {
 				defaults: {
@@ -326,7 +328,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					{
 						text: 'Исполнитель',
 						dataIndex: 'executor',
-                                                width:100,
+						width: 100,
 						items: [
 							createCmp('FComboBox', '', execStore, 'requestExecutorCombo', {
 								width: '90%',
@@ -345,12 +347,17 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					displayInfo: true,
 					store: 'journal'
 				},
-				createCmp('FLabel', 'СИЦ / Архив', {
+				labelForTable = createCmp('FLabel', '', {
 					dock: 'top',
 					cls: 'journal_title_label'
 				})
 			]
 		});
+		if (ns.isSIC)
+			labelForTable.setText("Справочно-информационный центр федеральных государственных архивов");
+		else
+			labelForTable.setText(Ext.getStore(ns.stIds.execOrgs)
+					.getById(ns.user.get('organization')).get('name'));
 		me.callParent();
 
 		me.store.addFilter(me._fltrs);

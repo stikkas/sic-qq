@@ -4,6 +4,7 @@
 		<web-resource-collection>
 			<web-resource-name>login page</web-resource-name>
 			<url-pattern>/login.jsp</url-pattern>
+			<url-pattern>/Auth</url-pattern>
 		</web-resource-collection>
 		<web-resource-collection>
 			<web-resource-name>resources files</web-resource-name>
@@ -40,6 +41,6 @@
 		</form-login-config>
 	</login-config>
 	<session-config>
-		<session-timeout>30</session-timeout>
+		<session-timeout>1</session-timeout>
 	</session-config>
 </web-app>

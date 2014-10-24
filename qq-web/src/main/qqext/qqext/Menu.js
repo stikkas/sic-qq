@@ -258,7 +258,6 @@ Ext.define('qqext.Menu', {
 			 */
 			function jvk() {
 				ns.setCurrentForm(0);
-				Ext.getStore('journal').load();
 			}
 
 			/**

@@ -45,7 +45,8 @@ Ext.define('qqext.controller.Main', {
 			storeId: 'searchResults',
 			url: '/qq-web/api/Search',
 			pageSize: 12,
-			model: 'qqext.model.SearchResultItem'
+			model: 'qqext.model.SearchResultItem',
+			remoteSort: true
 		});
 		createCmp('qqext.store.CustomStore', {
 			storeId: 'journal',

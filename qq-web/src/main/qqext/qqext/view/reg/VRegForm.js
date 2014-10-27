@@ -52,6 +52,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 				if (!ns.isSIC)
 					model.set('execOrg', orgId);
 				me.loadRecord();
+				ns.initRequired(me);
 			} else if (prev === ns.searchForm || prev === ns.jvkForm) {
 // Значит пришли по двойному клику на существуещем запросе, (открыли существующий запрос)
 				me.clear();
@@ -64,6 +65,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 						me.setViewOnly(true);
 						me.loadRecord();
 					}});
+				ns.initRequired(me);
 			}
 
 			if (!ns.isSIC) {

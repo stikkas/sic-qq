@@ -106,22 +106,22 @@ Ext.define('qqext.view.reg.VApplicant', {
 			if (typef === type) { // Выбрано физическое лицо
 				fisic.forEach(function (v) {
 					v.show();
-					v.allowBlank = false;
+					v.setRequired(true);
 				});
 				uric.forEach(function (u) {
 					u.hide();
 					u.setValue();
-					u.allowBlank = true;
+					u.setRequired(false);
 				});
 			} else {  // Выбрано юридическое лицо
 				fisic.forEach(function (v) {
 					v.hide();
 					v.setValue('');
-					v.allowBlank = true;
+					v.setRequired(false);
 				});
 				uric.forEach(function (u) {
 					u.show();
-					u.allowBlank = false;
+					u.setRequired(true);
 				});
 			}
 		}

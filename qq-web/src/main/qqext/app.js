@@ -47,8 +47,10 @@ Ext.application({
 				Ext.create('Viewport', {});
 
 				Ext.Ajax.on('requestexception', function (conn, response) {
-					if (response.status === 403)
-						ns.quitAction();
+					if (response.status === 403) {
+						ns.userStore.removeAll(true);
+						window.location = urls.welcome;
+					}
 				});
 
 				// Загружаем настройки для прикрепленных файлов
@@ -565,8 +567,9 @@ Ext.application({
 					return;
 				}
 			}
-			if (!~message.search(/<!DOCTYPE/i)) { // Если rest вернул страницу авторизации
-				ns.quitAction();
+			if (~message.search(/<!DOCTYPE/i)) { // Если rest вернул страницу авторизации
+				ns.userStore.removeAll(true);
+				window.location = urls.welcome;
 				return;
 			}
 			Ext.Msg.show({
@@ -584,6 +587,17 @@ Ext.application({
 		 * @property {Number} sicId
 		 */
 
+		/**
+		 * Устанавливает звездочки для обязательных полей формы
+		 * @param {Object} form объект, относительно которого искать поля
+		 * @method initRequired
+		 */
+		ns.initRequired = function (form) {
+			Ext.ComponentQuery.query('field', form).forEach(function (it) {
+				if (it.initRequired)
+					it.initRequired();
+			});
+		};
 		/**
 		 * Проверяет значения полей дат на допустимые.
 		 * Исползуется формат 'd.m.Y'.

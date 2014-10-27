@@ -38,6 +38,7 @@ Ext.define('qqext.view.exec.VExecForm', {
 
 				me.setViewOnly(true);
 				me._initData();
+				ns.initRequired(me);
 			}
 			ns.viewport.doLayout();
 		}

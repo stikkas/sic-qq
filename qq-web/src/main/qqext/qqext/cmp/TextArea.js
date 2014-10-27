@@ -11,11 +11,34 @@ Ext.define('qqext.cmp.TextArea', {
 	 * одинаковый интерфейс со всеми.
 	 * @param {Boolean} mode режим отображения: true - просмотр только, false - редактирование
 	 */
-	setViewOnly: function(mode) {
+	setViewOnly: function (mode) {
 		if (this._viewMode !== mode) {
 			this.inputEl.dom.disabled = mode;
 			this._viewMode = mode;
 		}
+	},
+	// Тут я обленился, просто тупо скопировал
+	/**
+	 * Устанавливает режим обязательности для поля формы
+	 * @param {Boolean} mode true - поле обязательно, false - поле опционально
+	 */
+	setRequired: function (mode) {
+		var me = this;
+		if (mode) {
+			me.labelEl.setHTML("<span>*</span>" + me.fieldLabel + me.labelSeparator);
+			me.allowBlank = false;
+		} else {
+			me.labelEl.setHTML(me.fieldLabel + me.labelSeparator);
+			me.allowBlank = true;
+		}
+	},
+	/**
+	 * Устанавливает обязательность поля после его создания
+	 */
+	initRequired: function () {
+		var me = this;
+		if (me.allowBlank === false)
+			me.labelEl.setHTML("<span>*</span>" + me.fieldLabel + me.labelSeparator);
 	}
 //	,
 //	// Может быть в будущем понадобится другое отображение содержимого textarea

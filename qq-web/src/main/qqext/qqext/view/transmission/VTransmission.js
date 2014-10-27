@@ -58,7 +58,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 							me._disableButtons(true, 0);
 
 					}});
-
+				ns.initRequired(me);
 			}
 			me.collapseAdds();
 			me.doLayout();
@@ -211,7 +211,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 								me._cd.show();
 							else
 								me._cd.hide();
-							me._cd.allowBlank = !value;
+							me._cd.setRequired(value);
 						}
 					}
 				}),

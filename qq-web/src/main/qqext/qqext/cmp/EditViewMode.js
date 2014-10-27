@@ -45,6 +45,9 @@
  *			}//... другие параметры
  *		});
  *
+ *	Также добавляет возможность выделять звездочкой обязательные поля. В дальнейших проектах
+ *	предполагается это упростить, и использовать overrides для Ext.form.field.Base.
+ *
  * @author С. Благодатских
  */
 Ext.define('qqext.cmp.EditViewMode', {
@@ -171,11 +174,33 @@ Ext.define('qqext.cmp.EditViewMode', {
 		var me = this;
 		me._setValueE(value);
 		me._label.innerHTML = me.isValid() ? me._getValue() : '';
-	}
+	},
 	/**
 	 * Используется для сохранения оригинального значения метода setValue
 	 * @private
 	 * @method _setValueE
 	 */
+	/**
+	 * Устанавливает режим обязательности для поля формы
+	 * @param {Boolean} mode true - поле обязательно, false - поле опционально
+	 */
+	setRequired: function (mode) {
+		var me = this;
+		if (mode) {
+			me.labelEl.setHTML("<span>*</span>" + me.fieldLabel + me.labelSeparator);
+			me.allowBlank = false;
+		} else {
+			me.labelEl.setHTML(me.fieldLabel + me.labelSeparator);
+			me.allowBlank = true;
+		}
+	},
+	/**
+	 * Устанавливает обязательность поля после его создания
+	 */
+	initRequired: function () {
+		var me = this;
+		if (me.allowBlank === false)
+			me.labelEl.setHTML("<span>*</span>" + me.fieldLabel + me.labelSeparator);
+	}
 });
 

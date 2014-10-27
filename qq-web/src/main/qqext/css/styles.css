@@ -447,6 +447,9 @@ div.collapse_section{
 .width150 .x-form-type-text.x-gridcolumn-form-item{
     width:150px !important;
 }
+.mar_t-5{
+    margin-top:-5px !important;
+}
 
 /**/
 /*.hmenu .x-btn-disabled{

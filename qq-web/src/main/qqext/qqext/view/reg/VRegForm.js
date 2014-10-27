@@ -417,10 +417,9 @@ Ext.define('qqext.view.reg.VRegForm', {
 				value;
 		if (me.inbox.executor.getValue() === qqext.sicId) {
 			date = new Date();
-			date.setDate(date.getDate() + 7);
+			date.setDate(date.getDate() + 15);
 			pd.setValue(date);
-		}
-		else {
+		} else {
 			value = vz.getValue();
 			if (value &&
 					vz.getStore().getById(value).get('code') === 'Q_VALUE_QUEST_TYPE_SOCIAL') {

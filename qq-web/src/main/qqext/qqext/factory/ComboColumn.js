@@ -17,7 +17,7 @@ Ext.define('qqext.factory.ComboColumn', {
 	 * (по умолчанию - `name`)
 	 * @param {String} valueField (optional) поле хранилища для значения (по умолчанию - `id`)
 	 */
-	constructor: function(text, dataIndex, storeId,
+	constructor: function (text, dataIndex, storeId,
 			flex, displayField, valueField) {
 		var me = this;
 		displayField = displayField || 'name';

@@ -629,7 +629,8 @@ Ext.application({
 					users: 'users',
 					allusers: 'allusers',
 					stats: 'statuses',
-					execOrgs: 'organizations'
+					execOrgs: 'organizations',
+					sendType: 'sendtypes'
 				};
 		// нужно инициализировать хранилище для информации об организациях
 		// и установить принадлежность пользователся к СИЦ
@@ -649,6 +650,7 @@ Ext.application({
 		create('DictStore', ids.litera, ids.litera, organization);
 		create('DictStore', ids.users, ids.users, organization);
 		create('DictStore', ids.allusers, ids.users);
+		create('DictStore', ids.sendType, ids.sendType);
 		create('DictStore', ids.stats, ids.stats, {
 			listeners: {
 				load: function (st, records) {

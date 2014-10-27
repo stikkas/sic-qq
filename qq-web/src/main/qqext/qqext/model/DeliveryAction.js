@@ -1,4 +1,4 @@
-Ext.define('qqext.model.DeliveryAction', (function() {
+Ext.define('qqext.model.DeliveryAction', (function () {
 
 	var ns = Ext.ns('qqext'),
 			del = ns.delAction = {

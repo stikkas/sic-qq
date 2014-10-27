@@ -105,13 +105,14 @@ Ext.define('qqext.view.notify.VNotify', {
 				createCmp = Ext.create,
 				labels = ns.labels,
 				notf = ns.notification,
+				stores = ns.stIds,
 				menu = createCmp('HButtonMenu', [
 					{text: labels.save, action: saveNotify, opts: {cls: 'save_btn'}},
 					{text: labels.edit, action: editNotify, opts: {cls: 'edit_btn'}}
 				], 'ToolButton', me);
 		Ext.applyIf(me, {
 			items: [
-				createCmp('FComboBox', notf.executor[1], ns.stIds.users, notf.executor[0], {
+				createCmp('FComboBox', notf.executor[1], stores.users, notf.executor[0], {
 					width: 450,
 					labelWidth: 150,
 					allowBlank: false
@@ -124,7 +125,7 @@ Ext.define('qqext.view.notify.VNotify', {
 					width: 270,
 					labelWidth: 150
 				}),
-				createCmp('FComboBox', notf.deliveryType[1], 'answerForm', notf.deliveryType[0], {
+				createCmp('FComboBox', notf.deliveryType[1], stores.sendType, notf.deliveryType[0], {
 					width: 270,
 					labelWidth: 150
 				}),

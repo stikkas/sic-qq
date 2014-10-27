@@ -129,6 +129,20 @@ public class DictREST {
 	}
 
 	/**
+	 * Возвращает список форм выдачи ответа
+	 *
+	 * @return возможные формы выдачи ответа
+	 */
+	@GET
+	@Path("sendtypes")
+	@Produces({"application/json"})
+	public List<Dict> getSendTypes() {
+		return execQuery("SELECT NEW ru.insoft.archive.qq.service.Dict(d.id, d.value, d.code) "
+			+ "from DescriptorValue d, DescriptorGroup g where d.groupId = g.id "
+			+ "and g.code='Q_DICT_ANSWER_FORM'");
+	}
+
+	/**
 	 * Выполняет запрос к базе
 	 */
 	private List<Dict> execQuery(String query) {

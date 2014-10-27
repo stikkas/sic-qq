@@ -39,7 +39,6 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 		var store = this._sf.getStore();
 		store.sync({callback: function () {
 				store.load();
-				console.log("into _mf.save");
 			}});
 	},
 	/**
@@ -88,7 +87,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 						menuDisabled: true
 					}, items: [
 						createCmp('ComboColumn', action.type[1], action.type[0],
-								'answerForm', 1),
+								ns.stIds.sendType, 1),
 						{
 							text: action.date[1],
 							dataIndex: action.date[0],

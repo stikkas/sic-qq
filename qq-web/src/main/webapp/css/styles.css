@@ -329,7 +329,7 @@ textarea[disabled=""]{
 label span{
     color:#f00;
     padding-right:5px;
-    /*position:absolute;            //для шлобального выравнивания * по вертикали
+    /*position:absolute;            //для глобального выравнивания * по вертикали
     left:10px;*/
     vertical-align:middle;
 }
@@ -446,6 +446,9 @@ div.collapse_section{
 /*width*/
 .width150 .x-form-type-text.x-gridcolumn-form-item{
     width:150px !important;
+}
+.mar_t-5{
+    margin-top:-5px !important;
 }
 
 /**/

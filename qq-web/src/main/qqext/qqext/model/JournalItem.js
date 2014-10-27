@@ -41,6 +41,9 @@ Ext.define('qqext.model.JournalItem', {
 			name: 'status',
 			type: 'string'
 		}, {
+			name: 'execOrg',
+			type: 'string'
+		}, {
 			name: 'executor',
 			type: 'string'
 		}]

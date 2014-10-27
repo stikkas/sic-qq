@@ -52,6 +52,10 @@ public class Notification implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date notificationDate;
 
+	@Column(name = "ISSUE_DATE", columnDefinition = "DATE")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date issueDate;
+
 	@JsonIgnore
 	@JoinColumn(name = "QUESTION_ID", referencedColumnName = "QUESTION_ID", insertable = false, updatable = false)
 	@OneToOne(optional = false, fetch = FetchType.LAZY)
@@ -102,6 +106,14 @@ public class Notification implements Serializable {
 
 	public void setNotificationDate(Date notificationDate) {
 		this.notificationDate = notificationDate;
+	}
+
+	public Date getIssueDate() {
+		return issueDate;
+	}
+
+	public void setIssueDate(Date issueDate) {
+		this.issueDate = issueDate;
 	}
 
 	public Question getQuestion() {

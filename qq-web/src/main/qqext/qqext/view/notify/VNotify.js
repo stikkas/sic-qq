@@ -18,6 +18,10 @@ Ext.define('qqext.view.notify.VNotify', {
 	height: 300,
 	maxHeight: 300,
 	title: 'Уведомление заявителю',
+	fieldDefaults: {
+		blankText: 'Обязательно для заполнения',
+		validateOnChange: false
+	},
 	/**
 	 * Индекс, в соответствии с которым сопоставляется верхнее меню (см. qqext.Menu)
 	 * @private
@@ -37,6 +41,8 @@ Ext.define('qqext.view.notify.VNotify', {
 						me._disableButtons(true, 0);
 						me._disableButtons(!ns.user.isAllowed(ns.rules.reg), 1);
 					}});
+
+				ns.initRequired(me);
 			}
 			ns.viewport.doLayout();
 		}
@@ -44,7 +50,7 @@ Ext.define('qqext.view.notify.VNotify', {
 	initComponent: function () {
 		//----------Обработчики кнопок меню----------
 		function saveNotify() {
-			if (!ns.checkDates([me._df]))
+			if (!ns.checkDates([me._df, me._idf]))
 				return;
 
 			var model = me.model,
@@ -53,32 +59,37 @@ Ext.define('qqext.view.notify.VNotify', {
 			me._disableButtons(true, 0, 1);
 			me.setViewOnly(true);
 			me.updateRecord(noti);
-
-			noti.save({callback: function (rec, op, suc) {
-					if (suc) {
-						model.set('status', ns.statsId[ns.stats.notify]);
-						// Обновляем модель запроса (статус)
-						model.save({callback: function (record, operation, success) {
-								if (success) {
-									me._disableButtons(false, 1);
-									ns.statusPanel.setStatus();
-									ns.infoChanged = true;
-								} else {
-									ns.showError("Ошибка сохранения", operation.getError());
-									me.setViewOnly(false);
-									// Включаем кнопку сохранить
-									me._disableButtons(false, 0);
-									noti.destroy();
+			if (me.isValid()) {
+				noti.save({callback: function (rec, op, suc) {
+						if (suc) {
+							model.set('status', ns.statsId[ns.stats.notify]);
+							// Обновляем модель запроса (статус)
+							model.save({callback: function (record, operation, success) {
+									if (success) {
+										me._disableButtons(false, 1);
+										ns.statusPanel.setStatus();
+										ns.infoChanged = true;
+									} else {
+										ns.showError("Ошибка сохранения", operation.getError());
+										me.setViewOnly(false);
+										// Включаем кнопку сохранить
+										me._disableButtons(false, 0);
+										noti.destroy();
+									}
 								}
-							}
-						});
-					} else {
-						ns.showError("Ошибка сохранения", op.getError());
-						me.setViewOnly(false);
-						me._disableButtons(false, 0);
+							});
+						} else {
+							ns.showError("Ошибка сохранения", op.getError());
+							me.setViewOnly(false);
+							me._disableButtons(false, 0);
+						}
 					}
-				}
-			});
+				});
+			} else {
+				ns.showError("Форма заполнена неправильно", me.getErrors());
+				me.setViewOnly(false);
+				me._disableButtons(false, 0);
+			}
 		}
 
 		function editNotify() {
@@ -102,17 +113,22 @@ Ext.define('qqext.view.notify.VNotify', {
 			items: [
 				createCmp('FComboBox', notf.executor[1], ns.stIds.users, notf.executor[0], {
 					width: 450,
-					labelWidth: 150
+					labelWidth: 150,
+					allowBlank: false
 				}),
 				createCmp('FComboBox', notf.docType[1], 'docType', notf.docType[0], {
 					width: 450,
+					labelWidth: 150
+				}),
+				me._df = createCmp('FDateField', notf.notificationDate[1], notf.notificationDate[0], {
+					width: 270,
 					labelWidth: 150
 				}),
 				createCmp('FComboBox', notf.deliveryType[1], 'answerForm', notf.deliveryType[0], {
 					width: 270,
 					labelWidth: 150
 				}),
-				me._df = createCmp('FDateField', notf.notificationDate[1], notf.notificationDate[0], {
+				me._idf = createCmp('FDateField', notf.issueDate[1], notf.issueDate[0], {
 					width: 270,
 					labelWidth: 150
 				})

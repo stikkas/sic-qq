@@ -124,7 +124,7 @@ public class QQSearch extends LoggedBean {
 							jTr.get("executor"), executor);
 						expressions.add(equalExecutor);
 						break;
-					case "organization":
+					case "execOrg":
 						Long organization = (Long) fb.getValue();
 						expressions.add(cb.equal(root.<Long>get("execOrg"), organization));
 				}
@@ -199,6 +199,10 @@ public class QQSearch extends LoggedBean {
 							o = cb.desc(admUserJoin.get("name"));
 						}
 						jpaOrders.add(o);
+						break;
+					case "execOrg":
+						Path<String> eoo = root.join("execOrgValue", JoinType.LEFT).get("shortValue");
+						jpaOrders.add(ou.asc() ? cb.asc(eoo) : cb.desc(eoo));
 						break;
 					default:
 						logger.warning("unknown sort field " + orderField);

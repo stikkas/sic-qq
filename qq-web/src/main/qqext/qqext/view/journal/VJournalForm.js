@@ -179,7 +179,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 //		} else {
 		if (!ns.isSIC) {
 			me._fltrs.push(createCmp('Ext.util.Filter', {
-				property: 'organization',
+				property: 'execOrg',
 				value: user.get('organization')
 			}));
 		}
@@ -320,6 +320,21 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						width: 150,
 						items: [
 							createCmp('FComboBox', '', ns.stIds.stats, 'requestStatusCombo', {
+								width: '90%',
+								listeners: {
+									select: me._filterComboSelected,
+									render: me._render,
+									specialkey: me._specialKeyStop
+								}
+							})
+						]
+					},
+					{
+						text: 'Архив-исполнитель',
+						dataIndex: 'execOrg',
+						width: 80,
+						items: [
+							createCmp('FComboBox', '', ns.stIds.litera, 'requestExecOrgCombo', {
 								width: '90%',
 								listeners: {
 									select: me._filterComboSelected,

@@ -322,6 +322,17 @@ textarea[disabled=""]{
 .right_date .x-hbox-form-item[style*='left: 460px;']{
     width:150px !important;
 }
+/*стили "*" для обязательных полей*/
+/*.x-form-item-label{
+    position:relative;              //для шлобального выравнивания * по вертикали
+}*/
+label span{
+    color:#f00;
+    padding-right:5px;
+    /*position:absolute;            //для шлобального выравнивания * по вертикали
+    left:10px;*/
+    vertical-align:middle;
+}
 
 /*collapse section*/
 .collapse_section,

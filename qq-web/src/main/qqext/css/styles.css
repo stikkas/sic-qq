@@ -329,7 +329,7 @@ textarea[disabled=""]{
 label span{
     color:#f00;
     padding-right:5px;
-    /*position:absolute;            //для шлобального выравнивания * по вертикали
+    /*position:absolute;            //для глобального выравнивания * по вертикали
     left:10px;*/
     vertical-align:middle;
 }

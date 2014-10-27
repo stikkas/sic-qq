@@ -80,6 +80,7 @@ Ext.define('qqext.view.reg.VApplicant', {
 					title: 'Дополнительные сведения',
 					collapsible: true,
 					cls: 'collapse_section',
+					hidden: true,
 					items: [
 						createCmp('FTextField', applicant.issueDocNum[1], applicant.issueDocNum[0], {
 							width: 250, labelWidth: 150
@@ -98,6 +99,7 @@ Ext.define('qqext.view.reg.VApplicant', {
 				})
 			]
 		});
+
 		allusers = [surname, name, fatherName, org, appCat];
 		uric = [org, appCat];
 		fisic = [surname, name, fatherName];
@@ -123,6 +125,7 @@ Ext.define('qqext.view.reg.VApplicant', {
 					u.show();
 					u.setRequired(true);
 				});
+//				me.collapseAdds();
 			}
 		}
 		me.callParent();

@@ -11,7 +11,7 @@ Ext.define('qqext.cmp.PanelEditViewMode', {
 	 * Включает или выключает режим просмотра
 	 * @param {Boolean} mode true - режим просмотра , false - обычный режим (редактирование)
 	 */
-	setViewOnly: function(mode) {
+	setViewOnly: function (mode) {
 		var items = this.items,
 				max = items.length,
 				i = 0;
@@ -23,5 +23,10 @@ Ext.define('qqext.cmp.PanelEditViewMode', {
 				// вроде Label, можно конечно и их переопределить с пустыми методами.
 			}
 		}
+	},
+	setRequired: function (mode) {
+		this.items.forEach(function (v) {
+			v.setRequired(mode);
+		});
 	}
 });

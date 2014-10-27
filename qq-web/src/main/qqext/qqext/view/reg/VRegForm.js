@@ -400,7 +400,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 		me.reset();
 		me.target.hide();
 		me.applicant.appType.setValue(null);
-		me.applicant.collapseAdds();
+//		me.applicant.collapseAdds();
 		qqext.statusPanel.setStatus('');
 		me.doLayout();
 	},

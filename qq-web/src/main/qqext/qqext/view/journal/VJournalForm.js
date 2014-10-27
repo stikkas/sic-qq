@@ -257,7 +257,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					{
 						xtype: 'datecolumn',
 						text: 'Дата исполнения плановая',
-						width: 110,
+						width: 136,
 						dataIndex: 'execDate',
 						itemId: 'planDateExec',
 						format: 'd.m.Y',
@@ -296,7 +296,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 //					},
 					{
 						text: 'От кого поступил',
-						width: 200,
+						width: 175,
 						dataIndex: 'fioOrg',
 						items: [
 							createCmp('FTextField', '', 'applicantField', {
@@ -332,7 +332,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					{
 						text: 'Архив-исполнитель',
 						dataIndex: 'execOrg',
-						width: 80,
+						width: 90,
 						items: [
 							createCmp('FComboBox', '', ns.stIds.litera, 'requestExecOrgCombo', {
 								width: '90%',

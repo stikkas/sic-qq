@@ -14,7 +14,6 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 	],
 	fieldDefaults: {
 		blankText: 'Обязательно для заполнения',
-		allowBlank: false,
 		validateOnChange: false
 	},
 	disabledCls: '',
@@ -36,16 +35,14 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 						me.prefix = createCmp('FTextField', '№ Входящего документа', 'prefixNum', true, {
 //							maskRe: /\d/,
 							viewOnly: true,
-							allowBlank: true,
 							labelAlign: 'right',
 							width: 245,
 							labelWidth: 200,
 							cls: 'two_col_fld'
 						}),
-						createCmp('FTextField', '/', 'sufixNum', true, {
+						me.sufix = createCmp('FTextField', '/', 'sufixNum', true, {
 //							maskRe: /\d/,
 							viewOnly: true,
-							allowBlank: true,
 							labelWidth: 5,
 							width: 50,
 							cls: 'small_lbl'
@@ -53,8 +50,9 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 					]
 				}),
 				me.datereg = createCmp('FDateField', 'Дата регистрации', 'regDate', true,
-						{viewOnly: true, allowBlank: true, width: 250, labelWidth: 150}), // Выставляется программно в модели
-				me._sp = createCmp('FComboBox', 'Способ передачи', 'inboxDocDeliveryType', 'transferType'),
+						{viewOnly: true, width: 250, labelWidth: 150}), // Выставляется программно в модели
+				me._sp = createCmp('FComboBox', 'Способ передачи', 'inboxDocDeliveryType',
+						'transferType', {allowBlank: false}),
 				me.executor = createCmp('FComboBox', 'Исполняющая организация',
 						ns.stIds.execOrgs, 'execOrg', {
 							width: 650, labelWidth: 150,
@@ -74,9 +72,11 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 						}),
 				me.registrator = createCmp('FComboBox', 'ФИО регистратора', ns.stIds.allusers,
 						'registrator', true,
-						{viewOnly: true, allowBlank: true, width: 500, labelWidth: 150})// Выставляется программно в модели
+						{viewOnly: true, width: 500, labelWidth: 150})// Выставляется программно в модели
 			]
 		});
+		if (ns.isSIC)
+			me.executor.allowBlank = false;
 		me.callParent();
 	}
 });

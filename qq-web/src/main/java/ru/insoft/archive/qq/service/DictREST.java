@@ -51,7 +51,7 @@ public class DictREST {
 	}
 
 	/**
-	 * Возвращает список литер. Для СИЦ - СИЦ, для архива СИЦ + аббревиатура
+	 * Возвращает список литер. Для СИЦ - все, для архива СИЦ + аббревиатура
 	 * архива
 	 *
 	 * @param organization идентификатор организации для кого нужен список
@@ -61,10 +61,14 @@ public class DictREST {
 	@Path("litera")
 	@Produces({"application/json"})
 	public List<Dict> getLiteras(@QueryParam("organization") Long organization) {
-		return execQuery("SELECT NEW ru.insoft.archive.qq.service.Dict(v.id, a.value, v.code)"
+		String query = "SELECT NEW ru.insoft.archive.qq.service.Dict(v.id, a.value, v.code)"
 			+ " from DescriptorValueAttr a, DescriptorGroupAttr g, DescriptorValue v"
-			+ " where a.attrId = g.id and a.valueId = v.id and g.code = 'MEMBER_LETTER'"
-			+ " and v.id in (" + sicId + "," + organization + ")");
+			+ " where a.attrId = g.id and a.valueId = v.id and g.code = 'MEMBER_LETTER'";
+
+		if (!organization.equals(sicId)) {
+			query += " and v.id in (" + sicId + "," + organization + ")";
+		}
+		return execQuery(query);
 	}
 
 	/**

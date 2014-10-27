@@ -137,13 +137,8 @@ public class QQSearch extends LoggedBean {
 				Order o = null;
 				switch (orderField) {
 					case "litera":
-						Join<Question, DescriptorValue> jj = root.join("litera", JoinType.LEFT);
-						if (ou.asc()) {
-							o = cb.asc(jj.get("value"));
-						} else {
-							o = cb.desc(jj.get("value"));
-						}
-						jpaOrders.add(o);
+						Path<String> jj = root.join("literaValue", JoinType.LEFT).get("value");
+						jpaOrders.add(ou.asc() ? cb.asc(jj) : cb.desc(jj));
 						break;
 					case "inboxDocNum":
 						if (ou.asc()) {
@@ -156,20 +151,12 @@ public class QQSearch extends LoggedBean {
 						jpaOrders.add(o);
 						break;
 					case "regDate":
-						if (ou.asc()) {
-							o = cb.asc(root.get("regDate"));
-						} else {
-							o = cb.desc(root.get("regDate"));
-						}
-						jpaOrders.add(o);
+						Path<Date> pd = root.get("regDate");
+						jpaOrders.add(ou.asc() ? cb.asc(pd) : cb.desc(pd));
 						break;
 					case "execDate":
-						if (ou.asc()) {
-							o = cb.asc(root.get("plannedFinishDate"));
-						} else {
-							o = cb.desc(root.get("plannedFinishDate"));
-						}
-						jpaOrders.add(o);
+						Path<Date> pld = root.get("plannedFinishDate");
+						jpaOrders.add(ou.asc() ? cb.asc(pld) : cb.desc(pld));
 						break;
 					case "fioOrg":
 						//Сортируются сначала по Юридическим лицам, потом по физическим
@@ -356,7 +343,7 @@ public class QQSearch extends LoggedBean {
 				Order o = null;
 				switch (orderField) {
 					case "litera":
-						Path<String> p = root.join("litera", JoinType.LEFT).get("value");
+						Path<String> p = root.join("literaValue", JoinType.LEFT).get("value");
 						jpaOrders.add(ou.asc() ? cb.asc(p) : cb.desc(p));
 						break;
 					case "inboxDocNum":

@@ -24,7 +24,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	draggable: false,
 	store: 'journal',
 	margin: '0 5 10 5',
-        cls:'journal_st',
+	cls: 'journal_st',
 	border: true,
 	listeners: {
 		activate: function (me, prev) {
@@ -40,17 +40,19 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					stats = ns.stats,
 					status = record.get('status');
 			var date = record.get('execDate');
-			if (date &&
-					((ns.isSIC && (
-							status === statsName[stats.reg] ||
-							status === statsName[stats.onexec])) ||
-							(!ns.isSIC && !(
-									status === statsName[stats.onreg] ||
-									status === statsName[stats.exec])))) {
-				var delta = Math.ceil((date - new Date()) / qqext.msPday);
-				if (delta <= 1)
+			if (date && status !== statsName[stats.onreg]) {
+				/*
+				 ((ns.isSIC && (
+				 status === statsName[stats.reg] ||
+				 status === statsName[stats.onexec])) ||
+				 (!ns.isSIC && !(
+				 status === statsName[stats.onreg] ||
+				 status === statsName[stats.exec])))) {
+				 */
+				var delta = parseInt((date - new Date()) / qqext.msPday);
+				if (delta <= 0)
 					return 'immediate';
-				if (delta < 4)
+				if (delta < 3)
 					return 'urgent';
 			}
 			return '';
@@ -169,12 +171,13 @@ Ext.define('qqext.view.journal.VJournalForm', {
 		if (user.isAllowed([rules.reg, rules.crd, rules.exec]))
 			me.listeners.itemdblclick = ns.openRequest;
 
-		if (ns.isSIC) {
-			me._fltrs.push(createCmp('Ext.util.Filter', {
-				property: 'litera',
-				value: user.get('organization')
-			}));
-		} else {
+//		if (ns.isSIC) {
+//			me._fltrs.push(createCmp('Ext.util.Filter', {
+//				property: 'litera',
+//				value: user.get('organization')
+//			}));
+//		} else {
+		if (!ns.isSIC) {
 			me._fltrs.push(createCmp('Ext.util.Filter', {
 				property: 'organization',
 				value: user.get('organization')

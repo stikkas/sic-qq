@@ -174,11 +174,14 @@ Ext.define('qqext.view.reg.VRegForm', {
 			var model = me.model,
 					user = ns.user,
 					userId = user.get('userId'),
-					now = new Date();
+					now = new Date(),
+					year = now.getYear() + 1900;
 			// Кнопки сохранить, удалить и регистрировать
 			me._disableButtons(true, 1, 2, 3);
 			me.setViewOnly(true);
 			me.updateRecord();
+			model.set('sufixNum', year);
+
 			// Заполняем обязательные поля:
 			if (!model.get('id')) { // Только для новых моделей
 				model.set('insertUser', userId);
@@ -188,13 +191,25 @@ Ext.define('qqext.view.reg.VRegForm', {
 			model.set('updateUser', userId);
 			model.set('updateDate', now);
 			model.set('status', ns.statsId[ns.stats.onreg]);
-			me._saveModel(function () {
-				me._disableButtons(false, 0);
-			}, function () {
-				me._disableButtons(false, 1, 3);
-			}, function () {
-				me._disableButtons(false, 1, 2, 3);
+			Ext.Ajax.request({
+				url: '/qq-web/rest/question/allowedid/' + ns.user.get('organization') + '/' + year,
+				success: function (answer) {
+					model.set('prefixNum', answer.responseText);
+					me._saveModel(function () {
+						me._disableButtons(false, 0);
+						me.inbox.prefix.setValue(answer.responseText);
+						me.inbox.sufix.setValue(year);
+					}, function () {
+						me._disableButtons(false, 1, 3);
+					}, function () {
+						me._disableButtons(false, 1, 2, 3);
+					});
+				},
+				failure: function () {
+					ns.showError("Ошибка", "Невозможно присвоить номер запросу");
+				}
 			});
+
 		}
 		/**
 		 * Обрабатывает событие 'click' на кнопке "Удалить"
@@ -232,8 +247,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 			var model = me.model, status;
 			if (me.validate()) {
 				var userId = ns.user.get('userId'),
-						now = new Date(),
-						year = now.getYear() + 1900;
+						now = new Date();
 				/*
 				 if (me.query.mr.getValue()) { // Добавляем один день к плановой дате, если отказ
 				 var plannedDateCombo = me.query.pd,
@@ -259,24 +273,13 @@ Ext.define('qqext.view.reg.VRegForm', {
 				model.set('updateDate', now);
 				model.set('registrator', userId);
 				model.set('regDate', now);
-				model.set('sufixNum', year);
-				Ext.Ajax.request({
-					url: '/qq-web/rest/question/allowedid/' + ns.user.get('organization') + '/' + year,
-					success: function (answer) {
-						model.set('prefixNum', answer.responseText);
-						me.inbox.prefix.setValue(answer.responseText);
-						me._saveModel(function () {
-							me.loadRecord(true);
-							ns.turnOnArticles(ns.btns.notify, ns.btns.trans);
-						}, function () { // Не смогли сохранить ничего
-							me._disableButtons(false, 1, 3);
-						}, function () { // Не смогли сохранить заявителя
-							me._disableButtons(false, 1, 2, 3);
-						});
-					},
-					failure: function () {
-						ns.showError("Ошибка", "Невозможно присвоить номер запросу");
-					}
+				me._saveModel(function () {
+					me.loadRecord(true);
+					ns.turnOnArticles(ns.btns.notify, ns.btns.trans);
+				}, function () { // Не смогли сохранить ничего
+					me._disableButtons(false, 1, 3);
+				}, function () { // Не смогли сохранить заявителя
+					me._disableButtons(false, 1, 2, 3);
 				});
 			} else { // Валидация не прошла
 				me._disableButtons(false, 1, 2, 3);

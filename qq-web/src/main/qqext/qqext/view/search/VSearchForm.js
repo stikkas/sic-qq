@@ -5,7 +5,7 @@
 Ext.define('qqext.view.search.VSearchForm', {
 	alias: 'VSearchForm',
 	extend: 'Ext.container.Container',
-        cls:'srch',
+	cls: 'srch',
 	requires: [
 		'qqext.view.search.VSearchParams',
 		'qqext.view.search.VSearchResult'
@@ -58,8 +58,8 @@ Ext.define('qqext.view.search.VSearchForm', {
 				ns = qqext,
 				user = ns.user,
 				rules = ns.rules;
-		if (ns.isSIC)
-			values.litera = ns.user.get('organization');
+//		if (ns.isSIC)
+//			values.litera = ns.user.get('organization');
 
 		if (user.isAllowed(rules.exec) && !user.isAllowed(rules.crd)
 				&& !user.isAllowed(rules.reg))

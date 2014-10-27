@@ -10,15 +10,14 @@ Ext.define('qqext.view.reg.VQueryObject', {
 	],
 	fieldDefaults: {
 		blankText: 'Обязательно для заполнения',
-		allowBlank: false,
 		validateOnChange: false
 	},
 	title: 'На кого запрос',
 	disabledCls: '',
 	formBind: true,
-	initComponent: function() {
+	initComponent: function () {
 		var createCmp = Ext.create,
-            year;
+				year;
 
 		Ext.applyIf(this, {
 			items: [
@@ -30,7 +29,7 @@ Ext.define('qqext.view.reg.VQueryObject', {
 					labelWidth: 150,
 					spinDownEnabled: false,
 					spinUpEnabled: false
-                })
+				})
 			]
 		});
 

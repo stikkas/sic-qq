@@ -72,6 +72,9 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 	@Column(name = "TRANSFER_TYPE_ID")
 	private Long transferType;
 
+	@Column(name = "NOTIFY_STATUS_ID")
+	private Long notifyStatus;
+
 	@Column(name = "EXEC_ORG_ID")
 	private Long execOrg;
 
@@ -167,6 +170,12 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 	private DescriptorValue statusValue;
 
 	@JsonIgnore
+	@JoinColumn(name = "NOTIFY_STATUS_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
+		insertable = false, updatable = false)
+	@ManyToOne(fetch = FetchType.EAGER)
+	private DescriptorValue notifyStatusValue;
+
+	@JsonIgnore
 	@JoinColumn(name = "EXEC_ORG_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
 		insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -255,6 +264,14 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 
 	public void setTransferType(Long transferType) {
 		this.transferType = transferType;
+	}
+
+	public Long getNotifyStatus() {
+		return notifyStatus;
+	}
+
+	public void setNotifyStatus(Long notifyStatus) {
+		this.notifyStatus = notifyStatus;
 	}
 
 	public Long getExecOrg() {
@@ -455,6 +472,14 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 
 	public void setExecOrgValue(DescriptorValue execOrgValue) {
 		this.execOrgValue = execOrgValue;
+	}
+
+	public DescriptorValue getNotifyStatusValue() {
+		return notifyStatusValue;
+	}
+
+	public void setNotifyStatusValue(DescriptorValue notifyStatusValue) {
+		this.notifyStatusValue = notifyStatusValue;
 	}
 
 	@Override

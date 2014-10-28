@@ -115,6 +115,20 @@ public class DictREST {
 	}
 
 	/**
+	 * Возвращает список возможных статусов уведомления запроса
+	 *
+	 * @return список статусов уведомления
+	 */
+	@GET
+	@Path("notifystatuses")
+	@Produces({"application/json"})
+	public List<Dict> getNotifyStatuses() {
+		return execQuery("SELECT NEW ru.insoft.archive.qq.service.Dict(d.id, d.value, d.code) "
+			+ "from DescriptorValue d, DescriptorGroup g where d.groupId = g.id "
+			+ "and g.code='Q_DICT_NOTIFY_STATUSES'");
+	}
+
+	/**
 	 * Возвращает список организаций
 	 *
 	 * @return список организаций

@@ -60,7 +60,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 				me._disableButtons(true, 1, 2, 3);
 				me._disableButtons(!(ns.user.isAllowed(ns.rules.reg) &&
 						model.get('status') === ns.statsId[ns.stats.onreg]
-						&& (ns.isSIC || model.get('litera') === model.get('execOrg'))), 0);
+						&& (model.get('litera') === ns.user.get('organization'))), 0);
 				model.getAppl({callback: function () {
 						me.setViewOnly(true);
 						me.loadRecord();
@@ -259,28 +259,49 @@ Ext.define('qqext.view.reg.VRegForm', {
 				me.updateRecord();
 				// Заполняем обязательные поля:
 
-				if (model.get('litera') !== model.get('execOrg'))
-					status = ns.stats.trans;
-				else
-					status = ns.stats.reg;
+//				if (model.get('litera') !== model.get('execOrg'))
+//					status = ns.stats.trans;
+				status = ns.stats.reg;
 				model.set('status', ns.statsId[status]);
-				if (!ns.request) {// Еще не сохраненная модель
-					model.set('insertUser', userId);
-					model.set('insertDate', now);
-				}
-
+				model.set('notifyStatus', ns.notiStatsId[ns.notiStats.noexec]);
 				model.set('updateUser', userId);
 				model.set('updateDate', now);
 				model.set('registrator', userId);
 				model.set('regDate', now);
-				me._saveModel(function () {
-					me.loadRecord(true);
-					ns.turnOnArticles(ns.btns.notify, ns.btns.trans);
-				}, function () { // Не смогли сохранить ничего
-					me._disableButtons(false, 1, 3);
-				}, function () { // Не смогли сохранить заявителя
-					me._disableButtons(false, 1, 2, 3);
-				});
+
+				if (!ns.request) {// Еще не сохраненная модель
+					var year = now.getYear() + 1900;
+					model.set('insertUser', userId);
+					model.set('insertDate', now);
+					model.set('sufixNum', year);
+
+					Ext.Ajax.request({
+						url: '/qq-web/rest/question/allowedid/' + ns.user.get('organization') + '/' + year,
+						success: function (answer) {
+							model.set('prefixNum', answer.responseText);
+							me._saveModel(function () {
+								me.loadRecord(true);
+								ns.turnOnArticles(ns.btns.notify, ns.btns.trans);
+							}, function () {
+								me._disableButtons(false, 1, 3);
+							}, function () {
+								me._disableButtons(false, 1, 2, 3);
+							});
+						},
+						failure: function () {
+							ns.showError("Ошибка", "Невозможно присвоить номер запросу");
+						}
+					});
+				} else { // Уже есть номер
+					me._saveModel(function () {
+						me.loadRecord(true);
+						ns.turnOnArticles(ns.btns.notify, ns.btns.trans);
+					}, function () { // Не смогли сохранить ничего
+						me._disableButtons(false, 1, 3);
+					}, function () { // Не смогли сохранить заявителя
+						me._disableButtons(false, 1, 2, 3);
+					});
+				}
 			} else { // Валидация не прошла
 				me._disableButtons(false, 1, 2, 3);
 				me.setViewOnly(false);
@@ -400,7 +421,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 		me.reset();
 		me.target.hide();
 		me.applicant.appType.setValue(null);
-//		me.applicant.collapseAdds();
 		qqext.statusPanel.setStatus('');
 		me.doLayout();
 	},

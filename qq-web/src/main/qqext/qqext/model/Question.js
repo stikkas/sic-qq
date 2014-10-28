@@ -33,6 +33,7 @@ Ext.define('qqext.model.Question', {
 					return new Date(v);
 			}},
 		{name: 'transferType', type: 'int', defaultValue: null, convert: null},
+		{name: 'notifyStatus', type: 'int', defaultValue: null, convert: null},
 		{name: 'execOrg', type: 'int', defaultValue: null, convert: null},
 		{name: 'insertUser', type: 'int', defaultValue: null, convert: null},
 		{name: 'updateUser', type: 'int', defaultValue: null, convert: null},

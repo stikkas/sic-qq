@@ -40,7 +40,8 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					stats = ns.stats,
 					status = record.get('status');
 			var date = record.get('execDate');
-			if (date && status !== statsName[stats.onreg]) {
+			if (date && status !== statsName[stats.onreg] &&
+					status !== statsName[stats.exec]) {
 				/*
 				 ((ns.isSIC && (
 				 status === statsName[stats.reg] ||
@@ -182,6 +183,14 @@ Ext.define('qqext.view.journal.VJournalForm', {
 				property: 'execOrg',
 				value: user.get('organization')
 			}));
+			me._fltrs.push(createCmp('Ext.util.Filter', {
+				property: 'nostatus',
+				value: ns.statsId[ns.stats.onreg]
+			}));
+			me._fltrs.push(createCmp('Ext.util.Filter', {
+				property: 'noorganization',
+				value: ns.sicId
+			}));
 		}
 
 		var labelForTable;
@@ -279,21 +288,21 @@ Ext.define('qqext.view.journal.VJournalForm', {
 								}
 							}]
 					},
-//					{
-//						text: 'От кого поступил',
-//						dataIndex: 'fioOrg',
-//						items: [
-//							createCmp('FComboBox', '', 'journalApplicantFilterStore', 'requestFromCombo', {
-//								width: '90%',
-//								queryMode: 'local',
-//								listeners: {
-//									select: me._filterComboSelected,
-//									render: me._render,
-//									specialkey: me._specialKeyStop
-//								}
-//							})
-//						]
-//					},
+					{
+						text: 'Статус уведомления',
+						dataIndex: 'notifyStatus',
+						hidden: !ns.isSIC,
+						items: [
+							createCmp('FComboBox', '', ns.stIds.notiStats, 'requestNotiStatus', {
+								width: '90%',
+								listeners: {
+									select: me._filterComboSelected,
+									render: me._render,
+									specialkey: me._specialKeyStop
+								}
+							})
+						]
+					},
 					{
 						text: 'От кого поступил',
 						width: 175,
@@ -377,9 +386,9 @@ Ext.define('qqext.view.journal.VJournalForm', {
 		else
 			labelForTable.setText(Ext.getStore(ns.stIds.execOrgs)
 					.getById(ns.user.get('organization')).get('name'));
-		me.callParent();
 
-		me.store.addFilter(me._fltrs);
+		me.callParent();
+		me.store.addFilter(me._fltrs, false);
 		me.store.sort([{property: 'inboxDocNum', direction: 'DESC'}]);
 	}
 });

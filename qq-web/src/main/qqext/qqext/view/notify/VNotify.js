@@ -60,24 +60,34 @@ Ext.define('qqext.view.notify.VNotify', {
 			me.setViewOnly(true);
 			me.updateRecord(noti);
 			if (me.isValid()) {
+				var ntf = ns.notification,
+						status = null;
+
+				if (noti.get(ntf.issueDate[0]))
+					status = ns.notiStatsId[ns.notiStats.send];
+				else if (noti.get(ntf.notificationDate[0]))
+					status = ns.notiStatsId[ns.notiStats.exec];
+
 				noti.save({callback: function (rec, op, suc) {
 						if (suc) {
-							model.set('status', ns.statsId[ns.stats.notify]);
-							// Обновляем модель запроса (статус)
-							model.save({callback: function (record, operation, success) {
-									if (success) {
-										me._disableButtons(false, 1);
-										ns.statusPanel.setStatus();
-										ns.infoChanged = true;
-									} else {
-										ns.showError("Ошибка сохранения", operation.getError());
-										me.setViewOnly(false);
-										// Включаем кнопку сохранить
-										me._disableButtons(false, 0);
-										noti.destroy();
+							if (status) {// Обновляем модель запроса (статус уведомления)
+								model.set('notifyStatus', status);
+								model.save({callback: function (record, operation, success) {
+										if (success) {
+											me._disableButtons(false, 1);
+											ns.infoChanged = true;
+										} else {
+											ns.showError("Ошибка сохранения", operation.getError());
+											me.setViewOnly(false);
+											// Включаем кнопку сохранить
+											me._disableButtons(false, 0);
+											noti.destroy();
+										}
 									}
-								}
-							});
+								});
+							} else {
+								me._disableButtons(false, 1);
+							}
 						} else {
 							ns.showError("Ошибка сохранения", op.getError());
 							me.setViewOnly(false);

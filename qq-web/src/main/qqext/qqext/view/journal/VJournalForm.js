@@ -382,6 +382,6 @@ Ext.define('qqext.view.journal.VJournalForm', {
 
 		me.callParent();
 		me.store.addFilter(me._fltrs, false);
-		me.store.sort([{property: 'inboxDocNum', direction: 'DESC'}]);
+		me.store.sort([{property: 'regDate', direction: 'DESC'}]);
 	}
 });

@@ -42,14 +42,6 @@ Ext.define('qqext.view.journal.VJournalForm', {
 			var date = record.get('execDate');
 			if (date && status !== statsName[stats.onreg] &&
 					status !== statsName[stats.exec]) {
-				/*
-				 ((ns.isSIC && (
-				 status === statsName[stats.reg] ||
-				 status === statsName[stats.onexec])) ||
-				 (!ns.isSIC && !(
-				 status === statsName[stats.onreg] ||
-				 status === statsName[stats.exec])))) {
-				 */
 				var delta = parseInt((date - new Date()) / qqext.msPday);
 				if (delta <= 0)
 					return 'immediate';
@@ -156,6 +148,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 				user = ns.user,
 				execStore = ns.stIds.users;
 
+// Если пользователь чистый исполнитель, то выводим запросы только назначеные ему
 		if (user.isAllowed(rules.exec) && !user.isAllowed(rules.crd)
 				&& !user.isAllowed(rules.reg)) {
 			var userId = user.get('userId');
@@ -172,26 +165,25 @@ Ext.define('qqext.view.journal.VJournalForm', {
 		if (user.isAllowed([rules.reg, rules.crd, rules.exec]))
 			me.listeners.itemdblclick = ns.openRequest;
 
-//		if (ns.isSIC) {
-//			me._fltrs.push(createCmp('Ext.util.Filter', {
-//				property: 'litera',
-//				value: user.get('organization')
-//			}));
-//		} else {
-		if (!ns.isSIC) {
+		if (ns.isSIC) // Запросы со статусом "На регистрации" с литерой архива для СИЦ не нужны
+			me._fltrs.push(createCmp('Ext.util.Filter', {
+				property: 'requestor',
+				value: ns.sicId
+			}));
+		else { // Запросы со статусом "На регистрации" с литерой СИЦ для архивов не нужны
 			me._fltrs.push(createCmp('Ext.util.Filter', {
 				property: 'execOrg',
 				value: user.get('organization')
-			}));
-			me._fltrs.push(createCmp('Ext.util.Filter', {
-				property: 'nostatus',
-				value: ns.statsId[ns.stats.onreg]
 			}));
 			me._fltrs.push(createCmp('Ext.util.Filter', {
 				property: 'noorganization',
 				value: ns.sicId
 			}));
 		}
+		me._fltrs.push(createCmp('Ext.util.Filter', {
+			property: 'nostatus',
+			value: ns.statsId[ns.stats.onreg]
+		}));
 
 		var labelForTable;
 		Ext.applyIf(me, {

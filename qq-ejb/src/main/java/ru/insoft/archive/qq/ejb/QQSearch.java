@@ -41,7 +41,7 @@ public class QQSearch extends LoggedBean {
 	private EntityManager em;
 
 	@EJB
-	private JsonTools jsonTools;
+	private static JsonTools jsonTools;
 
 	private Expression<Boolean> getLikeExp(String queryValue, String field,
 		Join<Question, Applicant> ro) {
@@ -364,7 +364,7 @@ public class QQSearch extends LoggedBean {
 		return bdr.build();
 	}
 
-	private class Filter {
+	private static class Filter {
 
 		/**
 		 * Литера
@@ -391,13 +391,19 @@ public class QQSearch extends LoggedBean {
 		 */
 		Long execOrg;
 		/**
-		 * Статус, с которым запросы не нужны. Всегда должен использоваться в
-		 * тройке с noorganization и execOrg
+		 * Запросщик информации, используется для СИЦ. Иными словами requestor
+		 * всегда отображает ID для CИЦ.
+		 */
+		Long requestor;
+		/**
+		 * Статус, с которым запросы не нужны. Присутствует всегда. На данный
+		 * момент это статус на регистрации.
 		 */
 		Long nostatus;
 		/**
 		 * Организация, чьи запросы с определенным статусом не нужны,
-		 * используется совместно с nostatus
+		 * используется совместно с nostatus. Используется в запросах от
+		 * архивов, а noorganization == СИЦ.
 		 */
 		Long noorganization;
 		/**
@@ -468,6 +474,9 @@ public class QQSearch extends LoggedBean {
 					case "noorganization":
 						noorganization = (Long) fb.getValue();
 						break;
+					case "requestor":
+						requestor = (Long) fb.getValue();
+						break;
 					case "notifyStatus":
 						notifyStatus = (Long) fb.getValue();
 				}
@@ -477,10 +486,14 @@ public class QQSearch extends LoggedBean {
 		<T> CriteriaQuery<T> createCriteriaQuery(CriteriaQuery<T> criteriaQuery,
 			Root<T> root, CriteriaBuilder cb) {
 			ArrayList<Expression> expressions = new ArrayList<>();
-			if (nostatus != null) {
+			if (noorganization != null) {
 				expressions.add(cb.or(cb.and(cb.notEqual(root.get("status"), nostatus),
 					cb.equal(root.get("litera"), noorganization)),
 					cb.equal(root.get("litera"), execOrg)));
+			} else {
+				expressions.add(cb.or(cb.and(cb.notEqual(root.get("status"), nostatus),
+					cb.notEqual(root.get("litera"), requestor)),
+					cb.equal(root.get("litera"), requestor)));
 			}
 			if (litera != null) {
 				expressions.add(cb.equal(root.get("litera"), litera));

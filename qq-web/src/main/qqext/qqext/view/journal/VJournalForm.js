@@ -341,6 +341,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					{
 						text: 'Архив-исполнитель',
 						dataIndex: 'execOrg',
+						hidden: !ns.isSIC,
 						width: 90,
 						items: [
 							createCmp('FComboBox', '', ns.stIds.litera, 'requestExecOrgCombo', {

@@ -196,7 +196,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						text: 'Литера',
 						itemId: 'literaCount',
 						dataIndex: 'litera',
-						width: 50,
+						width: 66,
 						items: [
 							createCmp('FComboBox', '', ns.stIds.litera, 'filterLiteraCombo', {
 								itemId: 'filterLiteraCombo',
@@ -258,12 +258,14 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					{
 						xtype: 'datecolumn',
 						text: 'Дата исполнения плановая',
-						width: 136,
+						width: 95,
+                                                cls:'mar_bot0',
 						dataIndex: 'execDate',
 						itemId: 'planDateExec',
 						format: 'd.m.Y',
 						items: [{
 								width: '90%',
+                                                                cls:'mar_t0',
 								xtype: 'hawkDateField',
 								focusOnToFront: false,
 								name: 'planDateExec',
@@ -282,6 +284,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					},
 					{
 						text: 'Статус уведомления',
+                                                minWidth:155,
 						dataIndex: 'notifyStatus',
 						hidden: !ns.isSIC,
 						items: [
@@ -334,7 +337,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						text: 'Архив-исполнитель',
 						dataIndex: 'execOrg',
 						hidden: !ns.isSIC,
-						width: 90,
+						width: 95,
 						items: [
 							createCmp('FComboBox', '', ns.stIds.litera, 'requestExecOrgCombo', {
 								width: '90%',

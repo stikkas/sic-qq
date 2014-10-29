@@ -327,10 +327,7 @@ Ext.application({
 			onreg: 'Q_VALUE_QSTAT_ONREG',
 			reg: 'Q_VALUE_QSTAT_REG',
 			onexec: 'Q_VALUE_QSTAT_ONEXEC',
-			exec: 'Q_VALUE_QSTAT_EXEC'/*,
-			 trans: 'Q_VALUE_QSTAT_TRANS',
-			 notify: 'Q_VALUE_QSTAT_NOTIFY'
-			 */
+			exec: 'Q_VALUE_QSTAT_EXEC'
 		};
 		/**
 		 * @property {Object} notiStatsId
@@ -347,7 +344,8 @@ Ext.application({
 		ns.notiStats = {
 			noexec: 'Q_VALUE_NOTIFY_NOEXEC',
 			exec: 'Q_VALUE_NOTIFY_EXEC',
-			send: 'Q_VALUE_NOTIFY_SEND'
+			send: 'Q_VALUE_NOTIFY_SEND',
+			none: 'Q_VALUE_NOTIFY_NONE'
 		};
 		/**
 		 * Делает доступной кнопку раздела для работы с ним. Проверяет правоправность действия, если
@@ -373,8 +371,6 @@ Ext.application({
 					registered = toa.reg || (toa.reg = statsId[statuses.reg]),
 					onexec = toa.onexec || (toa.onexec = statsId[statuses.onexec]),
 					exec = toa.exec || (toa.exec = statsId[statuses.exec]),
-//					trans = toa.trans || (toa.trans = statsId[statuses.trans]),
-//					notify = toa.notify || (toa.notify = statsId[statuses.notify]),
 					status,
 					buttons = arguments.length > 0 ? arguments : [
 						buttonNames.notify, buttonNames.trans, buttonNames.exec],

@@ -259,11 +259,14 @@ Ext.define('qqext.view.reg.VRegForm', {
 				me.updateRecord();
 				// Заполняем обязательные поля:
 
-//				if (model.get('litera') !== model.get('execOrg'))
-//					status = ns.stats.trans;
 				status = ns.stats.reg;
 				model.set('status', ns.statsId[status]);
-				model.set('notifyStatus', ns.notiStatsId[ns.notiStats.noexec]);
+				if (model.get('litera') === ns.sicId) {
+					if (model.get('execOrg') === ns.sicId)
+						model.set('notifyStatus', ns.notiStatsId[ns.notiStats.none]);
+					else
+						model.set('notifyStatus', ns.notiStatsId[ns.notiStats.noexec]);
+				}
 				model.set('updateUser', userId);
 				model.set('updateDate', now);
 				model.set('registrator', userId);

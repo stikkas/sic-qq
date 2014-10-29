@@ -40,15 +40,8 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					stats = ns.stats,
 					status = record.get('status');
 			var date = record.get('execDate');
-			if (date && status !== statsName[stats.onreg]) {
-				/*
-				 ((ns.isSIC && (
-				 status === statsName[stats.reg] ||
-				 status === statsName[stats.onexec])) ||
-				 (!ns.isSIC && !(
-				 status === statsName[stats.onreg] ||
-				 status === statsName[stats.exec])))) {
-				 */
+			if (date && status !== statsName[stats.onreg] &&
+					status !== statsName[stats.exec]) {
 				var delta = parseInt((date - new Date()) / qqext.msPday);
 				if (delta <= 0)
 					return 'immediate';
@@ -155,6 +148,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 				user = ns.user,
 				execStore = ns.stIds.users;
 
+// Если пользователь чистый исполнитель, то выводим запросы только назначеные ему
 		if (user.isAllowed(rules.exec) && !user.isAllowed(rules.crd)
 				&& !user.isAllowed(rules.reg)) {
 			var userId = user.get('userId');
@@ -171,18 +165,25 @@ Ext.define('qqext.view.journal.VJournalForm', {
 		if (user.isAllowed([rules.reg, rules.crd, rules.exec]))
 			me.listeners.itemdblclick = ns.openRequest;
 
-//		if (ns.isSIC) {
-//			me._fltrs.push(createCmp('Ext.util.Filter', {
-//				property: 'litera',
-//				value: user.get('organization')
-//			}));
-//		} else {
-		if (!ns.isSIC) {
+		if (ns.isSIC) // Запросы со статусом "На регистрации" с литерой архива для СИЦ не нужны
+			me._fltrs.push(createCmp('Ext.util.Filter', {
+				property: 'requestor',
+				value: ns.sicId
+			}));
+		else { // Запросы со статусом "На регистрации" с литерой СИЦ для архивов не нужны
 			me._fltrs.push(createCmp('Ext.util.Filter', {
 				property: 'execOrg',
 				value: user.get('organization')
 			}));
+			me._fltrs.push(createCmp('Ext.util.Filter', {
+				property: 'noorganization',
+				value: ns.sicId
+			}));
 		}
+		me._fltrs.push(createCmp('Ext.util.Filter', {
+			property: 'nostatus',
+			value: ns.statsId[ns.stats.onreg]
+		}));
 
 		var labelForTable;
 		Ext.applyIf(me, {
@@ -279,21 +280,21 @@ Ext.define('qqext.view.journal.VJournalForm', {
 								}
 							}]
 					},
-//					{
-//						text: 'От кого поступил',
-//						dataIndex: 'fioOrg',
-//						items: [
-//							createCmp('FComboBox', '', 'journalApplicantFilterStore', 'requestFromCombo', {
-//								width: '90%',
-//								queryMode: 'local',
-//								listeners: {
-//									select: me._filterComboSelected,
-//									render: me._render,
-//									specialkey: me._specialKeyStop
-//								}
-//							})
-//						]
-//					},
+					{
+						text: 'Статус уведомления',
+						dataIndex: 'notifyStatus',
+						hidden: !ns.isSIC,
+						items: [
+							createCmp('FComboBox', '', ns.stIds.notiStats, 'requestNotiStatus', {
+								width: '90%',
+								listeners: {
+									select: me._filterComboSelected,
+									render: me._render,
+									specialkey: me._specialKeyStop
+								}
+							})
+						]
+					},
 					{
 						text: 'От кого поступил',
 						width: 175,
@@ -332,6 +333,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					{
 						text: 'Архив-исполнитель',
 						dataIndex: 'execOrg',
+						hidden: !ns.isSIC,
 						width: 90,
 						items: [
 							createCmp('FComboBox', '', ns.stIds.litera, 'requestExecOrgCombo', {
@@ -377,9 +379,9 @@ Ext.define('qqext.view.journal.VJournalForm', {
 		else
 			labelForTable.setText(Ext.getStore(ns.stIds.execOrgs)
 					.getById(ns.user.get('organization')).get('name'));
-		me.callParent();
 
-		me.store.addFilter(me._fltrs);
-		me.store.sort([{property: 'inboxDocNum', direction: 'DESC'}]);
+		me.callParent();
+		me.store.addFilter(me._fltrs, false);
+		me.store.sort([{property: 'regDate', direction: 'DESC'}]);
 	}
 });

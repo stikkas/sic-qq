@@ -43,10 +43,11 @@ Ext.define('qqext.view.reg.VApplicant', {
 						change: function (cb, newv) {
 							if (newv)
 								switchTypeUser(cb.getStore().getById(newv).get('code'));
-							else
+							else {
 								allusers.forEach(function (v) {
 									v.hide();
 								});
+							}
 						}
 					}
 				}),
@@ -80,12 +81,15 @@ Ext.define('qqext.view.reg.VApplicant', {
 					title: 'Дополнительные сведения',
 					collapsible: true,
 					cls: 'collapse_section',
+					hidden: true,
+					width: 900,
+					collapsed: true,
 					items: [
 						createCmp('FTextField', applicant.issueDocNum[1], applicant.issueDocNum[0], {
 							width: 250, labelWidth: 150
 						}),
 						me.dt = createCmp('FDateField', applicant.issueDocDate[1], applicant.issueDocDate[0], {
-							width: 250, labelWidth: 150
+							width: 270, labelWidth: 150
 						}),
 						createCmp('FTextField', applicant.fioJurPerson[1], applicant.fioJurPerson[0], {
 							width: 350,
@@ -98,7 +102,8 @@ Ext.define('qqext.view.reg.VApplicant', {
 				})
 			]
 		});
-		allusers = [surname, name, fatherName, org, appCat];
+
+		allusers = [surname, name, fatherName, org, appCat, me._adds];
 		uric = [org, appCat];
 		fisic = [surname, name, fatherName];
 		// Переключает тип пользователя
@@ -113,6 +118,8 @@ Ext.define('qqext.view.reg.VApplicant', {
 					u.setValue();
 					u.setRequired(false);
 				});
+				me._adds.hide();
+				me._adds.setValue('');
 			} else {  // Выбрано юридическое лицо
 				fisic.forEach(function (v) {
 					v.hide();
@@ -123,18 +130,10 @@ Ext.define('qqext.view.reg.VApplicant', {
 					u.show();
 					u.setRequired(true);
 				});
+				me._adds.show().collapse();
 			}
 		}
 		me.callParent();
-	},
-	/**
-	 * Скрывает дополнительные сведения.
-	 * Изначально в конструкторе опция collapsed: true - не работает (extjs не может
-	 * правильно пересчитать размер), поэтому приходится делать это руками, после
-	 * того как форма будет активирована (afterrender тоже слишком рано)
-	 */
-	collapseAdds: function () {
-		this._adds.collapse();
 	}
 });
 

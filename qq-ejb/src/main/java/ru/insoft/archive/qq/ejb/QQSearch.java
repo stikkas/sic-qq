@@ -3,6 +3,8 @@ package ru.insoft.archive.qq.ejb;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -22,7 +24,6 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 
 import ru.insoft.archive.core_model.table.adm.AdmUser;
-import ru.insoft.archive.core_model.table.desc.DescriptorValue;
 import ru.insoft.archive.extcommons.ejb.JsonTools;
 import ru.insoft.archive.extcommons.webmodel.FilterBy;
 import ru.insoft.archive.extcommons.webmodel.OrderBy;
@@ -40,7 +41,7 @@ public class QQSearch extends LoggedBean {
 	private EntityManager em;
 
 	@EJB
-	private JsonTools jsonTools;
+	private static JsonTools jsonTools;
 
 	private Expression<Boolean> getLikeExp(String queryValue, String field,
 		Join<Question, Applicant> ro) {
@@ -58,78 +59,11 @@ public class QQSearch extends LoggedBean {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Question> criteriaQuery = cb.createQuery(Question.class);
 		Root<Question> root = criteriaQuery.from(Question.class);
-		ArrayList<Expression> expressions = new ArrayList<>();
+
 		if (filters != null) {
-			for (FilterBy fb : filters) {
-				switch (fb.getProperty()) {
-					case "litera":
-						logger.info("Фильтр литера: значение: "
-							+ fb.getValue().toString());
-						Expression<Boolean> literaEqual = cb.equal(
-							root.get("litera"), fb.getValue());
-						expressions.add(literaEqual);
-						break;
-					case "inboxDocNum":
-						String filterValue = fb.getValue().toString();
-						logger.info("Фильтр входящий номер: значение: "
-							+ filterValue);
-						String[] number = filterValue.split("/");
-						Long prefix,
-						 sufix;
-						try {
-							prefix = Long.parseLong(number[0]);
-							sufix = Long.parseLong(number[1]);
-						} catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-							prefix = sufix = -1L;
-						}
-						expressions.add(cb.and(
-							cb.equal(root.<Long>get("prefixNum"), prefix),
-							cb.equal(root.<Long>get("sufixNum"), sufix)));
-						break;
-					case "regDate":
-						Date d1 = jsonTools.parseBadStringDate((String) fb.getValue());
-						Expression<Boolean> dateEqual = cb.equal(
-							cb.function("trunc", Date.class, root.<Date>get("regDate")), d1);
-						expressions.add(dateEqual);
-						break;
-					case "execDate":
-						Date d2 = jsonTools.parseBadStringDate(fb.getValue().toString());
-						expressions.add(cb.equal(cb.function("trunc", Date.class,
-							root.get("plannedFinishDate")), d2));
-						break;
-					case "fioOrg":
-						String applicant = (String) fb.getValue();
-						Join<Question, Applicant> aplJoin = root.join("applicant");
-//						Expression<String> fio = cb.concat(cb.concat(cb.concat(
-//							aplJoin.<String>get("lastName"), " "),
-//							cb.concat(aplJoin.<String>get("firstName"), " ")),
-//							aplJoin.<String>get("middleName"));
-						Expression<Boolean> phyzLike = cb.like(cb.lower(aplJoin.<String>get("lastName")),
-							"%" + applicant.toLowerCase() + "%");
-						Expression<Boolean> jyrLike = cb.like(cb.lower(aplJoin.<String>get("organization")),
-							"%" + applicant.toLowerCase() + "%");
-						Expression<Boolean> finalOr = cb.or(phyzLike, jyrLike);
-						expressions.add(finalOr);
-						break;
-					case "status":
-						Long status = (Long) fb.getValue();
-						Expression<Boolean> eq = cb.equal(root.<Long>get("status"), status);
-						expressions.add(eq);
-						break;
-					case "executor":
-						Long executor = (Long) fb.getValue();
-						Join<Question, Transmission> jTr = root
-							.join("transmission");
-						Expression<Boolean> equalExecutor = cb.equal(
-							jTr.get("executor"), executor);
-						expressions.add(equalExecutor);
-						break;
-					case "execOrg":
-						Long organization = (Long) fb.getValue();
-						expressions.add(cb.equal(root.<Long>get("execOrg"), organization));
-				}
-			}
+			new Filter(filters).createCriteriaQuery(criteriaQuery, root, cb);
 		}
+
 		ArrayList<Order> jpaOrders = new ArrayList<>();
 		if (orders != null) {
 			for (OrderBy ou : orders) {
@@ -204,20 +138,15 @@ public class QQSearch extends LoggedBean {
 						Path<String> eoo = root.join("execOrgValue", JoinType.LEFT).get("shortValue");
 						jpaOrders.add(ou.asc() ? cb.asc(eoo) : cb.desc(eoo));
 						break;
+					case "notifyStatus":
+						Path<Long> qns = root.<Long>get("notifyStatus");
+						jpaOrders.add(ou.asc() ? cb.asc(qns) : cb.desc(qns));
 					default:
 						logger.warning("unknown sort field " + orderField);
 				}
 			}
 		}
-		if (expressions.size() > 0) {
-			Expression and = expressions.get(0);
-			if (expressions.size() > 1) {
-				for (int i = 1; i < expressions.size(); i++) {
-					and = cb.and(and, expressions.get(i));
-				}
-			}
-			criteriaQuery.where(and);
-		}
+
 		if (jpaOrders.size() > 0) {
 			criteriaQuery.orderBy(jpaOrders);
 		}
@@ -435,4 +364,188 @@ public class QQSearch extends LoggedBean {
 		return bdr.build();
 	}
 
+	private static class Filter {
+
+		/**
+		 * Литера
+		 */
+		Long litera;
+		/**
+		 * Префикс номера запроса
+		 */
+		Long prefixNum;
+		/**
+		 * Суфикс номера запроса
+		 */
+		Long suffixNum;
+		/**
+		 * Статус запроса
+		 */
+		Long status;
+		/**
+		 * Назначеный исполнитель запроса
+		 */
+		Long executor;
+		/**
+		 * Исполняющая организация запроса
+		 */
+		Long execOrg;
+		/**
+		 * Запросщик информации, используется для СИЦ. Иными словами requestor
+		 * всегда отображает ID для CИЦ.
+		 */
+		Long requestor;
+		/**
+		 * Статус, с которым запросы не нужны. Присутствует всегда. На данный
+		 * момент это статус на регистрации.
+		 */
+		Long nostatus;
+		/**
+		 * Организация, чьи запросы с определенным статусом не нужны,
+		 * используется совместно с nostatus. Используется в запросах от
+		 * архивов, а noorganization == СИЦ.
+		 */
+		Long noorganization;
+		/**
+		 * Дата регистарации запроса
+		 */
+		Date regDate;
+		/**
+		 * Плановая дата выполнения запроса
+		 */
+		Date execDate;
+		/**
+		 * От кого поступил запрос
+		 */
+		String fioOrg;
+
+		/**
+		 * Статус уведомления
+		 */
+		Long notifyStatus;
+
+		public Filter(List<FilterBy> filters) {
+			for (FilterBy fb : filters) {
+				switch (fb.getProperty()) {
+					case "litera":
+						litera = (Long) fb.getValue();
+						break;
+					case "inboxDocNum":
+						String filterValue = fb.getValue().toString();
+						String[] number = filterValue.split("/");
+						try {
+							prefixNum = Long.parseLong(number[0]);
+							suffixNum = Long.parseLong(number[1]);
+						} catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+							prefixNum = suffixNum = null;
+						}
+						break;
+					case "regDate": {
+						try {
+							regDate = jsonTools.parseBadStringDate((String) fb.getValue());
+						} catch (Exception ex) {
+							Logger.getLogger(QQSearch.class.getName()).log(Level.SEVERE, null, ex);
+						}
+					}
+					break;
+					case "execDate": {
+						try {
+							execDate = jsonTools.parseBadStringDate((String) fb.getValue());
+						} catch (Exception ex) {
+							Logger.getLogger(QQSearch.class.getName()).log(Level.SEVERE, null, ex);
+						}
+					}
+					break;
+					case "fioOrg":
+						fioOrg = (String) fb.getValue();
+						break;
+					case "status":
+						status = (Long) fb.getValue();
+						break;
+					case "executor":
+						executor = (Long) fb.getValue();
+						break;
+					case "execOrg":
+						execOrg = (Long) fb.getValue();
+						break;
+					case "nostatus":
+						nostatus = (Long) fb.getValue();
+						break;
+					case "noorganization":
+						noorganization = (Long) fb.getValue();
+						break;
+					case "requestor":
+						requestor = (Long) fb.getValue();
+						break;
+					case "notifyStatus":
+						notifyStatus = (Long) fb.getValue();
+				}
+			}
+		}
+
+		<T> CriteriaQuery<T> createCriteriaQuery(CriteriaQuery<T> criteriaQuery,
+			Root<T> root, CriteriaBuilder cb) {
+			ArrayList<Expression> expressions = new ArrayList<>();
+			if (noorganization != null) {
+				expressions.add(cb.or(cb.and(cb.notEqual(root.get("status"), nostatus),
+					cb.equal(root.get("litera"), noorganization)),
+					cb.equal(root.get("litera"), execOrg)));
+			} else {
+				expressions.add(cb.or(cb.and(cb.notEqual(root.get("status"), nostatus),
+					cb.notEqual(root.get("litera"), requestor)),
+					cb.equal(root.get("litera"), requestor)));
+			}
+			if (litera != null) {
+				expressions.add(cb.equal(root.get("litera"), litera));
+			}
+			if (regDate != null) {
+				expressions.add(cb.equal(
+					cb.function("trunc", Date.class, root.<Date>get("regDate")), regDate));
+			}
+			if (execDate != null) {
+				expressions.add(cb.equal(
+					cb.function("trunc", Date.class, root.<Date>get("plannedFinishDate")), execDate));
+			}
+			if (status != null) {
+				expressions.add(cb.equal(
+					root.<Long>get("status"), status));
+			}
+			if (execOrg != null) {
+				expressions.add(cb.equal(
+					root.<Long>get("execOrg"), execOrg));
+			}
+			if (executor != null) {
+				expressions.add(cb.equal(
+					root.join("transmission").get("executor"), executor));
+			}
+			if (prefixNum != null) {
+				expressions.add(cb.and(
+					cb.equal(root.<Long>get("prefixNum"), prefixNum),
+					cb.equal(root.<Long>get("sufixNum"), suffixNum)));
+
+			}
+			if (fioOrg != null) {
+				Join<Question, Applicant> aplJoin = root.join("applicant");
+				Expression<Boolean> phyzLike = cb.like(cb.lower(aplJoin.<String>get("lastName")),
+					"%" + fioOrg.toLowerCase() + "%");
+				Expression<Boolean> jyrLike = cb.like(cb.lower(aplJoin.<String>get("organization")),
+					"%" + fioOrg.toLowerCase() + "%");
+				expressions.add(cb.or(phyzLike, jyrLike));
+			}
+			if (notifyStatus != null) {
+				expressions.add(cb.equal(root.<Long>get("notifyStatus"), notifyStatus));
+			}
+
+			if (!expressions.isEmpty()) {
+				Expression and = expressions.get(0);
+				int size = expressions.size();
+				for (int i = 1; i < size; ++i) {
+					and = cb.and(and, expressions.get(i));
+				}
+				criteriaQuery.where(and);
+			}
+			return criteriaQuery;
+		}
+
+	}
 }

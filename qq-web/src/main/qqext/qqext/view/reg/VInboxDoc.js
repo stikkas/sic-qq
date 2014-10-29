@@ -41,7 +41,7 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 							cls: 'two_col_fld'
 						}),
 						me.sufix = createCmp('FTextField', '/', 'sufixNum', true, {
-//							maskRe: /\d/,
+							labelSeparator: '',
 							viewOnly: true,
 							labelWidth: 5,
 							width: 50,

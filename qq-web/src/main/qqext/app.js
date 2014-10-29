@@ -47,10 +47,14 @@ Ext.application({
 				Ext.create('Viewport', {});
 
 				Ext.Ajax.on('requestexception', function (conn, response) {
-					if (response.status === 403) {
-						ns.userStore.removeAll(true);
-						window.location = urls.welcome;
-					}
+					if (response.status === 403)
+						ns.forceQuit();
+				});
+				Ext.Ajax.on('requestcomplete', function (c, response) {
+					setTimeout(function () {
+						if (~response.responseText.search(/<!DOCTYPE/i))  // Если rest вернул страницу авторизации
+							ns.forceQuit();
+					}, 1);
 				});
 
 				// Загружаем настройки для прикрепленных файлов
@@ -317,15 +321,31 @@ Ext.application({
 		 */
 		/**
 		 * @property {Object} stats
-		 * кодовые значения статусов заросов
+		 * кодовые значения статусов запросов
 		 */
 		var statuses = ns.stats = {
 			onreg: 'Q_VALUE_QSTAT_ONREG',
 			reg: 'Q_VALUE_QSTAT_REG',
 			onexec: 'Q_VALUE_QSTAT_ONEXEC',
-			exec: 'Q_VALUE_QSTAT_EXEC',
-			trans: 'Q_VALUE_QSTAT_TRANS',
-			notify: 'Q_VALUE_QSTAT_NOTIFY'
+			exec: 'Q_VALUE_QSTAT_EXEC'
+		};
+		/**
+		 * @property {Object} notiStatsId
+		 * соотношения кодов статусов уведомлений к их идентификаторам
+		 */
+		/**
+		 * @property {Object} notiStatsName
+		 * соотношения кодов статусов уведомлений к их описаниям
+		 */
+		/**
+		 * @property {Object} notiStats
+		 * кодовые значения статусов уведомления запросов
+		 */
+		ns.notiStats = {
+			noexec: 'Q_VALUE_NOTIFY_NOEXEC',
+			exec: 'Q_VALUE_NOTIFY_EXEC',
+			send: 'Q_VALUE_NOTIFY_SEND',
+			none: 'Q_VALUE_NOTIFY_NONE'
 		};
 		/**
 		 * Делает доступной кнопку раздела для работы с ним. Проверяет правоправность действия, если
@@ -351,8 +371,6 @@ Ext.application({
 					registered = toa.reg || (toa.reg = statsId[statuses.reg]),
 					onexec = toa.onexec || (toa.onexec = statsId[statuses.onexec]),
 					exec = toa.exec || (toa.exec = statsId[statuses.exec]),
-					trans = toa.trans || (toa.trans = statsId[statuses.trans]),
-					notify = toa.notify || (toa.notify = statsId[statuses.notify]),
 					status,
 					buttons = arguments.length > 0 ? arguments : [
 						buttonNames.notify, buttonNames.trans, buttonNames.exec],
@@ -363,7 +381,8 @@ Ext.application({
 					case buttonNames.notify:
 						if (ns.isSIC) {
 							if (user.isAllowed([rules.reg, rules.crd, rules.exec]) &&
-									(request.get('status') === trans || request.get('status') === notify))
+									request.get('status') !== onreg &&
+									request.get('execOrg') !== ns.sicId)
 								ns.disableArticles(false, buttonNames.notify);
 						}
 						break;
@@ -392,6 +411,14 @@ Ext.application({
 			for (var i = 1; i < arguments.length; ++i)
 				getButton(arguments[i]).setDisabled(status);
 		};
+		/**
+		 * Вызывается в случае таймаута сессии во время работы.
+		 * @method forceQuit
+		 */
+		ns.forceQuit = function () {
+			ns.userStore.removeAll(true);
+			window.location = urls.welcome;
+		}
 		/**
 		 * Вызывается когда нажали на кнопку 'Выйти'
 		 * @method quitAction
@@ -568,8 +595,7 @@ Ext.application({
 				}
 			}
 			if (~message.search(/<!DOCTYPE/i)) { // Если rest вернул страницу авторизации
-				ns.userStore.removeAll(true);
-				window.location = urls.welcome;
+				ns.forceQuit();
 				return;
 			}
 			Ext.Msg.show({
@@ -630,7 +656,8 @@ Ext.application({
 					allusers: 'allusers',
 					stats: 'statuses',
 					execOrgs: 'organizations',
-					sendType: 'sendtypes'
+					sendType: 'sendtypes',
+					notiStats: 'notifystatuses'
 				};
 		// нужно инициализировать хранилище для информации об организациях
 		// и установить принадлежность пользователся к СИЦ
@@ -662,6 +689,19 @@ Ext.application({
 						ns.statsName[code] = r.get('name');
 					});
 					ns.statusPanel.fill();
+				}
+			}
+		});
+		create('DictStore', ids.notiStats, ids.notiStats, {
+			listeners: {
+				load: function (st, records) {
+					ns.notiStatsId = {};
+					ns.notiStatsName = {};
+					records.forEach(function (r) {
+						var code = r.get('code');
+						ns.notiStatsId[code] = r.get('id');
+						ns.notiStatsName[code] = r.get('name');
+					});
 				}
 			}
 		});

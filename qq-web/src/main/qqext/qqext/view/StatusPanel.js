@@ -38,22 +38,24 @@ Ext.define('qqext.view.StatusPanel', {
 					case statuses.exec:
 						stats.insert(6, id, createCmp('ImageLabel',
 								url + 'exec.png', name));
-						break;
-					case statuses.trans:
-						stats.insert(8, id, createCmp('ImageLabel',
-								url + 'trans.png', name));
-						break;
-					case statuses.notify:
-						stats.insert(10, id, createCmp('ImageLabel',
-								url + 'notify.png', name));
+						/*
+						 break;
+						 case statuses.trans:
+						 stats.insert(8, id, createCmp('ImageLabel',
+						 url + 'trans.png', name));
+						 break;
+						 case statuses.notify:
+						 stats.insert(10, id, createCmp('ImageLabel',
+						 url + 'notify.png', name));
+						 */
 				}
 			});
 			var arurl = url + 'arrow.png';
 			stats.insert(1, "ar1", createCmp('ImageLabel', arurl, ''));
 			stats.insert(3, "ar2", createCmp('ImageLabel', arurl, ''));
 			stats.insert(5, "ar3", createCmp('ImageLabel', arurl, ''));
-			stats.insert(7, "ar4", createCmp('ImageLabel', arurl, ''));
-			stats.insert(9, "ar5", createCmp('ImageLabel', arurl, ''));
+//			stats.insert(7, "ar4", createCmp('ImageLabel', arurl, ''));
+//			stats.insert(9, "ar5", createCmp('ImageLabel', arurl, ''));
 
 			stats.each(function (it) {
 				me.add(it);
@@ -70,16 +72,16 @@ Ext.define('qqext.view.StatusPanel', {
 			if (label === undefined) {
 				var index = stats.indexOfKey(qqext.request.get('status')),
 						items = [];
-				if (index < 7) {
-					for (var i = 0; i <= index; ++i)
-						items.push(i);
-				} else {
-					items.push(0);
-					items.push(1);
-					items.push(2);
-					for (var i = 7; i <= index; ++i)
-						items.push(i);
-				}
+//				if (index < 7) {
+				for (var i = 0; i <= index; ++i)
+					items.push(i);
+//				} else {
+//					items.push(0);
+//					items.push(1);
+//					items.push(2);
+//					for (var i = 7; i <= index; ++i)
+//						items.push(i);
+//				}
 				this.setVisible(true, items);
 			}
 		};

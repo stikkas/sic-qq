@@ -19,21 +19,25 @@ public class JournalItem extends QuestionInfoItem implements JsonOut {
 	public JournalItem(Question q) {
 		super(q);
 
-		this.execDate = q.getPlannedFinishDate();
+		execDate = q.getPlannedFinishDate();
 
+		DescriptorValue notistat = q.getNotifyStatusValue();
+		if (notistat != null) {
+			notifyStatus = notistat.getValue();
+		}
 		DescriptorValue statusdv = q.getStatusValue();
 		if (statusdv != null) {
-			this.status = statusdv.getValue();
+			status = statusdv.getValue();
 		}
 
 		Transmission t = q.getTransmission();
 		if (t != null && t.getExecutor() != null) {
-			this.executor = t.getExecutorValue().getName();
+			executor = t.getExecutorValue().getName();
 		}
 
 		DescriptorValue eo = q.getExecOrgValue();
 		if (eo != null) {
-			this.execOrg = eo.getShortValue();
+			execOrg = eo.getShortValue();
 		}
 
 	}
@@ -45,6 +49,15 @@ public class JournalItem extends QuestionInfoItem implements JsonOut {
 	private String executor;
 
 	private String execOrg;
+	private String notifyStatus;
+
+	public String getNotifyStatus() {
+		return notifyStatus;
+	}
+
+	public void setNotifyStatus(String notifyStatus) {
+		this.notifyStatus = notifyStatus;
+	}
 
 	public Date getExecDate() {
 		return execDate;

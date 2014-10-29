@@ -324,7 +324,7 @@ textarea[disabled=""]{
 }
 /*стили "*" для обязательных полей*/
 /*.x-form-item-label{
-    position:relative;              //для шлобального выравнивания * по вертикали
+    position:relative;              //для глобального выравнивания * по вертикали
 }*/
 label span{
     color:#f00;

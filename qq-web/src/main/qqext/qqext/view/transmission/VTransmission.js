@@ -35,8 +35,9 @@ Ext.define('qqext.view.transmission.VTransmission', {
 			ns.Menu.setEditMenu(me._idx);
 			if (ns.request !== me.model) {
 				// Значит новый запрос (не тот который был до этого)
-				var model = me.model = ns.request;
-				if (ns.isSIC && model.get('execOrg') !== ns.sicId) {
+				var model = me.model = ns.request,
+						execOrg = model.get('execOrg');
+				if (ns.isSIC && execOrg !== ns.sicId) {
 					me._be.bindStore(ns.stIds.allusers);
 					me._ex.bindStore(ns.stIds.allusers);
 				}
@@ -47,16 +48,9 @@ Ext.define('qqext.view.transmission.VTransmission', {
 						var stats = ns.stats,
 								statsId = ns.statsId,
 								status = model.get('status');
-						if (ns.user.isAllowed(ns.rules.crd) &&
-								(status === statsId[stats.reg] ||
-										((status === statsId[stats.notify] ||
-												status === statsId[stats.trans]) &&
-												!ns.isSIC))
-								)
-							me._disableButtons(false, 0);
-						else
-							me._disableButtons(true, 0);
-
+						me._disableButtons(!(ns.user.isAllowed(ns.rules.crd) &&
+								status === statsId[stats.reg] &&
+								ns.user.get('organization') === execOrg), 0);
 					}});
 				ns.initRequired(me);
 			}

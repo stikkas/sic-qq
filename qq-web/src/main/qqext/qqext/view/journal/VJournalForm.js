@@ -196,7 +196,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						text: 'Литера',
 						itemId: 'literaCount',
 						dataIndex: 'litera',
-						width: 66,
+						width: 97,
 						items: [
 							createCmp('FComboBox', '', ns.stIds.litera, 'filterLiteraCombo', {
 								itemId: 'filterLiteraCombo',

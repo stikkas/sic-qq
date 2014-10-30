@@ -232,6 +232,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					{
 						text: 'Дата регистрации',
 						width: 100,
+                                                cls:'pad_l-r10',
 						xtype: 'datecolumn',
 						dataIndex: 'regDate',
 						itemId: 'regDate',
@@ -284,12 +285,12 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					},
 					{
 						text: 'Статус уведомления',
-                                                minWidth:155,
+                                                minWidth:145,
 						dataIndex: 'notifyStatus',
 						hidden: !ns.isSIC,
 						items: [
 							createCmp('FComboBox', '', ns.stIds.notiStats, 'requestNotiStatus', {
-								width: '90%',
+								width: '95%',
 								listeners: {
 									select: me._filterComboSelected,
 									render: me._render,

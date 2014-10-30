@@ -167,11 +167,10 @@ label.journal_title_label{
     background-position: center right;
 }
 /*sorting in the table*/
-.x-column-header-sort-ASC .x-column-header-text{
-    background-image:url(../images/sortASC.png);
-}
+.x-column-header-sort-ASC .x-column-header-text,
 .x-column-header-sort-DESC .x-column-header-text{
-    background-image:url(../images/sortDESC.png);
+    background-image:none;
+    padding-right:0;
 }
 /*table*/
 /* #10934

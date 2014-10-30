@@ -427,9 +427,10 @@ Ext.application({
 			// молча, без выстерла событий, удаляем все данные из хранилища
 			ns.userStore.removeAll(true);
 			Ext.Ajax.request({url: urls.login,
-				success: function () {
+				callback: function () {
 					window.location = urls.welcome;
-				}});
+				} 
+            });
 		};
 		/**
 		 * @property {Obejct} applicant

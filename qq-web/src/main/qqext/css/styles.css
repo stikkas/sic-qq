@@ -459,6 +459,14 @@ div.collapse_section{
 .mar_bot0 .x-column-header-inner{
     padding-bottom:0 !important;
 }
+.pad_l-r10 .x-column-header-inner{
+    padding-left:10px !important;
+    padding-right:10px !important;
+}
+.journal_st .x-column-header-inner{
+    padding-left:0px;
+    padding-right:0px;
+}
 
 /**/
 /*.hmenu .x-btn-disabled{

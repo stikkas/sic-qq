@@ -232,7 +232,6 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					{
 						text: 'Дата регистрации',
 						width: 100,
-                                                cls:'pad_l-r10',
 						xtype: 'datecolumn',
 						dataIndex: 'regDate',
 						itemId: 'regDate',

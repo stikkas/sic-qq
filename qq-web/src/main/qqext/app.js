@@ -59,7 +59,7 @@ Ext.application({
 
 				// Загружаем настройки для прикрепленных файлов
 				var codes = ['QQ_ANSWER_DOC', 'QQ_APPLICANT_DOC', 'QQ_DOC_ROOT',
-					'URL_ROOT', 'DOCUMENT_ROOT'];
+					'URL_ROOT', 'DOCUMENT_ROOT', 'QQ_BIRT_VIEWER_URL'];
 				Ext.Ajax.request({
 					url: '/qq-web/rest/coreparameter',
 					method: 'GET',
@@ -85,6 +85,9 @@ Ext.application({
 									break;
 								case codes[4]:
 									root = v.value + "/";
+									break;
+								case codes[5]:
+									ns.urls.birt = v.value;
 							}
 						});
 						sendDir = applicationDir + sendDir;
@@ -238,7 +241,10 @@ Ext.application({
 		ns.edit = function () {
 			var me = this;
 			me.setViewOnly(false);
-			me._disableButtons(false, 1, 2, 3);
+			if (me === ns.regForm)
+				me._disableButtons(false, 1, 3, 4);
+			else
+				me._disableButtons(false, 1, 2, 3);
 			me._disableButtons(true, 0);
 			me.doLayout();
 		};
@@ -260,6 +266,7 @@ Ext.application({
 		ns.labels = {
 			save: "Сохранить",
 			edit: "Редактировать",
+			print: "Печать",
 			toSearch: "Вернуться в поиск",
 			remove: "Удалить",
 			register: "Регистрировать",
@@ -429,8 +436,8 @@ Ext.application({
 			Ext.Ajax.request({url: urls.login,
 				callback: function () {
 					window.location = urls.welcome;
-				} 
-            });
+				}
+			});
 		};
 		/**
 		 * @property {Obejct} applicant

@@ -41,10 +41,10 @@ Ext.define('qqext.view.reg.VRegForm', {
 						orgId = user.get('organization');
 				me.clear();
 				model = me.initModel();
-				//Кнопки "Редактировать" и "Удалить"
-				me._disableButtons(true, 0, 2);
+				//Кнопки "Редактировать" "Печать" и "Удалить"
+				me._disableButtons(true, 0, 2, 3);
 				//Кнопки "Сохранить" и "Регистрировать"
-				me._disableButtons(false, 1, 3);
+				me._disableButtons(false, 1, 4);
 				// Устанавливаем режим редактирования
 				me.setViewOnly(false);
 				// Литера
@@ -57,10 +57,15 @@ Ext.define('qqext.view.reg.VRegForm', {
 // Значит пришли по двойному клику на существуещем запросе, (открыли существующий запрос)
 				me.clear();
 				model = me.initModel(ns.request);
-				me._disableButtons(true, 1, 2, 3);
-				me._disableButtons(!(ns.user.isAllowed(ns.rules.reg) &&
-						model.get('status') === ns.statsId[ns.stats.onreg]
-						&& (model.get('litera') === ns.user.get('organization'))), 0);
+				me._disableButtons(true, 1, 3, 4);
+
+				var hasRegRule = ns.user.isAllowed(ns.rules.reg),
+						wantedStatus = model.get('status') === ns.statsId[ns.stats.onreg],
+						belongToCreator = model.get('litera') === ns.user.get('organization');
+
+				me._disableButtons(!(hasRegRule && wantedStatus && belongToCreator), 0); // Редактировать
+				me._disableButtons(!(hasRegRule && !wantedStatus && belongToCreator), 2); // Печать
+
 				model.getAppl({callback: function () {
 						me.setViewOnly(true);
 						me.loadRecord();
@@ -167,7 +172,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 		 * @returns {undefined}
 		 */
 		function save() {
-//			var me = this;
 			if (!ns.checkDates([me.query.pd, me.applicant.dt]))
 				return;
 
@@ -177,39 +181,46 @@ Ext.define('qqext.view.reg.VRegForm', {
 					now = new Date(),
 					year = now.getYear() + 1900;
 			// Кнопки сохранить, удалить и регистрировать
-			me._disableButtons(true, 1, 2, 3);
+			me._disableButtons(true, 1, 3, 4);
 			me.setViewOnly(true);
 			me.updateRecord();
-			model.set('sufixNum', year);
 
-			// Заполняем обязательные поля:
-			if (!model.get('id')) { // Только для новых моделей
-				model.set('insertUser', userId);
-				model.set('insertDate', now);
-				model.set('createOrg', user.get('organization'));
-			}
 			model.set('updateUser', userId);
 			model.set('updateDate', now);
 			model.set('status', ns.statsId[ns.stats.onreg]);
-			Ext.Ajax.request({
-				url: '/qq-web/rest/question/allowedid/' + ns.user.get('organization') + '/' + year,
-				success: function (answer) {
-					model.set('prefixNum', answer.responseText);
-					me._saveModel(function () {
-						me._disableButtons(false, 0);
-						me.inbox.prefix.setValue(answer.responseText);
-						me.inbox.sufix.setValue(year);
-					}, function () {
-						me._disableButtons(false, 1, 3);
-					}, function () {
-						me._disableButtons(false, 1, 2, 3);
-					});
-				},
-				failure: function () {
-					ns.showError("Ошибка", "Невозможно присвоить номер запросу");
-				}
-			});
-
+			// Заполняем обязательные поля:
+			if (!model.get('id')) { // Только для новых моделей
+				model.set('sufixNum', year);
+				model.set('insertUser', userId);
+				model.set('insertDate', now);
+				model.set('createOrg', user.get('organization'));
+				Ext.Ajax.request({
+					url: '/qq-web/rest/question/allowedid/' + ns.user.get('organization') + '/' + year,
+					success: function (answer) {
+						model.set('prefixNum', answer.responseText);
+						me._saveModel(function () {
+							me._disableButtons(false, 0);
+							me.inbox.prefix.setValue(answer.responseText);
+							me.inbox.sufix.setValue(year);
+						}, function () {
+							me._disableButtons(false, 1, 4);
+						}, function () {
+							me._disableButtons(false, 1, 3, 4);
+						});
+					},
+					failure: function () {
+						ns.showError("Ошибка", "Невозможно присвоить номер запросу");
+					}
+				});
+			} else {
+				me._saveModel(function () {
+					me._disableButtons(false, 0);
+				}, function () {
+					me._disableButtons(false, 1, 4);
+				}, function () {
+					me._disableButtons(false, 1, 3, 4);
+				});
+			}
 		}
 		/**
 		 * Обрабатывает событие 'click' на кнопке "Удалить"
@@ -241,7 +252,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 			if (!ns.checkDates([me.query.pd, me.applicant.dt]))
 				return;
 			// Кнопки сохранить, удалить и регистрировать
-			me._disableButtons(true, 1, 2, 3);
+			me._disableButtons(true, 1, 3, 4);
 			me.setViewOnly(true);
 			me._setPD();
 			var model = me.model, status;
@@ -285,10 +296,11 @@ Ext.define('qqext.view.reg.VRegForm', {
 							me._saveModel(function () {
 								me.loadRecord(true);
 								ns.turnOnArticles(ns.btns.notify, ns.btns.trans);
+								me._disableButtons(false, 2);
 							}, function () {
-								me._disableButtons(false, 1, 3);
+								me._disableButtons(false, 1, 4);
 							}, function () {
-								me._disableButtons(false, 1, 2, 3);
+								me._disableButtons(false, 1, 3, 4);
 							});
 						},
 						failure: function () {
@@ -299,16 +311,23 @@ Ext.define('qqext.view.reg.VRegForm', {
 					me._saveModel(function () {
 						me.loadRecord(true);
 						ns.turnOnArticles(ns.btns.notify, ns.btns.trans);
+						me._disableButtons(false, 2);
 					}, function () { // Не смогли сохранить ничего
-						me._disableButtons(false, 1, 3);
+						me._disableButtons(false, 1, 4);
 					}, function () { // Не смогли сохранить заявителя
-						me._disableButtons(false, 1, 2, 3);
+						me._disableButtons(false, 1, 3, 4);
 					});
 				}
 			} else { // Валидация не прошла
-				me._disableButtons(false, 1, 2, 3);
+				me._disableButtons(false, 1, 3, 4);
 				me.setViewOnly(false);
 			}
+		}
+		// Выполняет печать (переправку пользователся на открытие документа) выписки создания запроса
+		function print() {
+			var model = me.model;
+			window.open(ns.urls.birt + '?prefix=' + model.get('prefixNum') +
+					'&suffix=' + model.get('sufixNum') + '&litera=' + model.get('litera'));
 		}
 //----------------------------------------------
 		var me = this,
@@ -318,6 +337,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 				menu = createCmp('HButtonMenu', [
 					{text: labels.edit, action: ns.edit, opts: {cls: 'edit_btn'}},
 					{text: labels.save, action: save, opts: {cls: 'save_btn'}},
+					{text: labels.print, action: print, opts: {cls: 'print_btn'}},
 					{text: labels.remove, action: remove, opts: {cls: 'remove_btn'}},
 					{text: labels.register, action: book, opts: {cls: 'reg_btn'}}],
 						'ToolButton', me);

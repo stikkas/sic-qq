@@ -45,7 +45,7 @@ Ext.define('qqext.view.report.VReportForm', {
 
 						}
 					}),
-					me._end = create('FDateField', 'с', 'startDate', {
+					me._end = create('FDateField', 'по', 'startDate', {
 						width: 270, labelWidth: 150, allowBlank: false,
 						listeners: {
 							change: function (field, value) {

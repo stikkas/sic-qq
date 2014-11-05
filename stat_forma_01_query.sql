@@ -1,7 +1,44 @@
 -----------------------------------------------------------------------------------------------------------
 -- СТАТИСТИКА ИСПОЛНЕНИЯ ЗАПРОСОВ ФЕДЕРАЛЬНЫМИ ГОСУДАРСТВЕННЫМИ АРХИВАМИ И СПРАВОЧНО-ИНФОРМАЦИОННЫМ ЦЕНТРОМ
 -----------------------------------------------------------------------------------------------------------
-
+-----------------------------------------------------------------------------------------------------------
+-- Настройка для sqldeveloper и sqlplus (для birt не нужна)
+-- column soc_cnt format a4;
+-- column soc_exec_cnt format a4;
+-- column soc_exec_pos format a4;
+-- column soc_exec_neg format a4;
+-- column soc_exec_rec format a4;
+-- column soc_otkaz format a4;
+-- column soc_reject format a4;
+-- column tem_cnt format a4;
+-- column tem_exec_cnt format a4;
+-- column tem_exec_pos format a4;
+-- column tem_exec_neg format a4;
+-- column tem_exec_rec format a4;
+-- column tem_otkaz format a4;
+-- column tem_reject format a4;
+-- column gen_cnt format a4;
+-- column gen_exec_cnt format a4;
+-- column gen_exec_pos format a4;
+-- column gen_exec_neg format a4;
+-- column gen_exec_rec format a4;
+-- column gen_otkaz format a4;
+-- column gen_reject format a4;
+-- column bio_cnt format a4;
+-- column bio_exec_cnt format a4;
+-- column bio_exec_pos format a4;
+-- column bio_exec_neg format a4;
+-- column bio_exec_rec format a4;
+-- column bio_otkaz format a4;
+-- column bio_reject format a4;
+-- column cnt format a4;
+-- column exec_cnt format a4;
+-- column exec_pos format a4;
+-- column exec_neg format a4;
+-- column exec_rec format a4;
+-- column otkaz format a4;
+-- column reject_ format a4;
+-----------------------------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------------
 -- Заполнение таблицы для архивов и СИЦ (вместо Q_VALUE_MEMBER_SIC подставить код интересующего архива)
 -----------------------------------------------------------------------------------------------------------

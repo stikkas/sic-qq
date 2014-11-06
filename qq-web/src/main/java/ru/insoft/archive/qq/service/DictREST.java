@@ -139,7 +139,9 @@ public class DictREST {
 	public List<Dict> getOrganizations() {
 		return execQuery("SELECT NEW ru.insoft.archive.qq.service.Dict(d.id, d.value, d.code) "
 			+ "from DescriptorValue d, DescriptorGroup g where d.groupId = g.id "
-			+ "and g.code='ORG_STRUCTURE'");
+			+ "and g.code='ORG_STRUCTURE' "
+			+ "and (DESCRIPTOR_PACK.GET_ORG_STRUCTURE_TYPE(d.id) = 'ARCHIVE' "
+			+ "or d.code = 'Q_VALUE_MEMBER_SIC')");
 	}
 
 	/**

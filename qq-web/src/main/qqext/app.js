@@ -87,7 +87,7 @@ Ext.application({
 									root = v.value + "/";
 									break;
 								case codes[5]:
-									ns.urls.birt = v.value;
+									ns.urls.vypiska = v.value + ns.urls.vypiska;
 							}
 						});
 						sendDir = applicationDir + sendDir;
@@ -292,7 +292,8 @@ Ext.application({
 		var urls = ns.urls = {
 			welcome: "/qq-web/",
 			login: "/qq-web/Auth?action=logout",
-			storage: "/sic-storage/index.html"
+			storage: "/sic-storage/index.html",
+			vypiska: "?__report=extract.rptdesign&__format=doc&"
 		};
 		/**
 		 * @property {Object} btns

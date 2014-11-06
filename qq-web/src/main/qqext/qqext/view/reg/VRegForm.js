@@ -326,7 +326,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 		// Выполняет печать (переправку пользователся на открытие документа) выписки создания запроса
 		function print() {
 			var model = me.model;
-			window.open(ns.urls.birt + '?prefix=' + model.get('prefixNum') +
+			window.open(ns.urls.vypiska + 'prefix=' + model.get('prefixNum') +
 					'&suffix=' + model.get('sufixNum') + '&litera=' + model.get('litera'));
 		}
 //----------------------------------------------

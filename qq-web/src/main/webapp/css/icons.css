@@ -9,9 +9,9 @@ and open the template in the editor.
 */
 .hmenu .x-btn{
     background-repeat:no-repeat;
-    background-position:20px center;
-    padding-left:55px;
-    padding-right:15px;
+    background-position:15px center;
+    padding-left:45px;
+    padding-right:10px;
     margin-left:0;
     border-right:1px inset #506A8C !important;
 }
@@ -36,6 +36,9 @@ a.remove_btn.x-btn{
 a.reg_btn.x-btn{
     background-image:url(../images/i_ok.png);
     border-right:none !important;
+}
+a.print_btn.x-btn{
+    background-image:url(../images/printer.png);
 }
 .back_btn .hmenu{
     padding-right:0;

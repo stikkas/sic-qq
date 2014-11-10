@@ -1,6 +1,9 @@
 Ext.Loader.setConfig({
 	enabled: true,
-	paths: {qqext: 'qqext'}
+	paths: {
+		qqext: 'qqext',
+		over: 'overrides'
+	}
 });
 /*
  * Стандартная точка входя для ExtJS приложения.
@@ -18,7 +21,8 @@ Ext.application({
 		'qqext.store.DictValuesStore',
 		'qqext.store.DictStore',
 		'Ext.util.Filter',
-		'qqext.view.StatusPanel'
+		'qqext.view.StatusPanel',
+		'over.DatePicker'
 	],
 	controllers: ['qqext.controller.Main',
 		'qqext.controller.AttachedFiles'

@@ -1633,6 +1633,7 @@ Ext.Loader.addClassPathMappings({
   "hawk_common.store.UserLocalStorage": "../../packages/hawk_common/src/store/UserLocalStorage.js",
   "hawk_common.sys.Consts": "../../packages/hawk_common/src/sys/Consts.js",
   "hawk_common.sys.Utils": "../../packages/hawk_common/src/sys/Utils.js",
+  "over": "../../overrides",
   "qq": "../../qqext",
   "qqext.view.transmission.VTransmission": "../../qqext/view/transmission/VTransmission.js"
 });
@@ -2456,6 +2457,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "hawk_common.store.UserLocalStorage": [],
   "hawk_common.sys.Consts": [],
   "hawk_common.sys.Utils": [],
+  "over.DatePicker": [],
   "qq.model.ControlledObject": [],
   "qqext.Menu": [],
   "qqext.button.ArticleButton": [],
@@ -3494,6 +3496,7 @@ Ext.ClassManager.addNameAliasMappings({
   "hawk_common.store.UserLocalStorage": [],
   "hawk_common.sys.Consts": [],
   "hawk_common.sys.Utils": [],
+  "over.DatePicker": [],
   "qq.model.ControlledObject": [
     "ControlledObjectModel"
   ],

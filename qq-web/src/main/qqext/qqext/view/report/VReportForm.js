@@ -29,10 +29,11 @@ Ext.define('qqext.view.report.VReportForm', {
 				xtype: 'fieldcontainer',
 				layout: 'hbox',
 				fieldLabel: 'Период',
+                                cls:'label_style',
 				labelSeparator: '',
 				items: [
 					me._start = create('FDateField', 'с', 'startDate', {
-						width: 270, labelWidth: 150, allowBlank: false,
+						width: 120, cls:'width120', allowBlank: false,
 						listeners: {
 							change: function (field, value) {
 								if (field.isValid() && me._end.isValid()) {
@@ -46,7 +47,7 @@ Ext.define('qqext.view.report.VReportForm', {
 						}
 					}),
 					me._end = create('FDateField', 'по', 'startDate', {
-						width: 270, labelWidth: 150, allowBlank: false,
+						width: 120, cls:'width120', allowBlank: false,
 						listeners: {
 							change: function (field, value) {
 								if (field.isValid() && me._start.isValid()) {

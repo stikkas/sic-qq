@@ -22,7 +22,8 @@ Ext.application({
 		'qqext.store.DictStore',
 		'Ext.util.Filter',
 		'qqext.view.StatusPanel',
-		'over.DatePicker'
+		'over.DatePicker',
+		'over.ComboBox'
 	],
 	controllers: ['qqext.controller.Main',
 		'qqext.controller.AttachedFiles'

@@ -892,6 +892,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "hawk_common.store.UserLocalStorage": [],
   "hawk_common.sys.Consts": [],
   "hawk_common.sys.Utils": [],
+  "over.ComboBox": [],
   "over.DatePicker": [],
   "qq.model.ControlledObject": [],
   "qqext.Menu": [],
@@ -1931,6 +1932,7 @@ Ext.ClassManager.addNameAliasMappings({
   "hawk_common.store.UserLocalStorage": [],
   "hawk_common.sys.Consts": [],
   "hawk_common.sys.Utils": [],
+  "over.ComboBox": [],
   "over.DatePicker": [],
   "qq.model.ControlledObject": [
     "ControlledObjectModel"

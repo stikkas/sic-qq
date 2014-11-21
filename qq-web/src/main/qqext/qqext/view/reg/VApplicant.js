@@ -111,7 +111,8 @@ Ext.define('qqext.view.reg.VApplicant', {
 			if (typef === type) { // Выбрано физическое лицо
 				fisic.forEach(function (v) {
 					v.show();
-					v.setRequired(true);
+					if (v !== fatherName)
+						v.setRequired(true);
 				});
 				uric.forEach(function (u) {
 					u.hide();

@@ -64,7 +64,7 @@ Ext.application({
 
 				// Загружаем настройки для прикрепленных файлов
 				var codes = ['QQ_ANSWER_DOC', 'QQ_APPLICANT_DOC', 'QQ_DOC_ROOT',
-					'URL_ROOT', 'DOCUMENT_ROOT', 'QQ_BIRT_VIEWER_URL'];
+					'URL_ROOT', 'DOCUMENT_ROOT'];
 				Ext.Ajax.request({
 					url: '/qq-web/rest/coreparameter',
 					method: 'GET',
@@ -90,9 +90,6 @@ Ext.application({
 									break;
 								case codes[4]:
 									root = v.value + "/";
-									break;
-								case codes[5]:
-									ns.urls.vypiska = v.value + ns.urls.vypiska;
 							}
 						});
 						sendDir = applicationDir + sendDir;
@@ -298,7 +295,7 @@ Ext.application({
 			welcome: "/qq-web/",
 			login: "/qq-web/Auth?action=logout",
 			storage: "/sic-storage/index.html",
-			vypiska: "?__report=extract.rptdesign&__format=doc&"
+			vypiska: "/qq-web/reports/vypiska"
 		};
 		/**
 		 * @property {Object} btns

@@ -22,6 +22,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import ru.insoft.archive.core_model.table.adm.AdmUser;
 import ru.insoft.archive.core_model.table.desc.DescriptorValue;
 import ru.insoft.archive.extcommons.entity.HasId;
 import ru.insoft.archive.extcommons.json.JsonIn;
@@ -180,6 +181,11 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 		insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
 	private DescriptorValue execOrgValue;
+
+	@JsonIgnore
+	@JoinColumn(name = "REGISTRATOR_ID", referencedColumnName = "USER_ID", updatable = false, insertable = false)
+	@ManyToOne
+	private AdmUser registratorId;
 
 	public Question() {
 	}
@@ -480,6 +486,14 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 
 	public void setNotifyStatusValue(DescriptorValue notifyStatusValue) {
 		this.notifyStatusValue = notifyStatusValue;
+	}
+
+	public AdmUser getRegistratorId() {
+		return registratorId;
+	}
+
+	public void setRegistratorId(AdmUser registratorId) {
+		this.registratorId = registratorId;
 	}
 
 	@Override

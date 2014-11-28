@@ -1,8 +1,11 @@
 package ru.insoft.archive.qq.entity;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Set;
+import java.util.TimeZone;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -341,7 +344,7 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 	}
 
 	public void setInsertDate(Date insertDate) {
-		this.insertDate = insertDate;
+		this.insertDate = convertDate(insertDate);
 	}
 
 	public Date getUpdateDate() {
@@ -349,7 +352,7 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 	}
 
 	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
+		this.updateDate = convertDate(updateDate);
 	}
 
 	public String getContent() {
@@ -373,7 +376,7 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 	}
 
 	public void setPlannedFinishDate(Date plannedFinishDate) {
-		this.plannedFinishDate = plannedFinishDate;
+		this.plannedFinishDate = convertDate(plannedFinishDate);
 	}
 
 	public Date getRegDate() {
@@ -381,7 +384,7 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 	}
 
 	public void setRegDate(Date regDate) {
-		this.regDate = regDate;
+		this.regDate = convertDate(regDate);
 	}
 
 	public String getObjectMName() {
@@ -517,4 +520,9 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 		return "ru.insoft.archive.qq.entity.Question[ questionId=" + id + " ]";
 	}
 
+	private Date convertDate(Date date) {
+		Calendar cal = GregorianCalendar.getInstance();
+		cal.setTimeInMillis(date.getTime() - TimeZone.getDefault().getRawOffset());
+		return cal.getTime();
+	}
 }

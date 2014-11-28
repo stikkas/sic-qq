@@ -58,7 +58,7 @@ public class VypiskaInfo {
 
 	public VypiskaInfo() {
 		plannedDate = regDate = new Date();
-		organization = lastName = firstName = middleName = address = phone = content = registrator = "";
+		organization = lastName = firstName = middleName = address = phone = content = registrator = " ";
 	}
 
 	public VypiskaInfo(Date regDate, String organization, String lastName,
@@ -134,7 +134,7 @@ public class VypiskaInfo {
 			}
 			sb.append(phone);
 		}
-		return sb.toString();
+		return sb.toString() + " ";
 	}
 
 //Регистартор: Иванов И. И.

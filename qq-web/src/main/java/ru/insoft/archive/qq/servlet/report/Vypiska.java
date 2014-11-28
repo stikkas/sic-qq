@@ -49,8 +49,8 @@ public class Vypiska extends HttpServlet {
 		if (prefix == null || sufix == null || litera == null) {
 			response.sendError(500, "Недостаточно параметров");
 		} else {
-			response.setHeader("Content-Disposition", "attachment; filename='vypiska.pdf'");
-			response.setContentType("application/x-pdf; name='vypiska.pdf'");
+			response.setHeader("Content-Disposition", "attachment; filename=\"vypiska.pdf\"");
+			response.setContentType("application/x-pdf; name=\"vypiska.pdf\"");
 
 			try (OutputStream out = response.getOutputStream()) {
 				generator.getDocument(Long.parseLong(prefix), Long.parseLong(sufix),

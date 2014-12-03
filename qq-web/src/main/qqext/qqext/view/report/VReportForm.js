@@ -29,11 +29,11 @@ Ext.define('qqext.view.report.VReportForm', {
 				xtype: 'fieldcontainer',
 				layout: 'hbox',
 				fieldLabel: 'Период',
-                                cls:'label_style',
+				cls: 'label_style',
 				labelSeparator: '',
 				items: [
 					me._start = create('FDateField', 'с', 'startDate', {
-						width: 120, cls:'width120', allowBlank: false,
+						width: 120, cls: 'width120', allowBlank: false,
 						listeners: {
 							change: function (field, value) {
 								if (field.isValid() && me._end.isValid()) {
@@ -47,7 +47,7 @@ Ext.define('qqext.view.report.VReportForm', {
 						}
 					}),
 					me._end = create('FDateField', 'по', 'startDate', {
-						width: 120, cls:'width120', allowBlank: false,
+						width: 120, cls: 'width120', allowBlank: false,
 						listeners: {
 							change: function (field, value) {
 								if (field.isValid() && me._start.isValid()) {
@@ -65,8 +65,8 @@ Ext.define('qqext.view.report.VReportForm', {
 				disabled: true,
 				text: ns.labels.generate,
 				handler: function (btn) {
-					window.open(ns.urls.birt + '?startDate=' + format(me._start.getValue(), 'm.d.Y') +
-							'&endDate=' + format(me._end.getValue(), 'm.d.Y'));
+					window.open(ns.urls.statexec + '?startDate=' + format(me._start.getValue(), 'Y-m-d') +
+							'&endDate=' + format(me._end.getValue(), 'Y-m-d'));
 				}
 
 			})

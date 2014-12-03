@@ -1,7 +1,6 @@
 package ru.insoft.archive.qqlogin;
 
-import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 import javax.json.JsonObject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,8 +23,7 @@ import ru.insoft.archive.qq.webmodel.UserModel;
 @WebServlet(name = "Rules", urlPatterns = "/Rules")
 public class Rules extends AbstractServlet {
 
-	@EJB
-	@SessionScoped
+	@Inject
 	private UserInfo ui;
 
 	@Override

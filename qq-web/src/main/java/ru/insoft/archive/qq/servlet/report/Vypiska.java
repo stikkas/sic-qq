@@ -29,15 +29,11 @@ public class Vypiska extends ReportServlet {
 	private String litera;
 
 	@Override
-	protected void getParameters(HttpServletRequest request) {
+	protected boolean getParameters(HttpServletRequest request) {
 		prefix = request.getParameter("prefix");
 		sufix = request.getParameter("sufix");
 		litera = request.getParameter("litera");
-	}
-
-	@Override
-	protected boolean checkParameters() {
-		return prefix == null || sufix == null || litera == null;
+		return prefix != null && sufix != null && litera != null;
 	}
 
 	@Override

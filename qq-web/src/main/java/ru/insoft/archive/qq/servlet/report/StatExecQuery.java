@@ -28,13 +28,9 @@ public class StatExecQuery extends ReportServlet {
 	private String endDate;
 
 	@Override
-	protected void getParameters(HttpServletRequest request) {
+	protected boolean getParameters(HttpServletRequest request) {
 		startDate = request.getParameter("startDate");
 		endDate = request.getParameter("endDate");
-	}
-
-	@Override
-	protected boolean checkParameters() {
 		return startDate != null && endDate != null;
 	}
 

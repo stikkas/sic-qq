@@ -29,9 +29,7 @@ public abstract class ReportServlet extends HttpServlet {
 		throws ServletException, IOException {
 		response.setCharacterEncoding("utf-8");
 
-		getParameters(request);
-
-		if (!checkParameters()) {
+		if (!getParameters(request)) {
 			response.sendError(500, "Недостаточно параметров");
 		} else {
 			String fileName = getFileName();
@@ -47,18 +45,12 @@ public abstract class ReportServlet extends HttpServlet {
 	}
 
 	/**
-	 * Извлекает параметры из запроса
+	 * Извлекает параметры из запроса и проверят их наличие
 	 *
 	 * @param request запрос
+	 * @return true если все хорошо
 	 */
-	protected abstract void getParameters(HttpServletRequest request);
-
-	/**
-	 * Проверяет соответствие ожидаемых параметров действительным
-	 *
-	 * @return true - если все хорошо
-	 */
-	protected abstract boolean checkParameters();
+	protected abstract boolean getParameters(HttpServletRequest request);
 
 	/**
 	 * Создает документ и записывает в поток

@@ -7,6 +7,7 @@ Ext.define('qqext.factory.Checkbox', {
 	extend: 'qqext.cmp.Checkbox',
 	mixins: ['qqext.factory.Base'],
 	alias: 'FCheckbox',
+        labelWidth:150,
 	/**
 	 * Создает объект типа FCheckbox
 	 * @param {String} fieldLabel (required) Заголовок

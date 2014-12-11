@@ -21,9 +21,9 @@ Ext.define('qqext.view.reg.VQueryObject', {
 
 		Ext.applyIf(this, {
 			items: [
-				createCmp('FTextField', 'Фамилия', 'objectLName'),
-				createCmp('FTextField', 'Имя', 'objectFName'),
-				createCmp('FTextField', 'Отчество', 'objectMName'),
+				createCmp('FTextField', 'Фамилия', 'objectLName', {labelWidth:150}),
+				createCmp('FTextField', 'Имя', 'objectFName', {labelWidth:150}),
+				createCmp('FTextField', 'Отчество', 'objectMName', {labelWidth:150}),
 				year = createCmp('FNumberField', 'Год рождения', 'objectBirthYear', {
 					width: 230,
 					labelWidth: 150,

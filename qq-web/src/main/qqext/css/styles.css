@@ -1,3 +1,4 @@
+
 /*panel*/
 .x-panel-body-default{
     background-color:transparent;
@@ -92,7 +93,7 @@ label.journal_title_label{
 }
 .hmenu a .x-btn-inner{
     color:#000;
-    font: 1.1em Arial,sans-serif;
+    font: 1em Arial,sans-serif;
 }
 .vmenu{
     background:url(../images/vmenu_bg.png) no-repeat;
@@ -263,6 +264,9 @@ label.journal_title_label{
 /*fields*/
 .x-form-type-text{
     margin:5px;
+}
+input.x-form-checkbox{
+    margin-left:5px;
 }
 
 /*fields in table*/

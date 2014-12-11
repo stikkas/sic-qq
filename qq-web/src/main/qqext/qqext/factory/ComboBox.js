@@ -17,7 +17,7 @@ Ext.define('qqext.factory.ComboBox', {
 	 * @param {Boolean} viewmode режим просмотра (опционально, по умолчанию - редактирование)
 	 * @param {Object} opts дополнительные параметры для компонента
 	 */
-	constructor: function(fieldLabel, store, name, viewmode, opts) {
+	constructor: function (fieldLabel, store, name, viewmode, opts) {
 		var me = this;
 		me.fieldLabel = fieldLabel;
 		me.store = store;

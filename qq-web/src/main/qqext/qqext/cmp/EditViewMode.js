@@ -109,6 +109,7 @@ Ext.define('qqext.cmp.EditViewMode', {
 			me._label.style.display = 'none';
 			me._showInput();
 			me.setValue = me._setValueE;
+			me.fireEvent('editmode');
 		}
 	},
 	/**
@@ -124,6 +125,7 @@ Ext.define('qqext.cmp.EditViewMode', {
 		lbl.innerHTML = me.isValid() ? me._getValue() : '';
 		me._hideInput();
 		me.setValue = me._setValueV;
+		me.fireEvent('viewmode');
 	},
 	/**
 	 * Делает видимым элемент ввода. Стандартный для большинства, но бывают и исключения (Checkbox)

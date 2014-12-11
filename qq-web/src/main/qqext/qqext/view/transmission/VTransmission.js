@@ -50,10 +50,15 @@ Ext.define('qqext.view.transmission.VTransmission', {
 								status = model.get('status');
 						me._disableButtons(!(ns.user.isAllowed(ns.rules.crd) &&
 								status === statsId[stats.reg] &&
-								ns.user.get('organization') === execOrg), 0);
+								ns.user.get('organization') === execOrg ||
+								(status === statsId[stats.onexec] ||
+										status === statsId[stats.exec] && ns.user.isAllowed(ns.rules.admin))), 0);
 					}});
 				ns.initRequired(me);
 			}
+			while (me._execs.length > 1)
+				me._execs.pop().destroy();
+			me._coex = 2; // индекс, с которого начинаются поля для соисполнителей
 			me.collapseAdds();
 			me.doLayout();
 		}
@@ -72,10 +77,15 @@ Ext.define('qqext.view.transmission.VTransmission', {
 		 */
 		function save() {
 			var me = this;
-			if (!qqext.checkDates([me._df1, me._df2, me._cd]))
+			if (!qqext.checkDates(Ext.ComponentQuery.query('datefield', me)))
 				return;
 
-			var trans = me.model.getTrans();
+			var trans = me.model.getTrans(),
+					status = me.model.get('status'),
+					inEditMode = (status === ns.statsId[ns.stats.onexec] ||
+							status === ns.statsId[ns.stats.exec]);
+			if (inEditMode && !me.validate())
+				return;
 			// Кнопки сохранить, удалить и регистрировать
 			me._disableButtons(true, 1, 2, 3);
 			me.setViewOnly(true);
@@ -86,8 +96,13 @@ Ext.define('qqext.view.transmission.VTransmission', {
 						ns.infoChanged = true;
 					} else {
 						qqext.showError("Ошибка сохранения данных", op.getError());
-						me.setViewOnly(false);
-						me._disableButtons(true, 1, 2, 3);
+						if (inEditMode) {
+							me.setAdminMode();
+							me._disableButtons(false, 1);
+						} else {
+							me.setViewOnly(false);
+							me._disableButtons(false, 1, 2, 3);
+						}
 					}
 				}
 			});
@@ -118,14 +133,14 @@ Ext.define('qqext.view.transmission.VTransmission', {
 		 */
 		function book() {
 			var me = this;
-			if (!qqext.checkDates([me._df1, me._df2, me._cd]))
+			if (!qqext.checkDates(Ext.ComponentQuery.query('datefield', me)))
 				return;
 
 			var model = me.model,
 					trans = model.getTrans();
 			me._disableButtons(true, 1, 2, 3);
 			me.setViewOnly(true);
-			if (me.isValid()) {
+			if (me.validate()) {
 				me.updateRecord(trans);
 				trans.save({callback: function (r, o, s) {
 						if (s) {
@@ -149,7 +164,6 @@ Ext.define('qqext.view.transmission.VTransmission', {
 						}
 					}});
 			} else {
-				ns.showError("Форма заполнена неправильно", me.getErrors());
 				me._disableButtons(false, 1, 2, 3);
 				me.setViewOnly(false);
 			}
@@ -181,7 +195,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 							width: 450,
 							labelWidth: 150
 						}),
-						me._df1 = createCmp('FDateField', trans.bossExecutionDate[1], trans.bossExecutionDate[0],
+						createCmp('FDateField', trans.bossExecutionDate[1], trans.bossExecutionDate[0],
 								configForDate)
 					]
 				}),
@@ -192,10 +206,23 @@ Ext.define('qqext.view.transmission.VTransmission', {
 						me._ex = createCmp('FComboBox', trans.executor[1], ns.stIds.users, trans.executor[0],
 								{allowBlank: false,
 									width: 450,
-									labelWidth: 150
+									labelWidth: 150,
+									listeners: {
+										editmode: function () {
+											Ext.ComponentQuery.query('button', me).forEach(function (it) {
+												it.show();
+											});
+										},
+										viewmode: function () {
+											Ext.ComponentQuery.query('button', me).forEach(function (it) {
+												it.hide();
+											});
+										}
+									}
 								}),
-						me._df2 = createCmp('FDateField', trans.executionDate[1], trans.executionDate[0],
-								configForDate)
+						createCmp('FDateField', trans.executionDate[1], trans.executionDate[0],
+								configForDate),
+						createCmp('Ext.button.Button', {text: '+', handler: me.addExecutor, scope: me})
 					]
 				}),
 				createCmp('FCheckbox', trans.control[1], trans.control[0], {
@@ -239,6 +266,8 @@ Ext.define('qqext.view.transmission.VTransmission', {
 		me._btns = menus.items;
 		me.callParent();
 		ns.Menu.editReqMenu.insert(2, menus);
+		// Нужно для режима суперпользователя, который может править уже зарегестрированные
+		me._execs = [me.items.getAt(1)];
 	},
 	/**
 	 * Скрывает дополнительные сведения.
@@ -248,5 +277,47 @@ Ext.define('qqext.view.transmission.VTransmission', {
 	 */
 	collapseAdds: function () {
 		this._adds.collapse();
+	},
+	/**
+	 * Устанавливает определенные поля доступными для редактирования в режиме супервизора.
+	 */
+	setAdminMode: function () {
+		this._execs.forEach(function (it) {
+			it.setViewOnly(false);
+		});
+//		На закладке "Передача на исполнение" поля "ФИО исполнителя", "Соисполнитель".
+	},
+	addExecutor: function ae() {
+		var create = Ext.create,
+				me = this,
+				ns = qqext,
+				trans = ns.transmission,
+				configForDate = {
+					labelAlign: 'right',
+					margin: '6 0 0 0'
+				},
+		container = create('FieldContainer', {
+			layout: 'hbox',
+			cls: 'right_date',
+			items: [
+				create('FComboBox', trans.coexec[1], ns.stIds.users, trans.coexec[0] + me._coex,
+						{width: 450, labelWidth: 150}),
+				create('FDateField', trans.coexecDate[1], trans.coexecDate[0], configForDate),
+				create('Ext.button.Button', {text: 'x', handler: function () {
+						me.remove(container);
+						me._execs.pop();
+						me._coex--;
+					}})
+			]
+		});
+		me.insert(me._coex++, container);
+		me._execs.push(container);
+	},
+	validate: function () {
+		if (!this.isValid()) {
+			qqext.showError("Форма заполнена неправильно", this.getErrors());
+			return false;
+		}
+		return true;
 	}
 });

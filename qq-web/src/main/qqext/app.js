@@ -242,11 +242,31 @@ Ext.application({
 		 */
 		ns.edit = function () {
 			var me = this;
-			me.setViewOnly(false);
-			if (me === ns.regForm)
-				me._disableButtons(false, 1, 3, 4);
-			else
-				me._disableButtons(false, 1, 2, 3);
+			if (me === ns.regForm) {
+				if (ns.user.isAllowed(rules.admin) &&
+						ns.request.get('status') !== ns.statsId[statuses.onreg]) {
+					me._disableButtons(false, 1);
+					me.setAdminMode();
+				} else {
+					me.setViewOnly(false);
+					me._disableButtons(false, 1, 3, 4);
+				}
+			} else {
+				var status;
+				if (me === ns.execForm)
+					status = statuses.onexec;
+				else if (me === ns.transForm)
+					status = statuses.reg;
+
+				if (ns.user.isAllowed(rules.admin) &&
+						ns.request.get('status') !== ns.statsId[status]) {
+					me._disableButtons(false, 1);
+					me.setAdminMode();
+				} else {
+					me.setViewOnly(false);
+					me._disableButtons(false, 1, 2, 3);
+				}
+			}
 			me._disableButtons(true, 0);
 			me.doLayout();
 		};
@@ -321,7 +341,8 @@ Ext.application({
 		var rules = ns.rules = {
 			reg: 'Q_RULE_REGISTRATOR',
 			crd: 'Q_RULE_COORDINATOR',
-			exec: 'Q_RULE_EXECUTOR'
+			exec: 'Q_RULE_EXECUTOR',
+			admin: 'Q_RULE_SUPERVISOR'
 		};
 		/**
 		 * @property {Object} statsId
@@ -374,11 +395,9 @@ Ext.application({
 		 */
 		ns.turnOnArticles = function toa() {
 			var
-					rules = ns.rules,
 					user = ns.user,
 					request = ns.request,
 					statsId = ns.statsId,
-					// TODO: сделать что-то чтобы проверять по кодам статуса а не по ID из таблицы
 					onreg = toa.onreg || (toa.onreg = statsId[statuses.onreg]),
 					registered = toa.reg || (toa.reg = statsId[statuses.reg]),
 					onexec = toa.onexec || (toa.onexec = statsId[statuses.onexec]),
@@ -392,20 +411,20 @@ Ext.application({
 				switch (buttons[i]) {
 					case buttonNames.notify:
 						if (ns.isSIC) {
-							if (user.isAllowed([rules.reg, rules.crd, rules.exec]) &&
+							if (user.isAllowed([rules.reg, rules.crd, rules.exec, rules.admin]) &&
 									request.get('status') !== onreg &&
 									request.get('execOrg') !== ns.sicId)
 								ns.disableArticles(false, buttonNames.notify);
 						}
 						break;
 					case buttonNames.trans:
-						if (user.isAllowed([rules.crd, rules.exec, rules.reg])) {
+						if (user.isAllowed([rules.crd, rules.exec, rules.reg, rules.admin])) {
 							if (request.get('status') !== onreg)
 								ns.disableArticles(false, buttonNames.trans);
 						}
 						break;
 					case buttonNames.exec:
-						if (user.isAllowed([rules.exec, rules.crd, rules.reg])) {
+						if (user.isAllowed([rules.exec, rules.crd, rules.reg, rules.admin])) {
 							var status = request.get('status');
 							if (status === onexec || status === exec)
 								ns.disableArticles(false, buttonNames.exec);

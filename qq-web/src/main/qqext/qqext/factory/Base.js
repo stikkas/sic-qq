@@ -15,9 +15,10 @@ Ext.define('qqext.factory.Base', {
 	 * @param {Boolean} viewmode режим просмотра для первоначального отображения элемента
 	 * @param {Object} opts дополнительные настройки элемента
 	 */
-	_config: function(viewmode, opts) {
+	_config: function (viewmode, opts) {
 		var me = this,
-				superMethod = me.superclass[me.callParent.caller.$name],
+//				superMethod = me.superclass[me.callParent.caller.$name],
+				superMethod = me.superclass.constructor,
 				getErrors = me.getErrors;
 
 		if (viewmode === true) {
@@ -25,7 +26,7 @@ Ext.define('qqext.factory.Base', {
 			// здесь тогда ничего не делается
 			me.listeners = me.listeners || {};
 			Ext.applyIf(me.listeners, {
-				afterrender: function() {
+				afterrender: function () {
 					me.setViewOnly(viewmode);
 				}
 			});
@@ -36,11 +37,11 @@ Ext.define('qqext.factory.Base', {
 		 *  			Ошибка 2
 		 *  			Ошибка 3
 		 */
-		me.getErrors = function() {
+		me.getErrors = function () {
 			var errors = getErrors.apply(me, []);
 			if (errors.length > 0) {
 				return '<p>' + me.fieldLabel + ": "
-						+ errors.map(function(v) {
+						+ errors.map(function (v) {
 							return v + "<br/>";
 						}).join('') + "</p>";
 

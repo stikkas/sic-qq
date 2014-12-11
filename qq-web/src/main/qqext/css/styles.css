@@ -264,6 +264,9 @@ label.journal_title_label{
 .x-form-type-text{
     margin:5px;
 }
+input.x-form-checkbox{
+    margin-left:5px;
+}
 
 /*fields in table*/
 .x-grid table.x-form-type-text{

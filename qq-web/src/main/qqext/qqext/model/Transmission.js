@@ -1,10 +1,12 @@
-Ext.define('qqext.model.Transmission', (function() {
+Ext.define('qqext.model.Transmission', (function () {
 	var ns = Ext.ns('qqext'),
 			trans = ns.transmission = {
 				bossExecutor: ['bossExecutor', 'Ответственный за исполнение'],
 				bossExecutionDate: ['bossExecutionDate', 'Дата'],
 				executor: ['executor', 'ФИО исполнителя'],
 				executionDate: ['executionDate', 'Дата'],
+				coexec: ['coexec', 'Соисполнитель'],
+				coexecDate: ['coexecDate', 'Дата'],
 				control: ['control', 'Контроль'],
 				controlDate: ['controlDate', 'Контрольная дата исполнения'],
 				resolutionAuthor: ['resolutionAuthor', 'Автор резолюции'],
@@ -18,17 +20,17 @@ Ext.define('qqext.model.Transmission', (function() {
 		fields: [
 			{name: 'id', type: 'int', defaultValue: null, convert: null},
 			{name: trans.bossExecutor[0], type: 'int', convert: null, defaultValue: null},
-			{name: trans.bossExecutionDate[0], type: 'date', convert: function(v) {
+			{name: trans.bossExecutionDate[0], type: 'date', convert: function (v) {
 					if (v)
 						return new Date(v);
 				}},
 			{name: trans.executor[0], type: 'int', convert: null, defaultValue: null},
-			{name: trans.executionDate[0], type: 'date', convert: function(v) {
+			{name: trans.executionDate[0], type: 'date', convert: function (v) {
 					if (v)
 						return new Date(v);
 				}},
 			{name: trans.control[0], type: 'boolean', defaultValue: false},
-			{name: trans.controlDate[0], type: 'date', convert: function(v) {
+			{name: trans.controlDate[0], type: 'date', convert: function (v) {
 					if (v)
 						return new Date(v);
 				}},

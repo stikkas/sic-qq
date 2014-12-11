@@ -63,7 +63,8 @@ Ext.define('qqext.view.reg.VRegForm', {
 						wantedStatus = model.get('status') === ns.statsId[ns.stats.onreg],
 						belongToCreator = model.get('litera') === ns.user.get('organization');
 
-				me._disableButtons(!(hasRegRule && wantedStatus && belongToCreator), 0); // Редактировать
+				me._disableButtons(!(hasRegRule && wantedStatus && belongToCreator ||
+						(!wantedStatus && ns.user.isAllowed(ns.rules.admin))), 0); // Редактировать
 				me._disableButtons(!(hasRegRule && !wantedStatus && belongToCreator), 2); // Печать
 
 				model.getAppl({callback: function () {
@@ -88,9 +89,10 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 * @param {Function} success будет вызвана в случае полного успеха, т.е. после сохранения Applicant
 	 * @param {Function} fail1 будет вызвана в случае несохранения Question, т.е. ничего не сохранилось
 	 * @param {Function} fail2 будет вызвана в случае несохранения Applicant, т.е. Question сохранилось
+	 * @param {Boolean} inEditMode в режиме редактирования уже зарегистрированого запроса
 	 * @private
 	 */
-	_saveModel: function (success, fail1, fail2) {
+	_saveModel: function (success, fail1, fail2, inEditMode) {
 		var me = this, model = me.model,
 				ns = qqext;
 		model.save({callback: function (recs, operation, status) {
@@ -105,7 +107,10 @@ Ext.define('qqext.view.reg.VRegForm', {
 												if (!s) {
 													ns.showError("Данные о заявители не сохранены",
 															o.getError());
-													me.setViewOnly(false);
+													if (inEditMode)
+														me.setAdminMode();
+													else
+														me.setViewOnly(false);
 													// Провал на втором уровне
 													fail2();
 												} else {
@@ -116,7 +121,10 @@ Ext.define('qqext.view.reg.VRegForm', {
 														ns.statusPanel.setStatus();
 														ns.infoChanged = true;
 													}, function () {
-														me.setViewOnly(false);
+														if (inEditMode)
+															me.setAdminMode();
+														else
+															me.setViewOnly(false);
 														// Провал на втором уровне
 														fail2();
 													});
@@ -127,7 +135,10 @@ Ext.define('qqext.view.reg.VRegForm', {
 									},
 									failure: function (r, o) {
 										ns.showError("Ошибка загрузки нового запроса", o.getError());
-										me.setViewOnly(false);
+										if (inEditMode)
+											me.setAdminMode();
+										else
+											me.setViewOnly(false);
 										fail2();
 									}});
 					} else {
@@ -135,7 +146,10 @@ Ext.define('qqext.view.reg.VRegForm', {
 								if (!s) {
 									ns.showError("Данные о заявители не сохранены",
 											o.getError());
-									me.setViewOnly(false);
+									if (inEditMode)
+										me.setAdminMode();
+									else
+										me.setViewOnly(false);
 									// Провал на втором уровне
 									fail2();
 								} else {
@@ -145,7 +159,10 @@ Ext.define('qqext.view.reg.VRegForm', {
 										ns.statusPanel.setStatus();
 										ns.infoChanged = true;
 									}, function () {
-										me.setViewOnly(false);
+										if (inEditMode)
+											me.setAdminMode();
+										else
+											me.setViewOnly(false);
 										// Провал на втором уровне
 										fail2();
 									});
@@ -155,7 +172,10 @@ Ext.define('qqext.view.reg.VRegForm', {
 					}
 				} else {
 					ns.showError("Ошибка сохранения запроса", operation.getError());
-					me.setViewOnly(false);
+					if (inEditMode)
+						me.setAdminMode();
+					else
+						me.setViewOnly(false);
 					// Провал на первом уровне
 					fail1();
 				}
@@ -174,12 +194,17 @@ Ext.define('qqext.view.reg.VRegForm', {
 		function save() {
 			if (!ns.checkDates([me.query.pd, me.applicant.dt]))
 				return;
-
 			var model = me.model,
 					user = ns.user,
 					userId = user.get('userId'),
 					now = new Date(),
-					year = now.getYear() + 1900;
+					year = now.getYear() + 1900,
+					currentStatus = model.get('status'),
+					inEditMode = currentStatus && currentStatus !== ns.statsId[ns.stats.onreg];
+
+			if (inEditMode && !me.validate())
+				return;
+
 			// Кнопки сохранить, удалить и регистрировать
 			me._disableButtons(true, 1, 3, 4);
 			me.setViewOnly(true);
@@ -187,7 +212,8 @@ Ext.define('qqext.view.reg.VRegForm', {
 
 			model.set('updateUser', userId);
 			model.set('updateDate', now);
-			model.set('status', ns.statsId[ns.stats.onreg]);
+			if (!inEditMode)
+				model.set('status', ns.statsId[ns.stats.onreg]);
 			// Заполняем обязательные поля:
 			if (!model.get('id')) { // Только для новых моделей
 				model.set('sufixNum', year);
@@ -216,10 +242,16 @@ Ext.define('qqext.view.reg.VRegForm', {
 				me._saveModel(function () {
 					me._disableButtons(false, 0);
 				}, function () {
-					me._disableButtons(false, 1, 4);
+					if (inEditMode)
+						me._disableButtons(false, 1);
+					else
+						me._disableButtons(false, 1, 4);
 				}, function () {
-					me._disableButtons(false, 1, 3, 4);
-				});
+					if (inEditMode)
+						me._disableButtons(false, 1);
+					else
+						me._disableButtons(false, 1, 3, 4);
+				}, inEditMode);
 			}
 		}
 		/**
@@ -471,5 +503,16 @@ Ext.define('qqext.view.reg.VRegForm', {
 				pd.setValue(date);
 			}
 		}
+	},
+	/**
+	 * Устанавливает определенные поля доступными для редактирования в режиме супервизора.
+	 */
+	setAdminMode: function () {
+		this.applicant.items.getRange(1, 8).forEach(function (it) {
+			it.setViewOnly(false);
+		});
+		this.target.items.each(function (it) {
+			it.setViewOnly(false);
+		});
 	}
 });

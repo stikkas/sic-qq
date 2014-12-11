@@ -213,5 +213,11 @@ Ext.define('qqext.view.exec.VExecForm', {
 			return false;
 		}
 		return true;
+	},
+	/**
+	 * Устанавливает определенные поля доступными для редактирования в режиме супервизора.
+	 * (пока не используется)
+	 */
+	setAdminMode: function () {
 	}
 });

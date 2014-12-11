@@ -31,7 +31,7 @@ Ext.define('qqext.view.search.FioFieldContainer', {
 				createCmp = Ext.create;
 		Ext.applyIf(me, {
 			items: [
-				createCmp('FTextField', 'Фамилия', me.lastname),
+				createCmp('FTextField', 'Фамилия', me.lastname, {labelWidth:150}),
 				createCmp('FTextField', 'Имя', me.firstname, {labelAlign: 'right'}),
 				createCmp('FTextField', 'Отчество', me.middlename, {labelAlign: 'right'})
 			]

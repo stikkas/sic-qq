@@ -1,7 +1,6 @@
 package ru.insoft.archive.qq.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,8 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -24,9 +21,7 @@ import javax.validation.constraints.Size;
 @NamedQueries({
 	@NamedQuery(name = "WayToSend.findAll", query = "SELECT w FROM WayToSend w"),
 	@NamedQuery(name = "WayToSend.findById", query = "SELECT w FROM WayToSend w WHERE w.id = :id"),
-	@NamedQuery(name = "WayToSend.findByRemark", query = "SELECT w FROM WayToSend w WHERE w.remark = :remark"),
-	@NamedQuery(name = "WayToSend.findByIssueNumber", query = "SELECT w FROM WayToSend w WHERE w.issueNumber = :issueNumber"),
-	@NamedQuery(name = "WayToSend.findByRenewalNotice", query = "SELECT w FROM WayToSend w WHERE w.renewalNotice = :renewalNotice")})
+	@NamedQuery(name = "WayToSend.findByRemark", query = "SELECT w FROM WayToSend w WHERE w.remark = :remark")})
 public class WayToSend implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -43,10 +38,6 @@ public class WayToSend implements Serializable {
 	@Size(max = 255)
 	@Column(name = "ISSUE_NUMBER")
 	private String issueNumber;
-
-	@Column(name = "RENEWAL_NOTICE", columnDefinition = "DATE")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date renewalNotice;
 
 	public WayToSend() {
 	}
@@ -77,14 +68,6 @@ public class WayToSend implements Serializable {
 
 	public void setIssueNumber(String issueNumber) {
 		this.issueNumber = issueNumber;
-	}
-
-	public Date getRenewalNotice() {
-		return renewalNotice;
-	}
-
-	public void setRenewalNotice(Date renewalNotice) {
-		this.renewalNotice = renewalNotice;
 	}
 
 	@Override

@@ -11,6 +11,10 @@ Ext.define('qqext.controller.AttachedFiles', {
 		{
 			ref: 'answ',
 			selector: 'vexecform attachedfiles'
+		},
+		{
+			ref: 'info',
+			selector: 'vinfoform attachedfiles'
 		}
 	],
 	init: function () {
@@ -26,7 +30,14 @@ Ext.define('qqext.controller.AttachedFiles', {
 					this.getAnsw().deletedFiles.push(btn.fileId);
 					btn.up('filesList').remove(btn.up());
 				}
+			},
+			'vinfoform attachedfiles filesList button[action=removeExisting]': {
+				click: function (btn) {
+					this.getInfo().deletedFiles.push(btn.fileId);
+					btn.up('filesList').remove(btn.up());
+				}
 			}
+
 		});
 	}
 });

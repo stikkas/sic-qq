@@ -46,7 +46,7 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 				result = true;
 		// проверяем все, только потом возвращаем результат
 		if (me._df.getStore().count() === 0) {
-			errors.push("Должен быть указан хоть один документ");
+			errors.push("<p>Способ отправки: Должен быть указан хоть один документ<br/></p>");
 			result = false;
 		}
 		if (!me._df.isValid())
@@ -93,8 +93,8 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 					defaults: {
 						sortable: false,
 						menuDisabled: true
-					}, 
-                                        items: [
+					},
+					items: [
 						createCmp('ComboColumn', delAction.type[1], delAction.type[0],
 								delAction.type[0], 1),
 						{

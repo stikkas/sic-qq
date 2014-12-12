@@ -2500,6 +2500,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.model.ExecutionInfo": [],
   "qqext.model.JournalItem": [],
   "qqext.model.Notification": [],
+  "qqext.model.PreparedDoc": [],
   "qqext.model.Question": [],
   "qqext.model.SearchResultItem": [],
   "qqext.model.SendAction": [],
@@ -3616,6 +3617,9 @@ Ext.ClassManager.addNameAliasMappings({
   "qqext.model.Notification": [
     "NotificationModel"
   ],
+  "qqext.model.PreparedDoc": [
+    "PreparedDocModel"
+  ],
   "qqext.model.Question": [
     "QuestionModel"
   ],
@@ -3690,7 +3694,8 @@ Ext.ClassManager.addNameAliasMappings({
     "VButtonMenu"
   ],
   "qqext.view.notify.VNotify": [
-    "VNotify"
+    "VNotify",
+    "widget.vinfoform"
   ],
   "qqext.view.reg.VApplicant": [
     "VApplicant"

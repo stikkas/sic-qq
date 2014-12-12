@@ -36,9 +36,17 @@ Ext.define('qqext.view.exec.VExecForm', {
 						ns.user.get('organization') === me.model.get('execOrg') &&
 						me.model.get('status') === ns.statsId[ns.stats.onexec]), 0);
 
-				me.setViewOnly(true);
 				me._initData();
 				ns.initRequired(me);
+				var store = Ext.getStore('queryType');
+
+				if (me.model.get('questionType') ===
+						store.getAt(store.find('code', 'Q_VALUE_QUEST_TYPE_SOCIAL')).get('id'))
+					me._ef.df2.show();
+				else
+					me._ef.df2.hide();
+
+				me.setViewOnly(true);
 			}
 			ns.viewport.doLayout();
 		}
@@ -52,6 +60,13 @@ Ext.define('qqext.view.exec.VExecForm', {
 		});
 		model.getExec({callback: function (r1) {
 				me._ef.loadRecord(r1);
+				if (r1.get('renewalNotice')) {
+					me._ef.df2.viewOnly = true;
+					me._prodlen = true;
+				} else {
+					me._ef.df2.viewOnly = false;
+					me._prodlen = false;
+				}
 				r1.getWay({callback: function (r2) {
 						me._mf.loadRecord(r1.files(), r2);
 					}});
@@ -65,7 +80,7 @@ Ext.define('qqext.view.exec.VExecForm', {
 	_saveData: function (success, failure) {
 		// TODO: Может стоит обновить дату и пользователя обновления запроса
 		var me = this;
-		if (!qqext.checkDates([me._ef.df, me._mf.df]))
+		if (!qqext.checkDates([me._ef.df1, me._ef.df2]))
 			return;
 		me.setViewOnly(true);
 		me._disableButtons(true, 0, 1, 2, 3);
@@ -79,16 +94,26 @@ Ext.define('qqext.view.exec.VExecForm', {
 								me._cf.sync();
 								me._mf.save(model.get('id'), success, failure);
 								qqext.infoChanged = true;
+								if (!me._prodlen && model.get('renewalNotice')) {
+									me.model.set('plannedFinishDate',
+											me.model.get('plannedFinishDate').valueOf() + 30 * qqext.msPday);
+									me.model.save({callback: function (rec, op, st) {
+											if (st) {
+												me._prodlen = true;
+												me._ef.df2.viewOnly = true;
+											} else {
+												qqext.showError("Ошибка продления выполнения", op.getError());
+												failure();
+											}
+										}});
+								}
 							} else {
 								qqext.showError("Ошибка сохранение данных", o.getError());
 								failure();
 							}
-
 						}
 					});
-				}
-
-				else {
+				} else {
 					qqext.showError("Ошибка сохранение данных", o.getError());
 					failure();
 				}

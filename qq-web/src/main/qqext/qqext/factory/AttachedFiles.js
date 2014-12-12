@@ -43,7 +43,7 @@ Ext.define('qqext.factory.AttachedFiles', {
 	 * @param {String} url путь, относительно которого строится ссылки на файлы
 	 * @param {Object} cfg другие настройки для Ext.form.Panel
 	 */
-	constructor: function(title, type, path, url, cfg) {
+	constructor: function (title, type, path, url, cfg) {
 		var me = this;
 		Ext.apply(me, {
 			items: [me._fl = Ext.create('hawk_common.cmp.FilesList', {
@@ -58,6 +58,9 @@ Ext.define('qqext.factory.AttachedFiles', {
 		});
 		Ext.apply(me, cfg);
 		me.callParent();
+		if (cfg.allowBlank === false)
+			me.setTitle("<span>*</span>" + title);
+		me._title = title;
 	},
 	/**
 	 * Устанавливает нужный режим
@@ -66,11 +69,11 @@ Ext.define('qqext.factory.AttachedFiles', {
 	 * 	- 'true' - редактирование
 	 * 	- 'false' - просмотр
 	 */
-	setViewOnly: function(status) {
+	setViewOnly: function (status) {
 		var me = this;
 		if (me._mode !== status) {
 			me._fl.attachButton.setDisabled(status);
-			Ext.ComponentQuery.query('button', me).forEach(function(b) {
+			Ext.ComponentQuery.query('button', me).forEach(function (b) {
 				b.setDisabled(status);
 			});
 			Ext.ComponentQuery.query('filefield', me)[0].setDisabled(status);
@@ -82,25 +85,25 @@ Ext.define('qqext.factory.AttachedFiles', {
 	 * @param {Ext.data.Storage} store хранилище с информацией о файлах
 	 * @param {Boolean} setOnly только установить, не загружать данные с сервера
 	 */
-	loadRecord: function(store, setOnly) {
+	loadRecord: function (store, setOnly) {
 		var me = this;
 		me._st = store;
 		if (!setOnly)
-			store.load({callback: function() {
+			store.load({callback: function () {
 					me.showFiles();
 				}});
 	},
 	/**
 	 * Отображает файлы, информация о которых находится во внутреннем хранилище
 	 */
-	showFiles: function() {
+	showFiles: function () {
 		var me = this,
 				store = me._st;
 		me._fl.clearFiles();
 		if (store.count()) {
 			var path = me._url + store.getAt(0).get('question')
 					+ "/";
-			store.each(function(file) {
+			store.each(function (file) {
 				var name = file.get('name');
 				me._fl.addExistingFile({name: name,
 					id: file.get('id'),
@@ -108,7 +111,7 @@ Ext.define('qqext.factory.AttachedFiles', {
 			});
 		}
 		if (me._mode) {// Режим только просмотра
-			Ext.ComponentQuery.query('button', me).forEach(function(b) {
+			Ext.ComponentQuery.query('button', me).forEach(function (b) {
 				b.setDisabled(true);
 			});
 			Ext.ComponentQuery.query('filefield', me)[0].setDisabled(true);
@@ -117,12 +120,12 @@ Ext.define('qqext.factory.AttachedFiles', {
 	/**
 	 * Нужна для поддержания общего интерфейса. Ничего не делает
 	 */
-	updateRecord: function() {
+	updateRecord: function () {
 	},
 	/**
 	 * Очистить информацию о существующих файлах
 	 */
-	reset: function() {
+	reset: function () {
 		this._fl.clearFiles();
 	},
 	/**
@@ -132,7 +135,7 @@ Ext.define('qqext.factory.AttachedFiles', {
 	 * @param {Function} success вызывается в случае успешного сохранения
 	 * @param {Function} fail вызывается в случае ошибки сохранения
 	 */
-	save: function(id, success, fail) {
+	save: function (id, success, fail) {
 		var me = this;
 		me.getForm().submit({
 			clientValidation: false,
@@ -143,9 +146,9 @@ Ext.define('qqext.factory.AttachedFiles', {
 				path: me._path,
 				deletedFiles: Ext.encode(me.deletedFiles)
 			},
-			success: function(form, action) {
+			success: function (form, action) {
 				// Обновляем данные в хранилище, после успешного сохранения файлов
-				me._st.load({callback: function(records, operation, stat) {
+				me._st.load({callback: function (records, operation, stat) {
 						if (stat) {
 							me.reset();
 							me.showFiles();
@@ -158,7 +161,7 @@ Ext.define('qqext.factory.AttachedFiles', {
 						}
 					}});
 			},
-			failure: function(form, action) {
+			failure: function (form, action) {
 				qqext.showError("Ошибка сохранения файлов", action.response.responseText);
 				me.reset();
 				me.showFiles();
@@ -171,12 +174,12 @@ Ext.define('qqext.factory.AttachedFiles', {
 	 * которые существуют на сервере. Информация о файлах в базе уже нет, удалилась
 	 * когда удалили запрос.
 	 */
-	remove: function() {
+	remove: function () {
 		var store = this._st;
 		if (store.count()) {
 			var dir = this._path + store.getAt(0).get('question') + "/",
 					names = [];
-			store.each(function(rec) {
+			store.each(function (rec) {
 				names.push(rec.get('name'));
 			});
 			Ext.Ajax.request({
@@ -184,6 +187,18 @@ Ext.define('qqext.factory.AttachedFiles', {
 				jsonData: {name: names, dir: dir}
 			});
 		}
+	},
+	isValid: function () {
+		if (this.allowBlank === false && this._fl.items.getCount() < 2) {
+			this._errors = "<p>" + this._title + ": Необходимо прикрепить файлы<br/></p>";
+			return false;
+		} else {
+			this._errors = undefined;
+			return true;
+		}
+	},
+	getErrors: function () {
+		return this._errors;
 	}
 });
 

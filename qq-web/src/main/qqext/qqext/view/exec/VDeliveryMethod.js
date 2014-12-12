@@ -30,6 +30,8 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 			result = false;
 		if (!this._sf.isValid())
 			result = false;
+		if (!this._ff.isValid())
+			result = false;
 		return result;
 	},
 	/**
@@ -99,10 +101,6 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 					]
 				}),
 				createCmp('Ext.Component', {autoEl: 'hr'}),
-				me.df = createCmp('FDateField', way.notice[1], way.notice[0], {
-					width: 270,
-					labelWidth: 150
-				}),
 				me._in = createCmp('FTextField', way.number[1], way.number[0], {
 					width: 270,
 					labelWidth: 150
@@ -111,15 +109,28 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 					width: 800,
 					labelWidth: 150
 				}),
-				createCmp('FieldSet', {
-					title: 'Ответ',
-					collapsible: true,
-					collapsed: true,
-					cls: 'collapse_section attached_section legend70',
-					items: [me._ff = createCmp('FAttachedFiles', '',
-								'Q_VALUE_FILE_TYPE_ANSWER', ns.atpaths.fsend,
-								ns.atpaths.usend)]
-				})
+				me._ff = createCmp('FAttachedFiles', 'Ответ',
+						'Q_VALUE_FILE_TYPE_ANSWER', ns.atpaths.fsend,
+						ns.atpaths.usend, {
+							allowBlank: ns.isSIC ? false : true,
+							collapsible: true,
+							collapsed: true,
+							cls: 'collapse_section attached_section'
+						})
+
+						/*
+						 createCmp('FieldSet', {
+						 title: 'Ответ',
+						 collapsible: true,
+						 collapsed: true,
+						 cls: 'collapse_section attached_section legend70',
+						 items: [me._ff = createCmp('FAttachedFiles', '',
+						 'Q_VALUE_FILE_TYPE_ANSWER', ns.atpaths.fsend,
+						 ns.atpaths.usend, {
+						 allowBlank: ns.isSIC ? false : true
+						 })]
+						 })
+						 */
 			]
 		});
 

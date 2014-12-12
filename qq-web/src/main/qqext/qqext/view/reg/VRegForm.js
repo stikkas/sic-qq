@@ -53,6 +53,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 					model.set('execOrg', orgId);
 				me.loadRecord();
 				ns.initRequired(me);
+				me.query.pd.setViewOnly(true);
 			} else if (prev === ns.searchForm || prev === ns.jvkForm) {
 // Значит пришли по двойному клику на существуещем запросе, (открыли существующий запрос)
 				me.clear();
@@ -302,7 +303,10 @@ Ext.define('qqext.view.reg.VRegForm', {
 				me.updateRecord();
 				// Заполняем обязательные поля:
 
-				status = ns.stats.reg;
+				if (me.query.mr.value)
+					status = ns.stats.exec;
+				else
+					status = ns.stats.reg;
 				model.set('status', ns.statsId[status]);
 				if (model.get('litera') === ns.sicId) {
 					if (model.get('execOrg') === ns.sicId)
@@ -381,6 +385,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 				me.files = createCmp('FAttachedFiles', 'Документы заявителя',
 						'Q_VALUE_FILE_TYPE_APP_DOCS', ns.atpaths.fappl,
 						ns.atpaths.uappl, {
+							allowBlank: ns.isSIC ? false : true,
 							border: true,
 							collapsible: true,
 							collapsed: true,
@@ -496,10 +501,13 @@ Ext.define('qqext.view.reg.VRegForm', {
 			pd.setValue(date);
 		} else {
 			value = vz.getValue();
-			if (value &&
-					vz.getStore().getById(value).get('code') === 'Q_VALUE_QUEST_TYPE_SOCIAL') {
+			if (value) {
 				date = new Date();
-				date.setDate(date.getDate() + 30);
+				if (vz.getStore().getById(value).get('code') === 'Q_VALUE_QUEST_TYPE_SOCIAL') {
+					date.setDate(date.getDate() + 30);
+				} else {
+					date.setDate(date.getDate() + 90);
+				}
 				pd.setValue(date);
 			}
 		}

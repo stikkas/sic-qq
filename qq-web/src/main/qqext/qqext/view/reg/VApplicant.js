@@ -69,6 +69,7 @@ Ext.define('qqext.view.reg.VApplicant', {
 					labelWidth: 150
 				}),
 				createCmp('FTextField', applicant.country[1], applicant.country[0], {
+					allowBlank: false,
 					width: 350,
 					labelWidth: 150
 				}),

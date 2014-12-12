@@ -27,7 +27,12 @@ Ext.define('qqext.model.Notification', (function () {
 				}}
 		],
 		belongsTo: 'qqext.model.Question',
-		requires: ['Ext.data.proxy.Rest'],
+		associations: [
+			{type: 'hasMany', model: 'qqext.model.PreparedDoc',
+				name: 'files', foreignKey: 'question'}
+		],
+		requires: ['Ext.data.proxy.Rest',
+			'qqext.model.PreparedDoc'],
 		proxy: {
 			type: 'rest',
 			url: '/qq-web/rest/notification',

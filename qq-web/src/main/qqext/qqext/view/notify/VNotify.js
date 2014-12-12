@@ -7,6 +7,7 @@
 Ext.define('qqext.view.notify.VNotify', {
 	alias: 'VNotify',
 	extend: 'qqext.view.StyledPanel',
+	xtype: 'vinfoform',
 	requires: [
 		'qqext.factory.ComboBox',
 		'qqext.factory.DateField',
@@ -16,7 +17,7 @@ Ext.define('qqext.view.notify.VNotify', {
 	],
 	mixins: ['qqext.cmp.DisableButtons'],
 	height: 300,
-	maxHeight: 300,
+	maxHeight: 800,
 	title: 'Уведомление заявителю',
 	fieldDefaults: {
 		blankText: 'Обязательно для заполнения',
@@ -40,6 +41,7 @@ Ext.define('qqext.view.notify.VNotify', {
 						me.setViewOnly(true);
 						me._disableButtons(true, 0);
 						me._disableButtons(!ns.user.isAllowed(ns.rules.reg), 1);
+						me._files.loadRecord(r.files());
 					}});
 
 				ns.initRequired(me);
@@ -70,24 +72,31 @@ Ext.define('qqext.view.notify.VNotify', {
 
 				noti.save({callback: function (rec, op, suc) {
 						if (suc) {
-							if (status) {// Обновляем модель запроса (статус уведомления)
-								model.set('notifyStatus', status);
-								model.save({callback: function (record, operation, success) {
-										if (success) {
-											me._disableButtons(false, 1);
-											ns.infoChanged = true;
-										} else {
-											ns.showError("Ошибка сохранения", operation.getError());
-											me.setViewOnly(false);
-											// Включаем кнопку сохранить
-											me._disableButtons(false, 0);
-											noti.destroy();
+							me.saveFiles(function () {
+								if (status) {// Обновляем модель запроса (статус уведомления)
+									model.set('notifyStatus', status);
+									model.save({callback: function (record, operation, success) {
+											if (success) {
+												me._disableButtons(false, 1);
+												ns.infoChanged = true;
+											} else {
+												ns.showError("Ошибка сохранения", operation.getError());
+												me.setViewOnly(false);
+												// Включаем кнопку сохранить
+												me._disableButtons(false, 0);
+												me._files.remove();
+												noti.destroy();
+											}
 										}
-									}
-								});
-							} else {
-								me._disableButtons(false, 1);
-							}
+									});
+								} else {
+									me._disableButtons(false, 1);
+								}
+							}, function () {
+								ns.showError("Ошибка сохранения", "Ошибка сохранения файлов");
+								me.setViewOnly(false);
+								me._disableButtons(false, 0);
+							});
 						} else {
 							ns.showError("Ошибка сохранения", op.getError());
 							me.setViewOnly(false);
@@ -142,11 +151,30 @@ Ext.define('qqext.view.notify.VNotify', {
 				me._idf = createCmp('FDateField', notf.issueDate[1], notf.issueDate[0], {
 					width: 270,
 					labelWidth: 150
-				})
+				}),
+				me._files = createCmp('FAttachedFiles', "Подготовленный документ",
+						'Q_VALUE_FILE_TYPE_INFO', ns.atpaths.finfo,
+						ns.atpaths.uinfo, {
+							collapsible: true,
+							collapsed: true,
+							cls: 'collapse_section attached_section'
+						})
 			]
 		});
 		me._btns = menu.items;
 		me.callParent();
 		ns.Menu.editReqMenu.insert(1, menu);
+	},
+	/**
+	 * Сохраняем файлы
+	 * @param {Function} success выполняется в случае успешного сохранения
+	 * @param {Function} fail выполняется в случае ошибки
+	 */
+	saveFiles: function (success, fail) {
+		var me = this,
+				noti = me.model.getNoti();
+		me._files.loadRecord(noti.files(), true);
+		me._files.save(noti.get('id'), success, fail);
 	}
+
 });

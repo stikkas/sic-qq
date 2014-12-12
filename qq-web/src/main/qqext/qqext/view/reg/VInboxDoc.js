@@ -52,21 +52,30 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 				me.datereg = createCmp('FDateField', 'Дата регистрации', 'regDate', true,
 						{viewOnly: true, width: 250, labelWidth: 150}), // Выставляется программно в модели
 				me._sp = createCmp('FComboBox', 'Способ передачи', 'inboxDocDeliveryType',
-						'transferType', {allowBlank: false, width:300, labelWidth:'150'}),
+						'transferType', {allowBlank: false, width: 300, labelWidth: 150}),
 				me.executor = createCmp('FComboBox', 'Исполняющая организация',
 						ns.stIds.execOrgs, 'execOrg', {
 							width: 650, labelWidth: 150,
 							listeners: {
 								change: function (combo, value) {
-									var plannedDateCombo = ns.regForm.query.pd;
-									if (ns.sicId === value) {
-										plannedDateCombo.setViewOnly(true);
-										plannedDateCombo.viewOnly = true;
-									} else if (!ns.regForm.query.vz.social) {
-										plannedDateCombo.viewOnly = false;
-										plannedDateCombo._viewMode = !me._sp._viewMode;
-										plannedDateCombo.setViewOnly(me._sp._viewMode);
+									var otkaz = ns.regForm.query.mr;
+									if (value !== ns.sicId) {
+										otkaz.hide();
+										otkaz.reset();
+									} else {
+										otkaz.show();
 									}
+									/*
+									 var plannedDateCombo = ns.regForm.query.pd;
+									 if (ns.sicId === value) {
+									 plannedDateCombo.setViewOnly(true);
+									 plannedDateCombo.viewOnly = true;
+									 } else if (!ns.regForm.query.vz.social) {
+									 plannedDateCombo.viewOnly = false;
+									 plannedDateCombo._viewMode = !me._sp._viewMode;
+									 plannedDateCombo.setViewOnly(me._sp._viewMode);
+									 }
+									 */
 								}
 							}
 						}),

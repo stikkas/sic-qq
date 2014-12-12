@@ -1,8 +1,10 @@
-Ext.define('qqext.model.ExecutionInfo', (function() {
+Ext.define('qqext.model.ExecutionInfo', (function () {
 	var ns = Ext.ns('qqext'),
 			exec = ns.execInfo = {
 				date: ['execDate', 'Дата исполнения'],
+				notice: ['renewalNotice', 'Уведомление о продлении сроков'],
 				result: ['answerResult', 'Результат ответа'],
+				refer: ['reference', 'Переадресовка', 'Рекомендация'],
 				tema: ['usageAnswer', 'Тематика ответа'],
 				category: ['categoryComplexity', 'Категория сложности']
 			};
@@ -20,11 +22,16 @@ Ext.define('qqext.model.ExecutionInfo', (function() {
 		],
 		fields: [
 			{name: 'id', type: 'int', defaultValue: null, convert: null},
-			{name: exec.date[0], type: 'date', convert: function(v) {
+			{name: exec.date[0], type: 'date', convert: function (v) {
 					if (v)
 						return new Date(v);
-				}},
+				}, defaultValue: null},
+			{name: exec.notice[0], type: 'date', convert: function (v) {
+					if (v)
+						return new Date(v);
+				}, defaultValue: null},
 			{name: exec.result[0], type: 'int', defaultValue: null, convert: null},
+			{name: exec.refer[0], type: 'string', defaultValue: null, convert: null},
 			{name: exec.tema[0], type: 'int', defaultValue: null, convert: null},
 			{name: exec.category[0], type: 'int', defaultValue: null, convert: null}
 		],

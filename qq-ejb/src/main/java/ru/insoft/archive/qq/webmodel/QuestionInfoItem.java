@@ -6,6 +6,7 @@ import ru.insoft.archive.core_model.table.desc.DescriptorValue;
 import ru.insoft.archive.core_model.view.desc.VDescAttrValue;
 import ru.insoft.archive.qq.entity.Applicant;
 import ru.insoft.archive.qq.entity.Question;
+import ru.insoft.archive.qq.entity.Transmission;
 
 public class QuestionInfoItem {
 
@@ -50,6 +51,11 @@ public class QuestionInfoItem {
 				}
 			}
 		}
+
+		Transmission t = q.getTransmission();
+		if (t != null) {
+			controlDate = t.getControlDate();
+		}
 	}
 
 	protected Long id;
@@ -61,6 +67,7 @@ public class QuestionInfoItem {
 	protected String inboxDocNum;
 
 	protected Date regDate;
+	protected Date controlDate;
 
 	public Long getId() {
 		return id;
@@ -100,6 +107,14 @@ public class QuestionInfoItem {
 
 	public void setFioOrg(String fioOrg) {
 		this.fioOrg = fioOrg;
+	}
+
+	public Date getControlDate() {
+		return controlDate;
+	}
+
+	public void setControlDate(Date controlDate) {
+		this.controlDate = controlDate;
 	}
 
 }

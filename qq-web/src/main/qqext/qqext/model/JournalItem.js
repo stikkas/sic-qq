@@ -49,5 +49,12 @@ Ext.define('qqext.model.JournalItem', {
 		}, {
 			name: 'executor',
 			type: 'string'
+		}, {
+			name: 'controlDate',
+			type: 'date',
+			defaultValue: null,
+			dateFormat: 'd.m.Y',
+			dateWriteFormat: 'd.m.Y',
+			dateReadFormat: 'd.m.Y'
 		}]
 });

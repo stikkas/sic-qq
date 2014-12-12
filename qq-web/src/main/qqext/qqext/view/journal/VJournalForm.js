@@ -39,7 +39,9 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					statsName = ns.statsName,
 					stats = ns.stats,
 					status = record.get('status');
-			var date = record.get('execDate');
+			var date = record.get('controlDate');
+			if (!date)
+				date = record.get('execDate');
 			if (date && status !== statsName[stats.onreg] &&
 					status !== statsName[stats.exec]) {
 				var delta = parseInt((date - new Date()) / qqext.msPday);
@@ -259,13 +261,13 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						xtype: 'datecolumn',
 						text: 'Дата исполнения плановая',
 						minWidth: 95,
-                                                cls:'mar_bot0',
+						cls: 'mar_bot0',
 						dataIndex: 'execDate',
 						itemId: 'planDateExec',
 						format: 'd.m.Y',
 						items: [{
 								width: '90%',
-                                                                cls:'mar_t0',
+								cls: 'mar_t0',
 								xtype: 'hawkDateField',
 								focusOnToFront: false,
 								name: 'planDateExec',
@@ -284,7 +286,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					},
 					{
 						text: 'Статус уведомления',
-                                                minWidth:145,
+						minWidth: 145,
 						dataIndex: 'notifyStatus',
 						hidden: !ns.isSIC,
 						items: [

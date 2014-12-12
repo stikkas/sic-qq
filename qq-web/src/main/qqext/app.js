@@ -63,7 +63,7 @@ Ext.application({
 				});
 
 				// Загружаем настройки для прикрепленных файлов
-				var codes = ['QQ_ANSWER_DOC', 'QQ_APPLICANT_DOC', 'QQ_DOC_ROOT',
+				var codes = ['QQ_ANSWER_DOC', 'QQ_APPLICANT_DOC', 'QQ_INFO_DOC', 'QQ_DOC_ROOT',
 					'URL_ROOT', 'DOCUMENT_ROOT'];
 				Ext.Ajax.request({
 					url: '/qq-web/rest/coreparameter',
@@ -72,7 +72,7 @@ Ext.application({
 					success: function (result) {
 						var paths = ns.atpaths = {},
 								applicationDir, urlRoot,
-								applicantDir, sendDir,
+								applicantDir, sendDir, infoDir,
 								root;
 						Ext.decode(result.responseText).forEach(function (v) {
 							switch (v.code) {
@@ -83,19 +83,25 @@ Ext.application({
 									applicantDir = v.value + "/";
 									break;
 								case codes[2]:
-									applicationDir = v.value + "/";
+									infoDir = v.value + "/";
 									break;
 								case codes[3]:
-									urlRoot = v.value;
+									applicationDir = v.value + "/";
 									break;
 								case codes[4]:
+									urlRoot = v.value;
+									break;
+								case codes[5]:
 									root = v.value + "/";
 							}
 						});
 						sendDir = applicationDir + sendDir;
 						applicantDir = applicationDir + applicantDir;
+						infoDir = applicationDir + infoDir;
 						paths.fsend = root + sendDir;
 						paths.fappl = root + applicantDir;
+						paths.finfo = root + infoDir;
+						paths.uinfo = urlRoot + infoDir;
 						paths.usend = urlRoot + sendDir;
 						paths.uappl = urlRoot + applicantDir;
 					}

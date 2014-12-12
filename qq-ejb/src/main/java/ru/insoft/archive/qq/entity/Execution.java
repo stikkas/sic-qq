@@ -42,6 +42,9 @@ public class Execution implements Serializable {
 	@Column(name = "ANSWER_RESULT_ID")
 	private Long answerResult;
 
+	@Column(name = "REFERENCE")
+	private String reference;
+
 	@Column(name = "USAGE_ANSWER_ID")
 	private Long usageAnswer;
 
@@ -51,6 +54,10 @@ public class Execution implements Serializable {
 	@Column(name = "EXEC_DATE", columnDefinition = "DATE")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date execDate;
+
+	@Column(name = "RENEWAL_NOTICE", columnDefinition = "DATE")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date renewalNotice;
 
 	@JsonIgnore
 	@JoinColumn(name = "QUESTION_ID", referencedColumnName = "QUESTION_ID",
@@ -91,6 +98,14 @@ public class Execution implements Serializable {
 
 	public void setAnswerResult(Long answerResult) {
 		this.answerResult = answerResult;
+	}
+
+	public String getReference() {
+		return reference;
+	}
+
+	public void setReference(String reference) {
+		this.reference = reference;
 	}
 
 	public DescriptorValue getAnswerResultValue() {
@@ -139,6 +154,14 @@ public class Execution implements Serializable {
 
 	public void setQuestion(Question question) {
 		this.question = question;
+	}
+
+	public Date getRenewalNotice() {
+		return renewalNotice;
+	}
+
+	public void setRenewalNotice(Date renewalNotice) {
+		this.renewalNotice = renewalNotice;
 	}
 
 	@Override

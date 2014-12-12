@@ -89,4 +89,19 @@ public class AttachedFileFacadeREST extends AbstractFacade<AttachedFile> {
 			new Clause[]{new Clause("type", "Q_VALUE_FILE_TYPE_APP_DOCS")});
 	}
 
+	/**
+	 * Возвращает файлы принадлежащие секции "Уведомление заявителю".
+	 *
+	 * @param filter параметр запроса, содержащий id {@code Question}
+	 * @return список файлов
+	 */
+	@GET
+	@Path("info")
+	@Produces({"application/json"})
+	public List<AttachedFile> filesForNotification(@QueryParam("filter") QuestionFilter filter) {
+		Long id = filter.getId();
+		return id == -1L ? new ArrayList<AttachedFile>() : super.findByQuestionWhereAnd(id,
+			new Clause[]{new Clause("type", "Q_VALUE_FILE_TYPE_INFO")});
+	}
+
 }

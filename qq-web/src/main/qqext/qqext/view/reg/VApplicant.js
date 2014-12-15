@@ -52,13 +52,13 @@ Ext.define('qqext.view.reg.VApplicant', {
 					}
 				}),
 				surname = createCmp('FTextField', applicant.lastName[1], applicant.lastName[0], {
-					hidden: true
+					hidden: true, labelWidth: 150
 				}),
 				name = createCmp('FTextField', applicant.firstName[1], applicant.firstName[0], {
-					hidden: true
+					hidden: true, labelWidth: 150
 				}),
 				fatherName = createCmp('FTextField', applicant.middleName[1], applicant.middleName[0], {
-					hidden: true
+					hidden: true, labelWidth: 150
 				}),
 				org = createCmp('FTextArea', applicant.organization[1], applicant.organization[0],
 						{width: 950, labelWidth: 150, hidden: true}),

@@ -336,7 +336,8 @@ textarea[disabled=""]{
 /*.x-form-item-label{
     position:relative;              //для глобального выравнивания * по вертикали
 }*/
-label span{
+label span,
+.collapse_section span.x-panel-header-text > span{
     color:#f00;
     padding-right:5px;
     /*position:absolute;            //для глобального выравнивания * по вертикали
@@ -369,23 +370,31 @@ div.collapse_section{
 .collapse_section.legend70 legend{
     background-size:calc(100% - 80px) 1px;;
 }
+.collapse_section .x-tool-after-title{
+    left:0 !important;
+}
 .collapse_section .x-tool-toggle,
-.collapse_section .x-panel-header-icon{
+.collapse_section .x-panel-header-icon,
+.collapse_section .x-tool-collapse-top,
+.collapse_section .x-tool-expand-bottom{
     background-image:url(../images/arrowrs.png);
+    background-color:transparent;
     opacity:1;
     margin-right:5px;
 }
-.collapse_section .x-panel-header-icon{
+.collapse_section .x-panel-header-icon,
+.collapse_section .x-tool-collapse-top{
     background-position:0 center;
+    background-color:transparent;
 }
-.collapse_section .x-collapsed .x-panel-header-icon{
+.collapse_section .x-collapsed .x-panel-header-icon,
+.collapse_section .x-tool-expand-bottom{
     background-position:-15px center;
 }
 .collapse_section .x-fieldset-header-text,
 .collapse_section .x-panel-header-text-container-default{
     color:#2D446D;
     font:bold 15px Arial, sans-serif;
-    padding-left:0;
 }
 .collapse_section .x-noborder-t{
     border:none !important;

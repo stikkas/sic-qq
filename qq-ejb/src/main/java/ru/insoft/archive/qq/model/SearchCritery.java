@@ -12,33 +12,90 @@ import ru.insoft.archive.extcommons.json.JsonIn;
  */
 public class SearchCritery implements JsonIn {
 
+	/**
+	 * Архив исполнитель
+	 */
 	private Long archiveId;
 
+	/**
+	 * Литера
+	 */
 	private Long litera;
 
+	/**
+	 * Вид запроса
+	 */
 	private Long queryTypeId;
 
+	/**
+	 * Исполнитель
+	 */
 	private Long executor;
 
+	/**
+	 * Содержание запроса
+	 */
 	private String queryContent;
 
+	/**
+	 * Тип заявителя
+	 */
 	private Long applicantTypeId;
 
+	/**
+	 * Категория заявителя
+	 */
 	private Long applicantCategoryId;
 
-	private Date regDate;
+	/**
+	 * Дата регистрации с
+	 */
+	private Date regDateStart;
 
+	/**
+	 * Дата регистрации по
+	 */
+	private Date regDateEnd;
+
+	/**
+	 * На кого запрос имя
+	 */
 	private String reqFirstName;
 
+	/**
+	 * На кого запрос фамилия
+	 */
 	private String reqLastName;
 
+	/**
+	 * На кого запрос отчество
+	 */
 	private String reqMiddleName;
 
+	/**
+	 * Заявитель имя
+	 */
 	private String applFirstName;
 
+	/**
+	 * Заявитель фамилия
+	 */
 	private String applLastName;
 
+	/**
+	 * Заявитель отчество
+	 */
 	private String applMiddleName;
+
+	/**
+	 * Заявитель организация
+	 */
+	private String organization;
+
+	/**
+	 * Заявитель № исходящего документа
+	 */
+	private String issueDocNum;
 
 	/**
 	 * Позволяет определить, содержатся ли в критериях поиска атрибуты из
@@ -48,22 +105,10 @@ public class SearchCritery implements JsonIn {
 	 * @return
 	 */
 	public Boolean isApplicantJoinNeeds() {
-		if (applicantTypeId != null) {
-			return true;
-		}
-		if (applicantCategoryId != null) {
-			return true;
-		}
-		if (applFirstName != null) {
-			return true;
-		}
-		if (applLastName != null) {
-			return true;
-		}
-		if (applMiddleName != null) {
-			return true;
-		}
-		return false;
+		return !(applicantTypeId == null && applicantCategoryId == null
+				&& applFirstName == null && applLastName == null
+				&& applMiddleName == null && organization == null
+				&& issueDocNum == null);
 	}
 
 	public Long getArchiveId() {
@@ -104,14 +149,6 @@ public class SearchCritery implements JsonIn {
 
 	public void setApplicantCategoryId(Long applicantCategoryId) {
 		this.applicantCategoryId = applicantCategoryId;
-	}
-
-	public Date getRegDate() {
-		return regDate;
-	}
-
-	public void setRegDate(Date regDate) {
-		this.regDate = regDate;
 	}
 
 	public String getReqFirstName() {
@@ -160,6 +197,38 @@ public class SearchCritery implements JsonIn {
 
 	public void setApplMiddleName(String applMiddleName) {
 		this.applMiddleName = applMiddleName;
+	}
+
+	public Date getRegDateStart() {
+		return regDateStart;
+	}
+
+	public void setRegDateStart(Date regDateStart) {
+		this.regDateStart = regDateStart;
+	}
+
+	public Date getRegDateEnd() {
+		return regDateEnd;
+	}
+
+	public void setRegDateEnd(Date regDateEnd) {
+		this.regDateEnd = regDateEnd;
+	}
+
+	public String getOrganization() {
+		return organization;
+	}
+
+	public void setOrganization(String organization) {
+		this.organization = organization;
+	}
+
+	public String getIssueDocNum() {
+		return issueDocNum;
+	}
+
+	public void setIssueDocNum(String issueDocNum) {
+		this.issueDocNum = issueDocNum;
 	}
 
 	public Long getLitera() {

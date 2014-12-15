@@ -300,13 +300,16 @@ Ext.define('qqext.view.reg.VRegForm', {
 				 plannedDateCombo.setValue(plannedDate)
 				 }
 				 */
-				me.updateRecord();
 				// Заполняем обязательные поля:
 
-				if (me.query.mr.value)
+				if (me.query.mr.value) {
 					status = ns.stats.exec;
+					me.query.pd.setValue(now);
+				}
 				else
 					status = ns.stats.reg;
+
+				me.updateRecord();
 				model.set('status', ns.statsId[status]);
 				if (model.get('litera') === ns.sicId) {
 					if (model.get('execOrg') === ns.sicId)

@@ -13,6 +13,11 @@ public class QuestionInfoItem {
 	public QuestionInfoItem(Question q) {
 		id = q.getId();
 
+		DescriptorValue reqType = q.getQuestionTypeValue();
+		if (reqType != null) {
+			requestType = reqType.getShortValue();
+		}
+
 		DescriptorValue createOrg = q.getLiteraValue();
 		if (createOrg != null) {
 			for (VDescAttrValue a : createOrg.getAttrValues()) {
@@ -68,6 +73,15 @@ public class QuestionInfoItem {
 
 	protected Date regDate;
 	protected Date controlDate;
+	protected String requestType;
+
+	public String getRequestType() {
+		return requestType;
+	}
+
+	public void setRequestType(String requestType) {
+		this.requestType = requestType;
+	}
 
 	public Long getId() {
 		return id;

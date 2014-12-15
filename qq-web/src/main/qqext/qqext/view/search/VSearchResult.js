@@ -48,11 +48,14 @@ Ext.define('qqext.view.search.VSearchResult', {
 				text: 'Дата регистрации',
 				dataIndex: 'regDate'
 			}, {
+				text: 'Вид запроса',
+				dataIndex: 'requestType'
+			}, {
 				text: 'ФИО/Организация',
 				dataIndex: 'fioOrg'
 			}, {
-				text: 'Тематика ответа',
-				dataIndex: 'answerTematic'
+				text: 'Содержание запроса',
+				dataIndex: 'content'
 			}, {
 				text: 'Результат ответа',
 				dataIndex: 'answerResult'
@@ -70,7 +73,7 @@ Ext.define('qqext.view.search.VSearchResult', {
 		var ns = qqext,
 				rules = ns.rules;
 
-		if (ns.user.isAllowed([rules.reg, rules.crd, rules.exec]))
+		if (ns.user.isAllowed([rules.reg, rules.crd, rules.exec, rules.admin]))
 			this.listeners = {itemdblclick: ns.openRequest};
 		this.callParent();
 	}

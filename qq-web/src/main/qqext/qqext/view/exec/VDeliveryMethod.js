@@ -105,7 +105,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 					width: 270,
 					labelWidth: 150
 				}),
-				createCmp('FTextArea', way.remark[1], way.remark[0], {
+				me._rm = createCmp('FTextArea', way.remark[1], way.remark[0], {
 					width: 800,
 					labelWidth: 150
 				}),
@@ -135,5 +135,15 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 		});
 
 		me.callParent();
+	},
+	/**
+	 * Устанвливаеть таблицу "Способ отправки" и поля "Исходящий №" и "Примечание"
+	 * в режим редактирования при статусе запроса - исполнен.
+	 */
+	setEditMode: function () {
+		var me = this;
+		[me._sf, me._in, me._rm].forEach(function (it) {
+			it.setViewOnly(false);
+		});
 	}
 });

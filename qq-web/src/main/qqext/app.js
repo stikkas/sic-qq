@@ -244,12 +244,14 @@ Ext.application({
 		 * Работа кнопки "Редактировать" одинакова на всех формах:
 		 * отключить себя, включить все другие кнопки, сделать форму доступной
 		 * для редактирования.
+		 * Используется для "Регистрация", "Передача на исполнение", "Исполнение запроса"
 		 * @method edit
 		 */
 		ns.edit = function () {
-			var me = this;
+			var me = this,
+					admin = ns.user.isAllowed(rules.admin);
 			if (me === ns.regForm) {
-				if (ns.user.isAllowed(rules.admin) &&
+				if (admin &&
 						ns.request.get('status') !== ns.statsId[statuses.onreg]) {
 					me._disableButtons(false, 1);
 					me.setAdminMode();
@@ -257,20 +259,26 @@ Ext.application({
 					me.setViewOnly(false);
 					me._disableButtons(false, 1, 3, 4);
 				}
-			} else {
-				var status;
-				if (me === ns.execForm)
-					status = statuses.onexec;
-				else if (me === ns.transForm)
-					status = statuses.reg;
-
-				if (ns.user.isAllowed(rules.admin) &&
-						ns.request.get('status') !== ns.statsId[status]) {
+			} else if (me === ns.transForm) {
+				if (admin &&
+						ns.request.get('status') !== ns.statsId[statuses.reg]) {
 					me._disableButtons(false, 1);
 					me.setAdminMode();
 				} else {
 					me.setViewOnly(false);
 					me._disableButtons(false, 1, 2, 3);
+				}
+			} else { // Исполнение запроса
+				var status = ns.request.get('status');
+				if (status === ns.statsId[statuses.onexec]) {
+					me.setViewOnly(false);
+					me._disableButtons(false, 1, 2, 3);
+				} else if (status === ns.statsId[statuses.exec]) {
+					if (admin) {
+						me.setAdminMode();
+					}
+					me.setEditMode();
+					me._disableButtons(false, 1);
 				}
 			}
 			me._disableButtons(true, 0);
@@ -684,7 +692,8 @@ Ext.application({
 		};
 		// создаем все меню
 		ns.Menu.init();
-	},
+	}
+	,
 	initStores: function (organization) {
 		var ns = qqext,
 				create = Ext.create,

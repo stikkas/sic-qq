@@ -29,12 +29,17 @@ Ext.define('qqext.model.SearchResultItem', {
 			defaultValue: null,
 			convert: null
 		}, {
+			name: 'requestType',
+			type: 'string',
+			defaultValue: null,
+			convert: null
+		}, {
 			name: 'fioOrg',
 			type: 'string',
 			defaultValue: null,
 			convert: null
 		}, {
-			name: 'answerTematic',
+			name: 'content',
 			type: 'string',
 			defaultValue: null,
 			convert: null

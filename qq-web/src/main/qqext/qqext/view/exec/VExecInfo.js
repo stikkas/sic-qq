@@ -9,6 +9,7 @@ Ext.define('qqext.view.exec.VExecInfo', {
 		'qqext.factory.DateField'
 	],
 	title: 'Сведения об исполнении',
+        cls:'exec_inf',
 	fieldDefaults: {
 		validateOnChange: false,
 		blankText: 'Обязательно для заполнения',

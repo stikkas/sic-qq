@@ -531,3 +531,8 @@ div.collapse_section{
     background: -o-linear-gradient(center top, #758FAF, #CBD3DE);
     background: -ms-linear-gradient(center top, #758FAF, #CBD3DE);
 }
+/*переадресовка/рекомендация*/
+.exec_inf textarea{
+    width:619px !important;
+    height:55px;
+}

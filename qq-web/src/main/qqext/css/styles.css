@@ -336,7 +336,8 @@ textarea[disabled=""]{
 /*.x-form-item-label{
     position:relative;              //для глобального выравнивания * по вертикали
 }*/
-label span{
+label span,
+.collapse_section span.x-panel-header-text > span{
     color:#f00;
     padding-right:5px;
     /*position:absolute;            //для глобального выравнивания * по вертикали

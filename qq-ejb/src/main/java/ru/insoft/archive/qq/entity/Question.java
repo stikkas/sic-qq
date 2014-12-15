@@ -163,25 +163,31 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 
 	@JsonIgnore
 	@JoinColumn(name = "LITERA_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
-		insertable = false, updatable = false)
+			insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
 	private DescriptorValue literaValue;
 
 	@JsonIgnore
 	@JoinColumn(name = "STATUS_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
-		insertable = false, updatable = false)
+			insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
 	private DescriptorValue statusValue;
 
 	@JsonIgnore
+	@JoinColumn(name = "QUESTION_TYPE_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
+			insertable = false, updatable = false)
+	@ManyToOne(fetch = FetchType.EAGER)
+	private DescriptorValue questionTypeValue;
+
+	@JsonIgnore
 	@JoinColumn(name = "NOTIFY_STATUS_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
-		insertable = false, updatable = false)
+			insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
 	private DescriptorValue notifyStatusValue;
 
 	@JsonIgnore
 	@JoinColumn(name = "EXEC_ORG_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
-		insertable = false, updatable = false)
+			insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.EAGER)
 	private DescriptorValue execOrgValue;
 
@@ -221,6 +227,14 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 
 	public Long getPrefixNum() {
 		return prefixNum;
+	}
+
+	public DescriptorValue getQuestionTypeValue() {
+		return questionTypeValue;
+	}
+
+	public void setQuestionTypeValue(DescriptorValue questionTypeValue) {
+		this.questionTypeValue = questionTypeValue;
 	}
 
 	public void setPrefixNum(Long prefixNum) {

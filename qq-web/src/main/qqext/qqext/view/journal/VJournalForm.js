@@ -164,7 +164,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 			}));
 		}
 
-		if (user.isAllowed([rules.reg, rules.crd, rules.exec]))
+		if (user.isAllowed([rules.reg, rules.crd, rules.exec, rules.admin]))
 			me.listeners.itemdblclick = ns.openRequest;
 
 		if (ns.isSIC) // Запросы со статусом "На регистрации" с литерой архива для СИЦ не нужны

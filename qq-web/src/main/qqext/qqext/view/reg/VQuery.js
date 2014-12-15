@@ -25,28 +25,28 @@ Ext.define('qqext.view.reg.VQuery', {
 		Ext.applyIf(me, {
 			items: [
 				me.vz = createCmp('FComboBox', 'Вид запроса', 'queryType', 'questionType', {
-					/*
-					 listeners: {
-					 change: function (box, value) {
-					 var target = ns.regForm.target,
-					 code = box.getStore().getById(value).get('code');
-					 if (code === 'Q_VALUE_QUEST_TYPE_TEMATIC')
-					 target.hide();
-					 else
-					 target.show();
-					 if (ns.regForm.inbox.executor.getValue() !== ns.sicId) {
-					 if (code === 'Q_VALUE_QUEST_TYPE_SOCIAL') {
-					 me.pd.setViewOnly(true);
-					 me.pd.viewOnly = true;
-					 me.vz.social = true;
-					 } else {
-					 me.pd.viewOnly = false;
-					 me.pd.setViewOnly(me.vz._viewMode);
-					 me.vz.social = false;
-					 }
-					 }
-					 }
-					 },*/
+					listeners: {
+						change: function (box, value) {
+							var target = ns.regForm.target,
+									code = box.getStore().getById(value).get('code');
+							if (code === 'Q_VALUE_QUEST_TYPE_TEMATIC')
+								target.hide();
+							else
+								target.show();
+							/*
+							 if (ns.regForm.inbox.executor.getValue() !== ns.sicId) {
+							 if (code === 'Q_VALUE_QUEST_TYPE_SOCIAL') {
+							 me.pd.setViewOnly(true);
+							 me.pd.viewOnly = true;
+							 me.vz.social = true;
+							 } else {
+							 me.pd.viewOnly = false;
+							 me.pd.setViewOnly(me.vz._viewMode);
+							 me.vz.social = false;
+							 }
+							 }*/
+						}
+					},
 					width: 370
 				}),
 				me.pd = createCmp('FDateField', 'Плановая дата исполнения запроса', 'plannedFinishDate', {

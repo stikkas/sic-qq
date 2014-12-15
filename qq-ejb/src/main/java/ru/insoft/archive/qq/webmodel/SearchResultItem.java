@@ -15,25 +15,23 @@ public class SearchResultItem extends QuestionInfoItem implements JsonOut, JsonI
 
 		Execution ei = q.getExecution();
 		if (ei != null) {
-			if (ei.getUsageAnswerValue() != null) {
-				this.answerTematic = ei.getUsageAnswerValue().getValue();
-			}
 			if (ei.getAnswerResultValue() != null) {
 				this.answerResult = ei.getAnswerResultValue().getValue();
 			}
 		}
+		content = q.getContent();
 	}
 
-	private String answerTematic;
+	private String content;
 
 	private String answerResult;
 
-	public String getAnswerTematic() {
-		return answerTematic;
+	public String getContent() {
+		return content;
 	}
 
-	public void setAnswerTematic(String answerTematic) {
-		this.answerTematic = answerTematic;
+	public void setContent(String content) {
+		this.content = content;
 	}
 
 	public String getAnswerResult() {

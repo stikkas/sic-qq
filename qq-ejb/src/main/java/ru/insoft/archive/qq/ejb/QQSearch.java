@@ -44,18 +44,17 @@ public class QQSearch extends LoggedBean {
 	private static JsonTools jsonTools;
 
 	private Expression<Boolean> getLikeExp(String queryValue, String field,
-		Join<Question, Applicant> ro) {
+			Join<Question, Applicant> ro) {
 		queryValue = queryValue.toUpperCase();
 		queryValue += "%";
-		logger.info("value for like expression: " + queryValue);
 		CriteriaBuilder b = em.getCriteriaBuilder();
 		Expression<Boolean> exp = b.like(b.upper(ro.<String>get(field)),
-			queryValue);
+				queryValue);
 		return exp;
 	}
 
 	public JsonObject getJournalData(Integer start, Integer limit,
-		List<FilterBy> filters, List<OrderBy> orders) throws Exception {
+			List<FilterBy> filters, List<OrderBy> orders) throws Exception {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Question> criteriaQuery = cb.createQuery(Question.class);
 		Root<Question> root = criteriaQuery.from(Question.class);
@@ -96,14 +95,14 @@ public class QQSearch extends LoggedBean {
 						//Сортируются сначала по Юридическим лицам, потом по физическим
 						Join<Question, Applicant> aplJoin = root.join("applicant");
 						Expression<String> concat = cb.concat(
-							aplJoin.<String>get("lastName"), " ");
+								aplJoin.<String>get("lastName"), " ");
 						concat = cb.concat(concat, aplJoin.<String>get("firstName"));
 						concat = cb.concat(concat, " ");
 						concat = cb.concat(concat,
-							aplJoin.<String>get("middleName"));
+								aplJoin.<String>get("middleName"));
 						concat = cb.lower(concat);
 						Expression<String> jur = cb.lower(aplJoin
-							.<String>get("organization"));
+								.<String>get("organization"));
 						Order jurOrder = null;
 						Order phyzOrder = null;
 						if (ou.asc()) {
@@ -172,7 +171,7 @@ public class QQSearch extends LoggedBean {
 	}
 
 	public JsonObject getSearchResult(Integer start, Integer limit,
-		SearchCritery query, List<OrderBy> orders) throws Exception {
+			SearchCritery query, List<OrderBy> orders) throws Exception {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<Question> searchQuery = cb.createQuery(Question.class);
 
@@ -185,78 +184,92 @@ public class QQSearch extends LoggedBean {
 
 			Long applType = query.getApplicantTypeId();
 			if (applType != null) {
-				Expression<Boolean> applTypeExp = cb.equal(
-					join.<Long>get("applicantType"), applType);
-				expressions.add(applTypeExp);
+				expressions.add(cb.equal(join.<Long>get("applicantType"), applType));
 			}
 
 			Long applCat = query.getApplicantCategoryId();
 			if (applCat != null) {
-				Expression<Boolean> applCatExp = cb.equal(
-					join.<Long>get("applicantCategory"), applCat);
-				expressions.add(applCatExp);
+				expressions.add(cb.equal(join.<Long>get("applicantCategory"), applCat));
 			}
 
 			String applName = query.getApplFirstName();
 			if (applName != null) {
-				expressions.add(getLikeExp(applName, "firstName", join));
+				expressions.add(cb.like(cb.upper(join.<String>get("firstName")),
+						(applName + "%").toUpperCase()));
 			}
 
-			String applSurname = query.getApplLastName();
-			if (applSurname != null) {
-				expressions.add(getLikeExp(applSurname, "lastName", join));
+			applName = query.getApplLastName();
+			if (applName != null) {
+				expressions.add(cb.like(cb.upper(join.<String>get("lastName")),
+						(applName + "%").toUpperCase()));
 			}
 
-			String applFather = query.getApplMiddleName();
-			if (applFather != null) {
-				expressions.add(getLikeExp(applFather, "middleName", join));
+			applName = query.getApplMiddleName();
+			if (applName != null) {
+				expressions.add(cb.like(cb.upper(join.<String>get("middleName")),
+						(applName + "%").toUpperCase()));
+			}
+
+			String organization = query.getOrganization();
+			if (organization != null) {
+				expressions.add(cb.like(cb.upper(join.<String>get("organization")),
+						("%" + organization + "%").toUpperCase()));
+			}
+
+			String issueDocNum = query.getIssueDocNum();
+			if (issueDocNum != null) {
+				expressions.add(cb.like(cb.upper(join.<String>get("issueDocNum")),
+						("%" + issueDocNum + "%").toUpperCase()));
 			}
 		}
 
 		Long execArchId = query.getArchiveId();
 		if (execArchId != null) {
-			Expression<Boolean> archExecutor = cb.equal(root.get("execOrg"), execArchId);
-			expressions.add(archExecutor);
+			expressions.add(cb.equal(root.get("execOrg"), execArchId));
 		}
 
 		Long queryTypeId = query.getQueryTypeId();
 		if (queryTypeId != null) {
-			Expression<Boolean> queryType = cb.equal(root.get("questionType"),
-				queryTypeId);
-			expressions.add(queryType);
+			expressions.add(cb.equal(root.get("questionType"), queryTypeId));
 		}
 
 		String content = query.getQueryContent();
 		if (content != null) {
-			content = "%" + content.toUpperCase() + "%";
-			Expression<Boolean> contentExp = cb.like(
-				cb.upper(root.<String>get("content")), content);
-			expressions.add(contentExp);
+			expressions.add(cb.like(cb.upper(root.<String>get("content")),
+					("%" + content + "%").toUpperCase()));
 		}
 
-		Date regDate = query.getRegDate();
-		if (regDate != null) {
-			expressions.add(cb.equal(
-				cb.function("trunc", Date.class, root.<Date>get("regDate")),
-				regDate));
+		Date startRegDate = query.getRegDateStart();
+		Date endRegDate = query.getRegDateEnd();
+		if (startRegDate != null && endRegDate != null) {
+			expressions.add(cb.between(cb.function("trunc", Date.class, root.<Date>get("regDate")),
+					startRegDate, endRegDate));
+		} else if (startRegDate != null) {
+			expressions.add(cb.greaterThan(
+					cb.function("trunc", Date.class, root.<Date>get("regDate")),
+					startRegDate));
+		} else if (endRegDate != null) {
+			expressions.add(cb.lessThan(
+					cb.function("trunc", Date.class, root.<Date>get("regDate")),
+					endRegDate));
 		}
 
 		String name = query.getReqLastName();
 		if (name != null) {
 			expressions.add(cb.like(cb.upper(root.<String>get("objectLName")),
-				name.toUpperCase() + "%"));
+					name.toUpperCase() + "%"));
 		}
 
 		name = query.getReqFirstName();
 		if (name != null) {
 			expressions.add(cb.like(cb.upper(root.<String>get("objectFName")),
-				name.toUpperCase() + "%"));
+					name.toUpperCase() + "%"));
 		}
 
 		name = query.getReqMiddleName();
 		if (name != null) {
 			expressions.add(cb.like(cb.upper(root.<String>get("objectMName")),
-				name.toUpperCase() + "%"));
+					name.toUpperCase() + "%"));
 		}
 
 		Long litera = query.getLitera();
@@ -267,7 +280,7 @@ public class QQSearch extends LoggedBean {
 		Long executor = query.getExecutor();
 		if (executor != null) {
 			expressions.add(cb.equal(root.join("transmission")
-				.<Long>get("executor"), executor));
+					.<Long>get("executor"), executor));
 		}
 		ArrayList<Order> jpaOrders = new ArrayList<>();
 		if (orders != null) {
@@ -298,14 +311,14 @@ public class QQSearch extends LoggedBean {
 						//Сортируются сначала по Юридическим лицам, потом по физическим
 						Join<Question, Applicant> aplJoin = root.join("applicant");
 						Expression<String> concat = cb.concat(
-							aplJoin.<String>get("lastName"), " ");
+								aplJoin.<String>get("lastName"), " ");
 						concat = cb.concat(concat, aplJoin.<String>get("firstName"));
 						concat = cb.concat(concat, " ");
 						concat = cb.concat(concat,
-							aplJoin.<String>get("middleName"));
+								aplJoin.<String>get("middleName"));
 						concat = cb.lower(concat);
 						Expression<String> jur = cb.lower(aplJoin
-							.<String>get("organization"));
+								.<String>get("organization"));
 						Order jurOrder = null;
 						Order phyzOrder = null;
 						if (ou.asc()) {
@@ -318,13 +331,17 @@ public class QQSearch extends LoggedBean {
 						jpaOrders.add(jurOrder);
 						jpaOrders.add(phyzOrder);
 						break;
-					case "answerTematic":
-						Path<String> ei = root.join("execution", JoinType.LEFT).get("usageAnswer");
+					case "content":
+						Path<String> ei = root.get("content");
 						jpaOrders.add(ou.asc() ? cb.asc(ei) : cb.desc(ei));
 						break;
 					case "answerResult":
 						Path<String> ra = root.join("execution", JoinType.LEFT).get("answerResult");
 						jpaOrders.add(ou.asc() ? cb.asc(ra) : cb.desc(ra));
+						break;
+					case "requestType":
+						Path<String> rt = root.join("questionTypeValue", JoinType.LEFT).get("shortValue");
+						jpaOrders.add(ou.asc() ? cb.asc(rt) : cb.desc(rt));
 						break;
 					default:
 						logger.warning("unknown sort field " + orderField);
@@ -484,52 +501,52 @@ public class QQSearch extends LoggedBean {
 		}
 
 		<T> CriteriaQuery<T> createCriteriaQuery(CriteriaQuery<T> criteriaQuery,
-			Root<T> root, CriteriaBuilder cb) {
+				Root<T> root, CriteriaBuilder cb) {
 			ArrayList<Expression> expressions = new ArrayList<>();
 			if (noorganization != null) {
 				expressions.add(cb.or(cb.and(cb.notEqual(root.get("status"), nostatus),
-					cb.equal(root.get("litera"), noorganization)),
-					cb.equal(root.get("litera"), execOrg)));
+						cb.equal(root.get("litera"), noorganization)),
+						cb.equal(root.get("litera"), execOrg)));
 			} else {
 				expressions.add(cb.or(cb.and(cb.notEqual(root.get("status"), nostatus),
-					cb.notEqual(root.get("litera"), requestor)),
-					cb.equal(root.get("litera"), requestor)));
+						cb.notEqual(root.get("litera"), requestor)),
+						cb.equal(root.get("litera"), requestor)));
 			}
 			if (litera != null) {
 				expressions.add(cb.equal(root.get("litera"), litera));
 			}
 			if (regDate != null) {
 				expressions.add(cb.equal(
-					cb.function("trunc", Date.class, root.<Date>get("regDate")), regDate));
+						cb.function("trunc", Date.class, root.<Date>get("regDate")), regDate));
 			}
 			if (execDate != null) {
 				expressions.add(cb.equal(
-					cb.function("trunc", Date.class, root.<Date>get("plannedFinishDate")), execDate));
+						cb.function("trunc", Date.class, root.<Date>get("plannedFinishDate")), execDate));
 			}
 			if (status != null) {
 				expressions.add(cb.equal(
-					root.<Long>get("status"), status));
+						root.<Long>get("status"), status));
 			}
 			if (execOrg != null) {
 				expressions.add(cb.equal(
-					root.<Long>get("execOrg"), execOrg));
+						root.<Long>get("execOrg"), execOrg));
 			}
 			if (executor != null) {
 				expressions.add(cb.equal(
-					root.join("transmission").get("executor"), executor));
+						root.join("transmission").get("executor"), executor));
 			}
 			if (prefixNum != null) {
 				expressions.add(cb.and(
-					cb.equal(root.<Long>get("prefixNum"), prefixNum),
-					cb.equal(root.<Long>get("sufixNum"), suffixNum)));
+						cb.equal(root.<Long>get("prefixNum"), prefixNum),
+						cb.equal(root.<Long>get("sufixNum"), suffixNum)));
 
 			}
 			if (fioOrg != null) {
 				Join<Question, Applicant> aplJoin = root.join("applicant");
 				Expression<Boolean> phyzLike = cb.like(cb.lower(aplJoin.<String>get("lastName")),
-					"%" + fioOrg.toLowerCase() + "%");
+						"%" + fioOrg.toLowerCase() + "%");
 				Expression<Boolean> jyrLike = cb.like(cb.lower(aplJoin.<String>get("organization")),
-					"%" + fioOrg.toLowerCase() + "%");
+						"%" + fioOrg.toLowerCase() + "%");
 				expressions.add(cb.or(phyzLike, jyrLike));
 			}
 			if (notifyStatus != null) {

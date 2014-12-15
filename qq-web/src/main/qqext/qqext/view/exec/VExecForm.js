@@ -32,9 +32,10 @@ Ext.define('qqext.view.exec.VExecForm', {
 				// Значит новый запрос (не тот который был до этого)
 				me.model = ns.request;
 				me._disableButtons(true, 1, 2, 3);
+				var status = me.model.get('status');
 				me._disableButtons(!(ns.user.isAllowed(ns.rules.exec) &&
 						ns.user.get('organization') === me.model.get('execOrg') &&
-						me.model.get('status') === ns.statsId[ns.stats.onexec]), 0);
+						(status === ns.statsId[ns.stats.onexec] || status === ns.statsId[ns.stats.exec])), 0);
 
 				me._initData();
 				ns.initRequired(me);
@@ -133,8 +134,13 @@ Ext.define('qqext.view.exec.VExecForm', {
 			me._saveData(function () {
 				me._disableButtons(false, 0);
 			}, function () {
-				me._disableButtons(false, 1, 2, 3);
-				me.setViewOnly(false);
+				if (me.model.get('status') === ns.statsId[ns.stats.exec]) {
+					me._disableButtons(false, 1);
+					me.setEditMode();
+				} else {
+					me._disableButtons(false, 1, 2, 3);
+					me.setViewOnly(false);
+				}
 			});
 		}
 		/**
@@ -244,5 +250,12 @@ Ext.define('qqext.view.exec.VExecForm', {
 	 * (пока не используется)
 	 */
 	setAdminMode: function () {
+	},
+	/**
+	 * Устанвливаеть таблицу "Способ отправки" и поля "Исходящий №" и "Примечание"
+	 * в режим редактирования при статусе запроса - исполнен.
+	 */
+	setEditMode: function () {
+		this._mf.setEditMode();
 	}
 });

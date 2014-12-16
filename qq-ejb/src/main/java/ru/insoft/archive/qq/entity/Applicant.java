@@ -9,8 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -95,13 +93,13 @@ public class Applicant implements Serializable, HasId, JsonIn, JsonOut {
 
 	@JsonIgnore
 	@JoinColumn(name = "QUESTION_ID",
-		referencedColumnName = "QUESTION_ID", insertable = false, updatable = false)
+			referencedColumnName = "QUESTION_ID", insertable = false, updatable = false)
 	@OneToOne(optional = false, fetch = FetchType.EAGER)
 	private Question question;
 
 	@JsonIgnore
 	@JoinColumn(name = "APPLICANT_TYPE_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
-		insertable = false, updatable = false)
+			insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private DescriptorValue applicantTypeValue;
 

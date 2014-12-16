@@ -398,6 +398,7 @@ div.collapse_section{
 .collapse_section .x-panel-header-text-container-default{
     color:#2D446D;
     font:bold 15px Arial, sans-serif;
+    left:2px !important;
 }
 .collapse_section .x-noborder-t{
     border:none !important;

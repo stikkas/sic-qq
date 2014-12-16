@@ -697,8 +697,7 @@ Ext.application({
 		};
 		// создаем все меню
 		ns.Menu.init();
-	}
-	,
+	},
 	initStores: function (organization) {
 		var ns = qqext,
 				create = Ext.create,
@@ -724,6 +723,8 @@ Ext.application({
 							ns.sicId = record.get('id');
 					}
 					ns.isSIC = ns.sicId === organization;
+					if (!ns.isSIC)
+						ns.getButton(ns.btns.notify).hide();
 				}
 			}
 		});

@@ -51,8 +51,8 @@ Ext.define('qqext.view.transmission.VTransmission', {
 						me._disableButtons(!(ns.user.isAllowed(ns.rules.crd) &&
 								status === statsId[stats.reg] &&
 								ns.user.get('organization') === execOrg ||
-								(status === statsId[stats.onexec] ||
-										status === statsId[stats.exec] && ns.user.isAllowed(ns.rules.admin))), 0);
+								((status === statsId[stats.onexec] ||
+										status === statsId[stats.exec]) && ns.user.isAllowed(ns.rules.admin))), 0);
 					}});
 				ns.initRequired(me);
 			}

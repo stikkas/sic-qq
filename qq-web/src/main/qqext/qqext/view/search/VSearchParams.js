@@ -30,17 +30,18 @@ Ext.define('qqext.view.search.VSearchParams', {
 				createCmp('Ext.form.FieldContainer', {
 					fieldLabel: 'Дата регистрации',
 					labelWidth: 150,
+                                        cls:'label_style',
 					items: [
 						createCmp('FDateField', 'c', 'regDateStart',
-								{width: 250, labelWidth: 50}),
+								{width: 110, labelWidth: 10, cls:'float_l mar_t0'}),
 						createCmp('FDateField', 'по', 'regDateEnd',
-								{width: 250, labelWidth: 50})
+								{width: 130, labelWidth: 25, cls:'mar_t0'})
 					]}),
 				createCmp('FLabel', 'На кого запрос', {cls: 'three_hor_lbl'}),
 				createCmp('FioFieldContainer', 'reqLastName', 'reqFirstName', 'reqMiddleName'),
 				createCmp('FLabel', 'Заявитель', {cls: 'three_hor_lbl'}),
 				createCmp('FioFieldContainer', 'applLastName', 'applFirstName', 'applMiddleName'),
-				createCmp('FTextField', 'Организация', 'organization', {width: 250, labelWidth: 150}),
+				createCmp('FTextField', 'Организация', 'organization', {width: 913, labelWidth: 150}),
 				createCmp('FTextField', '№ исходящего документа заявителя', 'issueDocNum',
 						{width: 250, labelWidth: 150})
 			]

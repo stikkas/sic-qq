@@ -19,6 +19,8 @@ Ext.define('qqext.view.search.VSearchForm', {
 	listeners: {
 		activate: function (me, prev) {
 			var ns = qqext;
+			ns.Menu.editMenu.items.getAt(0).items.getAt(1).show();
+			ns.Menu.editMenu.items.getAt(0).items.getAt(2).show();
 			ns.switchArticleButton(ns.getButton(ns.btns.search));
 			ns.updateInfo();
 		}

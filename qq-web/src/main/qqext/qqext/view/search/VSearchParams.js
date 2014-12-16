@@ -19,7 +19,7 @@ Ext.define('qqext.view.search.VSearchParams', {
 			items: [
 				createCmp('FComboBox', 'Архив исполнитель', qqext.stIds.execOrgs, 'archiveId',
 						{width: 650, labelWidth: 150}),
-				createCmp('FComboBox', 'Вид запроса', 'queryType', 'queryTypeId',
+				createCmp('FComboBox', 'Вид запроса', qqext.stIds.queryType, 'queryTypeId',
 						{width: 400, labelWidth: 150}),
 				createCmp('FTextField', 'Содержание запроса', 'queryContent',
 						{width: 950, labelWidth: 150}),

@@ -46,7 +46,7 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 				result = true;
 		// проверяем все, только потом возвращаем результат
 		if (me._df.getStore().count() === 0) {
-			errors.push("<p>Способ отправки: Должен быть указан хоть один документ<br/></p>");
+			errors.push("<p>Выдача документов: Должен быть указан хоть один документ<br/></p>");
 			result = false;
 		}
 		if (!me._df.isValid())

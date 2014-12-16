@@ -42,16 +42,17 @@ public class QQSearch extends LoggedBean {
 
 	@EJB
 	private static JsonTools jsonTools;
-
-	private Expression<Boolean> getLikeExp(String queryValue, String field,
-			Join<Question, Applicant> ro) {
-		queryValue = queryValue.toUpperCase();
-		queryValue += "%";
-		CriteriaBuilder b = em.getCriteriaBuilder();
-		Expression<Boolean> exp = b.like(b.upper(ro.<String>get(field)),
-				queryValue);
-		return exp;
-	}
+	/*
+	 private Expression<Boolean> getLikeExp(String queryValue, String field,
+	 Join<Question, Applicant> ro) {
+	 queryValue = queryValue.toUpperCase();
+	 queryValue += "%";
+	 CriteriaBuilder b = em.getCriteriaBuilder();
+	 Expression<Boolean> exp = b.like(b.upper(ro.<String>get(field)),
+	 queryValue);
+	 return exp;
+	 }
+	 */
 
 	public JsonObject getJournalData(Integer start, Integer limit,
 			List<FilterBy> filters, List<OrderBy> orders) throws Exception {
@@ -73,6 +74,10 @@ public class QQSearch extends LoggedBean {
 						Path<String> jj = root.join("literaValue", JoinType.LEFT).get("value");
 						jpaOrders.add(ou.asc() ? cb.asc(jj) : cb.desc(jj));
 						break;
+					case "queryType":
+						Path<String> qt = root.join("questionTypeValue", JoinType.LEFT).get("shortValue");
+						jpaOrders.add(ou.asc() ? cb.asc(qt) : cb.desc(qt));
+						break;
 					case "inboxDocNum":
 						if (ou.asc()) {
 							jpaOrders.add(cb.asc(root.<Long>get("sufixNum")));
@@ -87,9 +92,13 @@ public class QQSearch extends LoggedBean {
 						Path<Date> pd = root.get("regDate");
 						jpaOrders.add(ou.asc() ? cb.asc(pd) : cb.desc(pd));
 						break;
-					case "execDate":
+					case "plannedDate":
 						Path<Date> pld = root.get("plannedFinishDate");
 						jpaOrders.add(ou.asc() ? cb.asc(pld) : cb.desc(pld));
+						break;
+					case "execDate":
+						Path<Date> ed = root.join("execution", JoinType.LEFT).get("execDate");
+						jpaOrders.add(ou.asc() ? cb.asc(ed) : cb.desc(ed));
 						break;
 					case "fioOrg":
 						//Сортируются сначала по Юридическим лицам, потом по физическим
@@ -388,6 +397,10 @@ public class QQSearch extends LoggedBean {
 		 */
 		Long litera;
 		/**
+		 * Тип запроса (социально-правовой и т.д.)
+		 */
+		Long queryType;
+		/**
 		 * Префикс номера запроса
 		 */
 		Long prefixNum;
@@ -430,6 +443,10 @@ public class QQSearch extends LoggedBean {
 		/**
 		 * Плановая дата выполнения запроса
 		 */
+		Date plannedDate;
+		/**
+		 * Дата выполнения запроса
+		 */
 		Date execDate;
 		/**
 		 * От кого поступил запрос
@@ -447,6 +464,9 @@ public class QQSearch extends LoggedBean {
 					case "litera":
 						litera = (Long) fb.getValue();
 						break;
+					case "queryType":
+						queryType = (Long) fb.getValue();
+						break;
 					case "inboxDocNum":
 						String filterValue = fb.getValue().toString();
 						String[] number = filterValue.split("/");
@@ -460,6 +480,14 @@ public class QQSearch extends LoggedBean {
 					case "regDate": {
 						try {
 							regDate = jsonTools.parseBadStringDate((String) fb.getValue());
+						} catch (Exception ex) {
+							Logger.getLogger(QQSearch.class.getName()).log(Level.SEVERE, null, ex);
+						}
+					}
+					break;
+					case "plannedDate": {
+						try {
+							plannedDate = jsonTools.parseBadStringDate((String) fb.getValue());
 						} catch (Exception ex) {
 							Logger.getLogger(QQSearch.class.getName()).log(Level.SEVERE, null, ex);
 						}
@@ -515,14 +543,23 @@ public class QQSearch extends LoggedBean {
 			if (litera != null) {
 				expressions.add(cb.equal(root.get("litera"), litera));
 			}
+			if (queryType != null) {
+				expressions.add(cb.equal(root.get("questionType"), queryType));
+			}
 			if (regDate != null) {
 				expressions.add(cb.equal(
 						cb.function("trunc", Date.class, root.<Date>get("regDate")), regDate));
 			}
+			if (plannedDate != null) {
+				expressions.add(cb.equal(
+						cb.function("trunc", Date.class, root.<Date>get("plannedFinishDate")), plannedDate));
+			}
+
 			if (execDate != null) {
 				expressions.add(cb.equal(
-						cb.function("trunc", Date.class, root.<Date>get("plannedFinishDate")), execDate));
+						cb.function("trunc", Date.class, root.join("execution").get("execDate")), execDate));
 			}
+
 			if (status != null) {
 				expressions.add(cb.equal(
 						root.<Long>get("status"), status));

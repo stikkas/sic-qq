@@ -18,6 +18,8 @@ Ext.define('qqext.view.report.VReportForm', {
 		activate: function () {
 			var ns = qqext;
 			ns.switchArticleButton(ns.getButton(ns.btns.report));
+			ns.Menu.editMenu.items.getAt(0).items.getAt(1).hide();
+			ns.Menu.editMenu.items.getAt(0).items.getAt(2).hide();
 		}
 	},
 	initComponent: function () {

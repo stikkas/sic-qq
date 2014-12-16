@@ -7,7 +7,7 @@ Ext.define('qqext.store.DictStore', {
 	requires: [
 		'Ext.data.proxy.Rest'
 	],
-	fields: ['id', 'name', 'code'],
+	fields: ['id', 'name', 'code', 'shortValue'],
 	autoLoad: true,
 	/**
 	 * Конструктор

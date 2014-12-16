@@ -41,7 +41,7 @@ Ext.define('qqext.model.Question', {
 		{name: 'registrator', type: 'int', defaultValue: null, convert: null},
 		{name: 'plannedFinishDate', type: 'date', convert: function (v) {
 				if (v)
-					return new Date(v);
+					return new Date(v + qqext.msPhour); // Костыль
 			}},
 		{name: 'content', type: 'string', defaultValue: null},
 		{name: 'answerFormType', type: 'int', defaultValue: null, convert: null},

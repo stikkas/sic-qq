@@ -39,7 +39,7 @@ Ext.define('qqext.view.exec.VExecForm', {
 
 				me._initData();
 				ns.initRequired(me);
-				var store = Ext.getStore('queryType');
+				var store = Ext.getStore(ns.stIds.queryType);
 
 				if (me.model.get('questionType') ===
 						store.getAt(store.find('code', 'Q_VALUE_QUEST_TYPE_SOCIAL')).get('id'))
@@ -189,8 +189,8 @@ Ext.define('qqext.view.exec.VExecForm', {
 								ns.statusPanel.setStatus();
 							} else {
 								ns.showError("Ошибка обновления статуса", o.getError());
-								me._disableButtons(false, 0);
 							}
+							me._disableButtons(false, 0);
 						}});
 				}, failure);
 			} else { // Валидация не прошла

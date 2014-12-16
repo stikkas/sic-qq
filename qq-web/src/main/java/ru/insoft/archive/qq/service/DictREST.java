@@ -44,7 +44,7 @@ public class DictREST {
 	private void setSicId() {
 		try {
 			sicId = (Long) em.createQuery("SELECT v.id from DescriptorValue v where "
-				+ "v.code=:mem").setParameter("mem", SIC_MEMBER).getSingleResult();
+					+ "v.code=:mem").setParameter("mem", SIC_MEMBER).getSingleResult();
 		} catch (NonUniqueResultException | NoResultException e) {
 // TODO что делать?
 		}
@@ -62,8 +62,8 @@ public class DictREST {
 	@Produces({"application/json"})
 	public List<Dict> getLiteras(@QueryParam("organization") Long organization) {
 		String query = "SELECT NEW ru.insoft.archive.qq.service.Dict(v.id, a.value, v.code)"
-			+ " from DescriptorValueAttr a, DescriptorGroupAttr g, DescriptorValue v"
-			+ " where a.attrId = g.id and a.valueId = v.id and g.code = 'MEMBER_LETTER'";
+				+ " from DescriptorValueAttr a, DescriptorGroupAttr g, DescriptorValue v"
+				+ " where a.attrId = g.id and a.valueId = v.id and g.code = 'MEMBER_LETTER'";
 
 		if (!organization.equals(sicId)) {
 			query += " and v.id in (" + sicId + "," + organization + ")";
@@ -83,10 +83,10 @@ public class DictREST {
 	@Produces({"application/json"})
 	public List<Dict> getUsers(@DefaultValue("-1") @QueryParam("organization") Long organization) {
 		String query = "SELECT DISTINCT new ru.insoft.archive.qq.service.Dict(a.id, a.name) from "
-			+ "AdmUser a, AdmEmployee e, AdmUserGroup g, AdmGroupRule r, AdmAccessRule x "
-			+ "where a.id = e.userId and a.id = g.userId "
-			+ "and r.groupId = g.groupId and x.accessRuleId = r.accessRuleId "
-			+ "and x.code in ('Q_RULE_REGISTRATOR', 'Q_RULE_COORDINATOR', 'Q_RULE_EXECUTOR')";
+				+ "AdmUser a, AdmEmployee e, AdmUserGroup g, AdmGroupRule r, AdmAccessRule x "
+				+ "where a.id = e.userId and a.id = g.userId "
+				+ "and r.groupId = g.groupId and x.accessRuleId = r.accessRuleId "
+				+ "and x.code in ('Q_RULE_REGISTRATOR', 'Q_RULE_COORDINATOR', 'Q_RULE_EXECUTOR')";
 		if (!organization.equals(-1L)) {
 			query += " and e.departmentId = '" + organization + "'";
 		}
@@ -110,8 +110,8 @@ public class DictREST {
 	@Produces({"application/json"})
 	public List<Dict> getStatuses() {
 		return execQuery("SELECT NEW ru.insoft.archive.qq.service.Dict(d.id, d.value, d.code) "
-			+ "from DescriptorValue d, DescriptorGroup g where d.groupId = g.id "
-			+ "and g.code='Q_DICT_QUESTION_STATUSES'");
+				+ "from DescriptorValue d, DescriptorGroup g where d.groupId = g.id "
+				+ "and g.code='Q_DICT_QUESTION_STATUSES'");
 	}
 
 	/**
@@ -124,8 +124,8 @@ public class DictREST {
 	@Produces({"application/json"})
 	public List<Dict> getNotifyStatuses() {
 		return execQuery("SELECT NEW ru.insoft.archive.qq.service.Dict(d.id, d.value, d.code) "
-			+ "from DescriptorValue d, DescriptorGroup g where d.groupId = g.id "
-			+ "and g.code='Q_DICT_NOTIFY_STATUSES'");
+				+ "from DescriptorValue d, DescriptorGroup g where d.groupId = g.id "
+				+ "and g.code='Q_DICT_NOTIFY_STATUSES'");
 	}
 
 	/**
@@ -138,10 +138,10 @@ public class DictREST {
 	@Produces({"application/json"})
 	public List<Dict> getOrganizations() {
 		return execQuery("SELECT NEW ru.insoft.archive.qq.service.Dict(d.id, d.value, d.code) "
-			+ "from DescriptorValue d, DescriptorGroup g where d.groupId = g.id "
-			+ "and g.code='ORG_STRUCTURE' "
-			+ "and (DESCRIPTOR_PACK.GET_ORG_STRUCTURE_TYPE(d.id) = 'ARCHIVE' "
-			+ "or d.code = 'Q_VALUE_MEMBER_SIC')");
+				+ "from DescriptorValue d, DescriptorGroup g where d.groupId = g.id "
+				+ "and g.code='ORG_STRUCTURE' "
+				+ "and (DESCRIPTOR_PACK.GET_ORG_STRUCTURE_TYPE(d.id) = 'ARCHIVE' "
+				+ "or d.code = 'Q_VALUE_MEMBER_SIC')");
 	}
 
 	/**
@@ -154,8 +154,22 @@ public class DictREST {
 	@Produces({"application/json"})
 	public List<Dict> getSendTypes() {
 		return execQuery("SELECT NEW ru.insoft.archive.qq.service.Dict(d.id, d.value, d.code) "
-			+ "from DescriptorValue d, DescriptorGroup g where d.groupId = g.id "
-			+ "and g.code='Q_DICT_ANSWER_FORM'");
+				+ "from DescriptorValue d, DescriptorGroup g where d.groupId = g.id "
+				+ "and g.code='Q_DICT_ANSWER_FORM'");
+	}
+
+	/**
+	 * Возвращает список типов запросов
+	 *
+	 * @return возможные формы выдачи ответа
+	 */
+	@GET
+	@Path("querytypes")
+	@Produces({"application/json"})
+	public List<Dict> getQuerytTypes() {
+		return execQuery("SELECT NEW ru.insoft.archive.qq.service.ExtDict(d.id, d.value, d.code, d.shortValue) "
+				+ "from DescriptorValue d, DescriptorGroup g where d.groupId = g.id "
+				+ "and g.code='Q_DICT_QUEST_TYPE'");
 	}
 
 	/**

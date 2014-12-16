@@ -61,7 +61,8 @@ Ext.define('qqext.view.search.VSearchResult', {
                                 width:'22%'
 			}, {
 				text: 'Результат ответа',
-				dataIndex: 'answerResult'
+				dataIndex: 'answerResult',
+                                width:'20%'
 			}]},
 	forceFit: true,
 	dockedItems: [

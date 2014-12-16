@@ -18,7 +18,6 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	],
 	width: '100%',
 	forceFit: true,
-	name: 'journalGridPanel',
 	overflowY: 'auto',
 	//maxHeight: 300,
 	draggable: false,
@@ -42,8 +41,9 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					stats = ns.stats,
 					status = record.get('status');
 			var date = record.get('controlDate');
-			if (!date)
-				date = record.get('execDate');
+			if (!date) {
+				date = record.get('plannedDate');
+			}
 			if (date && status !== statsName[stats.onreg] &&
 					status !== statsName[stats.exec]) {
 				var delta = parseInt((date - new Date()) / qqext.msPday);
@@ -197,7 +197,6 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					width: 97,
 					items: [
 						createCmp('FComboBox', '', ns.stIds.litera, 'filterLiteraCombo', {
-							itemId: 'filterLiteraCombo',
 							width: '90%',
 							listeners: {
 								select: me._filterComboSelected,
@@ -233,7 +232,6 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					items: [{
 							width: '90%',
 							xtype: 'hawkDateField',
-							name: 'regDateField',
 							listeners: {
 								select: me._filterDateSelected,
 								render: me._render,
@@ -250,14 +248,13 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					text: 'Дата исполнения плановая',
 					minWidth: 95,
 					cls: 'mar_bot0',
-					dataIndex: 'execDate',
+					dataIndex: 'plannedDate',
 					format: 'd.m.Y',
 					items: [{
 							width: '90%',
 							cls: 'mar_t0',
 							xtype: 'hawkDateField',
 							focusOnToFront: false,
-							name: 'planDateExec',
 							listeners: {
 								select: me._filterDateSelected,
 								render: me._render,
@@ -380,7 +377,6 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					items: [{
 							width: '90%',
 							xtype: 'hawkDateField',
-							name: 'regDateField',
 							listeners: {
 								select: me._filterDateSelected,
 								render: me._render,

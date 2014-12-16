@@ -24,7 +24,7 @@ Ext.define('qqext.view.reg.VQuery', {
 				ns = qqext;
 		Ext.applyIf(me, {
 			items: [
-				me.vz = createCmp('FComboBox', 'Вид запроса', 'queryType', 'questionType', {
+				me.vz = createCmp('FComboBox', 'Вид запроса', ns.stIds.queryType, 'questionType', {
 					listeners: {
 						change: function (box, value) {
 							var target = ns.regForm.target,

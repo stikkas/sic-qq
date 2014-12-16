@@ -30,6 +30,8 @@ Ext.define('qqext.view.journal.VJournalForm', {
 		activate: function (me, prev) {
 			var ns = qqext;
 			ns.switchArticleButton(ns.getButton(ns.btns.jvk));
+			ns.Menu.editMenu.items.getAt(0).items.getAt(2).show();
+			ns.Menu.editMenu.items.getAt(0).items.getAt(1).hide();
 			ns.updateInfo();
 		}
 	},
@@ -187,185 +189,299 @@ Ext.define('qqext.view.journal.VJournalForm', {
 			value: ns.statsId[ns.stats.onreg]
 		}));
 
-		var labelForTable;
+		var labelForTable, items;
+		if (ns.isSIC) {
+			items = [{
+					text: 'Литера',
+					dataIndex: 'litera',
+					width: 97,
+					items: [
+						createCmp('FComboBox', '', ns.stIds.litera, 'filterLiteraCombo', {
+							itemId: 'filterLiteraCombo',
+							width: '90%',
+							listeners: {
+								select: me._filterComboSelected,
+								render: me._render,
+								specialkey: me._specialKeyStop
+							}
+						})
+					]}, {
+					text: '№ вх. документа',
+					dataIndex: 'inboxDocNum',
+					minWidth: 80,
+					items: [
+						createCmp('FTextField', '', 'docNumberTextField', {
+							width: '90%',
+							listeners: {
+								specialkey: function (tf, event, eopts) {
+									event.stopPropagation();
+									if (event.getKey() === event.ENTER) {
+										var grid = tf.ownerCt.ownerCt.ownerCt;
+										grid.applyFilter();
+									}
+								},
+								render: me._render
+							}
+						})
+					]}, {
+					text: 'Дата регистрации',
+					minWidth: 100,
+					xtype: 'datecolumn',
+					dataIndex: 'regDate',
+					format: 'd.m.Y',
+					focusOnToFront: false,
+					items: [{
+							width: '90%',
+							xtype: 'hawkDateField',
+							name: 'regDateField',
+							listeners: {
+								select: me._filterDateSelected,
+								render: me._render,
+								specialkey: function (tf, event, eopts) {
+									event.stopPropagation();
+									if (event.getKey() === event.ENTER) {
+										var grid = tf.ownerCt.ownerCt.ownerCt;
+										grid.applyFilter();
+									}
+								}
+							}
+						}]}, {
+					xtype: 'datecolumn',
+					text: 'Дата исполнения плановая',
+					minWidth: 95,
+					cls: 'mar_bot0',
+					dataIndex: 'execDate',
+					format: 'd.m.Y',
+					items: [{
+							width: '90%',
+							cls: 'mar_t0',
+							xtype: 'hawkDateField',
+							focusOnToFront: false,
+							name: 'planDateExec',
+							listeners: {
+								select: me._filterDateSelected,
+								render: me._render,
+								specialkey: function (tf, event, eopts) {
+									event.stopPropagation();
+									if (event.getKey() === event.ENTER) {
+										var grid = tf.ownerCt.ownerCt.ownerCt;
+										grid.applyFilter();
+									}
+								}
+							}
+						}]}, {
+					text: 'Статус уведомления',
+					minWidth: 145,
+					dataIndex: 'notifyStatus',
+					items: [
+						createCmp('FComboBox', '', ns.stIds.notiStats, 'requestNotiStatus', {
+							width: '95%',
+							listeners: {
+								select: me._filterComboSelected,
+								render: me._render,
+								specialkey: me._specialKeyStop
+							}
+						})
+					]}, {
+					text: 'От кого поступил',
+					minWidth: 175,
+					dataIndex: 'fioOrg',
+					items: [
+						createCmp('FTextField', '', 'applicantField', {
+							width: '90%',
+							listeners: {
+								specialkey: function (tf, event) {
+									event.stopPropagation();
+									if (event.getKey() === event.ENTER) {
+										var grid = tf.ownerCt.ownerCt.ownerCt;
+										grid.applyFilter();
+									}
+								},
+								render: me._render
+							}
+						})
+					]}, {
+					text: 'Состояние запроса',
+					dataIndex: 'status',
+					minWidth: 150,
+					items: [
+						createCmp('FComboBox', '', ns.stIds.stats, 'requestStatusCombo', {
+							width: '90%',
+							listeners: {
+								select: me._filterComboSelected,
+								render: me._render,
+								specialkey: me._specialKeyStop
+							}
+						})
+					]}, {
+					text: 'Архив-исполнитель',
+					dataIndex: 'execOrg',
+					minWidth: 95,
+					items: [
+						createCmp('FComboBox', '', ns.stIds.litera, 'requestExecOrgCombo', {
+							width: '90%',
+							listeners: {
+								select: me._filterComboSelected,
+								render: me._render,
+								specialkey: me._specialKeyStop
+							}
+						})
+					]}, {
+					text: 'Исполнитель',
+					dataIndex: 'executor',
+					minWidth: 100,
+					items: [
+						createCmp('FComboBox', '', execStore, 'rlequestExecutorCombo', {
+							width: '90%',
+							listeners: {
+								select: me._filterComboSelected,
+								render: me._render,
+								specialkey: me._specialKeyStop
+							}
+						})
+					]}];
+		} else {
+			items = [{
+					text: 'Литера',
+					dataIndex: 'litera',
+					width: 97,
+					items: [createCmp('FComboBox', '', ns.stIds.litera, 'filterLiteraCombo', {
+							width: '90%',
+							listeners: {
+								select: me._filterComboSelected,
+								render: me._render,
+								specialkey: me._specialKeyStop
+							}
+						})
+					]}, {
+					text: '№ вх. документа',
+					dataIndex: 'inboxDocNum',
+					minWidth: 80,
+					items: [createCmp('FTextField', '', 'docNumberTextField', {
+							width: '90%',
+							listeners: {
+								specialkey: function (tf, event, eopts) {
+									event.stopPropagation();
+									if (event.getKey() === event.ENTER) {
+										var grid = tf.ownerCt.ownerCt.ownerCt;
+										grid.applyFilter();
+									}
+								},
+								render: me._render
+							}
+						})
+					]}, {
+					text: 'Дата регистрации',
+					minWidth: 100,
+					xtype: 'datecolumn',
+					dataIndex: 'regDate',
+					format: 'd.m.Y',
+					focusOnToFront: false,
+					items: [{
+							width: '90%',
+							xtype: 'hawkDateField',
+							name: 'regDateField',
+							listeners: {
+								select: me._filterDateSelected,
+								render: me._render,
+								specialkey: function (tf, event, eopts) {
+									event.stopPropagation();
+									if (event.getKey() === event.ENTER) {
+										var grid = tf.ownerCt.ownerCt.ownerCt;
+										grid.applyFilter();
+									}
+								}
+							}
+						}]}, {
+					text: 'Вид запроса',
+					minWidth: 100,
+					dataIndex: 'queryType',
+					items: [createCmp('FComboBox', '', ns.stIds.queryType, 'filterQTypeCombo', {
+							width: '90%',
+							displayField: 'shortValue',
+							listeners: {
+								select: me._filterComboSelected,
+								render: me._render,
+								specialkey: me._specialKeyStop
+							}
+						})
+					]}, {
+					text: 'От кого поступил',
+					minWidth: 175,
+					dataIndex: 'fioOrg',
+					items: [
+						createCmp('FTextField', '', 'applicantField', {
+							width: '90%',
+							listeners: {
+								specialkey: function (tf, event) {
+									event.stopPropagation();
+									if (event.getKey() === event.ENTER) {
+										var grid = tf.ownerCt.ownerCt.ownerCt;
+										grid.applyFilter();
+									}
+								},
+								render: me._render
+							}
+						})
+					]}, {
+					text: 'Состояние запроса',
+					dataIndex: 'status',
+					minWidth: 150,
+					items: [
+						createCmp('FComboBox', '', ns.stIds.stats, 'requestStatusCombo', {
+							width: '90%',
+							listeners: {
+								select: me._filterComboSelected,
+								render: me._render,
+								specialkey: me._specialKeyStop
+							}
+						})
+					]}, {
+					xtype: 'datecolumn',
+					text: 'Дата исполнения',
+					minWidth: 95,
+					cls: 'mar_bot0',
+					dataIndex: 'execDate',
+					format: 'd.m.Y',
+					items: [{
+							width: '90%',
+							cls: 'mar_t0',
+							xtype: 'hawkDateField',
+							focusOnToFront: false,
+							listeners: {
+								select: me._filterDateSelected,
+								render: me._render,
+								specialkey: function (tf, event, eopts) {
+									event.stopPropagation();
+									if (event.getKey() === event.ENTER) {
+										var grid = tf.ownerCt.ownerCt.ownerCt;
+										grid.applyFilter();
+									}
+								}
+							}
+						}]}, {
+					text: 'Исполнитель',
+					dataIndex: 'executor',
+					minWidth: 100,
+					items: [
+						createCmp('FComboBox', '', execStore, 'requestExecutorCombo', {
+							width: '90%',
+							listeners: {
+								select: me._filterComboSelected,
+								render: me._render,
+								specialkey: me._specialKeyStop
+							}
+						})
+					]
+				}];
+		}
 		Ext.applyIf(me, {
 			columns: {
 				defaults: {
 					menuDisabled: true
 				},
-				items: [
-					{
-						text: 'Литера',
-						itemId: 'literaCount',
-						dataIndex: 'litera',
-						width: 97,
-						items: [
-							createCmp('FComboBox', '', ns.stIds.litera, 'filterLiteraCombo', {
-								itemId: 'filterLiteraCombo',
-								width: '90%',
-								listeners: {
-									select: me._filterComboSelected,
-									render: me._render,
-									specialkey: me._specialKeyStop
-								}
-							})
-						]
-					},
-					{
-						text: '№ вх. документа',
-						dataIndex: 'inboxDocNum',
-						minWidth: 80,
-						items: [
-							createCmp('FTextField', '', 'docNumberTextField', {
-								width: '90%',
-								listeners: {
-									specialkey: function (tf, event, eopts) {
-										event.stopPropagation();
-										if (event.getKey() === event.ENTER) {
-											var grid = tf.ownerCt.ownerCt.ownerCt;
-											grid.applyFilter();
-										}
-									},
-									render: me._render
-								}
-							})
-						]
-					},
-					{
-						text: 'Дата регистрации',
-						minWidth: 100,
-						xtype: 'datecolumn',
-						dataIndex: 'regDate',
-						itemId: 'regDate',
-						format: 'd.m.Y',
-						focusOnToFront: false,
-						items: [
-							{
-								width: '90%',
-								xtype: 'hawkDateField',
-								name: 'regDateField',
-								listeners: {
-									select: me._filterDateSelected,
-									render: me._render,
-									specialkey: function (tf, event, eopts) {
-										event.stopPropagation();
-										if (event.getKey() === event.ENTER) {
-											var grid = tf.ownerCt.ownerCt.ownerCt;
-											grid.applyFilter();
-										}
-									}
-								}
-							}]
-					},
-					{
-						xtype: 'datecolumn',
-						text: 'Дата исполнения плановая',
-						minWidth: 95,
-						cls: 'mar_bot0',
-						dataIndex: 'execDate',
-						itemId: 'planDateExec',
-						format: 'd.m.Y',
-						items: [{
-								width: '90%',
-								cls: 'mar_t0',
-								xtype: 'hawkDateField',
-								focusOnToFront: false,
-								name: 'planDateExec',
-								listeners: {
-									select: me._filterDateSelected,
-									render: me._render,
-									specialkey: function (tf, event, eopts) {
-										event.stopPropagation();
-										if (event.getKey() === event.ENTER) {
-											var grid = tf.ownerCt.ownerCt.ownerCt;
-											grid.applyFilter();
-										}
-									}
-								}
-							}]
-					},
-					{
-						text: 'Статус уведомления',
-						minWidth: 145,
-						dataIndex: 'notifyStatus',
-						hidden: !ns.isSIC,
-						items: [
-							createCmp('FComboBox', '', ns.stIds.notiStats, 'requestNotiStatus', {
-								width: '95%',
-								listeners: {
-									select: me._filterComboSelected,
-									render: me._render,
-									specialkey: me._specialKeyStop
-								}
-							})
-						]
-					},
-					{
-						text: 'От кого поступил',
-						minWidth: 175,
-						dataIndex: 'fioOrg',
-						items: [
-							createCmp('FTextField', '', 'applicantField', {
-								width: '90%',
-								listeners: {
-									specialkey: function (tf, event) {
-										event.stopPropagation();
-										if (event.getKey() === event.ENTER) {
-											var grid = tf.ownerCt.ownerCt.ownerCt;
-											grid.applyFilter();
-										}
-									},
-									render: me._render
-								}
-							})
-						]
-					},
-					{
-						text: 'Состояние запроса',
-						dataIndex: 'status',
-						minWidth: 150,
-						items: [
-							createCmp('FComboBox', '', ns.stIds.stats, 'requestStatusCombo', {
-								width: '90%',
-								listeners: {
-									select: me._filterComboSelected,
-									render: me._render,
-									specialkey: me._specialKeyStop
-								}
-							})
-						]
-					},
-					{
-						text: 'Архив-исполнитель',
-						dataIndex: 'execOrg',
-						hidden: !ns.isSIC,
-						minWidth: 95,
-						items: [
-							createCmp('FComboBox', '', ns.stIds.litera, 'requestExecOrgCombo', {
-								width: '90%',
-								listeners: {
-									select: me._filterComboSelected,
-									render: me._render,
-									specialkey: me._specialKeyStop
-								}
-							})
-						]
-					},
-					{
-						text: 'Исполнитель',
-						dataIndex: 'executor',
-						minWidth: 100,
-						items: [
-							createCmp('FComboBox', '', execStore, 'requestExecutorCombo', {
-								width: '90%',
-								listeners: {
-									select: me._filterComboSelected,
-									render: me._render,
-									specialkey: me._specialKeyStop
-								}
-							})
-						]
-					}]},
+				items: items
+			},
 			dockedItems: [
 				{
 					xtype: 'pagingtoolbar',

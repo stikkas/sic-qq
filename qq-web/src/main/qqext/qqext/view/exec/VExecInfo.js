@@ -9,7 +9,7 @@ Ext.define('qqext.view.exec.VExecInfo', {
 		'qqext.factory.DateField'
 	],
 	title: 'Сведения об исполнении',
-        cls:'exec_inf',
+	cls: 'exec_inf',
 	fieldDefaults: {
 		validateOnChange: false,
 		blankText: 'Обязательно для заполнения',
@@ -51,7 +51,7 @@ Ext.define('qqext.view.exec.VExecInfo', {
 							editable: false,
 							width: 400
 						}),
-				me._rf = createCmp('FTextArea', '', exec.refer[0], {hidden: true}),
+				me._rf = createCmp('FTextArea', '', exec.refer[0], {allowBlank: true, hidden: true}),
 				createCmp('FComboBox', exec.tema[1], 'tematicOfAnswer', exec.tema[0], {
 					editable: false,
 					width: 400

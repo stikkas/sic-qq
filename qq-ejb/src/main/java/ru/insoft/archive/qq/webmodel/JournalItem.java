@@ -7,6 +7,7 @@ import java.util.Date;
 
 import ru.insoft.archive.core_model.table.desc.DescriptorValue;
 import ru.insoft.archive.extcommons.json.JsonOut;
+import ru.insoft.archive.qq.entity.Execution;
 import ru.insoft.archive.qq.entity.Question;
 import ru.insoft.archive.qq.entity.Transmission;
 
@@ -19,8 +20,17 @@ public class JournalItem extends QuestionInfoItem implements JsonOut {
 	public JournalItem(Question q) {
 		super(q);
 
-		execDate = q.getPlannedFinishDate();
+		plannedDate = q.getPlannedFinishDate();
 
+		Execution ex = q.getExecution();
+		if (ex != null) {
+			execDate = ex.getExecDate();
+		}
+
+		DescriptorValue qt = q.getQuestionTypeValue();
+		if (qt != null) {
+			queryType = qt.getShortValue();
+		}
 		DescriptorValue notistat = q.getNotifyStatusValue();
 		if (notistat != null) {
 			notifyStatus = notistat.getValue();
@@ -44,6 +54,10 @@ public class JournalItem extends QuestionInfoItem implements JsonOut {
 
 	private Date execDate;
 
+	private String queryType;
+
+	private Date plannedDate;
+
 	private String status;
 
 	private String executor;
@@ -59,12 +73,12 @@ public class JournalItem extends QuestionInfoItem implements JsonOut {
 		this.notifyStatus = notifyStatus;
 	}
 
-	public Date getExecDate() {
-		return execDate;
+	public Date getPlannedDate() {
+		return plannedDate;
 	}
 
-	public void setExecDate(Date execDate) {
-		this.execDate = execDate;
+	public void setPlannedDate(Date plannedDate) {
+		this.plannedDate = plannedDate;
 	}
 
 	public String getStatus() {
@@ -90,4 +104,21 @@ public class JournalItem extends QuestionInfoItem implements JsonOut {
 	public void setExecOrg(String execOrg) {
 		this.execOrg = execOrg;
 	}
+
+	public String getQueryType() {
+		return queryType;
+	}
+
+	public void setQueryType(String queryType) {
+		this.queryType = queryType;
+	}
+
+	public Date getExecDate() {
+		return execDate;
+	}
+
+	public void setExecDate(Date execDate) {
+		this.execDate = execDate;
+	}
+
 }

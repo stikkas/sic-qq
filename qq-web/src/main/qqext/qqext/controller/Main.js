@@ -25,7 +25,6 @@ Ext.define('qqext.controller.Main', {
 					applicantType: 'Q_DICT_APPLICANT_TYPE',
 					inboxDocDeliveryType: 'QQ_TRANSMISSION_MODE',
 					docType: 'Q_DICT_DOC_TYPES',
-					queryType: 'Q_DICT_QUEST_TYPE',
 					storageTerritory: 'Q_DICT_STORAGE',
 					tematicOfAnswer: 'Q_DICT_THEMATIC_ANSW',
 					diffCategory: 'Q_DICT_DIFF_CATEGORY',

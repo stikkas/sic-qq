@@ -12,6 +12,9 @@ Ext.define('qqext.model.JournalItem', {
 			name: 'litera',
 			type: 'string'
 		}, {
+			name: 'queryType',
+			type: 'string'
+		}, {
 			name: 'inboxDocNum',
 			type: 'string',
 			defaultValue: null,
@@ -22,6 +25,13 @@ Ext.define('qqext.model.JournalItem', {
 			}
 		}, {
 			name: 'regDate',
+			type: 'date',
+			defaultValue: null,
+			dateFormat: 'd.m.Y',
+			dateWriteFormat: 'd.m.Y',
+			dateReadFormat: 'd.m.Y'
+		}, {
+			name: 'plannedDate',
 			type: 'date',
 			defaultValue: null,
 			dateFormat: 'd.m.Y',

@@ -209,10 +209,15 @@ Ext.application({
 		 * Текущий запрос (модель Question)
 		 */
 		/**
+		 * @property {Number} msPhour
+		 * кол-во миллисекунд в часу
+		 */
+		ns.msPhour = 1000 * 60 * 60;
+		/**
 		 * @property {Number} msPday
 		 * кол-во миллисекунд в дне
 		 */
-		ns.msPday = 1000 * 60 * 60 * 24;
+		ns.msPday = ns.msPhour * 24;
 		/*
 		 * Различные кнопки, на которые нужно иметь ссылки по ходу дела. Обращаться к ним
 		 * только через интерфейс {@link #getButton} и {@link #addButton}.
@@ -704,7 +709,8 @@ Ext.application({
 					stats: 'statuses',
 					execOrgs: 'organizations',
 					sendType: 'sendtypes',
-					notiStats: 'notifystatuses'
+					notiStats: 'notifystatuses',
+					queryType: 'querytypes'
 				};
 		// нужно инициализировать хранилище для информации об организациях
 		// и установить принадлежность пользователся к СИЦ
@@ -725,6 +731,7 @@ Ext.application({
 		create('DictStore', ids.users, ids.users, organization);
 		create('DictStore', ids.allusers, ids.users);
 		create('DictStore', ids.sendType, ids.sendType);
+		create('DictStore', ids.queryType, ids.queryType);
 		create('DictStore', ids.stats, ids.stats, {
 			listeners: {
 				load: function (st, records) {

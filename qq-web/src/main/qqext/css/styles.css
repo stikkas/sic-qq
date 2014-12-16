@@ -219,6 +219,9 @@ label.journal_title_label{
 .x-grid-row-alt .x-grid-td{
     background-color:#E2E7EE;
 }
+.x-grid-view {
+    overflow-x:hidden !important;
+}
 .tbl_cls{
     margin:5px 10px 0 10px;
 }
@@ -491,7 +494,9 @@ div.collapse_section{
     padding-left:0px;
     padding-right:0px;
 }
-
+.float_l{
+    float:left;
+}
 /**/
 /*.hmenu .x-btn-disabled{
     display: none;

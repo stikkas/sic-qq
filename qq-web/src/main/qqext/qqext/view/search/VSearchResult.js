@@ -20,7 +20,8 @@ Ext.define('qqext.view.search.VSearchResult', {
 				hidden: true
 			}, {
 				text: 'Литера',
-				dataIndex: 'litera'
+				dataIndex: 'litera',
+                                width:'6%'
 			}, {
 				text: '№ вх. документа',
 				dataIndex: 'inboxDocNum'
@@ -52,10 +53,12 @@ Ext.define('qqext.view.search.VSearchResult', {
 				dataIndex: 'requestType'
 			}, {
 				text: 'ФИО/Организация',
-				dataIndex: 'fioOrg'
+				dataIndex: 'fioOrg',
+                                width:'22%'
 			}, {
 				text: 'Содержание запроса',
-				dataIndex: 'content'
+				dataIndex: 'content',
+                                width:'22%'
 			}, {
 				text: 'Результат ответа',
 				dataIndex: 'answerResult'

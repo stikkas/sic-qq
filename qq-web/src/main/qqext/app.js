@@ -432,7 +432,7 @@ Ext.application({
 						if (ns.isSIC) {
 							if (user.isAllowed([rules.reg, rules.crd, rules.exec, rules.admin]) &&
 									request.get('status') !== onreg &&
-									request.get('execOrg') !== ns.sicId)
+									request.get('execOrg') !== ns.sicId && request.get('litera') === ns.sicId)
 								ns.disableArticles(false, buttonNames.notify);
 						}
 						break;

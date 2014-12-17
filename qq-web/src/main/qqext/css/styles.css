@@ -100,7 +100,7 @@ label.journal_title_label{
     background-size:100% 100%;
     border:1px solid #38547B;
     /*width:250px;*/
-    min-width:12em;
+    min-width:13em;
 }
 .vmenu div{
     width:100% !important;
@@ -123,7 +123,7 @@ label.journal_title_label{
 .vmenu a .x-btn-button{
     /*min-height:1.5em;*/
     height:auto;
-    padding:4.5% 0;
+    padding:5% 0;
 }
 .vmenu a .x-btn-inner{
     color:#2D446D;
@@ -147,7 +147,7 @@ label.journal_title_label{
 /*status*/
 .vmenu .reg_panel .x-box-inner{
     margin:5px auto;
-    width:10.5em !important;
+    width:11.5em !important;
 }
 .vmenu .reg_panel .x-box-inner label{
     //max-width:150px;

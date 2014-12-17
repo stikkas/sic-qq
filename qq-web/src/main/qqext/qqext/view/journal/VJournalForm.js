@@ -434,7 +434,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					]}, {
 					xtype: 'datecolumn',
 					text: 'Дата исполнения',
-					minWidth: 95,
+					minWidth: 90,
 					dataIndex: 'execDate',
 					format: 'd.m.Y',
 					items: [{
@@ -456,7 +456,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						}]}, {
 					text: 'Исполнитель',
 					dataIndex: 'executor',
-					minWidth: 120,
+					minWidth: 115,
 					items: [
 						createCmp('FComboBox', '', execStore, 'requestExecutorCombo', {
 							width: '90%',

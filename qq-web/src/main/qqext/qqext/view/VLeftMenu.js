@@ -10,6 +10,7 @@ Ext.define('qqext.view.VLeftMenu', {
 	],
 	margin: '0 10 0 0',
 	region: 'west',
+        //width:'20%',
 	layout: 'vbox',
 	initComponent: function() {
 		Ext.applyIf(this, {

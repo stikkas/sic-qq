@@ -51,7 +51,7 @@ Ext.define('qqext.view.search.VSearchResult', {
 			}, {
 				text: 'Вид запроса',
 				dataIndex: 'requestType',
-                                width:'7%'
+                                width:'8.5%'
 			}, {
 				text: 'ФИО/Организация',
 				dataIndex: 'fioOrg',

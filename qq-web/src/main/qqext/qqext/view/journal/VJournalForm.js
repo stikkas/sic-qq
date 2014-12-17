@@ -207,7 +207,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					]}, {
 					text: '№ вх. документа',
 					dataIndex: 'inboxDocNum',
-					minWidth: 80,
+					minWidth: 50,
 					items: [
 						createCmp('FTextField', '', 'docNumberTextField', {
 							width: '90%',
@@ -224,7 +224,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						})
 					]}, {
 					text: 'Дата регистрации',
-					minWidth: 100,
+					minWidth: 65,
 					xtype: 'datecolumn',
 					dataIndex: 'regDate',
 					format: 'd.m.Y',
@@ -246,8 +246,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						}]}, {
 					xtype: 'datecolumn',
 					text: 'Дата исполнения плановая',
-					minWidth: 95,
-					cls: 'mar_bot0',
+					minWidth: 65,
 					dataIndex: 'plannedDate',
 					format: 'd.m.Y',
 					items: [{
@@ -268,7 +267,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 							}
 						}]}, {
 					text: 'Статус уведомления',
-					minWidth: 145,
+					minWidth: 115,
 					dataIndex: 'notifyStatus',
 					items: [
 						createCmp('FComboBox', '', ns.stIds.notiStats, 'requestNotiStatus', {
@@ -281,7 +280,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						})
 					]}, {
 					text: 'От кого поступил',
-					minWidth: 175,
+					minWidth: 165,
 					dataIndex: 'fioOrg',
 					items: [
 						createCmp('FTextField', '', 'applicantField', {
@@ -300,7 +299,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					]}, {
 					text: 'Состояние запроса',
 					dataIndex: 'status',
-					minWidth: 150,
+					minWidth: 120,
 					items: [
 						createCmp('FComboBox', '', ns.stIds.stats, 'requestStatusCombo', {
 							width: '90%',
@@ -313,7 +312,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					]}, {
 					text: 'Архив-исполнитель',
 					dataIndex: 'execOrg',
-					minWidth: 95,
+					minWidth: 65,
 					items: [
 						createCmp('FComboBox', '', ns.stIds.litera, 'requestExecOrgCombo', {
 							width: '90%',
@@ -326,7 +325,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					]}, {
 					text: 'Исполнитель',
 					dataIndex: 'executor',
-					minWidth: 100,
+					minWidth: 70,
 					items: [
 						createCmp('FComboBox', '', execStore, 'rlequestExecutorCombo', {
 							width: '90%',
@@ -341,7 +340,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 			items = [{
 					text: 'Литера',
 					dataIndex: 'litera',
-					width: 97,
+					minWidth: 80,
 					items: [createCmp('FComboBox', '', ns.stIds.litera, 'filterLiteraCombo', {
 							width: '90%',
 							listeners: {
@@ -369,7 +368,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						})
 					]}, {
 					text: 'Дата регистрации',
-					minWidth: 100,
+					minWidth: 90,
 					xtype: 'datecolumn',
 					dataIndex: 'regDate',
 					format: 'd.m.Y',
@@ -390,7 +389,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 							}
 						}]}, {
 					text: 'Вид запроса',
-					width: 70,
+					minWidth: 60,
 					dataIndex: 'queryType',
 					items: [createCmp('FComboBox', '', ns.stIds.queryType, 'filterQTypeCombo', {
 							width: '90%',
@@ -422,7 +421,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					]}, {
 					text: 'Состояние запроса',
 					dataIndex: 'status',
-					minWidth: 150,
+					minWidth: 130,
 					items: [
 						createCmp('FComboBox', '', ns.stIds.stats, 'requestStatusCombo', {
 							width: '90%',
@@ -457,7 +456,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						}]}, {
 					text: 'Исполнитель',
 					dataIndex: 'executor',
-					minWidth: 150,
+					minWidth: 120,
 					items: [
 						createCmp('FComboBox', '', execStore, 'requestExecutorCombo', {
 							width: '90%',

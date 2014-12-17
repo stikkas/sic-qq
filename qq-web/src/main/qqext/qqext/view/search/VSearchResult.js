@@ -21,7 +21,7 @@ Ext.define('qqext.view.search.VSearchResult', {
 			}, {
 				text: 'Литера',
 				dataIndex: 'litera',
-                                width:'8%'
+				width: '6%'
 			}, {
 				text: '№ вх. документа',
 				dataIndex: 'inboxDocNum'
@@ -55,15 +55,15 @@ Ext.define('qqext.view.search.VSearchResult', {
 			}, {
 				text: 'ФИО/Организация',
 				dataIndex: 'fioOrg',
-                                width:'22%'
+				width: '22%'
 			}, {
 				text: 'Содержание запроса',
 				dataIndex: 'content',
-                                width:'22%'
+				width: '22%'
 			}, {
 				text: 'Результат ответа',
 				dataIndex: 'answerResult',
-                                width:'20%'
+				width: '20%'
 			}]},
 	forceFit: true,
 	dockedItems: [

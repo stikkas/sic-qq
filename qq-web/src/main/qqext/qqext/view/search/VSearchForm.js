@@ -35,8 +35,8 @@ Ext.define('qqext.view.search.VSearchForm', {
 		});
 		me.callParent();
 		if (!qqext.isSIC) {
-			var combo = me._form.items.getAt(0);
-			combo.setValue(qqext.user.get('organization'));
+			var combo = me._cmb = me._form.items.getAt(0);
+			combo.setValue(me._org = qqext.user.get('organization'));
 			combo.hide();
 		}
 	},
@@ -45,9 +45,13 @@ Ext.define('qqext.view.search.VSearchForm', {
 	 * и результаты поиска. Приводит форму в первоначальное состояние.
 	 */
 	reset: function () {
-		Ext.getStore('searchResults').loadData([], false);
-		this._form.getForm().reset();
-		this._grid.dockedItems.getAt(2).onLoad();
+//		Ext.getStore('searchResults').loadData([], false);
+		var me = this;
+		me._grid.store.removeAll();
+		me._form.getForm().reset();
+		if (!qqext.isSIC)
+			me._cmb.setValue(me._org);
+		me._grid.dockedItems.getAt(2).onLoad();
 	},
 	/**
 	 * Запускает поиск по параметрам первого элемента контейнера

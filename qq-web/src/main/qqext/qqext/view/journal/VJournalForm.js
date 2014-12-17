@@ -389,7 +389,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 								}
 							}
 						}]}, {
-					text: 'Вид запроса',
+					text: 'Вид запр.',
 					minWidth: 100,
 					dataIndex: 'queryType',
 					items: [createCmp('FComboBox', '', ns.stIds.queryType, 'filterQTypeCombo', {

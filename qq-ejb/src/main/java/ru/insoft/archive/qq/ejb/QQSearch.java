@@ -254,11 +254,11 @@ public class QQSearch extends LoggedBean {
 			expressions.add(cb.between(cb.function("trunc", Date.class, root.<Date>get("regDate")),
 					startRegDate, endRegDate));
 		} else if (startRegDate != null) {
-			expressions.add(cb.greaterThan(
+			expressions.add(cb.greaterThanOrEqualTo(
 					cb.function("trunc", Date.class, root.<Date>get("regDate")),
 					startRegDate));
 		} else if (endRegDate != null) {
-			expressions.add(cb.lessThan(
+			expressions.add(cb.lessThanOrEqualTo(
 					cb.function("trunc", Date.class, root.<Date>get("regDate")),
 					endRegDate));
 		}

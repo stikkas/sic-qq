@@ -519,8 +519,9 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 * Устанавливает определенные поля доступными для редактирования в режиме супервизора.
 	 */
 	setAdminMode: function () {
-		this.applicant.items.getRange(1, 8).forEach(function (it) {
-			it.setViewOnly(false);
+		this.applicant.items.getRange(1, 8).forEach(function (it, i) {
+			if (i !== 4)
+				it.setViewOnly(false);
 		});
 		this.target.items.each(function (it) {
 			it.setViewOnly(false);

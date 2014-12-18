@@ -99,27 +99,40 @@ label.journal_title_label{
     background:url(../images/vmenu_bg.png) no-repeat;
     background-size:100% 100%;
     border:1px solid #38547B;
-    width:250px;
+    /*width:250px;*/
+    min-width:13em;
+}
+.vmenu div{
+    width:100% !important;
 }
 .vmenu a{
     color:#2D446D;
     font:1.5em 'Lucida Sans Unicode', sans-serif;
     text-align:left;
-    padding:15px;
+    /*padding:15px;*/
     border:none;
     border-bottom:1px solid #38547B;
     background-image:-moz-linear-gradient(top, #7D95B4, #ABBED8, #C7D0DC, #ABBED8, #7D95B4);
     background-image:-webkit-gradient(linear, center top, center bottom, from(#7D95B4), to(#7D95B4), color-stop(25%, #ABBED8), color-stop(50%, #C7D0DC), color-stop(75%, #ABBED8));
     background: -o-linear-gradient(top, #7D95B4, #ABBED8, #C7D0DC, #ABBED8, #7D95B4);
     background: -ms-linear-gradient(top, #7D95B4, #C7D0DC, #7D95B4);
+    height:auto;
+    position:relative !important;       /*для выстраивания пунктов меню друг за другом*/
+    top: 0 !important;
 }
 .vmenu a .x-btn-button{
-    height:20px;
+    /*min-height:1.5em;*/
+    height:auto;
+    padding:5% 0;
 }
 .vmenu a .x-btn-inner{
     color:#2D446D;
     font:bold 0.8em 'Lucida Sans Unicode', sans-serif;
+    line-height:1.1;
     text-align:left;
+    white-space:normal;
+    word-wrap:break-word;
+    //width:80%;
 }
 .vmenu a.active-article {
     background-image:-moz-linear-gradient(top, #59769C, #768EAE, #59769C);
@@ -134,13 +147,14 @@ label.journal_title_label{
 /*status*/
 .vmenu .reg_panel .x-box-inner{
     margin:5px auto;
+    width:11.5em !important;
 }
 .vmenu .reg_panel .x-box-inner label{
-    max-width:150px;
+    //max-width:150px;
     word-spacing:normal;
 }
 .vmenu .reg_panel .x-box-inner .x-box-item{
-    margin:5px 3px;
+    margin:2px 3px;
     vertical-align:middle;
 }
 

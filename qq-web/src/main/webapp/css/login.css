@@ -34,7 +34,10 @@ legend{
     background-size:100%;
     background-position: center center;
     width:800px;
-    margin:-10px 0 40px 0;
+    margin:-10px auto 40px auto;
+}
+noindex:-o-prefocus, .log_fields{
+    margin-top:35px !important;
 }
 .login_panel fieldset{
     text-align:center;

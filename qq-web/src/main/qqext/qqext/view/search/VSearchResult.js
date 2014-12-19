@@ -21,10 +21,11 @@ Ext.define('qqext.view.search.VSearchResult', {
 			}, {
 				text: 'Литера',
 				dataIndex: 'litera',
-				width: '6%'
+				width: '7%'
 			}, {
 				text: '№ вх. документа',
-				dataIndex: 'inboxDocNum'
+				dataIndex: 'inboxDocNum',
+				width: '9.5%'
 //				doSort: function (state) {
 //					var ds = Ext.getStore('searchResults'),
 //							field = this.getSortParam();
@@ -51,15 +52,16 @@ Ext.define('qqext.view.search.VSearchResult', {
 			}, {
 				text: 'Вид запроса',
 				dataIndex: 'requestType',
-                                width:'8.5%'
+                                minWidth: 70,
+                                maxWidth: 75
 			}, {
 				text: 'ФИО/Организация',
 				dataIndex: 'fioOrg',
-				width: '22%'
+				width: '21%'
 			}, {
 				text: 'Содержание запроса',
 				dataIndex: 'content',
-				width: '22%'
+				width: '21%'
 			}, {
 				text: 'Результат ответа',
 				dataIndex: 'answerResult',

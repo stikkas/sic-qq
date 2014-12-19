@@ -389,7 +389,8 @@ Ext.define('qqext.view.journal.VJournalForm', {
 							}
 						}]}, {
 					text: 'Вид запроса',
-					minWidth: 60,
+                                        minWidth: 60,
+                                        maxWidth: 60,
 					dataIndex: 'queryType',
 					items: [createCmp('FComboBox', '', ns.stIds.queryType, 'filterQTypeCombo', {
 							width: '90%',

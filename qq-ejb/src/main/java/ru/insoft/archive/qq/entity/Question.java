@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Set;
 import java.util.TimeZone;
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,7 +21,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import ru.insoft.archive.core_model.table.adm.AdmUser;
@@ -48,18 +46,6 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 	@Column(name = "QUESTION_ID")
 	private Long id;
 
-	@Basic(optional = false)
-	@NotNull
-	@Column(name = "INSERT_DATE", columnDefinition = "DATE")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date insertDate;
-
-	@Basic(optional = false)
-	@NotNull
-	@Column(name = "UPDATE_DATE", columnDefinition = "DATE")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date updateDate;
-
 	@Column(name = "STATUS_ID")
 	private Long status;
 
@@ -82,15 +68,7 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 	@Column(name = "EXEC_ORG_ID")
 	private Long execOrg;
 
-	@Basic(optional = false)
-	@NotNull
-	@Column(name = "INSERT_USER_ID")
-	private Long insertUser;
 
-	@Basic(optional = false)
-	@NotNull
-	@Column(name = "UPDATE_USER_ID")
-	private Long updateUser;
 
 	@Column(name = "QUESTION_TYPE_ID")
 	private Long questionType;
@@ -203,11 +181,7 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 		this.id = id;
 	}
 
-	public Question(Long id, Date insertDate, Date updateDate) {
-		this.id = id;
-		this.insertDate = insertDate;
-		this.updateDate = updateDate;
-	}
+
 
 	public Long getId() {
 		return id;
@@ -305,22 +279,6 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 		this.execOrg = execOrg;
 	}
 
-	public Long getInsertUser() {
-		return insertUser;
-	}
-
-	public void setInsertUser(Long insertUser) {
-		this.insertUser = insertUser;
-	}
-
-	public Long getUpdateUser() {
-		return updateUser;
-	}
-
-	public void setUpdateUser(Long updateUser) {
-		this.updateUser = updateUser;
-	}
-
 	public Long getQuestionType() {
 		return questionType;
 	}
@@ -351,22 +309,6 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 
 	public void setObjectBirthYear(Long objectBirthYear) {
 		this.objectBirthYear = objectBirthYear;
-	}
-
-	public Date getInsertDate() {
-		return insertDate;
-	}
-
-	public void setInsertDate(Date insertDate) {
-		this.insertDate = convertDate(insertDate);
-	}
-
-	public Date getUpdateDate() {
-		return updateDate;
-	}
-
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = convertDate(updateDate);
 	}
 
 	public String getContent() {

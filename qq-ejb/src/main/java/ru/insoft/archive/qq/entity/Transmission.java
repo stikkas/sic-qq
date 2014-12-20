@@ -2,17 +2,21 @@ package ru.insoft.archive.qq.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -78,6 +82,9 @@ public class Transmission implements Serializable, HasId, JsonIn, JsonOut {
 	@JoinColumn(name = "EXECUTOR_ID", referencedColumnName = "USER_ID", insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private AdmUser executorValue;
+
+	@OneToMany(mappedBy = "trans", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	private Set<Assistant> assistants; 
 
 	public Transmission() {
 	}
@@ -180,6 +187,17 @@ public class Transmission implements Serializable, HasId, JsonIn, JsonOut {
 
 	public void setQuestion(Question question) {
 		this.question = question;
+	}
+
+	public void addAssistant(AdmUser user, Date exec) {
+		Assistant assistant = new Assistant(this.getId(), user.getId());
+		assistant.setTrans(this);
+		assistant.setExecDate(exec);
+		assistants.add(assistant);
+	}
+
+	public Set<Assistant> getAssistants() {
+		return assistants;
 	}
 
 	@Override

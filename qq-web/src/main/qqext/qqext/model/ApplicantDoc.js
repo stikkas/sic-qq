@@ -4,7 +4,6 @@
 Ext.define('qqext.model.ApplicantDoc', {
 	alias: 'ApplicantDocModel',
 	extend: 'Ext.data.Model',
-	idProperty: 'id',
 	fields: [
 		{name: 'id', type: 'int', convert: null, defaultValue: null, isNull: true},
 		{name: 'name', type: 'string'},

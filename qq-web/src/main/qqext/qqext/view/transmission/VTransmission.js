@@ -29,36 +29,43 @@ Ext.define('qqext.view.transmission.VTransmission', {
 	 */
 	_idx: 5,
 	listeners: {
-		activate: function (me, prev) {
+		activate: function(me, prev) {
 			var ns = qqext;
 			ns.switchArticleButton(ns.getButton(ns.btns.trans));
 			ns.Menu.setEditMenu(me._idx);
 			if (ns.request !== me.model) {
 				// Значит новый запрос (не тот который был до этого)
+
+				while (me._execs.length > 1)
+					me._execs.pop().destroy();
+				me._coex = 2; // индекс, с которого начинаются поля для соисполнителей
+
 				var model = me.model = ns.request,
-						execOrg = model.get('execOrg');
+					execOrg = model.get('execOrg');
 				if (ns.isSIC && execOrg !== ns.sicId) {
 					me._be.bindStore(ns.stIds.allusers);
 					me._ex.bindStore(ns.stIds.allusers);
 				}
-				model.getTrans({callback: function (r) {
+				model.getTrans({
+					callback: function(r) {
 						me.loadRecord(r);
+						r.assistants().each(function(it) {
+							me.addExecutor(it);
+						});
 						me.setViewOnly(true);
 						me._disableButtons(true, 1, 2, 3);
 						var stats = ns.stats,
-								statsId = ns.statsId,
-								status = model.get('status');
+							statsId = ns.statsId,
+							status = model.get('status');
 						me._disableButtons(!(ns.user.isAllowed(ns.rules.crd) &&
-								status === statsId[stats.reg] &&
-								ns.user.get('organization') === execOrg ||
-								((status === statsId[stats.onexec] ||
-										status === statsId[stats.exec]) && ns.user.isAllowed(ns.rules.admin))), 0);
-					}});
+							status === statsId[stats.reg] &&
+							ns.user.get('organization') === execOrg ||
+							((status === statsId[stats.onexec] ||
+								status === statsId[stats.exec]) && ns.user.isAllowed(ns.rules.admin))), 0);
+					}
+				});
 				ns.initRequired(me);
 			}
-			while (me._execs.length > 1)
-				me._execs.pop().destroy();
-			me._coex = 2; // индекс, с которого начинаются поля для соисполнителей
 			me.collapseAdds();
 			me.doLayout();
 		}
@@ -67,7 +74,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 	 * @property {qqext.cmp.FieldSet} _adds поля для "Дополнительные сведения"
 	 * @private
 	 */
-	initComponent: function () {
+	initComponent: function() {
 		//----------обработчики для кнопок меню---------
 		//sc - контекст для обработчика
 
@@ -81,16 +88,18 @@ Ext.define('qqext.view.transmission.VTransmission', {
 				return;
 
 			var trans = me.model.getTrans(),
-					status = me.model.get('status'),
-					inEditMode = (status === ns.statsId[ns.stats.onexec] ||
-							status === ns.statsId[ns.stats.exec]);
+				status = me.model.get('status'),
+				inEditMode = (status === ns.statsId[ns.stats.onexec] ||
+					status === ns.statsId[ns.stats.exec]);
 			if (inEditMode && !me.validate())
 				return;
 			// Кнопки сохранить, удалить и регистрировать
 			me._disableButtons(true, 1, 2, 3);
 			me.setViewOnly(true);
 			me.updateRecord(trans);
-			trans.save({callback: function (rec, op, suc) {
+			me.updateAssistants(trans);
+			trans.save({
+				callback: function(rec, op, suc) {
 					if (suc) {
 						me._disableButtons(false, 0);
 						ns.infoChanged = true;
@@ -114,75 +123,101 @@ Ext.define('qqext.view.transmission.VTransmission', {
 		 * @returns {undefined}
 		 */
 		function remove() {
-			me.model.getTrans().destroy({callback: function (recs, operation) {
-					if (!operation.success)
-						ns.showError("Ошибка удаления данных", operation.getError());
-					else {
-						me._disableButtons(true, 2);
-						me.getForm().reset();
-						ns.infoChanged = true;
-					}
-				}
-			});
-		}
-		/**
-		 * Обрабатывает событие 'click' на кнопке "Регистрировать".
-		 * TODO реализовать метод
-		 * @private
-		 * @returns {undefined}
-		 */
-		function book() {
-			var me = this;
-			if (!qqext.checkDates(Ext.ComponentQuery.query('datefield', me)))
-				return;
-
-			var model = me.model,
-					trans = model.getTrans();
-			me._disableButtons(true, 1, 2, 3);
-			me.setViewOnly(true);
-			if (me.validate()) {
-				me.updateRecord(trans);
-				trans.save({callback: function (r, o, s) {
-						if (s) {
-							model.set('status', ns.statsId[ns.stats.onexec]);
-							model.save({callback: function (rec, op, suc) {
-									if (suc) {
-										ns.statusPanel.setStatus();
-										ns.turnOnArticles(ns.btns.exec);
-										ns.infoChanged = true;
-									} else {
-										ns.showError("Ошибка обновления статуса", op.getError());
-										trans.destroy();
-										me._disableButtons(false, 1, 2, 3);
-										me.setViewOnly(false);
-									}
-								}});
-						} else {
-							ns.showError("Ошибка сохранения данных", o.getError());
-							me._disableButtons(false, 1, 2, 3);
-							me.setViewOnly(false);
+				me.model.getTrans().destroy({
+					callback: function(recs, operation) {
+						if (!operation.success)
+							ns.showError("Ошибка удаления данных", operation.getError());
+						else {
+							me._disableButtons(true, 2);
+							me.getForm().reset();
+							ns.infoChanged = true;
 						}
-					}});
-			} else {
-				me._disableButtons(false, 1, 2, 3);
-				me.setViewOnly(false);
+					}
+				});
 			}
-		}
-//----------------------------------------------
+			/**
+			 * Обрабатывает событие 'click' на кнопке "Регистрировать".
+			 * TODO реализовать метод
+			 * @private
+			 * @returns {undefined}
+			 */
+		function book() {
+				var me = this;
+				if (!qqext.checkDates(Ext.ComponentQuery.query('datefield', me)))
+					return;
+
+				var model = me.model,
+					trans = model.getTrans();
+				me._disableButtons(true, 1, 2, 3);
+				me.setViewOnly(true);
+				if (me.validate()) {
+					me.updateRecord(trans);
+					me.updateAssistants(trans);
+					trans.save({
+						callback: function(r, o, s) {
+							if (s) {
+								model.set('status', ns.statsId[ns.stats.onexec]);
+								model.save({
+									callback: function(rec, op, suc) {
+										if (suc) {
+											ns.statusPanel.setStatus();
+											ns.turnOnArticles(ns.btns.exec);
+											ns.infoChanged = true;
+										} else {
+											ns.showError("Ошибка обновления статуса", op.getError());
+											trans.destroy();
+											me._disableButtons(false, 1, 2, 3);
+											me.setViewOnly(false);
+										}
+									}
+								});
+							} else {
+								ns.showError("Ошибка сохранения данных", o.getError());
+								me._disableButtons(false, 1, 2, 3);
+								me.setViewOnly(false);
+							}
+						}
+					});
+				} else {
+					me._disableButtons(false, 1, 2, 3);
+					me.setViewOnly(false);
+				}
+			}
+			//----------------------------------------------
 		var me = this,
-				ns = qqext,
-				labels = ns.labels,
-				createCmp = Ext.create,
-				trans = ns.transmission,
-				configForDate = {
-					labelAlign: 'right',
-					margin: '6 0 0 0'
-				},
-		menus = createCmp('HButtonMenu', [
-			{text: labels.edit, action: ns.edit, opts: {cls: 'edit_btn'}},
-			{text: labels.save, action: save, opts: {cls: 'save_btn'}},
-			{text: labels.remove, action: remove, opts: {cls: 'remove_btn'}},
-			{text: labels.register, action: book, opts: {cls: 'reg_btn'}}],
+			ns = qqext,
+			labels = ns.labels,
+			createCmp = Ext.create,
+			trans = ns.transmission,
+			configForDate = {
+				labelAlign: 'right',
+				margin: '6 0 0 0'
+			},
+			menus = createCmp('HButtonMenu', [{
+					text: labels.edit,
+					action: ns.edit,
+					opts: {
+						cls: 'edit_btn'
+					}
+				}, {
+					text: labels.save,
+					action: save,
+					opts: {
+						cls: 'save_btn'
+					}
+				}, {
+					text: labels.remove,
+					action: remove,
+					opts: {
+						cls: 'remove_btn'
+					}
+				}, {
+					text: labels.register,
+					action: book,
+					opts: {
+						cls: 'reg_btn'
+					}
+				}],
 				'ToolButton', me);
 		Ext.applyIf(me, {
 			items: [
@@ -191,43 +226,48 @@ Ext.define('qqext.view.transmission.VTransmission', {
 					cls: 'right_date',
 					items: [
 						me._be = createCmp('FComboBox', trans.bossExecutor[1], ns.stIds.users,
-								trans.bossExecutor[0], {allowBlank: false,
-							width: 450,
-							labelWidth: 150
-						}),
+							trans.bossExecutor[0], {
+								allowBlank: false,
+								width: 450,
+								labelWidth: 150
+							}),
 						createCmp('FDateField', trans.bossExecutionDate[1], trans.bossExecutionDate[0],
-								configForDate)
+							configForDate)
 					]
 				}),
 				createCmp('FieldContainer', {
 					layout: 'hbox',
 					cls: 'right_date',
 					items: [
-						me._ex = createCmp('FComboBox', trans.executor[1], ns.stIds.users, trans.executor[0],
-								{allowBlank: false,
-									width: 450,
-									labelWidth: 150,
-									listeners: {
-										editmode: function () {
-											Ext.ComponentQuery.query('button', me).forEach(function (it) {
-												it.show();
-											});
-										},
-										viewmode: function () {
-											Ext.ComponentQuery.query('button', me).forEach(function (it) {
-												it.hide();
-											});
-										}
-									}
-								}),
+						me._ex = createCmp('FComboBox', trans.executor[1], ns.stIds.users, trans.executor[0], {
+							allowBlank: false,
+							width: 450,
+							labelWidth: 150,
+							listeners: {
+								editmode: function() {
+									Ext.ComponentQuery.query('button', me).forEach(function(it) {
+										it.show();
+									});
+								},
+								viewmode: function() {
+									Ext.ComponentQuery.query('button', me).forEach(function(it) {
+										it.hide();
+									});
+								}
+							}
+						}),
 						createCmp('FDateField', trans.executionDate[1], trans.executionDate[0],
-								configForDate),
-						createCmp('Ext.button.Button', {text: '+', handler: me.addExecutor, scope: me})
+							configForDate),
+						createCmp('Ext.button.Button', {
+							text: '+',
+							handler: me.addExecutor,
+							scope: me
+						})
 					]
 				}),
 				createCmp('FCheckbox', trans.control[1], trans.control[0], {
 					listeners: {
-						change: function (cb, value) {
+						change: function(cb, value) {
 							if (value)
 								me._cd.show();
 							else
@@ -239,7 +279,8 @@ Ext.define('qqext.view.transmission.VTransmission', {
 				me._cd = createCmp('FDateField', trans.controlDate[1], trans.controlDate[0], {
 					width: 250,
 					hidden: true,
-					labelWidth: 150}),
+					labelWidth: 150
+				}),
 				me._adds = createCmp('FieldSet', {
 					collapsible: true,
 					title: 'Дополнительная информация',
@@ -251,10 +292,10 @@ Ext.define('qqext.view.transmission.VTransmission', {
 							labelWidth: 150
 						}),
 						createCmp('FComboBox', trans.storageTerritory[1], 'storageTerritory',
-								trans.storageTerritory[0], {
-							width: 450,
-							labelWidth: 150
-						}),
+							trans.storageTerritory[0], {
+								width: 450,
+								labelWidth: 150
+							}),
 						createCmp('FTextField', trans.storageName[1], trans.storageName[0], {
 							width: 450,
 							labelWidth: 150
@@ -275,49 +316,84 @@ Ext.define('qqext.view.transmission.VTransmission', {
 	 * правильно пересчитать размер), поэтому приходится делать это руками, после
 	 * того как форма будет активирована (afterrender тоже слишком рано)
 	 */
-	collapseAdds: function () {
+	collapseAdds: function() {
 		this._adds.collapse();
 	},
 	/**
 	 * Устанавливает определенные поля доступными для редактирования в режиме супервизора.
 	 */
-	setAdminMode: function () {
-		this._execs.forEach(function (it) {
+	setAdminMode: function() {
+		this._execs.forEach(function(it) {
 			it.setViewOnly(false);
 		});
-//		На закладке "Передача на исполнение" поля "ФИО исполнителя", "Соисполнитель".
+		//		На закладке "Передача на исполнение" поля "ФИО исполнителя", "Соисполнитель".
 	},
-	addExecutor: function ae() {
+	/**
+	 * Добавляет поля ввода для соисполнителя
+	 */
+	addExecutor: function() {
 		var create = Ext.create,
-				me = this,
-				ns = qqext,
-				trans = ns.transmission,
-				configForDate = {
-					labelAlign: 'right',
-					margin: '6 0 0 0'
-				},
-		container = create('FieldContainer', {
-			layout: 'hbox',
-			cls: 'right_date',
-			items: [
-				create('FComboBox', trans.coexec[1], ns.stIds.users, trans.coexec[0] + me._coex,
-						{width: 450, labelWidth: 150}),
-				create('FDateField', trans.coexecDate[1], trans.coexecDate[0], configForDate),
-				create('Ext.button.Button', {text: 'x', handler: function () {
-						me.remove(container);
-						me._execs.pop();
-						me._coex--;
-					}})
-			]
-		});
+			me = this,
+			ns = qqext,
+			trans = ns.transmission,
+			assistant = arguments.length === 1 ? arguments[0] : null,
+			cb, df,
+			configForDate = {
+				labelAlign: 'right',
+				margin: '6 0 0 0'
+			},
+
+			container = create('FieldContainer', {
+				layout: 'hbox',
+				cls: 'right_date',
+				items: [
+					cb = create('FComboBox', trans.coexec[1], ns.stIds.users, trans.coexec[0] + me._coex, {
+						width: 450,
+						labelWidth: 150
+					}),
+					df = create('FDateField', trans.coexecDate[1], trans.coexecDate[0], configForDate),
+					create('Ext.button.Button', {
+						text: 'x',
+						hidden: assistant ? true : false,
+						handler: function() {
+							me._execs.splice(me._execs.indexOf(container), 1);
+							me.remove(container);
+							me._coex--;
+						}
+					})
+				]
+			});
 		me.insert(me._coex++, container);
 		me._execs.push(container);
+		if (assistant) {
+			cb.setValue(assistant.get('user'));
+			df.setValue(assistant.get('execDate'));
+		}
 	},
-	validate: function () {
+	validate: function() {
 		if (!this.isValid()) {
 			qqext.showError("Форма заполнена неправильно", this.getErrors());
 			return false;
 		}
 		return true;
+	},
+	/**
+	 * Добавляет соисполнителей в модель
+	 * @param {qqext.model.Transmission}  model модель для передачи на сервер
+	 */
+	updateAssistants: function(model) {
+		var store = model.assistants();
+		store.removeAll(true);
+		this._execs.forEach(function(it, i) {
+			if (i !== 0) {
+				var items = it.items,
+					user = items.getAt(0).getValue();
+				if (user) // молча пропускаем пустой элемент
+					store.add({
+					user: user,
+					execDate: items.getAt(1).getValue()
+				});
+			}
+		});
 	}
 });

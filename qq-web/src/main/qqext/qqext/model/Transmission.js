@@ -38,13 +38,29 @@ Ext.define('qqext.model.Transmission', (function () {
 			{name: trans.storageTerritory[0], type: 'int', defaultValue: null, convert: null},
 			{name: trans.storageName[0], type: 'string'}
 		],
-		requires: ['Ext.data.proxy.Rest'],
+		requires: ['Ext.data.proxy.Rest', 'qqext.model.Assistant'],
 		belongsTo: 'qqext.model.Question',
+		associations: [{type: 'hasMany', model: 'qqext.model.Assistant', name: 'assistants',
+				foreignKey: 'transmission'}],
 		proxy: {
 			type: 'rest',
 			url: '/qq-web/rest/transmission',
 			reader: 'json',
-			writer: 'json'
+			writer: {
+				type: 'json',
+				getRecordData: function(record) {
+					var data = record.data;
+					data.assistants = [];
+					record.assistants().each(function(item) {
+						data.assistants.push({
+							user: item.get('user'),
+							transmission: item.get('transmission'),
+							execDate: item.get('execDate')
+						});
+					});
+					return data;
+				}
+			}
 		}
 	};
 })());

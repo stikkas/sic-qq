@@ -30,15 +30,16 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 */
 	_idx: 3,
 	listeners: {
-		activate: function (me, prev) {
-			var ns = qqext, model;
+		activate: function(me, prev) {
+			var ns = qqext,
+				model;
 			ns.switchArticleButton(ns.getButton(ns.btns.reg));
 			ns.Menu.setEditMenu(me._idx);
 			if (ns.request === null) {
 				// Значит событие случилось по нажатию на кнопку "Добавить"
 				var
-						user = ns.user,
-						orgId = user.get('organization');
+					user = ns.user,
+					orgId = user.get('organization');
 				me.clear();
 				model = me.initModel();
 				//Кнопки "Редактировать" "Печать" и "Удалить"
@@ -55,23 +56,25 @@ Ext.define('qqext.view.reg.VRegForm', {
 				ns.initRequired(me);
 				me.query.pd.setViewOnly(true);
 			} else if (prev === ns.searchForm || prev === ns.jvkForm) {
-// Значит пришли по двойному клику на существуещем запросе, (открыли существующий запрос)
+				// Значит пришли по двойному клику на существуещем запросе, (открыли существующий запрос)
 				me.clear();
 				model = me.initModel(ns.request);
 				me._disableButtons(true, 1, 3, 4);
 
 				var hasRegRule = ns.user.isAllowed(ns.rules.reg),
-						wantedStatus = model.get('status') === ns.statsId[ns.stats.onreg],
-						belongToCreator = model.get('litera') === ns.user.get('organization');
+					wantedStatus = model.get('status') === ns.statsId[ns.stats.onreg],
+					belongToCreator = model.get('litera') === ns.user.get('organization');
 
 				me._disableButtons(!(hasRegRule && wantedStatus && belongToCreator ||
-						(!wantedStatus && ns.user.isAllowed(ns.rules.admin))), 0); // Редактировать
+					(!wantedStatus && ns.user.isAllowed(ns.rules.admin))), 0); // Редактировать
 				me._disableButtons(!(hasRegRule && !wantedStatus && belongToCreator), 2); // Печать
 
-				model.getAppl({callback: function () {
+				model.getAppl({
+					callback: function() {
 						me.setViewOnly(true);
 						me.loadRecord();
-					}});
+					}
+				});
 				ns.initRequired(me);
 			}
 
@@ -93,60 +96,66 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 * @param {Boolean} inEditMode в режиме редактирования уже зарегистрированого запроса
 	 * @private
 	 */
-	_saveModel: function (success, fail1, fail2, inEditMode) {
-		var me = this, model = me.model,
-				ns = qqext;
-		model.save({callback: function (recs, operation, status) {
+	_saveModel: function(success, fail1, fail2, inEditMode) {
+		var me = this,
+			model = me.model,
+			ns = qqext;
+		model.save({
+			callback: function(recs, operation, status) {
 				if (status) {
 					if (!model.get('id')) { // Новая модель(загружаем, чтобы правильно работали ассоциации)
-						ns.model.Question.load(operation.response.responseText,
-								{success: function (record) {
-										ns.request = me.model = record;
-										var appl = record.getAppl();
-										me.applicant.updateRecord(appl);
-										appl.save({callback: function (r, o, s) {
-												if (!s) {
-													ns.showError("Данные о заявители не сохранены",
-															o.getError());
-													if (inEditMode)
-														me.setAdminMode();
-													else
-														me.setViewOnly(false);
-													// Провал на втором уровне
-													fail2();
-												} else {
-													// Полный успех. Сохраняем файлы
-													me.files.loadRecord(record.files(), true);
-													me.files.save(record.get('id'), function () {
-														success();
-														ns.statusPanel.setStatus();
-														ns.infoChanged = true;
-													}, function () {
-														if (inEditMode)
-															me.setAdminMode();
-														else
-															me.setViewOnly(false);
-														// Провал на втором уровне
-														fail2();
-													});
-												}
-											}});
+						ns.model.Question.load(operation.response.responseText, {
+							success: function(record) {
+								ns.request = me.model = record;
+								var appl = record.getAppl();
+								me.applicant.updateRecord(appl);
+								appl.save({
+									callback: function(r, o, s) {
+										if (!s) {
+											ns.showError("Данные о заявители не сохранены",
+												o.getError());
+											if (inEditMode)
+												me.setAdminMode();
+											else
+												me.setViewOnly(false);
+											// Провал на втором уровне
+											fail2();
+										} else {
+											// Полный успех. Сохраняем файлы
+											me.files.loadRecord(record.files(), true);
+											me.files.save(record.get('id'), function() {
+												success();
+												ns.statusPanel.setStatus();
+												ns.infoChanged = true;
+											}, function() {
+												if (inEditMode)
+													me.setAdminMode();
+												else
+													me.setViewOnly(false);
+												// Провал на втором уровне
+												fail2();
+											});
+										}
+									}
+								});
 
-										ns.request = me.model = record;
-									},
-									failure: function (r, o) {
-										ns.showError("Ошибка загрузки нового запроса", o.getError());
-										if (inEditMode)
-											me.setAdminMode();
-										else
-											me.setViewOnly(false);
-										fail2();
-									}});
+								ns.request = me.model = record;
+							},
+							failure: function(r, o) {
+								ns.showError("Ошибка загрузки нового запроса", o.getError());
+								if (inEditMode)
+									me.setAdminMode();
+								else
+									me.setViewOnly(false);
+								fail2();
+							}
+						});
 					} else {
-						model.getAppl().save({callback: function (r, o, s) {
+						model.getAppl().save({
+							callback: function(r, o, s) {
 								if (!s) {
 									ns.showError("Данные о заявители не сохранены",
-											o.getError());
+										o.getError());
 									if (inEditMode)
 										me.setAdminMode();
 									else
@@ -155,11 +164,11 @@ Ext.define('qqext.view.reg.VRegForm', {
 									fail2();
 								} else {
 									// Полный успех. Сохраняем файлы
-									me.files.save(model.get('id'), function () {
+									me.files.save(model.get('id'), function() {
 										success();
 										ns.statusPanel.setStatus();
 										ns.infoChanged = true;
-									}, function () {
+									}, function() {
 										if (inEditMode)
 											me.setAdminMode();
 										else
@@ -183,7 +192,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 			}
 		});
 	},
-	initComponent: function () {
+	initComponent: function() {
 		//----------обработчики для кнопок меню---------
 		//sc - контекст для обработчика
 
@@ -193,77 +202,72 @@ Ext.define('qqext.view.reg.VRegForm', {
 		 * @returns {undefined}
 		 */
 		function save() {
-			if (!ns.checkDates([me.query.pd, me.applicant.dt]))
-				return;
-			var model = me.model,
+				if (!ns.checkDates([me.query.pd, me.applicant.dt]))
+					return;
+				var model = me.model,
 					user = ns.user,
-					userId = user.get('userId'),
 					now = new Date(),
 					year = now.getYear() + 1900,
 					currentStatus = model.get('status'),
 					inEditMode = currentStatus && currentStatus !== ns.statsId[ns.stats.onreg];
 
-			if (inEditMode && !me.validate())
-				return;
+				if (inEditMode && !me.validate())
+					return;
 
-			// Кнопки сохранить, удалить и регистрировать
-			me._disableButtons(true, 1, 3, 4);
-			me.setViewOnly(true);
-			me.updateRecord();
+				// Кнопки сохранить, удалить и регистрировать
+				me._disableButtons(true, 1, 3, 4);
+				me.setViewOnly(true);
+				me.updateRecord();
 
-			model.set('updateUser', userId);
-			model.set('updateDate', now);
-			if (!inEditMode)
-				model.set('status', ns.statsId[ns.stats.onreg]);
-			// Заполняем обязательные поля:
-			if (!model.get('id')) { // Только для новых моделей
-				model.set('sufixNum', year);
-				model.set('insertUser', userId);
-				model.set('insertDate', now);
-				model.set('createOrg', user.get('organization'));
-				Ext.Ajax.request({
-					url: '/qq-web/rest/question/allowedid/' + ns.user.get('organization') + '/' + year,
-					success: function (answer) {
-						model.set('prefixNum', answer.responseText);
-						me._saveModel(function () {
-							me._disableButtons(false, 0);
-							me.inbox.prefix.setValue(answer.responseText);
-							me.inbox.sufix.setValue(year);
-						}, function () {
+				if (!inEditMode)
+					model.set('status', ns.statsId[ns.stats.onreg]);
+				// Заполняем обязательные поля:
+				if (!model.get('id')) { // Только для новых моделей
+					model.set('sufixNum', year);
+					model.set('createOrg', user.get('organization'));
+					Ext.Ajax.request({
+						url: '/qq-web/rest/question/allowedid/' + ns.user.get('organization') + '/' + year,
+						success: function(answer) {
+							model.set('prefixNum', answer.responseText);
+							me._saveModel(function() {
+								me._disableButtons(false, 0);
+								me.inbox.prefix.setValue(answer.responseText);
+								me.inbox.sufix.setValue(year);
+							}, function() {
+								me._disableButtons(false, 1, 4);
+							}, function() {
+								me._disableButtons(false, 1, 3, 4);
+							});
+						},
+						failure: function() {
+							ns.showError("Ошибка", "Невозможно присвоить номер запросу");
+						}
+					});
+				} else {
+					me._saveModel(function() {
+						me._disableButtons(false, 0);
+					}, function() {
+						if (inEditMode)
+							me._disableButtons(false, 1);
+						else
 							me._disableButtons(false, 1, 4);
-						}, function () {
+					}, function() {
+						if (inEditMode)
+							me._disableButtons(false, 1);
+						else
 							me._disableButtons(false, 1, 3, 4);
-						});
-					},
-					failure: function () {
-						ns.showError("Ошибка", "Невозможно присвоить номер запросу");
-					}
-				});
-			} else {
-				me._saveModel(function () {
-					me._disableButtons(false, 0);
-				}, function () {
-					if (inEditMode)
-						me._disableButtons(false, 1);
-					else
-						me._disableButtons(false, 1, 4);
-				}, function () {
-					if (inEditMode)
-						me._disableButtons(false, 1);
-					else
-						me._disableButtons(false, 1, 3, 4);
-				}, inEditMode);
+					}, inEditMode);
+				}
 			}
-		}
-		/**
-		 * Обрабатывает событие 'click' на кнопке "Удалить"
-		 * @private
-		 * @returns {undefined}
-		 */
+			/**
+			 * Обрабатывает событие 'click' на кнопке "Удалить"
+			 * @private
+			 * @returns {undefined}
+			 */
 		function remove() {
-//			var me = this;
+			//			var me = this;
 			me.model.destroy({
-				callback: function (recs, operation) {
+				callback: function(recs, operation) {
 					if (operation.success) {
 						me.files.remove();
 						me.model = ns.request = null;
@@ -282,126 +286,152 @@ Ext.define('qqext.view.reg.VRegForm', {
 		 * @returns {undefined}
 		 */
 		function book() {
-			if (!ns.checkDates([me.query.pd, me.applicant.dt]))
-				return;
-			// Кнопки сохранить, удалить и регистрировать
-			me._disableButtons(true, 1, 3, 4);
-			me.setViewOnly(true);
-			me._setPD();
-			var model = me.model, status;
-			if (me.validate()) {
-				var userId = ns.user.get('userId'),
+				if (!ns.checkDates([me.query.pd, me.applicant.dt]))
+					return;
+				// Кнопки сохранить, удалить и регистрировать
+				me._disableButtons(true, 1, 3, 4);
+				me.setViewOnly(true);
+				me._setPD();
+				var model = me.model,
+					status;
+				if (me.validate()) {
+					var userId = ns.user.get('userId'),
 						now = new Date();
-				/*
-				 if (me.query.mr.getValue()) { // Добавляем один день к плановой дате, если отказ
-				 var plannedDateCombo = me.query.pd,
-				 plannedDate = plannedDateCombo.getValue();
-				 plannedDate.setDate(plannedDate.getDate() + 1);
-				 plannedDateCombo.setValue(plannedDate)
-				 }
-				 */
-				// Заполняем обязательные поля:
+					/*
+					 if (me.query.mr.getValue()) { // Добавляем один день к плановой дате, если отказ
+					 var plannedDateCombo = me.query.pd,
+					 plannedDate = plannedDateCombo.getValue();
+					 plannedDate.setDate(plannedDate.getDate() + 1);
+					 plannedDateCombo.setValue(plannedDate)
+					 }
+					 */
+					// Заполняем обязательные поля:
 
-				if (me.query.mr.value) {
-					status = ns.stats.exec;
-					me.query.pd.setValue(now);
+					if (me.query.mr.value) {
+						status = ns.stats.exec;
+						me.query.pd.setValue(now);
+					} else
+						status = ns.stats.reg;
+
+					me.updateRecord();
+					model.set('status', ns.statsId[status]);
+					if (model.get('litera') === ns.sicId) {
+						if (model.get('execOrg') === ns.sicId)
+							model.set('notifyStatus', ns.notiStatsId[ns.notiStats.none]);
+						else
+							model.set('notifyStatus', ns.notiStatsId[ns.notiStats.noexec]);
+					}
+					model.set('registrator', userId);
+					model.set('regDate', now);
+
+					if (!ns.request) { // Еще не сохраненная модель
+						var year = now.getYear() + 1900;
+						model.set('sufixNum', year);
+
+						Ext.Ajax.request({
+							url: '/qq-web/rest/question/allowedid/' + ns.user.get('organization') + '/' + year,
+							success: function(answer) {
+								model.set('prefixNum', answer.responseText);
+								me._saveModel(function() {
+									me.loadRecord(true);
+									ns.turnOnArticles(ns.btns.notify, ns.btns.trans);
+									me._disableButtons(false, 2);
+								}, function() {
+									me._disableButtons(false, 1, 4);
+								}, function() {
+									me._disableButtons(false, 1, 3, 4);
+								});
+							},
+							failure: function() {
+								ns.showError("Ошибка", "Невозможно присвоить номер запросу");
+							}
+						});
+					} else { // Уже есть номер
+						me._saveModel(function() {
+							me.loadRecord(true);
+							ns.turnOnArticles(ns.btns.notify, ns.btns.trans);
+							me._disableButtons(false, 2);
+						}, function() { // Не смогли сохранить ничего
+							me._disableButtons(false, 1, 4);
+						}, function() { // Не смогли сохранить заявителя
+							me._disableButtons(false, 1, 3, 4);
+						});
+					}
+				} else { // Валидация не прошла
+					me._disableButtons(false, 1, 3, 4);
+					me.setViewOnly(false);
 				}
-				else
-					status = ns.stats.reg;
-
-				me.updateRecord();
-				model.set('status', ns.statsId[status]);
-				if (model.get('litera') === ns.sicId) {
-					if (model.get('execOrg') === ns.sicId)
-						model.set('notifyStatus', ns.notiStatsId[ns.notiStats.none]);
-					else
-						model.set('notifyStatus', ns.notiStatsId[ns.notiStats.noexec]);
-				}
-				model.set('updateUser', userId);
-				model.set('updateDate', now);
-				model.set('registrator', userId);
-				model.set('regDate', now);
-
-				if (!ns.request) {// Еще не сохраненная модель
-					var year = now.getYear() + 1900;
-					model.set('insertUser', userId);
-					model.set('insertDate', now);
-					model.set('sufixNum', year);
-
-					Ext.Ajax.request({
-						url: '/qq-web/rest/question/allowedid/' + ns.user.get('organization') + '/' + year,
-						success: function (answer) {
-							model.set('prefixNum', answer.responseText);
-							me._saveModel(function () {
-								me.loadRecord(true);
-								ns.turnOnArticles(ns.btns.notify, ns.btns.trans);
-								me._disableButtons(false, 2);
-							}, function () {
-								me._disableButtons(false, 1, 4);
-							}, function () {
-								me._disableButtons(false, 1, 3, 4);
-							});
-						},
-						failure: function () {
-							ns.showError("Ошибка", "Невозможно присвоить номер запросу");
-						}
-					});
-				} else { // Уже есть номер
-					me._saveModel(function () {
-						me.loadRecord(true);
-						ns.turnOnArticles(ns.btns.notify, ns.btns.trans);
-						me._disableButtons(false, 2);
-					}, function () { // Не смогли сохранить ничего
-						me._disableButtons(false, 1, 4);
-					}, function () { // Не смогли сохранить заявителя
-						me._disableButtons(false, 1, 3, 4);
-					});
-				}
-			} else { // Валидация не прошла
-				me._disableButtons(false, 1, 3, 4);
-				me.setViewOnly(false);
 			}
-		}
-		// Выполняет печать (переправку пользователся на открытие документа) выписки создания запроса
+			// Выполняет печать (переправку пользователся на открытие документа) выписки создания запроса
 		function print() {
-			var model = me.model;
-			window.open(ns.urls.vypiska + '?prefix=' + model.get('prefixNum') +
+				var model = me.model;
+				window.open(ns.urls.vypiska + '?prefix=' + model.get('prefixNum') +
 					'&sufix=' + model.get('sufixNum') + '&litera=' + model.get('litera'));
-		}
-//----------------------------------------------
+			}
+			//----------------------------------------------
 		var me = this,
-				ns = qqext,
-				labels = ns.labels,
-				createCmp = Ext.create,
-				menu = createCmp('HButtonMenu', [
-					{text: labels.edit, action: ns.edit, opts: {cls: 'edit_btn'}},
-					{text: labels.save, action: save, opts: {cls: 'save_btn'}},
-					{text: labels.print, action: print, opts: {hidden: !ns.isSIC, cls: 'print_btn'}},
-					{text: labels.remove, action: remove, opts: {cls: 'remove_btn'}},
-					{text: labels.register, action: book, opts: {cls: 'reg_btn'}}],
-						'ToolButton', me);
-		Ext.applyIf(me, {items: [
+			ns = qqext,
+			labels = ns.labels,
+			createCmp = Ext.create,
+			menu = createCmp('HButtonMenu', [{
+					text: labels.edit,
+					action: ns.edit,
+					opts: {
+						cls: 'edit_btn'
+					}
+				}, {
+					text: labels.save,
+					action: save,
+					opts: {
+						cls: 'save_btn'
+					}
+				}, {
+					text: labels.print,
+					action: print,
+					opts: {
+						hidden: !ns.isSIC,
+						cls: 'print_btn'
+					}
+				}, {
+					text: labels.remove,
+					action: remove,
+					opts: {
+						cls: 'remove_btn'
+					}
+				}, {
+					text: labels.register,
+					action: book,
+					opts: {
+						cls: 'reg_btn'
+					}
+				}],
+				'ToolButton', me);
+		Ext.applyIf(me, {
+			items: [
 				me.inbox = createCmp('VInboxDoc'),
 				me.query = createCmp('VQuery'),
 				me.applicant = createCmp('VApplicant'),
-				me.target = createCmp('VQueryObject', {hidden: true}),
+				me.target = createCmp('VQueryObject', {
+					hidden: true
+				}),
 				me.files = createCmp('FAttachedFiles', 'Документы заявителя',
-						'Q_VALUE_FILE_TYPE_APP_DOCS', ns.atpaths.fappl,
-						ns.atpaths.uappl, {
-							allowBlank: ns.isSIC ? false : true,
-							border: true,
-							collapsible: true,
-							collapsed: true,
-							titleCollapse: true,
-							animCollapse: true,
-							hideCollapseTool: true,
-							disabledCls: '',
-							cls: 'collapse_section attached_section',
-							header: {
-								icon: 'images/transp.png'
-							}
-						})
-			]});
+					'Q_VALUE_FILE_TYPE_APP_DOCS', ns.atpaths.fappl,
+					ns.atpaths.uappl, {
+						allowBlank: ns.isSIC ? false : true,
+						border: true,
+						collapsible: true,
+						collapsed: true,
+						titleCollapse: true,
+						animCollapse: true,
+						hideCollapseTool: true,
+						disabledCls: '',
+						cls: 'collapse_section attached_section',
+						header: {
+							icon: 'images/transp.png'
+						}
+					})
+			]
+		});
 		me._btns = menu.items;
 		me.callParent();
 		ns.Menu.editReqMenu.insert(0, menu);
@@ -412,11 +442,12 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 * @param {Boolean} withoutFiles не загружать модель файлов
 	 * @private
 	 */
-	_mAction: function (action, withoutFiles) {
+	_mAction: function(action, withoutFiles) {
 		var me = this,
-				model = me.model;
+			model = me.model;
 		[me.inbox, me.query,
-			me.target].forEach(function (f) {
+			me.target
+		].forEach(function(f) {
 			f[action](model);
 		});
 		if (!withoutFiles) {
@@ -428,13 +459,13 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 * Загружает данные из модели на форму
 	 * @param {Boolean} withoutFiles не загружать модель файлов
 	 */
-	loadRecord: function (withoutFiles) {
+	loadRecord: function(withoutFiles) {
 		this._mAction('loadRecord', withoutFiles);
 	},
 	/**
 	 * Сохраняет данные формы в модели
 	 */
-	updateRecord: function () {
+	updateRecord: function() {
 		this._mAction('updateRecord');
 	},
 	/**
@@ -442,12 +473,12 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 * @param {qqext.model.Question} model если задана то модель формы инициализируется ей
 	 * @returns {qqext.model.Question} модель
 	 */
-	initModel: function (model) {
+	initModel: function(model) {
 		var me = this;
 		if (model)
 			return me.model = model;
 		var createCmp = Ext.create,
-				model = me.model = createCmp('QuestionModel');
+			model = me.model = createCmp('QuestionModel');
 		model.setAppl(createCmp('ApplicantModel'));
 		return model;
 	},
@@ -455,9 +486,9 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 * Проверяет форму на валидность (для прохождения регистрации).
 	 * @returns {Boolean} показывает ошибку и возвращает false в случае не правильного заполнения формы
 	 */
-	validate: function () {
+	validate: function() {
 		var errors = [];
-		this.items.each(function (form) {
+		this.items.each(function(form) {
 			if (!(form.isHidden() || form.isValid()))
 				errors.push(form.getErrors());
 		});
@@ -470,8 +501,8 @@ Ext.define('qqext.view.reg.VRegForm', {
 	/**
 	 * Сбрасывает все ошибки
 	 */
-	reset: function () {
-		this.items.each(function (form) {
+	reset: function() {
+		this.items.each(function(form) {
 			form.reset();
 		});
 	},
@@ -479,7 +510,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 * Приводит форму к первоначальному состоянию,
 	 * без данных
 	 */
-	clear: function () {
+	clear: function() {
 		var me = this;
 		me.reset();
 		me.target.hide();
@@ -492,12 +523,12 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 * Вызывается только при регистрации запроса, перед проверкой.
 	 * @private
 	 */
-	_setPD: function () {
+	_setPD: function() {
 		var me = this,
-				date,
-				pd = me.query.pd,
-				vz = me.query.vz,
-				value;
+			date,
+			pd = me.query.pd,
+			vz = me.query.vz,
+			value;
 		if (me.inbox.executor.getValue() === qqext.sicId) {
 			date = new Date();
 			date.setDate(date.getDate() + 15);
@@ -518,12 +549,12 @@ Ext.define('qqext.view.reg.VRegForm', {
 	/**
 	 * Устанавливает определенные поля доступными для редактирования в режиме супервизора.
 	 */
-	setAdminMode: function () {
-		this.applicant.items.getRange(1, 8).forEach(function (it, i) {
+	setAdminMode: function() {
+		this.applicant.items.getRange(1, 8).forEach(function(it, i) {
 			if (i !== 4)
 				it.setViewOnly(false);
 		});
-		this.target.items.each(function (it) {
+		this.target.items.each(function(it) {
 			it.setViewOnly(false);
 		});
 	}

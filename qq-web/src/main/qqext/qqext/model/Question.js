@@ -15,14 +15,6 @@ Ext.define('qqext.model.Question', {
 	],
 	fields: [
 		{name: 'id', type: 'int', defaultValue: null, convert: null, isNull: true},
-		{name: 'insertDate', type: 'date', convert: function (v) {
-				if (v)
-					return new Date(v);
-			}},
-		{name: 'updateDate', type: 'date', convert: function (v) {
-				if (v)
-					return new Date(v);
-			}},
 		{name: 'status', type: 'int', defaultValue: null, convert: null},
 		{name: 'createOrg', type: 'int', defaultValue: null, convert: null},
 		{name: 'litera', type: 'int', defaultValue: null, convert: null},
@@ -35,8 +27,6 @@ Ext.define('qqext.model.Question', {
 		{name: 'transferType', type: 'int', defaultValue: null, convert: null},
 		{name: 'notifyStatus', type: 'int', defaultValue: null, convert: null},
 		{name: 'execOrg', type: 'int', defaultValue: null, convert: null},
-		{name: 'insertUser', type: 'int', defaultValue: null, convert: null},
-		{name: 'updateUser', type: 'int', defaultValue: null, convert: null},
 		{name: 'questionType', type: 'int', defaultValue: null, convert: null},
 		{name: 'registrator', type: 'int', defaultValue: null, convert: null},
 		{name: 'plannedFinishDate', type: 'date', convert: function (v) {

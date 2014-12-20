@@ -28,6 +28,7 @@ import ru.insoft.archive.extcommons.ejb.JsonTools;
 import ru.insoft.archive.extcommons.webmodel.FilterBy;
 import ru.insoft.archive.extcommons.webmodel.OrderBy;
 import ru.insoft.archive.qq.entity.Applicant;
+import ru.insoft.archive.qq.entity.Assistant;
 import ru.insoft.archive.qq.entity.Question;
 import ru.insoft.archive.qq.model.SearchCritery;
 import ru.insoft.archive.qq.entity.Transmission;
@@ -135,10 +136,14 @@ public class QQSearch extends LoggedBean {
 					case "executor":
 						Join<Question, Transmission> jTr = root.join("transmission", JoinType.LEFT);
 						Join<Transmission, AdmUser> admUserJoin = jTr.join("executorValue", JoinType.LEFT);
+//						Join<Transmission, Assistant> assTransJoin = jTr.join("assistants", JoinType.LEFT);
+//						Join<Assistant, AdmUser> assUserJoin = assTransJoin.join("userValue", JoinType.LEFT);
 						if (ou.asc()) {
 							o = cb.asc(admUserJoin.get("name"));
+//							jpaOrders.add(cb.asc(assUserJoin.get("name")));
 						} else {
 							o = cb.desc(admUserJoin.get("name"));
+//							jpaOrders.add(cb.desc(assUserJoin.get("name")));
 						}
 						jpaOrders.add(o);
 						break;
@@ -288,8 +293,10 @@ public class QQSearch extends LoggedBean {
 
 		Long executor = query.getExecutor();
 		if (executor != null) {
-			expressions.add(cb.equal(root.join("transmission")
-					.<Long>get("executor"), executor));
+			Join<Question, Transmission> jTr = root.join("transmission");
+			Join<Transmission, Assistant> aTr = jTr.join("assistants", JoinType.LEFT);
+			expressions.add(cb.or(cb.equal(jTr.<Long>get("executor"), executor),
+					cb.equal(aTr.<Long>get("user"), executor)));
 		}
 		ArrayList<Order> jpaOrders = new ArrayList<>();
 		if (orders != null) {
@@ -569,8 +576,10 @@ public class QQSearch extends LoggedBean {
 						root.<Long>get("execOrg"), execOrg));
 			}
 			if (executor != null) {
-				expressions.add(cb.equal(
-						root.join("transmission").get("executor"), executor));
+				Join<Question, Transmission> jTr = root.join("transmission");
+				Join<Transmission, Assistant> aTr = jTr.join("assistants", JoinType.LEFT);
+				expressions.add(cb.or(cb.equal(jTr.<Long>get("executor"), executor),
+						cb.equal(aTr.<Long>get("user"), executor)));
 			}
 			if (prefixNum != null) {
 				expressions.add(cb.and(

@@ -930,6 +930,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.factory.TextField": [],
   "qqext.model.Applicant": [],
   "qqext.model.ApplicantDoc": [],
+  "qqext.model.Assistant": [],
   "qqext.model.Coordination": [],
   "qqext.model.DeliveryAction": [],
   "qqext.model.ExecutionInfo": [],
@@ -2037,6 +2038,7 @@ Ext.ClassManager.addNameAliasMappings({
   "qqext.model.ApplicantDoc": [
     "ApplicantDocModel"
   ],
+  "qqext.model.Assistant": [],
   "qqext.model.Coordination": [
     "CoordinationModel"
   ],

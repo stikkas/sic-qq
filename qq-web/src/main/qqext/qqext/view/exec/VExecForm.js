@@ -33,9 +33,12 @@ Ext.define('qqext.view.exec.VExecForm', {
 				me.model = ns.request;
 				me._disableButtons(true, 1, 2, 3);
 				var status = me.model.get('status');
-				me._disableButtons(!(ns.user.isAllowed(ns.rules.exec) &&
-						ns.user.get('organization') === me.model.get('execOrg') &&
-						(status === ns.statsId[ns.stats.onexec] || status === ns.statsId[ns.stats.exec])), 0);
+				me.model.getTrans({
+					callback: function (r) {
+						me._disableButtons(!(r.get('executor') === ns.user.get('userId') &&
+								(status === ns.statsId[ns.stats.onexec] || status === ns.statsId[ns.stats.exec])), 0);
+					}
+				});
 
 				me._initData();
 				ns.initRequired(me);
@@ -59,7 +62,8 @@ Ext.define('qqext.view.exec.VExecForm', {
 		me.items.each(function (it) {
 			it.reset();
 		});
-		model.getExec({callback: function (r1) {
+		model.getExec({
+			callback: function (r1) {
 				me._ef.loadRecord(r1);
 				if (r1.get('renewalNotice')) {
 					me._ef.df2.viewOnly = true;
@@ -68,10 +72,13 @@ Ext.define('qqext.view.exec.VExecForm', {
 					me._ef.df2.viewOnly = false;
 					me._prodlen = false;
 				}
-				r1.getWay({callback: function (r2) {
+				r1.getWay({
+					callback: function (r2) {
 						me._mf.loadRecord(r1.files(), r2);
-					}});
-			}});
+					}
+				});
+			}
+		});
 		[me._df, me._cf, me._mf].forEach(function (v) {
 			v.setStorage();
 		});
@@ -87,9 +94,11 @@ Ext.define('qqext.view.exec.VExecForm', {
 		me._disableButtons(true, 0, 1, 2, 3);
 		var model = me.model.getExec();
 		me.updateRecord();
-		model.save({callback: function (r, o, s) {
+		model.save({
+			callback: function (r, o, s) {
 				if (s) {
-					model.getWay().save({callback: function (rec, op, st) {
+					model.getWay().save({
+						callback: function (rec, op, st) {
 							if (st) {
 								me._df.sync();
 								me._cf.sync();
@@ -98,7 +107,8 @@ Ext.define('qqext.view.exec.VExecForm', {
 								if (!me._prodlen && model.get('renewalNotice')) {
 									me.model.set('plannedFinishDate',
 											me.model.get('plannedFinishDate').valueOf() + 30 * qqext.msPday);
-									me.model.save({callback: function (rec, op, st) {
+									me.model.save({
+										callback: function (rec, op, st) {
 											if (st) {
 												me._prodlen = true;
 												me._ef.df2.viewOnly = true;
@@ -106,7 +116,8 @@ Ext.define('qqext.view.exec.VExecForm', {
 												qqext.showError("Ошибка продления выполнения", op.getError());
 												failure();
 											}
-										}});
+										}
+									});
 								}
 							} else {
 								qqext.showError("Ошибка сохранение данных", o.getError());
@@ -150,10 +161,13 @@ Ext.define('qqext.view.exec.VExecForm', {
 		 */
 		function remove() {
 			var model = me.model;
-			model.getExec().destroy({callback: function (r, o) {
+			model.getExec().destroy({
+				callback: function (r, o) {
 					if (o.success) {
 						me._mf.remove();
-						model.setExec(createCmp('ExecutionInfoModel', {id: model.get('id')}));
+						model.setExec(createCmp('ExecutionInfoModel', {
+							id: model.get('id')
+						}));
 						me._disableButtons(true, 0, 2);
 						me._disableButtons(false, 1, 3);
 						me._initData();
@@ -178,20 +192,21 @@ Ext.define('qqext.view.exec.VExecForm', {
 			var issueNumberField = me._mf._in,
 					model = me.model;
 			if (!issueNumberField.getValue()) {
-				issueNumberField.setValue(model.get('prefixNum') + '/'
-						+ model.get('sufixNum'));
+				issueNumberField.setValue(model.get('prefixNum') + '/' + model.get('sufixNum'));
 			}
 			if (me.validate()) {
 				me._saveData(function () {
 					model.set('status', ns.statsId[ns.stats.exec]);
-					model.save({callback: function (r, o, s) {
+					model.save({
+						callback: function (r, o, s) {
 							if (s) {
 								ns.statusPanel.setStatus();
 							} else {
 								ns.showError("Ошибка обновления статуса", o.getError());
 							}
 							me._disableButtons(false, 0);
-						}});
+						}
+					});
 				}, failure);
 			} else { // Валидация не прошла
 				failure();
@@ -202,11 +217,31 @@ Ext.define('qqext.view.exec.VExecForm', {
 				me = this,
 				labels = ns.labels,
 				createCmp = Ext.create,
-				menu = createCmp('HButtonMenu', [
-					{text: labels.edit, action: ns.edit, opts: {cls: 'edit_btn'}},
-					{text: labels.save, action: save, opts: {cls: 'save_btn'}},
-					{text: labels.remove, action: remove, opts: {cls: 'remove_btn'}},
-					{text: labels.register, action: book, opts: {cls: 'reg_btn'}}],
+				menu = createCmp('HButtonMenu', [{
+						text: labels.edit,
+						action: ns.edit,
+						opts: {
+							cls: 'edit_btn'
+						}
+					}, {
+						text: labels.save,
+						action: save,
+						opts: {
+							cls: 'save_btn'
+						}
+					}, {
+						text: labels.remove,
+						action: remove,
+						opts: {
+							cls: 'remove_btn'
+						}
+					}, {
+						text: labels.register,
+						action: book,
+						opts: {
+							cls: 'reg_btn'
+						}
+					}],
 						'ToolButton', me);
 		Ext.applyIf(me, {
 			items: [
@@ -221,7 +256,8 @@ Ext.define('qqext.view.exec.VExecForm', {
 		ns.Menu.editReqMenu.insert(3, menu);
 	},
 	updateRecord: function () {
-		var me = this, model = me.model.getExec();
+		var me = this,
+				model = me.model.getExec();
 		me._ef.updateRecord(model);
 		me._mf.updateRecord(model.getWay());
 	},
@@ -233,7 +269,8 @@ Ext.define('qqext.view.exec.VExecForm', {
 		var forms = this.items,
 				i = 0,
 				max = forms.length,
-				errors = [], form;
+				errors = [],
+				form;
 		for (; i < max; ++i) {
 			form = forms.getAt(i);
 			if (!form.isValid())

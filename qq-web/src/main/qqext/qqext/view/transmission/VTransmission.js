@@ -41,11 +41,15 @@ Ext.define('qqext.view.transmission.VTransmission', {
 				me._coex = 2; // индекс, с которого начинаются поля для соисполнителей
 
 				var model = me.model = ns.request,
-					execOrg = model.get('execOrg');
-				if (ns.isSIC && execOrg !== ns.sicId) {
-					me._be.bindStore(ns.stIds.allusers);
-					me._ex.bindStore(ns.stIds.allusers);
-				}
+					execOrg = model.get('execOrg'),
+					allusers = (ns.isSIC && execOrg !== ns.sicId);
+				// Выставляем список правильных пользователей для исполниетелей и соисполнителей.
+				me.items.each(function(fc) {
+					if (fc.$className !== 'qqext.cmp.FieldContainer')
+						return false;
+					fc.items.getAt(0).bindStore(allusers ? ns.stIds.allusers : ns.stIds.users);
+				});
+
 				model.getTrans({
 					callback: function(r) {
 						me.loadRecord(r);

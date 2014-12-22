@@ -1,8 +1,9 @@
 .welcomecontainer{
     background-image:url(../images/main_page_bg.jpg) !important;
-    background-size:100% 100%;
+    background-size:100% 100% !important;
     background-position:center bottom;
     background-color:#E4D9C1;
+    background-repeat:no-repeat !important;
 }
 .welcomecontainer .x-box-inner{
     color:#742708;
@@ -43,26 +44,27 @@ height:200px !important;
     word-wrap:break-word;
 }
 .welcomebutton .x-btn-icon-el{
-width:80px;
-background-position:top center;
-margin-left:calc(50% - 35px);
+    width:80px;
+    background-position:top center;
+    margin:auto;
+    right:0;
 }
 .welcomepage .x-toolbar-footer{
-background-color:#E5DCC5;
+    background-color:#E5DCC5;
 }
 .welcomepage .x-toolbar-footer .x-btn{
-background-image:url(../images/key.png);
-background-repeat:no-repeat;
-background-color:transparent;
-border:none;
-padding:7px 20px 7px 30px;
+    background-image:url(../images/key.png);
+    background-repeat:no-repeat;
+    background-color:transparent;
+    border:none;
+    padding:7px 20px 7px 30px;
 }
 .welcomepage .x-toolbar-footer .x-btn-button{
-height:20px;
+    height:20px;
 }
 .welcomepage .x-toolbar-footer .x-btn-inner{
-color:#230F07;
-font: bold 1.1em Arial, sans-serif;
-text-decoration:underline;
+    color:#230F07;
+    font: bold 1.1em Arial, sans-serif;
+    text-decoration:underline;
 }
 

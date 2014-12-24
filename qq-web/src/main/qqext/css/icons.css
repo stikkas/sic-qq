@@ -20,6 +20,8 @@ and open the template in the editor.
 }
 a.add_btn.x-btn{
     background-image:url(../images/i_add.png);
+    background-color:transparent;
+    border:none;
 }
 a.search_btn.x-btn{
     background-image:url(../images/i_binok.png);
@@ -35,6 +37,8 @@ a.save_btn.x-btn{
 }
 a.remove_btn.x-btn{
     background-image:url(../images/delete.png);
+    background-color:transparent;
+    border:none;
 }
 a.reg_btn.x-btn{
     background-image:url(../images/i_ok.png);
@@ -100,4 +104,14 @@ a.quit_btn.x-btn{
 /*прячем счетчик у полей вроде Года рождения*/
 div.x-form-spinner-up, div.x-form-spinner-down{
     display:none;
+}
+/*кнопки и даты соисполнителя*/
+.exec_fld_cls{
+    background-size:100%;
+    margin-top:10px;
+    left: 0 !important;
+    margin-left: 670px !important;
+}
+.coexec input[name="coexecDate"]{
+    width:110px !important;
 }

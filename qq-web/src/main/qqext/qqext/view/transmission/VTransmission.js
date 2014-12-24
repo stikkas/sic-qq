@@ -241,7 +241,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 				}),
 				createCmp('FieldContainer', {
 					layout: 'hbox',
-					cls: 'right_date',
+					cls: 'right_date coexec',
 					items: [
 						me._ex = createCmp('FComboBox', trans.executor[1], ns.stIds.users, trans.executor[0], {
 							allowBlank: false,
@@ -263,7 +263,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 						createCmp('FDateField', trans.executionDate[1], trans.executionDate[0],
 							configForDate),
 						createCmp('Ext.button.Button', {
-							text: '+',
+							cls:'add_btn exec_fld_cls',
 							handler: me.addExecutor,
 							scope: me
 						})
@@ -349,7 +349,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 
 			container = create('FieldContainer', {
 				layout: 'hbox',
-				cls: 'right_date',
+				cls: 'right_date coexec',
 				items: [
 					cb = create('FComboBox', trans.coexec[1], ns.stIds.users, trans.coexec[0] + me._coex, {
 						width: 450,
@@ -357,7 +357,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 					}),
 					df = create('FDateField', trans.coexecDate[1], trans.coexecDate[0], configForDate),
 					create('Ext.button.Button', {
-						text: 'x',
+						cls:'remove_btn exec_fld_cls',
 						hidden: assistant ? true : false,
 						handler: function() {
 							me._execs.splice(me._execs.indexOf(container), 1);

@@ -27,6 +27,7 @@ Ext.define('qqext.view.report.VReportForm', {
 				ns = qqext,
 				create = Ext.create,
 				format = Ext.Date.format;
+		/*
 		this.items = [{
 				xtype: 'fieldcontainer',
 				layout: 'hbox',
@@ -73,6 +74,7 @@ Ext.define('qqext.view.report.VReportForm', {
 
 			})
 		];
+		*/
 		this.callParent();
 	}
 });

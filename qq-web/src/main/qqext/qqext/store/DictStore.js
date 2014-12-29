@@ -13,7 +13,7 @@ Ext.define('qqext.store.DictStore', {
 	 * Конструктор
 	 * @param {String} storeId идентификатор хранлища
 	 * @param {String} dict последняя часть адреса, по которому будет отправлен запрос серверу
-	 * @param {Number} org идентификатор организации, которой будет ограничен запрос
+	 * @param {Number/String} org идентификатор организации, которой будет ограничен запрос, или роль 
 	 * @param {Object} opts дополнительные настройки для Ext.data.Store
 	 */
 	constructor: function (storeId, dict, org, opts) {
@@ -29,7 +29,11 @@ Ext.define('qqext.store.DictStore', {
 			if (org instanceof Object) {
 				me.callParent([org]);
 			} else {
-				me.proxy.extraParams = {organization: org};
+				if (isNaN(parseInt(org))) // Значит это роль
+					me.proxy.extraParams = {role: org};
+				else // Значит это организация
+					me.proxy.extraParams = {organization: org};
+
 				if (opts)
 					me.callParent([opts]);
 				else

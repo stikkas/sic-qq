@@ -705,6 +705,7 @@ Ext.application({
 					litera: 'litera',
 					users: 'users',
 					allusers: 'allusers',
+					regusers: 'regusers',
 					stats: 'statuses',
 					execOrgs: 'organizations',
 					sendType: 'sendtypes',
@@ -731,6 +732,7 @@ Ext.application({
 		create('DictStore', ids.litera, ids.litera, organization);
 		create('DictStore', ids.users, ids.users, organization);
 		create('DictStore', ids.allusers, ids.users);
+		create('DictStore', ids.regusers, ids.users, 'Q_RULE_REGISTRATOR');
 		create('DictStore', ids.sendType, ids.sendType);
 		create('DictStore', ids.queryType, ids.queryType);
 		create('DictStore', ids.stats, ids.stats, {

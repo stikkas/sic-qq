@@ -21,6 +21,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import ru.insoft.archive.qq.qualifier.Arial;
+import ru.insoft.archive.qq.qualifier.ArialBold;
 
 /**
  * Создает документ "Выписка"
@@ -34,7 +35,11 @@ public class Vypiska {
 
 	@Inject
 	@Arial
-	private BaseFont bf;
+	private BaseFont arial;
+
+	@Inject
+	@ArialBold
+	private BaseFont arialBold;
 
 	public void getDocument(Long prefix, Long sufix, Long litera,
 		OutputStream out) {
@@ -51,12 +56,13 @@ public class Vypiska {
 			doc.addCreator("INSOFT");
 			doc.addTitle("Выписка");
 
-			Font blank = new Font(bf, 6);
-			Font uderline = new Font(bf, 12, Font.UNDERLINE);
-			Font title = new Font(bf, 14);
-			Font title_bold = new Font(bf, 14, Font.BOLD);
-			Font value = new Font(bf, 13, Font.BOLD);
-			Font general = new Font(bf, 12);
+			Font blank = new Font(arial, 6);
+			Font uderline = new Font(arial, 12, Font.UNDERLINE);
+			Font title = new Font(arial, 14);
+			Font title_bold = new Font(arialBold, 14);
+			Font value = new Font(arialBold, 13);
+			Font general = new Font(arial, 12);
+
 			Font font;
 			int align;
 			Paragraph paragraph;
@@ -115,7 +121,8 @@ public class Vypiska {
 					++i;
 					continue;
 				} else if (i == 30) { // Дата выдачи
-					doc.add(createTable(createCell(new Phrase(template[i] + vi.getFinishDate(), value),
+//					doc.add(createTable(createCell(new Phrase(template[i] + vi.getFinishDate(), value),
+					doc.add(createTable(createCell(new Phrase("       ", value),
 						Element.ALIGN_CENTER, Rectangle.BOTTOM)));
 					++i;
 					doc.add(new Paragraph(" ", blank));
@@ -257,7 +264,7 @@ public class Vypiska {
 		"____________________          ", // 37
 		"Должность, фамилия, инициалы сотрудника, выдавшего конечный документ:", // 38
 		"_______________________________________________________________________________", // 39
-		"Подпись заявителя, подтверждающего получение конечного документа в СИЦ", // 40
+		"Подпись заявителя, подтверждающего получение конечного документа", // 40
 		"__________________________________________________     ________________(подпись)", // 41
 		"Расшифровка подписи (ФИО)                                                      ", // 42
 		"Дата  ____________________" // 43

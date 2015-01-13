@@ -3,12 +3,13 @@ package ru.insoft.archive.qq.producer;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.BaseFont;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.inject.Produces;
 import ru.insoft.archive.qq.qualifier.Arial;
-import ru.insoft.archive.qq.report.Vypiska;
+import ru.insoft.archive.qq.qualifier.ArialBold;
+import ru.insoft.archive.qq.qualifier.ArialBoldItalic;
+import ru.insoft.archive.qq.qualifier.ArialItalic;
 
 /**
  * Предоставляет базовые шрифты для pdf документов.
@@ -19,31 +20,38 @@ public class Fonts {
 
 	@Produces
 	@Arial
-	public BaseFont getFont() { // Вызывается только первый раз, потом существует до закрытия всего приложение (jboss stop)
-		BaseFont bf = null;
-		try {
-			bf = BaseFont.createFont(getFontFileName(),
-				BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-		} catch (DocumentException | IOException ex) {
-			Logger.getLogger(Vypiska.class.getName()).log(Level.SEVERE, null, ex);
-		}
-		return bf;
+	public BaseFont getArial() {
+		return getFont("fonts/Arial.ttf");
 	}
 
-	private String getFontFileName() {
-		String fileName = "fonts/arial.ttf";
-//		if (!new File(fileName).exists()) {
-		try (InputStream is = getClass().getClassLoader().getResourceAsStream(fileName)) {
-//				OutputStream out = new FileOutputStream(fileName)) {
-//				byte[] bts = new byte[4096];
-//				int readed;
-//				while ((readed = is.read(bts, 0, bts.length)) != -1) {
-//					out.write(bts, 0, readed);
-//				}
-		} catch (IOException ex) {
-			Logger.getLogger(Vypiska.class.getName()).log(Level.SEVERE, ex.getMessage());
-		}
-//		}
-		return fileName;
+	@Produces
+	@ArialBold
+	public BaseFont getArialBold() {
+		return getFont("fonts/Arial_Bold.ttf");
 	}
+
+	@Produces
+	@ArialBoldItalic
+	public BaseFont getArialBoldItalic() {
+		return getFont("fonts/Arial_Bold_Italic.ttf");
+	}
+
+	@Produces
+	@ArialItalic
+	public BaseFont getArialItalic() {
+		return getFont("fonts/Arial_Italic.ttf");
+	}
+
+	private BaseFont getFont(String resourceFileName) {
+		BaseFont font = null;
+		try {
+			getClass().getClassLoader().getResourceAsStream(resourceFileName);
+			font = BaseFont.createFont(resourceFileName,
+					BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+		} catch (DocumentException | IOException ex) {
+			Logger.getLogger(Fonts.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return font;
+	}
+
 }

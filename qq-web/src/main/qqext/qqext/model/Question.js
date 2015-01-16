@@ -45,6 +45,7 @@ Ext.define('qqext.model.Question', {
 		{type: 'hasOne', model: 'qqext.model.Transmission', foreignKey: 'id',
 			setterName: 'setTrans', getterName: 'getTrans'},
 		{type: 'hasOne', model: 'qqext.model.Applicant', foreignKey: 'id',
+			associationKey: 'applicant', 
 			setterName: 'setAppl', getterName: 'getAppl'},
 		{type: 'hasOne', model: 'qqext.model.Notification', foreignKey: 'id',
 			setterName: 'setNoti', getterName: 'getNoti'},
@@ -57,7 +58,14 @@ Ext.define('qqext.model.Question', {
 		type: 'rest',
 		url: '/qq-web/rest/question',
 		reader: 'json',
-		writer: 'json',
+		writer: {
+			type: 'json',
+			getRecordData: function (record) {
+				var data = record.data;
+				data.applicant = record.getAppl().data;
+				return data;
+			}
+		},
 		listeners: {
 			exception: function (proxy, answer, operation) {
 				operation.error = answer.responseText;

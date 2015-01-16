@@ -73,7 +73,7 @@ public class DictREST {
 				+ " from DescriptorValueAttr a, DescriptorGroupAttr g, DescriptorValue v"
 				+ " where a.attrId = g.id and a.valueId = v.id and g.code = 'MEMBER_LETTER'";
 
-		if (!organization.equals(sicId)) {
+		if (organization != null && !organization.equals(sicId)) {
 			query += " and v.id in (" + sicId + "," + organization + ")";
 		}
 		return execQuery(query);

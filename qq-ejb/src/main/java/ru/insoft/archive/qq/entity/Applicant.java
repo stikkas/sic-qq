@@ -33,9 +33,7 @@ public class Applicant implements Serializable, HasId, JsonIn, JsonOut {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Basic(optional = false)
-	@NotNull
-	@Column(name = "QUESTION_ID")
+	@Column(name = "QUESTION_ID", nullable = false)
 	private Long id;
 
 	@Column(name = "APPLICANT_CATEGORY_ID")
@@ -94,7 +92,7 @@ public class Applicant implements Serializable, HasId, JsonIn, JsonOut {
 	@JsonIgnore
 	@JoinColumn(name = "QUESTION_ID",
 			referencedColumnName = "QUESTION_ID", insertable = false, updatable = false)
-	@OneToOne(optional = false, fetch = FetchType.EAGER)
+	@OneToOne
 	private Question question;
 
 	@JsonIgnore

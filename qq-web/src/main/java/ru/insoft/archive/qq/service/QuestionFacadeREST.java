@@ -1,5 +1,7 @@
 package ru.insoft.archive.qq.service;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Objects;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -17,6 +19,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
+import ru.insoft.archive.qq.entity.Applicant;
 import ru.insoft.archive.qq.entity.Question;
 
 /**
@@ -49,19 +52,44 @@ public class QuestionFacadeREST extends AbstractFacade<Question> {
 		}
 	}
 
+	/**
+	 * Создает новый запрос. Назначает ему номер.
+	 *
+	 * @param entity Объект запроса
+	 * @return идентификатор нового запроса
+	 */
 	@POST
 	@Produces({"application/json"})
 	@Consumes({"application/json"})
-	public Object createEntity(Question entity) {
-		Question check = exists(entity);
-		if (check == null) {
-			return super.create(entity).getId();
+	public Question createEntity(Question entity) {
+		Long suffix = (long) new GregorianCalendar().get(Calendar.YEAR);
+		Long prefix = em.createNamedQuery("Question.maxNumber", Long.class)
+				.setParameter("year", suffix)
+				.setParameter("litera", entity.getLitera())
+				.getSingleResult();
+		if (prefix == null) {
+			prefix = 1l;
+		} else {
+			++prefix;
 		}
+		entity.setPrefixNum(prefix);
+		entity.setSufixNum(suffix);
+		super.create(entity);
+		Applicant applicant = entity.getApplicant();
+		applicant.setId(entity.getId());
+		em.persist(applicant);
+		return entity;
+		/*
+		 Question check = exists(entity);
+		 if (check == null) {
+		 return super.create(entity).getId();
+		 }
 
-		ResponseBuilder builder = Response.status(Status.NOT_FOUND);
-		builder.header("Content-Type", "text/html; charset=utf-8");
-		builder.entity("<p>Запрос с таким номером уже существует</p>");
-		throw new WebApplicationException(builder.build());
+		 ResponseBuilder builder = Response.status(Status.NOT_FOUND);
+		 builder.header("Content-Type", "text/html; charset=utf-8");
+		 builder.entity("<p>Запрос с таким номером уже существует</p>");
+		 throw new WebApplicationException(builder.build());
+		 */
 	}
 
 	@PUT
@@ -69,15 +97,15 @@ public class QuestionFacadeREST extends AbstractFacade<Question> {
 	@Consumes({"application/json"})
 	@Produces({"application/json"})
 	public void edit(@PathParam("id") Long id, Question entity) {
-		Question check = exists(entity);
-		if (check == null || Objects.equals(check.getId(), id)) {
+//		Question check = exists(entity);
+//		if (check == null || Objects.equals(check.getId(), id)) {
 			super.edit(entity);
-		} else {
-			ResponseBuilder builder = Response.status(Status.NOT_FOUND);
-			builder.header("Content-Type", "text/html; charset=utf-8");
-			builder.entity("<p>Запрос с таким номером уже существует</p>");
-			throw new WebApplicationException(builder.build());
-		}
+//		} else {
+//			ResponseBuilder builder = Response.status(Status.NOT_FOUND);
+//			builder.header("Content-Type", "text/html; charset=utf-8");
+//			builder.entity("<p>Запрос с таким номером уже существует</p>");
+//			throw new WebApplicationException(builder.build());
+//		}
 	}
 
 	@DELETE
@@ -99,7 +127,7 @@ public class QuestionFacadeREST extends AbstractFacade<Question> {
 	@Path("allowedid/{litera}/{sufix}")
 	@Produces({"application/json"})
 	public Long getAllowedId(@PathParam("litera") Long litera,
-		@PathParam("sufix") Long sufix) {
+			@PathParam("sufix") Long sufix) {
 		Question entity = super.<Long>getMaximumValue(new Clause[]{
 			new Clause<Long>("litera", litera),
 			new Clause<Long>("sufixNum", sufix)

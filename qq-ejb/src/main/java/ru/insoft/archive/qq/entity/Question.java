@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,12 +17,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import ru.insoft.archive.core_model.table.adm.AdmUser;
@@ -36,6 +41,9 @@ import ru.insoft.archive.extcommons.json.JsonOut;
  */
 @Entity
 @Table(name = "QQ_QUESTION")
+@NamedQueries({
+	@NamedQuery(name = "Question.maxNumber",
+			query = "SELECT MAX(q.prefixNum) FROM Question q WHERE q.sufixNum = :year AND q.litera = :litera")})
 public class Question implements Serializable, HasId, JsonIn, JsonOut {
 
 	private static final long serialVersionUID = 1L;
@@ -52,6 +60,8 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 	@Column(name = "CREATE_ORG_ID")
 	private Long createOrg;
 
+	@Basic(optional = false)
+	@NotNull
 	@Column(name = "LITERA_ID")
 	private Long litera;
 
@@ -68,17 +78,19 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 	@Column(name = "EXEC_ORG_ID")
 	private Long execOrg;
 
-
-
 	@Column(name = "QUESTION_TYPE_ID")
 	private Long questionType;
 
 	@Column(name = "REGISTRATOR_ID")
 	private Long registrator;
 
+	@Basic(optional = false)
+	@NotNull
 	@Column(name = "PREFIX_NUM")
 	private Long prefixNum;
 
+	@Basic(optional = false)
+	@NotNull
 	@Column(name = "SUFIX_NUM")
 	private Long sufixNum;
 
@@ -123,8 +135,7 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
 	private Transmission transmission;
 
-	@JsonIgnore
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "question", fetch = FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.MERGE, mappedBy = "question", fetch = FetchType.EAGER)
 	private Applicant applicant;
 
 	@JsonIgnore
@@ -174,14 +185,15 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 	@ManyToOne
 	private AdmUser registratorId;
 
+	@OneToMany(mappedBy = "questionValue", fetch = FetchType.EAGER)
+	private Set<AttachedFile> files;
+
 	public Question() {
 	}
 
 	public Question(Long id) {
 		this.id = id;
 	}
-
-
 
 	public Long getId() {
 		return id;
@@ -453,6 +465,16 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 
 	public void setRegistratorId(AdmUser registratorId) {
 		this.registratorId = registratorId;
+	}
+
+	public Set<AttachedFile> getFiles() {
+		return files;
+	}
+
+	public void addFile(AttachedFile file) {
+		if (file.getTypeValue().getCode().equals("Q_VALUE_FILE_TYPE_APP_DOCS")) {
+			files.add(file);
+		}
 	}
 
 	@Override

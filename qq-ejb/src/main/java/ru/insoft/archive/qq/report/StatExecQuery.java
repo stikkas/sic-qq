@@ -13,6 +13,7 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,26 +21,35 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import ru.insoft.archive.qq.qualifier.Arial;
+import ru.insoft.archive.qq.qualifier.ArialBold;
 
 /**
  * Статистика исполнения запросов федеральными архивами и СИЦ
  *
  * @author С. Благодатских
  */
+@Stateless
 public class StatExecQuery {
 
 	@PersistenceContext(unitName = "SicEntityManager")
 	private EntityManager em;
 
-	private static final SimpleDateFormat printFormat = new SimpleDateFormat("dd.MM.yyyy");
-
 	@Inject
 	@Arial
-	private BaseFont bf;
+	private BaseFont normal;
+
+	@Inject
+	@ArialBold
+	private BaseFont bold;
+
+	private static Font tableFont;
+	private static Font titleFont;
+	private static Font dateFont;
 
 	private static final String[] tematics = {
 		"Социально-правовые запросы",
@@ -55,6 +65,8 @@ public class StatExecQuery {
 //		"Q_VALUE_QUEST_TYPE_BIO",
 //		""
 //	};
+
+	private static final SimpleDateFormat printFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 	private static final String[][] status = {{"Получено"},
 	{"Исполнено", "Всего", "Выдано полож. ответов", "Выдано отриц. ответов", "Выдано рекомендаций"},
@@ -79,54 +91,53 @@ public class StatExecQuery {
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 		1, 1, 1, 1, 1};
 	private static final String stringQuery = "select "
-		+ "QQ_ON_INTERVAL_QUERY_COUNT(:social,:member,:start,:end) as soc_cnt,"
-		+ "QQ_ON_INTERVAL_EXEC_COUNT(:social,:member,:start,:end) as soc_exec_cnt,"
-		+ "QQ_ON_INTERVAL_EXEC_POS(:social,:member,:start,:end) as soc_exec_pos,"
-		+ "QQ_ON_INTERVAL_EXEC_NEG(:social,:member,:start,:end) as soc_exec_neg,"
-		+ "QQ_ON_INTERVAL_EXEC_REC(:social,:member,:start,:end) as soc_exec_rec,"
-		+ "QQ_ON_INTERVAL_REFUS_COUNT(:social,:member,:start,:end) as soc_otkaz,"
-		+ "QQ_ON_INTERVAL_REJECT_COUNT(:social,:member,:start,:end) as soc_reject,"
-		+ "QQ_ON_INTERVAL_QUERY_COUNT(:tematic,:member,:start,:end) as tem_cnt,"
-		+ "QQ_ON_INTERVAL_EXEC_COUNT(:tematic,:member,:start,:end) as tem_exec_cnt,"
-		+ "QQ_ON_INTERVAL_EXEC_POS(:tematic,:member,:start,:end) as tem_exec_pos,"
-		+ "QQ_ON_INTERVAL_EXEC_NEG(:tematic,:member,:start,:end) as tem_exec_neg,"
-		+ "QQ_ON_INTERVAL_EXEC_REC(:tematic,:member,:start,:end) as tem_exec_rec,"
-		+ "QQ_ON_INTERVAL_REFUS_COUNT(:tematic,:member,:start,:end) as tem_otkaz,"
-		+ "QQ_ON_INTERVAL_REJECT_COUNT(:tematic,:member,:start,:end) as tem_reject,"
-		+ "QQ_ON_INTERVAL_QUERY_COUNT(:genia,:member,:start,:end) as gen_cnt,"
-		+ "QQ_ON_INTERVAL_EXEC_COUNT(:genia,:member,:start,:end) as gen_exec_cnt,"
-		+ "QQ_ON_INTERVAL_EXEC_POS(:genia,:member,:start,:end) as gen_exec_pos,"
-		+ "QQ_ON_INTERVAL_EXEC_NEG(:genia,:member,:start,:end) as gen_exec_neg,"
-		+ "QQ_ON_INTERVAL_EXEC_REC(:genia,:member,:start,:end) as gen_exec_rec,"
-		+ "QQ_ON_INTERVAL_REFUS_COUNT(:genia,:member,:start,:end) as gen_otkaz,"
-		+ "QQ_ON_INTERVAL_REJECT_COUNT(:genia,:member,:start,:end) as gen_reject,"
-		+ "QQ_ON_INTERVAL_QUERY_COUNT(:bio,:member,:start,:end) as bio_cnt,"
-		+ "QQ_ON_INTERVAL_EXEC_COUNT(:bio,:member,:start,:end) as bio_exec_cnt,"
-		+ "QQ_ON_INTERVAL_EXEC_POS(:bio,:member,:start,:end) as bio_exec_pos,"
-		+ "QQ_ON_INTERVAL_EXEC_NEG(:bio,:member,:start,:end) as bio_exec_neg,"
-		+ "QQ_ON_INTERVAL_EXEC_REC(:bio,:member,:start,:end) as bio_exec_rec,"
-		+ "QQ_ON_INTERVAL_REFUS_COUNT(:bio,:member,:start,:end) as bio_otkaz,"
-		+ "QQ_ON_INTERVAL_REJECT_COUNT(:bio,:member,:start,:end) as bio_reject,"
-		+ "QQ_ON_INTERVAL_QUERY_COUNT(:all,:member,:start,:end) as cnt,"
-		+ "QQ_ON_INTERVAL_EXEC_COUNT(:all,:member,:start,:end) as exec_cnt,"
-		+ "QQ_ON_INTERVAL_EXEC_POS(:all,:member,:start,:end) as exec_pos,"
-		+ "QQ_ON_INTERVAL_EXEC_NEG(:all,:member,:start,:end) as exec_neg,"
-		+ "QQ_ON_INTERVAL_EXEC_REC(:all,:member,:start,:end) as exec_rec,"
-		+ "QQ_ON_INTERVAL_REFUS_COUNT(:all,:member,:start,:end) as otkaz,"
-		+ "QQ_ON_INTERVAL_REJECT_COUNT(:all,:member,:start,:end) as reject_ "
-		+ "from dual";
-	private static Font tableFont;
+			+ "QQ_ON_INTERVAL_QUERY_COUNT(:social,:member,:start,:end) as soc_cnt,"
+			+ "QQ_ON_INTERVAL_EXEC_COUNT(:social,:member,:start,:end) as soc_exec_cnt,"
+			+ "QQ_ON_INTERVAL_EXEC_POS(:social,:member,:start,:end) as soc_exec_pos,"
+			+ "QQ_ON_INTERVAL_EXEC_NEG(:social,:member,:start,:end) as soc_exec_neg,"
+			+ "QQ_ON_INTERVAL_EXEC_REC(:social,:member,:start,:end) as soc_exec_rec,"
+			+ "QQ_ON_INTERVAL_REFUS_COUNT(:social,:member,:start,:end) as soc_otkaz,"
+			+ "QQ_ON_INTERVAL_REJECT_COUNT(:social,:member,:start,:end) as soc_reject,"
+			+ "QQ_ON_INTERVAL_QUERY_COUNT(:tematic,:member,:start,:end) as tem_cnt,"
+			+ "QQ_ON_INTERVAL_EXEC_COUNT(:tematic,:member,:start,:end) as tem_exec_cnt,"
+			+ "QQ_ON_INTERVAL_EXEC_POS(:tematic,:member,:start,:end) as tem_exec_pos,"
+			+ "QQ_ON_INTERVAL_EXEC_NEG(:tematic,:member,:start,:end) as tem_exec_neg,"
+			+ "QQ_ON_INTERVAL_EXEC_REC(:tematic,:member,:start,:end) as tem_exec_rec,"
+			+ "QQ_ON_INTERVAL_REFUS_COUNT(:tematic,:member,:start,:end) as tem_otkaz,"
+			+ "QQ_ON_INTERVAL_REJECT_COUNT(:tematic,:member,:start,:end) as tem_reject,"
+			+ "QQ_ON_INTERVAL_QUERY_COUNT(:genia,:member,:start,:end) as gen_cnt,"
+			+ "QQ_ON_INTERVAL_EXEC_COUNT(:genia,:member,:start,:end) as gen_exec_cnt,"
+			+ "QQ_ON_INTERVAL_EXEC_POS(:genia,:member,:start,:end) as gen_exec_pos,"
+			+ "QQ_ON_INTERVAL_EXEC_NEG(:genia,:member,:start,:end) as gen_exec_neg,"
+			+ "QQ_ON_INTERVAL_EXEC_REC(:genia,:member,:start,:end) as gen_exec_rec,"
+			+ "QQ_ON_INTERVAL_REFUS_COUNT(:genia,:member,:start,:end) as gen_otkaz,"
+			+ "QQ_ON_INTERVAL_REJECT_COUNT(:genia,:member,:start,:end) as gen_reject,"
+			+ "QQ_ON_INTERVAL_QUERY_COUNT(:bio,:member,:start,:end) as bio_cnt,"
+			+ "QQ_ON_INTERVAL_EXEC_COUNT(:bio,:member,:start,:end) as bio_exec_cnt,"
+			+ "QQ_ON_INTERVAL_EXEC_POS(:bio,:member,:start,:end) as bio_exec_pos,"
+			+ "QQ_ON_INTERVAL_EXEC_NEG(:bio,:member,:start,:end) as bio_exec_neg,"
+			+ "QQ_ON_INTERVAL_EXEC_REC(:bio,:member,:start,:end) as bio_exec_rec,"
+			+ "QQ_ON_INTERVAL_REFUS_COUNT(:bio,:member,:start,:end) as bio_otkaz,"
+			+ "QQ_ON_INTERVAL_REJECT_COUNT(:bio,:member,:start,:end) as bio_reject,"
+			+ "QQ_ON_INTERVAL_QUERY_COUNT(:all,:member,:start,:end) as cnt,"
+			+ "QQ_ON_INTERVAL_EXEC_COUNT(:all,:member,:start,:end) as exec_cnt,"
+			+ "QQ_ON_INTERVAL_EXEC_POS(:all,:member,:start,:end) as exec_pos,"
+			+ "QQ_ON_INTERVAL_EXEC_NEG(:all,:member,:start,:end) as exec_neg,"
+			+ "QQ_ON_INTERVAL_EXEC_REC(:all,:member,:start,:end) as exec_rec,"
+			+ "QQ_ON_INTERVAL_REFUS_COUNT(:all,:member,:start,:end) as otkaz,"
+			+ "QQ_ON_INTERVAL_REJECT_COUNT(:all,:member,:start,:end) as reject_ "
+			+ "from dual";
 
 	private Object[] execRequest(String member, Date start, Date end) {
 		List<Object[]> result = em.createNativeQuery(stringQuery)
-			.setParameter("social", "Q_VALUE_QUEST_TYPE_SOCIAL")
-			.setParameter("tematic", "Q_VALUE_QUEST_TYPE_TEMATIC")
-			.setParameter("genia", "Q_VALUE_QUEST_TYPE_GENEA")
-			.setParameter("bio", "Q_VALUE_QUEST_TYPE_BIO")
-			.setParameter("all", "")
-			.setParameter("member", member)
-			.setParameter("start", start)
-			.setParameter("end", end).getResultList();
+				.setParameter("social", "Q_VALUE_QUEST_TYPE_SOCIAL")
+				.setParameter("tematic", "Q_VALUE_QUEST_TYPE_TEMATIC")
+				.setParameter("genia", "Q_VALUE_QUEST_TYPE_GENEA")
+				.setParameter("bio", "Q_VALUE_QUEST_TYPE_BIO")
+				.setParameter("all", "")
+				.setParameter("member", member)
+				.setParameter("start", start)
+				.setParameter("end", end).getResultList();
 		if (result.isEmpty()) {
 			return new Object[0];
 		}
@@ -134,9 +145,15 @@ public class StatExecQuery {
 	}
 
 	@PostConstruct
-	void init() {
+	public void init() {
 		if (tableFont == null) {
-			tableFont = new Font(bf, 9);
+			tableFont = new Font(normal, 8);
+		}
+		if (titleFont == null) {
+			titleFont = new Font(bold, 12);
+		}
+		if (dateFont == null) {
+			dateFont = new Font(normal, 11);
 		}
 	}
 
@@ -156,17 +173,16 @@ public class StatExecQuery {
 			doc.addCreator("INSOFT");
 			doc.addTitle("Статистика исполнения запросов федеральными архивами и СИЦ");
 
-			Font stampFont = new Font(bf, 11);
-			Font titleFont = new Font(bf, 12, Font.BOLD);
-
 			// Заголовок документа
-			Paragraph p = new Paragraph("Дата печати:", stampFont);
-			p.add(new Chunk("                                                     СТАТИСТИКА ИСПОЛНЕНИЯ ЗАПРОСОВ ФЕДЕРАЛЬНЫМИ", titleFont));
+			Paragraph p = new Paragraph("Дата печати:", dateFont);
+			p.add(new Chunk(new VerticalPositionMark(), 250, false));
+			p.add(new Chunk("СТАТИСТИКА ИСПОЛНЕНИЯ ЗАПРОСОВ ФЕДЕРАЛЬНЫМИ", titleFont));
 			doc.add(p);
-			p = new Paragraph(now, stampFont);
-			p.add(new Chunk("                                        ГОСУДАРСТВЕННЫМИ АРХИВАМИ И СПРАВОЧНО-ИНФОРМАЦИОННЫМ ЦЕНТРОМ", titleFont));
+			p = new Paragraph(now, dateFont);
+			p.add(new Chunk(new VerticalPositionMark(), 170, false));
+			p.add(new Chunk("ГОСУДАРСТВЕННЫМИ АРХИВАМИ И СПРАВОЧНО-ИНФОРМАЦИОННЫМ ЦЕНТРОМ", titleFont));
 			doc.add(p);
-			p = new Paragraph("ЗА  ПЕРИОД С " + start + " ПО " + end, stampFont);
+			p = new Paragraph("ЗА  ПЕРИОД С " + start + " ПО " + end, dateFont);
 			p.setAlignment(Element.ALIGN_CENTER);
 			p.setSpacingBefore(10);
 			p.setSpacingAfter(10);
@@ -194,6 +210,7 @@ public class StatExecQuery {
 					if (stat.length == 1) {
 						cell.setRotation(90);
 						cell.setRowspan(2);
+						cell.setPaddingLeft(6);
 					} else {
 						cell.setColspan(stat.length - 1);
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -208,25 +225,27 @@ public class StatExecQuery {
 						for (int j = 1; j < stat.length; ++j) {
 							cell = new PdfPCell(new TablePhrase(stat[j]));
 							cell.setRotation(90);
+							cell.setPaddingLeft(6);
 							table.addCell(cell);
 						}
 					}
 				}
 			}
 
-			addSubTitle(table, "Федеральные государственные архивы", titleFont);
+			addSubTitle(table, "Федеральные государственные архивы и Справочно-информационный центр", titleFont);
 
-			int endArchivesIndex = literaCodes.length - 4;
-			int k = 0;
-			for (; k < endArchivesIndex; ++k) {
+//			int endArchivesIndex = literaCodes.length - 4;
+//			int k = 0;
+//			for (; k < endArchivesIndex; ++k) {
+			for (int k = 0; k < literaCodes.length; ++k) {
 				createRowData(table, literaCodes[k], literaCodes[++k], startDate, endDate);
 			}
 
 			addSubTitle(table, "Справочно-информационный центр", titleFont);
 
-			for (; k < literaCodes.length; ++k) {
-				createRowData(table, literaCodes[k], literaCodes[++k], startDate, endDate);
-			}
+//			for (; k < literaCodes.length; ++k) {
+//				createRowData(table, literaCodes[k], literaCodes[++k], startDate, endDate);
+//			}
 			doc.add(table);
 
 			doc.close();

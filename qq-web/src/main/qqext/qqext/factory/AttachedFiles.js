@@ -88,8 +88,14 @@ Ext.define('qqext.factory.AttachedFiles', {
 	loadRecord: function (store, setOnly) {
 		var me = this;
 		me._st = store;
-		if (!setOnly)
-			store.load({callback: function () {
+		if (!setOnly && qqext.request)
+			store.load({
+				/*
+				params: {
+					filter: Ext.encode([{property: "question", value: qqext.request.get('id')}])
+				},
+				*/
+				callback: function () {
 					me.showFiles();
 				}});
 	},
@@ -148,7 +154,8 @@ Ext.define('qqext.factory.AttachedFiles', {
 			},
 			success: function (form, action) {
 				// Обновляем данные в хранилище, после успешного сохранения файлов
-				me._st.load({callback: function (records, operation, stat) {
+				me._st.load({
+					callback: function (records, operation, stat) {
 						if (stat) {
 							me.reset();
 							me.showFiles();

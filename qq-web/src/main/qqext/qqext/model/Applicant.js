@@ -41,11 +41,6 @@ Ext.define('qqext.model.Applicant', (function() {
 			{name: applicant.appends[0], type: 'string', defaultValue: null, convert: null}
 		],
 		belongsTo: 'qqext.model.Question',
-		proxy: {
-			type: 'rest',
-			url: '/qq-web/rest/applicant',
-			reader: 'json',
-			writer: 'json'
-		}
+		proxy: { type: 'memory'}
 	};
 })());

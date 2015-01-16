@@ -7,12 +7,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import ru.insoft.archive.core_model.table.desc.DescriptorValue;
 
 /**
  * Прикрепленные файлы. Могут быть в запросе и в ответе (два типа файлов)
@@ -51,6 +55,16 @@ public class AttachedFile implements Serializable {
 	@NotNull
 	@Column(name = "QUESTION_ID")
 	private Long question;
+
+	@JsonIgnore
+	@JoinColumn(name = "QUESTION_ID", referencedColumnName = "QUESTION_ID", updatable = false, insertable = false)
+	@ManyToOne
+	private Question questionValue;
+
+	@JsonIgnore
+	@JoinColumn(name = "FILE_TYPE_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID", updatable = false, insertable = false)
+	@ManyToOne
+	private DescriptorValue typeValue;
 
 	public AttachedFile() {
 	}
@@ -102,6 +116,23 @@ public class AttachedFile implements Serializable {
 	public void setQuestion(Long question) {
 		this.question = question;
 	}
+
+	public Question getQuestionValue() {
+		return questionValue;
+	}
+
+	public void setQuestionValue(Question questionValue) {
+		this.questionValue = questionValue;
+	}
+
+	public DescriptorValue getTypeValue() {
+		return typeValue;
+	}
+
+	public void setTypeValue(DescriptorValue typeValue) {
+		this.typeValue = typeValue;
+	}
+
 
 	@Override
 	public int hashCode() {

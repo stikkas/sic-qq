@@ -2,7 +2,7 @@ package ru.insoft.archive.qq.servlet.report;
 
 import java.io.OutputStream;
 import java.sql.Date;
-import javax.inject.Inject;
+import javax.ejb.EJB;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 @WebServlet(name = "StatExecQuery", urlPatterns = {"/reports/statexecquery"})
 public class StatExecQuery extends ReportServlet {
 
-	@Inject
+	@EJB
 	ru.insoft.archive.qq.report.StatExecQuery generator;
 
 	/**

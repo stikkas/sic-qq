@@ -76,7 +76,7 @@ Ext.define('qqext.view.reg.VApplicant', {
 				createCmp('FTextField', applicant.address[1], applicant.address[0], {
 					width: 950, labelWidth: 150}),
 				createCmp('FTextField', applicant.phone[1], applicant.phone[0], {
-					width: 350,
+					width: 500,
 					labelWidth: 150}),
 				me._adds = createCmp('FieldSet', {
 					title: 'Дополнительные сведения',
@@ -87,7 +87,7 @@ Ext.define('qqext.view.reg.VApplicant', {
 					collapsed: true,
 					items: [
 						createCmp('FTextField', applicant.issueDocNum[1], applicant.issueDocNum[0], {
-							width: 250, labelWidth: 150
+							width: 500, labelWidth: 150
 						}),
 						me.dt = createCmp('FDateField', applicant.issueDocDate[1], applicant.issueDocDate[0], {
 							width: 270, labelWidth: 150

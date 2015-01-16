@@ -42,20 +42,22 @@ Ext.define('qqext.view.transmission.VTransmission', {
 
 				var model = me.model = ns.request,
 						execOrg = model.get('execOrg'),
-						allusers = (ns.isSIC && execOrg !== ns.sicId);
-				// Выставляем список правильных пользователей для исполниетелей и соисполнителей.
+						rightStore = (ns.isSIC && execOrg !== ns.sicId) ? ns.stIds.allusers : ns.stIds.users;
+
+				// Выставляем список правильных пользователей для исполниетелей.
 				me.items.each(function (fc) {
 					if (fc.$className !== 'qqext.cmp.FieldContainer')
 						return false;
-					fc.items.getAt(0).bindStore(allusers ? ns.stIds.allusers : ns.stIds.users);
+					fc.items.getAt(0).bindStore(rightStore);
 				});
 
 				model.getTrans({
 					callback: function (r) {
 						me.loadRecord(r);
 						r.assistants().each(function (it) {
-							me.addExecutor(it);
+							me.addExecutor(it, rightStore);
 						});
+
 						me.setViewOnly(true);
 						me._disableButtons(true, 1, 2, 3);
 						var stats = ns.stats,
@@ -341,17 +343,24 @@ Ext.define('qqext.view.transmission.VTransmission', {
 				me = this,
 				ns = qqext,
 				trans = ns.transmission,
-				assistant = arguments.length === 1 ? arguments[0] : null,
+				assistant = arguments[0],
+				store = arguments[1],
 				cb, df,
 				configForDate = {
 					labelAlign: 'right',
 					margin: '6 0 0 0'
-				},
-		container = create('FieldContainer', {
+				};
+
+		if (arguments[0] instanceof Ext.button.Button) {
+			assistant = null;
+			store = ns.stIds.users;
+		}
+
+		var container = create('FieldContainer', {
 			layout: 'hbox',
 			cls: 'right_date coexec',
 			items: [
-				cb = create('FComboBox', trans.coexec[1], ns.stIds.users, trans.coexec[0] + me._coex, {
+				cb = create('FComboBox', trans.coexec[1], store, trans.coexec[0] + me._coex, {
 					width: 450,
 					labelWidth: 150
 				}),

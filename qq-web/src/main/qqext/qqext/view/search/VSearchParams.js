@@ -43,7 +43,7 @@ Ext.define('qqext.view.search.VSearchParams', {
 				createCmp('FioFieldContainer', 'applLastName', 'applFirstName', 'applMiddleName'),
 				createCmp('FTextField', 'Организация', 'organization', {width: 913, labelWidth: 150}),
 				createCmp('FTextField', '№ исходящего документа заявителя', 'issueDocNum',
-						{width: 250, labelWidth: 150})
+						{width: 500, labelWidth: 150})
 			]
 		});
 		this.callParent();

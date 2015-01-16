@@ -18,15 +18,16 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import ru.insoft.archive.qq.qualifier.Arial;
 import ru.insoft.archive.qq.qualifier.ArialBold;
+import static ru.insoft.archive.qq.report.StatQuery1.typesQuery;
 
 /**
  * Статистика исполнения запросов федеральными архивами и СИЦ
@@ -36,8 +37,8 @@ import ru.insoft.archive.qq.qualifier.ArialBold;
 @Stateless
 public class StatExecQuery {
 
-	@PersistenceContext(unitName = "SicEntityManager")
-	private EntityManager em;
+	@EJB
+	private StatQuery1 statQuery;
 
 	@Inject
 	@Arial
@@ -58,14 +59,6 @@ public class StatExecQuery {
 		"Биографические запросы",
 		"Всего запросов"
 	};
-//	private static final String[] temaCodes = {
-//		"Q_VALUE_QUEST_TYPE_SOCIAL",
-//		"Q_VALUE_QUEST_TYPE_TEMATIC",
-//		"Q_VALUE_QUEST_TYPE_GENEA",
-//		"Q_VALUE_QUEST_TYPE_BIO",
-//		""
-//	};
-
 	private static final SimpleDateFormat printFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 	private static final String[][] status = {{"Получено"},
@@ -73,76 +66,11 @@ public class StatExecQuery {
 	{"Мотив. отказ"},
 	{"Снято с исполнения"}};
 
-	private static final String[] literaCodes = {
-		"ГАРФ", "Q_VALUE_MEMBER_GARF",
-		"РГАЭ", "Q_VALUE_MEMBER_RGAE",
-		"РГАНТД", "Q_VALUE_MEMBER_RGANTD",
-		"РГАЛИ", "Q_VALUE_MEMBER_RGALI",
-		"РГАСПИ", "Q_VALUE_MEMBER_RGASPI",
-		"РГАНИ", "Q_VALUE_MEMBER_RGANI",
-		"РГВА", "Q_VALUE_MEMBER_RGBA",
-		"Подитог", "-1",
-		"СИЦ", "Q_VALUE_MEMBER_SIC",
-		"Итого", ""
-	};
 	private static final int[] cellWidths = new int[]{2,
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 		1, 1, 1, 1, 1};
-	private static final String stringQuery = "select "
-			+ "QQ_ON_INTERVAL_QUERY_COUNT(:social,:member,:start,:end) as soc_cnt,"
-			+ "QQ_ON_INTERVAL_EXEC_COUNT(:social,:member,:start,:end) as soc_exec_cnt,"
-			+ "QQ_ON_INTERVAL_EXEC_POS(:social,:member,:start,:end) as soc_exec_pos,"
-			+ "QQ_ON_INTERVAL_EXEC_NEG(:social,:member,:start,:end) as soc_exec_neg,"
-			+ "QQ_ON_INTERVAL_EXEC_REC(:social,:member,:start,:end) as soc_exec_rec,"
-			+ "QQ_ON_INTERVAL_REFUS_COUNT(:social,:member,:start,:end) as soc_otkaz,"
-			+ "QQ_ON_INTERVAL_REJECT_COUNT(:social,:member,:start,:end) as soc_reject,"
-			+ "QQ_ON_INTERVAL_QUERY_COUNT(:tematic,:member,:start,:end) as tem_cnt,"
-			+ "QQ_ON_INTERVAL_EXEC_COUNT(:tematic,:member,:start,:end) as tem_exec_cnt,"
-			+ "QQ_ON_INTERVAL_EXEC_POS(:tematic,:member,:start,:end) as tem_exec_pos,"
-			+ "QQ_ON_INTERVAL_EXEC_NEG(:tematic,:member,:start,:end) as tem_exec_neg,"
-			+ "QQ_ON_INTERVAL_EXEC_REC(:tematic,:member,:start,:end) as tem_exec_rec,"
-			+ "QQ_ON_INTERVAL_REFUS_COUNT(:tematic,:member,:start,:end) as tem_otkaz,"
-			+ "QQ_ON_INTERVAL_REJECT_COUNT(:tematic,:member,:start,:end) as tem_reject,"
-			+ "QQ_ON_INTERVAL_QUERY_COUNT(:genia,:member,:start,:end) as gen_cnt,"
-			+ "QQ_ON_INTERVAL_EXEC_COUNT(:genia,:member,:start,:end) as gen_exec_cnt,"
-			+ "QQ_ON_INTERVAL_EXEC_POS(:genia,:member,:start,:end) as gen_exec_pos,"
-			+ "QQ_ON_INTERVAL_EXEC_NEG(:genia,:member,:start,:end) as gen_exec_neg,"
-			+ "QQ_ON_INTERVAL_EXEC_REC(:genia,:member,:start,:end) as gen_exec_rec,"
-			+ "QQ_ON_INTERVAL_REFUS_COUNT(:genia,:member,:start,:end) as gen_otkaz,"
-			+ "QQ_ON_INTERVAL_REJECT_COUNT(:genia,:member,:start,:end) as gen_reject,"
-			+ "QQ_ON_INTERVAL_QUERY_COUNT(:bio,:member,:start,:end) as bio_cnt,"
-			+ "QQ_ON_INTERVAL_EXEC_COUNT(:bio,:member,:start,:end) as bio_exec_cnt,"
-			+ "QQ_ON_INTERVAL_EXEC_POS(:bio,:member,:start,:end) as bio_exec_pos,"
-			+ "QQ_ON_INTERVAL_EXEC_NEG(:bio,:member,:start,:end) as bio_exec_neg,"
-			+ "QQ_ON_INTERVAL_EXEC_REC(:bio,:member,:start,:end) as bio_exec_rec,"
-			+ "QQ_ON_INTERVAL_REFUS_COUNT(:bio,:member,:start,:end) as bio_otkaz,"
-			+ "QQ_ON_INTERVAL_REJECT_COUNT(:bio,:member,:start,:end) as bio_reject,"
-			+ "QQ_ON_INTERVAL_QUERY_COUNT(:all,:member,:start,:end) as cnt,"
-			+ "QQ_ON_INTERVAL_EXEC_COUNT(:all,:member,:start,:end) as exec_cnt,"
-			+ "QQ_ON_INTERVAL_EXEC_POS(:all,:member,:start,:end) as exec_pos,"
-			+ "QQ_ON_INTERVAL_EXEC_NEG(:all,:member,:start,:end) as exec_neg,"
-			+ "QQ_ON_INTERVAL_EXEC_REC(:all,:member,:start,:end) as exec_rec,"
-			+ "QQ_ON_INTERVAL_REFUS_COUNT(:all,:member,:start,:end) as otkaz,"
-			+ "QQ_ON_INTERVAL_REJECT_COUNT(:all,:member,:start,:end) as reject_ "
-			+ "from dual";
-
-	private Object[] execRequest(String member, Date start, Date end) {
-		List<Object[]> result = em.createNativeQuery(stringQuery)
-				.setParameter("social", "Q_VALUE_QUEST_TYPE_SOCIAL")
-				.setParameter("tematic", "Q_VALUE_QUEST_TYPE_TEMATIC")
-				.setParameter("genia", "Q_VALUE_QUEST_TYPE_GENEA")
-				.setParameter("bio", "Q_VALUE_QUEST_TYPE_BIO")
-				.setParameter("all", "")
-				.setParameter("member", member)
-				.setParameter("start", start)
-				.setParameter("end", end).getResultList();
-		if (result.isEmpty()) {
-			return new Object[0];
-		}
-		return result.get(0);
-	}
 
 	@PostConstruct
 	public void init() {
@@ -157,8 +85,17 @@ public class StatExecQuery {
 		}
 	}
 
+	/**
+	 * Возвращает pdf файл в поток ответа сервера
+	 * @param startDate начальная дата регистрации запросов
+	 * @param endDate конечная дата регистрации запросов 
+	 * @param out выходной поток
+	 */
 	public void getDocument(Date startDate, Date endDate, OutputStream out) {
 		try {
+
+			Map<String, List<StatQuery1.Stat>> archives = statQuery.collect(startDate, endDate);
+
 			float offset = Utilities.millimetersToPoints(6);
 
 			String start = printFormat.format(startDate);
@@ -234,11 +171,31 @@ public class StatExecQuery {
 
 			addSubTitle(table, "Федеральные государственные архивы и Справочно-информационный центр", titleFont);
 
-//			int endArchivesIndex = literaCodes.length - 4;
-//			int k = 0;
-//			for (; k < endArchivesIndex; ++k) {
-			for (int k = 0; k < literaCodes.length; ++k) {
-				createRowData(table, literaCodes[k], literaCodes[++k], startDate, endDate);
+			for (String key : archives.keySet()) {
+				System.out.println(key);
+				StatQuery1.Stat all = new StatQuery1.Stat();
+				List<StatQuery1.Stat> stats = archives.get(key);
+				for (int i = 0; i < stats.size(); ++i) {
+					StatQuery1.Stat stat = stats.get(i);
+					System.out.println("\t" + typesQuery[i]);
+					System.out.println("\t\t" + stat);
+					all.recived += stat.recived;
+					all.execMinus += stat.execMinus;
+					all.execPlus += stat.execPlus;
+					all.execRecomend += stat.execRecomend;
+					all.executed += stat.executed;
+					all.refused += stat.refused;
+					all.reseted += stat.reseted;
+				}
+				System.out.println("\tВсего");
+				System.out.println("\t\t" + all);
+			}
+
+			int endArchivesIndex = 2 * StatQuery1.archiveCount;
+			int k = 0;
+			for (; k < endArchivesIndex; k += 2) {
+				createRowData(table, archives.get(StatQuery1.literaCodes[k]), 
+						StatQuery1.literaCodes[k + 1], true);
 			}
 
 			addSubTitle(table, "Справочно-информационный центр", titleFont);
@@ -275,22 +232,58 @@ public class StatExecQuery {
 	 * итога.
 	 *
 	 * @param table таблица
-	 * @param title строка для первой яцейки
-	 * @param member кодовое значение архива
-	 * @param start начальная дата
-	 * @param end конечная дата
+	 * @param member контейнер с данными
+	 * @param title строка для первой ячейки
+	 * @param archive это архив, и значит не надо выводить мотивированный отказ
 	 */
-	private void createRowData(PdfPTable table, String title, String member, Date start, Date end) {
+	private void createRowData(PdfPTable table, List<StatQuery1.Stat> data, String title, boolean archive) {
 		PdfPCell cell = new PdfPCell(new TablePhrase(title));
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell.setPaddingBottom(4);
 		table.addCell(cell);
-		for (Object count : execRequest(member, start, end)) {
-			cell = new PdfPCell(new TablePhrase((String) count));
-			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			cell.setPaddingBottom(4);
-			table.addCell(cell);
+
+		StatQuery1.Stat all = new StatQuery1.Stat();
+		int max = data.size();
+		for (int i = 0; i < max; ++i) {
+			StatQuery1.Stat stat = data.get(i);
+			addCell(table, String.valueOf(stat.recived));
+			addCell(table, String.valueOf(stat.executed));
+			addCell(table, String.valueOf(stat.execPlus));
+			addCell(table, String.valueOf(stat.execMinus));
+			addCell(table, String.valueOf(stat.execRecomend));
+			if (archive) {
+				addCell(table, " ");
+			} else {
+				addCell(table, String.valueOf(stat.refused));
+			}
+			addCell(table, String.valueOf(stat.reseted));
+
+			all.recived += stat.recived;
+			all.execMinus += stat.execMinus;
+			all.execPlus += stat.execPlus;
+			all.execRecomend += stat.execRecomend;
+			all.executed += stat.executed;
+			all.refused += stat.refused;
+			all.reseted += stat.reseted;
 		}
+		addCell(table, String.valueOf(all.recived));
+		addCell(table, String.valueOf(all.executed));
+		addCell(table, String.valueOf(all.execPlus));
+		addCell(table, String.valueOf(all.execMinus));
+		addCell(table, String.valueOf(all.execRecomend));
+		if (archive) {
+			addCell(table, " ");
+		} else {
+			addCell(table, String.valueOf(all.refused));
+		}
+		addCell(table, String.valueOf(all.reseted));
+	}
+
+	private void addCell(PdfPTable table, String value) {
+		PdfPCell cell = new PdfPCell(new TablePhrase(value));
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		cell.setPaddingBottom(4);
+		table.addCell(cell);
 	}
 
 	/**
@@ -303,3 +296,67 @@ public class StatExecQuery {
 		}
 	}
 }
+/*
+ private static final String stringQuery = "select "
+ + "QQ_ON_INTERVAL_QUERY_COUNT(:social,:member,:start,:end) as soc_cnt,"
+ + "QQ_ON_INTERVAL_EXEC_COUNT(:social,:member,:start,:end) as soc_exec_cnt,"
+ + "QQ_ON_INTERVAL_EXEC_POS(:social,:member,:start,:end) as soc_exec_pos,"
+ + "QQ_ON_INTERVAL_EXEC_NEG(:social,:member,:start,:end) as soc_exec_neg,"
+ + "QQ_ON_INTERVAL_EXEC_REC(:social,:member,:start,:end) as soc_exec_rec,"
+ + "QQ_ON_INTERVAL_REFUS_COUNT(:social,:member,:start,:end) as soc_otkaz,"
+ + "QQ_ON_INTERVAL_REJECT_COUNT(:social,:member,:start,:end) as soc_reject,"
+ + "QQ_ON_INTERVAL_QUERY_COUNT(:tematic,:member,:start,:end) as tem_cnt,"
+ + "QQ_ON_INTERVAL_EXEC_COUNT(:tematic,:member,:start,:end) as tem_exec_cnt,"
+ + "QQ_ON_INTERVAL_EXEC_POS(:tematic,:member,:start,:end) as tem_exec_pos,"
+ + "QQ_ON_INTERVAL_EXEC_NEG(:tematic,:member,:start,:end) as tem_exec_neg,"
+ + "QQ_ON_INTERVAL_EXEC_REC(:tematic,:member,:start,:end) as tem_exec_rec,"
+ + "QQ_ON_INTERVAL_REFUS_COUNT(:tematic,:member,:start,:end) as tem_otkaz,"
+ + "QQ_ON_INTERVAL_REJECT_COUNT(:tematic,:member,:start,:end) as tem_reject,"
+ + "QQ_ON_INTERVAL_QUERY_COUNT(:genia,:member,:start,:end) as gen_cnt,"
+ + "QQ_ON_INTERVAL_EXEC_COUNT(:genia,:member,:start,:end) as gen_exec_cnt,"
+ + "QQ_ON_INTERVAL_EXEC_POS(:genia,:member,:start,:end) as gen_exec_pos,"
+ + "QQ_ON_INTERVAL_EXEC_NEG(:genia,:member,:start,:end) as gen_exec_neg,"
+ + "QQ_ON_INTERVAL_EXEC_REC(:genia,:member,:start,:end) as gen_exec_rec,"
+ + "QQ_ON_INTERVAL_REFUS_COUNT(:genia,:member,:start,:end) as gen_otkaz,"
+ + "QQ_ON_INTERVAL_REJECT_COUNT(:genia,:member,:start,:end) as gen_reject,"
+ + "QQ_ON_INTERVAL_QUERY_COUNT(:bio,:member,:start,:end) as bio_cnt,"
+ + "QQ_ON_INTERVAL_EXEC_COUNT(:bio,:member,:start,:end) as bio_exec_cnt,"
+ + "QQ_ON_INTERVAL_EXEC_POS(:bio,:member,:start,:end) as bio_exec_pos,"
+ + "QQ_ON_INTERVAL_EXEC_NEG(:bio,:member,:start,:end) as bio_exec_neg,"
+ + "QQ_ON_INTERVAL_EXEC_REC(:bio,:member,:start,:end) as bio_exec_rec,"
+ + "QQ_ON_INTERVAL_REFUS_COUNT(:bio,:member,:start,:end) as bio_otkaz,"
+ + "QQ_ON_INTERVAL_REJECT_COUNT(:bio,:member,:start,:end) as bio_reject,"
+ + "QQ_ON_INTERVAL_QUERY_COUNT(:all,:member,:start,:end) as cnt,"
+ + "QQ_ON_INTERVAL_EXEC_COUNT(:all,:member,:start,:end) as exec_cnt,"
+ + "QQ_ON_INTERVAL_EXEC_POS(:all,:member,:start,:end) as exec_pos,"
+ + "QQ_ON_INTERVAL_EXEC_NEG(:all,:member,:start,:end) as exec_neg,"
+ + "QQ_ON_INTERVAL_EXEC_REC(:all,:member,:start,:end) as exec_rec,"
+ + "QQ_ON_INTERVAL_REFUS_COUNT(:all,:member,:start,:end) as otkaz,"
+ + "QQ_ON_INTERVAL_REJECT_COUNT(:all,:member,:start,:end) as reject_ "
+ + "from dual";
+
+ private Object[] execRequest(String member, Date start, Date end) {
+ List<Object[]> result = em.createNativeQuery(stringQuery)
+ .setParameter("social", "Q_VALUE_QUEST_TYPE_SOCIAL")
+ .setParameter("tematic", "Q_VALUE_QUEST_TYPE_TEMATIC")
+ .setParameter("genia", "Q_VALUE_QUEST_TYPE_GENEA")
+ .setParameter("bio", "Q_VALUE_QUEST_TYPE_BIO")
+ .setParameter("all", "")
+ .setParameter("member", member)
+ .setParameter("start", start)
+ .setParameter("end", end).getResultList();
+ if (result.isEmpty()) {
+ return new Object[0];
+ }
+ return result.get(0);
+ }
+ //	private static final String[] temaCodes = {
+ //		"Q_VALUE_QUEST_TYPE_SOCIAL",
+ //		"Q_VALUE_QUEST_TYPE_TEMATIC",
+ //		"Q_VALUE_QUEST_TYPE_GENEA",
+ //		"Q_VALUE_QUEST_TYPE_BIO",
+ //		""
+ //	};
+
+
+ */

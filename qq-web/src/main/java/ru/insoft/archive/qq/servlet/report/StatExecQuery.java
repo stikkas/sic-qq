@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 public class StatExecQuery extends ReportServlet {
 
 	@EJB
-	ru.insoft.archive.qq.report.StatExecQuery generator;
+	ru.insoft.archive.qq.report.StatReport1 generator;
 
 	/**
 	 * Начальная дата для выборки данных

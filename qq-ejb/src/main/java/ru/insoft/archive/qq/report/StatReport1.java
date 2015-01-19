@@ -16,6 +16,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,6 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import ru.insoft.archive.qq.qualifier.Arial;
 import ru.insoft.archive.qq.qualifier.ArialBold;
-import static ru.insoft.archive.qq.report.StatQuery1.typesQuery;
 
 /**
  * Статистика исполнения запросов федеральными архивами и СИЦ
@@ -35,7 +35,7 @@ import static ru.insoft.archive.qq.report.StatQuery1.typesQuery;
  * @author С. Благодатских
  */
 @Stateless
-public class StatExecQuery {
+public class StatReport1 {
 
 	@EJB
 	private StatQuery1 statQuery;
@@ -87,14 +87,15 @@ public class StatExecQuery {
 
 	/**
 	 * Возвращает pdf файл в поток ответа сервера
+	 *
 	 * @param startDate начальная дата регистрации запросов
-	 * @param endDate конечная дата регистрации запросов 
+	 * @param endDate конечная дата регистрации запросов
 	 * @param out выходной поток
 	 */
 	public void getDocument(Date startDate, Date endDate, OutputStream out) {
 		try {
 
-			Map<String, List<StatQuery1.Stat>> archives = statQuery.collect(startDate, endDate);
+			Map<String, List<Stat>> archives = statQuery.collect(startDate, endDate);
 
 			float offset = Utilities.millimetersToPoints(6);
 
@@ -171,43 +172,40 @@ public class StatExecQuery {
 
 			addSubTitle(table, "Федеральные государственные архивы и Справочно-информационный центр", titleFont);
 
-			for (String key : archives.keySet()) {
-				System.out.println(key);
-				StatQuery1.Stat all = new StatQuery1.Stat();
-				List<StatQuery1.Stat> stats = archives.get(key);
-				for (int i = 0; i < stats.size(); ++i) {
-					StatQuery1.Stat stat = stats.get(i);
-					System.out.println("\t" + typesQuery[i]);
-					System.out.println("\t\t" + stat);
-					all.recived += stat.recived;
-					all.execMinus += stat.execMinus;
-					all.execPlus += stat.execPlus;
-					all.execRecomend += stat.execRecomend;
-					all.executed += stat.executed;
-					all.refused += stat.refused;
-					all.reseted += stat.reseted;
-				}
-				System.out.println("\tВсего");
-				System.out.println("\t\t" + all);
-			}
-
 			int endArchivesIndex = 2 * StatQuery1.archiveCount;
 			int k = 0;
+			List<Stat> allArchives = Arrays.asList(new Stat(), // Социально-правовые
+					new Stat(), // Тематические
+					new Stat(), // Генеалогические
+					new Stat(), // Биографические
+					new Stat() // Всего
+			);
 			for (; k < endArchivesIndex; k += 2) {
-				createRowData(table, archives.get(StatQuery1.literaCodes[k]), 
-						StatQuery1.literaCodes[k + 1], true);
+				createRowData(table, archives.get(StatQuery1.literaCodes[k]),
+						StatQuery1.literaCodes[k + 1], allArchives/*, true*/);
 			}
 
-			addSubTitle(table, "Справочно-информационный центр", titleFont);
+			// Подитог
+			createRowDataItogo(table, allArchives, "Подитог"/*, true*/);
 
-//			for (; k < literaCodes.length; ++k) {
-//				createRowData(table, literaCodes[k], literaCodes[++k], startDate, endDate);
-//			}
+			// Данные по СИЦ
+			createRowData(table, archives.get(StatQuery1.literaCodes[k]),
+					StatQuery1.literaCodes[k + 1], allArchives/*, false*/);
+			k += 2;
+
+			// Итого
+			createRowDataItogo(table, allArchives, "Итого"/*, false*/);
+
+			addSubTitle(table, "Справочно-информационный центр", titleFont);
+			// По литере
+			createRowData(table, archives.get(StatQuery1.literaCodes[k]),
+					StatQuery1.literaCodes[k + 1], null/*, false*/);
+
 			doc.add(table);
 
 			doc.close();
 		} catch (DocumentException ex) {
-			Logger.getLogger(StatExecQuery.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(StatReport1.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 
@@ -221,64 +219,118 @@ public class StatExecQuery {
 	private void addSubTitle(PdfPTable table, String title, Font font) {
 		PdfPCell cell = new PdfPCell(new Phrase(title, font));
 		cell.setColspan(36);
-		cell.setPaddingBottom(12);
-		cell.setPaddingTop(8);
+		cell.setPaddingBottom(6);
+		cell.setPaddingTop(4);
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		table.addCell(cell);
 	}
 
 	/**
-	 * Вставляет в таблицу строку с данными для каждого архива и подитога и
-	 * итога.
+	 * Вставляет в таблицу строку с данными для каждого архива. Подсчитывает
+	 * итоговые значения.
 	 *
 	 * @param table таблица
 	 * @param member контейнер с данными
 	 * @param title строка для первой ячейки
+	 * @param allArchives список данных по всем архивам
 	 * @param archive это архив, и значит не надо выводить мотивированный отказ
 	 */
-	private void createRowData(PdfPTable table, List<StatQuery1.Stat> data, String title, boolean archive) {
+	private void createRowData(PdfPTable table, List<Stat> data, String title,
+			List<Stat> allArchives
+			/*boolean archive*/) {
 		PdfPCell cell = new PdfPCell(new TablePhrase(title));
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell.setPaddingBottom(4);
 		table.addCell(cell);
 
-		StatQuery1.Stat all = new StatQuery1.Stat();
+		boolean countItogo = allArchives != null;
+
+		Stat all = new Stat();
 		int max = data.size();
-		for (int i = 0; i < max; ++i) {
-			StatQuery1.Stat stat = data.get(i);
-			addCell(table, String.valueOf(stat.recived));
-			addCell(table, String.valueOf(stat.executed));
-			addCell(table, String.valueOf(stat.execPlus));
-			addCell(table, String.valueOf(stat.execMinus));
-			addCell(table, String.valueOf(stat.execRecomend));
+		int i = 0;
+		for (; i < max; ++i) {
+			Stat stat = data.get(i);
+			addCell(table, stat.getRecived());
+			addCell(table, stat.getExecuted());
+			addCell(table, stat.getExecPlus());
+			addCell(table, stat.getExecMinus());
+			addCell(table, stat.getExecRecomend());
+			/*
 			if (archive) {
 				addCell(table, " ");
 			} else {
 				addCell(table, String.valueOf(stat.refused));
 			}
-			addCell(table, String.valueOf(stat.reseted));
+			*/
+			addCell(table, stat.getRefused());
+			addCell(table, stat.getReseted());
 
-			all.recived += stat.recived;
-			all.execMinus += stat.execMinus;
-			all.execPlus += stat.execPlus;
-			all.execRecomend += stat.execRecomend;
-			all.executed += stat.executed;
-			all.refused += stat.refused;
-			all.reseted += stat.reseted;
+			all.increase(stat);
+			if (countItogo) {
+				allArchives.get(i).increase(stat);
+			}
 		}
-		addCell(table, String.valueOf(all.recived));
-		addCell(table, String.valueOf(all.executed));
-		addCell(table, String.valueOf(all.execPlus));
-		addCell(table, String.valueOf(all.execMinus));
-		addCell(table, String.valueOf(all.execRecomend));
+		if (countItogo) {
+			allArchives.get(i).increase(all);
+		}
+		addCell(table, all.getRecived());
+		addCell(table, all.getExecuted());
+		addCell(table, all.getExecPlus());
+		addCell(table, all.getExecMinus());
+		addCell(table, all.getExecRecomend());
+		/*
 		if (archive) {
 			addCell(table, " ");
 		} else {
 			addCell(table, String.valueOf(all.refused));
 		}
-		addCell(table, String.valueOf(all.reseted));
+		*/
+		addCell(table, all.getRefused());
+		addCell(table, all.getReseted());
 	}
 
+	/**
+	 * Вставляет в таблицу строку с данными для итоговых значений
+	 *
+	 * @param table таблица
+	 * @param member контейнер с данными
+	 * @param title строка для первой ячейки
+	 * @param allArchives список данных по всем архивам
+	 * @param archive это архив, и значит не надо выводить мотивированный отказ
+	 */
+	private void createRowDataItogo(PdfPTable table, List<Stat> data, String title
+			/*boolean archive*/) {
+		PdfPCell cell = new PdfPCell(new TablePhrase(title));
+		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		cell.setPaddingBottom(4);
+		table.addCell(cell);
+
+		int max = data.size();
+		for (int i = 0; i < max; ++i) {
+			Stat stat = data.get(i);
+			addCell(table, stat.getRecived());
+			addCell(table, stat.getExecuted());
+			addCell(table, stat.getExecPlus());
+			addCell(table, stat.getExecMinus());
+			addCell(table, stat.getExecRecomend());
+			/*
+			if (archive) {
+				addCell(table, " ");
+			} else {
+				addCell(table, String.valueOf(stat.refused));
+			}
+			*/
+			addCell(table, stat.getRefused());
+			addCell(table, stat.getReseted());
+		}
+	}
+
+	/**
+	 * Добавляет ячейку в таблицу
+	 *
+	 * @param table таблица
+	 * @param value значение ячейки
+	 */
 	private void addCell(PdfPTable table, String value) {
 		PdfPCell cell = new PdfPCell(new TablePhrase(value));
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);

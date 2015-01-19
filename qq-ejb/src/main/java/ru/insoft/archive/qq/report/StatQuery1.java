@@ -69,9 +69,7 @@ public class StatQuery1 {
 		RGASPI, "РГАСПИ",
 		RGANI, "РГАНИ",
 		RGBA, "РГВА",
-		"suball", "Подитог",
 		SIC, "СИЦ",
-		"all", "Итого",
 		SICLITERA, "По литере"
 	};
 
@@ -79,47 +77,7 @@ public class StatQuery1 {
 	private Map<String, Long> descriptorIds;
 	private Map<Long, String> descriptorValues;
 
-// контейнер для сбора информации
-	public static class Stat {
 
-		/**
-		 * Получено
-		 */
-		public long recived;
-		/**
-		 * Исполнено всего
-		 */
-		public long executed;
-		/**
-		 * Исполнено выдано положительных ответов
-		 */
-		public long execPlus;
-		/**
-		 * Исполнено выдано отрицательных ответов
-		 */
-		public long execMinus;
-		/**
-		 * Исполнено выдано рекомендаций
-		 */
-		public long execRecomend;
-		/**
-		 * Мотивированный отказ
-		 */
-		public long refused;
-		/**
-		 * Снято с исполнения
-		 */
-		public long reseted;
-
-		@Override
-		public String toString() {
-			return "Получено: " + recived + ", Исполнено( всего: "
-					+ executed + ", полож: " + execPlus + ", отриц: " + execMinus
-					+ ", реком: " + execRecomend + " ), мот. отказ: " + refused
-					+ ", снято: " + reseted;
-		}
-
-	}
 
 	@PersistenceContext(unitName = "SicEntityManager")
 	private EntityManager em;
@@ -226,7 +184,7 @@ public class StatQuery1 {
 							++stat.execRecomend;
 					}
 				}
-				if (question.getMotivatedRefusal().equals(1)) {
+				if (question.getMotivatedRefusal()) {
 					++stat.refused;
 				}
 			}

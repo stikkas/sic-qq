@@ -2,7 +2,9 @@ package ru.insoft.archive.qq.report;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +13,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TemporalType;
 import ru.insoft.archive.core_model.table.desc.DescriptorValue;
 import ru.insoft.archive.qq.entity.Execution;
 import ru.insoft.archive.qq.entity.Question;
@@ -77,8 +80,6 @@ public class StatQuery1 {
 	private Map<String, Long> descriptorIds;
 	private Map<Long, String> descriptorValues;
 
-
-
 	@PersistenceContext(unitName = "SicEntityManager")
 	private EntityManager em;
 
@@ -102,10 +103,14 @@ public class StatQuery1 {
 	}
 
 	public Map<String, List<Stat>> collect(Date start, Date end) {
+		Calendar cal = new GregorianCalendar();
+		cal.setTime(end);
+		cal.add(Calendar.DAY_OF_YEAR, 1);
+		end = cal.getTime();
 		Query query = em.createQuery("SELECT q FROM Question q "
 				+ "WHERE q.regDate BETWEEN :start AND :end")
-				.setParameter("start", start)
-				.setParameter("end", end);
+				.setParameter("start", start, TemporalType.DATE)
+				.setParameter("end", end, TemporalType.DATE);
 
 		Map<String, List<Stat>> archives = new HashMap<String, List<Stat>>() {
 			{
@@ -184,11 +189,10 @@ public class StatQuery1 {
 							++stat.execRecomend;
 					}
 				}
-				if (question.getMotivatedRefusal()) {
-					++stat.refused;
-				}
 			}
-
+			if (question.getMotivatedRefusal()) {
+				++stat.refused;
+			}
 			if (answerType != null && answerType.equals(complyCanceled)) {
 				++stat.reseted;
 			}

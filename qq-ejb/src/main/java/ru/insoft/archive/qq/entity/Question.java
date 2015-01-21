@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 import javax.persistence.Basic;
@@ -65,7 +64,6 @@ public class Question implements Serializable, HasId, JsonIn, JsonOut {
 	@Column(name = "LITERA_ID")
 	private Long litera;
 
-	@Size(max = 255)
 	@Column(name = "CONTENT")
 	private String content;
 

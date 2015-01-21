@@ -2,7 +2,7 @@
 <project>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ru.insoft.archive</groupId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<artifactId>qq-parent</artifactId>
 	<packaging>pom</packaging>
 
@@ -10,7 +10,6 @@
 		<module>qq-ejb/</module>
 		<module>qq-web/</module>
     <module>sic-storage/sic-storage-web/</module>
-    <!--		<module>arm-admin/</module> -->
 		<module>qq/</module>
 		<module>ext-commons/</module>
 		<module>core-model/</module>

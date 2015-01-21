@@ -361,7 +361,8 @@ Ext.application({
 			reg: 'Q_RULE_REGISTRATOR',
 			crd: 'Q_RULE_COORDINATOR',
 			exec: 'Q_RULE_EXECUTOR',
-			admin: 'Q_RULE_SUPERVISOR'
+			admin: 'Q_RULE_SUPERVISOR',
+			sexec: 'Q_RULE_SEXECUTOR'
 		};
 		/**
 		 * @property {Object} statsId
@@ -430,20 +431,20 @@ Ext.application({
 				switch (buttons[i]) {
 					case buttonNames.notify:
 						if (ns.isSIC) {
-							if (user.isAllowed([rules.reg, rules.crd, rules.exec, rules.admin]) &&
+							if (user.isAllowed([rules.reg, rules.crd, rules.exec, rules.admin, rules.sexec]) &&
 									request.get('status') !== onreg &&
 									request.get('execOrg') !== ns.sicId && request.get('litera') === ns.sicId)
 								ns.disableArticles(false, buttonNames.notify);
 						}
 						break;
 					case buttonNames.trans:
-						if (user.isAllowed([rules.crd, rules.exec, rules.reg, rules.admin])) {
+						if (user.isAllowed([rules.crd, rules.exec, rules.reg, rules.admin, rules.sexec])) {
 							if (request.get('status') !== onreg)
 								ns.disableArticles(false, buttonNames.trans);
 						}
 						break;
 					case buttonNames.exec:
-						if (user.isAllowed([rules.exec, rules.crd, rules.reg, rules.admin])) {
+						if (user.isAllowed([rules.exec, rules.crd, rules.reg, rules.admin, rules.sexec])) {
 							var status = request.get('status');
 							if (status === onexec || status === exec)
 								ns.disableArticles(false, buttonNames.exec);

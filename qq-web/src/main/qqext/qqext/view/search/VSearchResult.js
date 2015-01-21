@@ -80,7 +80,7 @@ Ext.define('qqext.view.search.VSearchResult', {
 		var ns = qqext,
 				rules = ns.rules;
 
-		if (ns.user.isAllowed([rules.reg, rules.crd, rules.exec, rules.admin]))
+		if (ns.user.isAllowed([rules.reg, rules.crd, rules.exec, rules.admin, rules.sexec]))
 			this.listeners = {itemdblclick: ns.openRequest};
 		this.callParent();
 	}

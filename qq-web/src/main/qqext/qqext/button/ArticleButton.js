@@ -14,5 +14,6 @@ Ext.define('qqext.button.ArticleButton', {
 		qqext.articles.push(this);
 		this.callParent(arguments);
 	}
-})
+});
+
 

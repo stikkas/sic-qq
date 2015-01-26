@@ -19,6 +19,7 @@ import ru.insoft.archive.qq.entity.Execution;
 import ru.insoft.archive.qq.entity.Question;
 
 /**
+ * Собирает статистику по выполненым запросам за определенный период.
  *
  * @author Благодатских С.
  */
@@ -107,7 +108,7 @@ public class StatQuery1 {
 		cal.setTime(end);
 		cal.add(Calendar.DAY_OF_YEAR, 1);
 		end = cal.getTime();
-		Query query = em.createQuery("SELECT q FROM Question q "
+		Query query = em.createQuery("SELECT q.questionType, q.execOrg, q.litera FROM Question q "
 				+ "WHERE q.regDate BETWEEN :start AND :end")
 				.setParameter("start", start, TemporalType.DATE)
 				.setParameter("end", end, TemporalType.DATE);
@@ -126,23 +127,39 @@ public class StatQuery1 {
 			}
 		};
 
-		List<Question> results = query.getResultList();
-		for (Question question : results) {
-			Long answerTypeId = null;
-			Execution execution = question.getExecution();
-			if (execution != null) {
-				answerTypeId = execution.getAnswerResult();
+		List<Object[]> results = query.getResultList();
+		for (Object[] res : results) {
+			if (res[0].equals(descriptorIds.get(social))) {
+				countRecived(archives, 0, (Long)res[1], (Long)res[2]);
+			} else if (res[0].equals(descriptorIds.get(tematic))) {
+				countRecived(archives, 1, (Long)res[1], (Long)res[2]);
+			} else if (res[0].equals(descriptorIds.get(genea))) {
+				countRecived(archives, 2, (Long)res[1], (Long)res[2]);
+			} else if (res[0].equals(descriptorIds.get(bio))) {
+				countRecived(archives, 3, (Long)res[1], (Long)res[2]);
 			}
-			Long typeId = question.getQuestionType();
+		}
+
+		query = em.createQuery("SELECT q.questionType, q.litera, q.execOrg, "
+				+ "q.motivatedRefusal, e.answerResult FROM Question q "
+				+ "LEFT JOIN q.execution e WHERE q.status = :status "
+				+ "AND e.execDate BETWEEN :start AND :end")
+				.setParameter("status", descriptorIds.get(complited))
+				.setParameter("start", start, TemporalType.DATE)
+				.setParameter("end", end, TemporalType.DATE);
+
+		for (Object[] res : (List<Object[]>) query.getResultList()) {
+
+			Long typeId = (Long) res[0];
 
 			if (typeId.equals(descriptorIds.get(social))) {
-				countArchives(archives, 0, answerTypeId, question);
+				countArchives(archives, 0, (Long) res[4], (Long) res[1], (Long) res[2], (Boolean) res[3]);
 			} else if (typeId.equals(descriptorIds.get(tematic))) {
-				countArchives(archives, 1, answerTypeId, question);
+				countArchives(archives, 1, (Long) res[4], (Long) res[1], (Long) res[2], (Boolean) res[3]);
 			} else if (typeId.equals(descriptorIds.get(genea))) {
-				countArchives(archives, 2, answerTypeId, question);
+				countArchives(archives, 2, (Long) res[4], (Long) res[1], (Long) res[2], (Boolean) res[3]);
 			} else {
-				countArchives(archives, 3, answerTypeId, question);
+				countArchives(archives, 3, (Long) res[4], (Long) res[1], (Long) res[2], (Boolean) res[3]);
 			}
 		}
 		return archives;
@@ -154,49 +171,67 @@ public class StatQuery1 {
 	 *
 	 * @param archives контейнеры для хранения данных по архивам
 	 * @param index номер контейнера 0 - social, 1 - tematic, 2 - genea, 3 - bio
-	 * @param answerTypeId идентификатор типа ответа (положительный,
+	 * @param answerResult идентификатор типа ответа (положительный,
 	 * отрицательный и т.д.)
-	 * @param question запрос
+	 * @param litera идентификатор литеры
+	 * @param execOrg идентификатор исполняющей организации
+	 * @param refusal мотивированный отказ в случае true
 	 */
-	private void countArchives(Map<String, List<Stat>> archives, int index, Long answerTypeId, Question question) {
+	private void countArchives(Map<String, List<Stat>> archives, int index, Long answerResult,
+			Long litera, Long execOrg, Boolean refusal) {
 		List<Stat> stats = new ArrayList<>();
-		stats.add(archives.get(descriptorValues.get(question.getExecOrg())).get(index));
+		stats.add(archives.get(descriptorValues.get(execOrg)).get(index));
 
-		Long litera = question.getLitera();
 		if (litera.equals(descriptorIds.get(SIC))) {
 			stats.add(archives.get(SICLITERA).get(index));
 		}
 
+		String answerResultCode = descriptorValues.get(answerResult);
 		for (Stat stat : stats) {
-			++stat.recived;
-			String answerType = descriptorValues.get(answerTypeId);
-			if (question.getStatus().equals(descriptorIds.get(complited))) {
-				++stat.executed;
-				if (answerType != null) {
-					switch (answerType) {
-						case positive:
-						case positivePaid:
-							++stat.execPlus;
-							break;
-						case negative:
-						case negativeNoProfil:
-						case negativePaid:
-						case negativeWithView:
-						case negativeWithRedirect:
-							++stat.execMinus;
-							break;
-						case negativeWithRecomendation:
-							++stat.execRecomend;
-					}
-				}
-			}
-			if (question.getMotivatedRefusal()) {
+			++stat.executed;
+			if (refusal) {
 				++stat.refused;
+				continue;
 			}
-			if (answerType != null && answerType.equals(complyCanceled)) {
-				++stat.reseted;
+			if (answerResultCode != null) {
+				switch (answerResultCode) {
+					case positive:
+					case positivePaid:
+						++stat.execPlus;
+						break;
+					case negative:
+					case negativeNoProfil:
+					case negativePaid:
+					case negativeWithView:
+					case negativeWithRedirect:
+						++stat.execMinus;
+						break;
+					case negativeWithRecomendation:
+						++stat.execRecomend;
+						break;
+					case complyCanceled:
+						++stat.reseted;
+				}
 			}
 		}
 
 	}
+
+	/**
+	 * Выполняется подсчет полученных запросов
+	 *
+	 * @param archives контейнеры для хранения данных по архивам
+	 * @param index номер контейнера 0 - social, 1 - tematic, 2 - genea, 3 - bio
+	 * @param execOrg идентификатор исполняющей организации
+	 * @param litera идентификатор литеры
+	 */
+	private void countRecived(Map<String, List<Stat>> archives, int index, Long execOrg, Long litera) {
+		++archives.get(descriptorValues.get(execOrg)).get(index).recived;
+
+		if (litera.equals(descriptorIds.get(SIC))) {
+			++archives.get(SICLITERA).get(index).recived;
+		}
+
+	}
+
 }

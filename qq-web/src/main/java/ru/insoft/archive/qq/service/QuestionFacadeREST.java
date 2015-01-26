@@ -138,7 +138,7 @@ public class QuestionFacadeREST extends AbstractFacade<Question> {
 	 * Необходимо для проставления даты исполнения.
 	 */
 	private void createExecutionForMotivitedRefusal(Question entity) {
-		if (entity.getStatus().equals(execStatusId)) {
+		if (entity.getMotivatedRefusal() && entity.getStatus().equals(execStatusId)) {
 			Execution execution = new Execution(entity.getId());
 			execution.setExecDate(entity.getRegDate());
 			em.persist(execution);

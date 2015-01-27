@@ -19,15 +19,15 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-web-api</artifactId>
-			<version>6.0</version>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>qq-ejb</artifactId>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>ru.insoft.archive</groupId>
-			<artifactId>qq-ejb</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>javax</groupId>
+			<artifactId>javaee-web-api</artifactId>
+			<version>6.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

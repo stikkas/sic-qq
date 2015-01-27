@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author С. Благодатских
  */
-@WebServlet(name = "StatExecQuery", urlPatterns = {"/reports/statexecquery"})
+@WebServlet(name = "StatExecQuery", urlPatterns = {"/reports/statexecquery1"})
 public class StatExecQuery extends ReportServlet {
 
 	@EJB
@@ -41,7 +41,7 @@ public class StatExecQuery extends ReportServlet {
 
 	@Override
 	protected String getFileName() {
-		return "statexecquery";
+		return "statexecquery1";
 	}
 
 }

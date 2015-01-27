@@ -335,7 +335,8 @@ Ext.application({
 			login: "/qq-web/Auth?action=logout",
 			storage: "/sic-storage/index.html",
 			vypiska: "/qq-web/reports/vypiska",
-			statexec: "/qq-web/reports/statexecquery"
+			statexec1: "/qq-web/reports/statexecquery1",
+			statexec2: "/qq-web/reports/statexecquery2"
 		};
 		/**
 		 * @property {Object} btns

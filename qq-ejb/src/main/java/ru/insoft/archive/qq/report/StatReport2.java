@@ -34,7 +34,7 @@ public class StatReport2 {
 
 			float offset = Utilities.millimetersToPoints(6);
 
-			Document doc = new Document(PageSize.A4);
+			Document doc = new Document();
 			doc.setMargins(offset, offset, offset, offset);
 			PdfWriter.getInstance(doc, out);
 			doc.open();

@@ -3,6 +3,7 @@ Ext.define('qqext.model.Notification', (function () {
 			notf = ns.notification = {
 				executor: ['executor', 'ФИО исполнителя'],
 				docType: ['docType', 'Тип документов'],
+				toWhom: ['toWhom', 'Кому'],
 				deliveryType: ['deliveryType', 'Способ передачи'],
 				notificationDate: ['notificationDate', 'Дата уведомления'],
 				issueDate: ['issueDate', 'Дата выдачи/отправки документа']
@@ -16,6 +17,7 @@ Ext.define('qqext.model.Notification', (function () {
 			{name: 'id', type: 'int', convert: null, defaultValue: null},
 			{name: notf.executor[0], type: 'int', convert: null, defaultValue: null},
 			{name: notf.docType[0], type: 'int', convert: null, defaultValue: null},
+			{name: notf.toWhom[0], type: 'string', convert: null, defaultValue: null},
 			{name: notf.deliveryType[0], type: 'int', convert: null, defaultValue: null},
 			{name: notf.notificationDate[0], type: 'date', convert: function (v) {
 					if (v)

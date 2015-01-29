@@ -336,7 +336,8 @@ Ext.application({
 			storage: "/sic-storage/index.html",
 			vypiska: "/qq-web/reports/vypiska",
 			statexec1: "/qq-web/reports/statexecquery1",
-			statexec2: "/qq-web/reports/statexecquery2"
+			statexec2: "/qq-web/reports/statexecquery2",
+			reqnoti: "/qq-web/reports/uvedomlenie"
 		};
 		/**
 		 * @property {Object} btns

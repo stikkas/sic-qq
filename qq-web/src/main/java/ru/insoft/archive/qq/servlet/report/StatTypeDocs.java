@@ -29,27 +29,31 @@ public class StatTypeDocs extends ReportServlet {
 	/**
 	 * Идентификатор архива
 	 */
-	private String archive;
+	private Long archive;
 	/**
 	 * Идентификатор типа запроса
 	 */
-	private String queryType;
+	private Long queryType;
 
 	@Override
 	protected boolean getParameters(HttpServletRequest request) {
 		startDate = request.getParameter("startDate");
 		endDate = request.getParameter("endDate");
-		archive = request.getParameter("archive");
-		queryType = request.getParameter("queryType");
+		String arch = request.getParameter("archive");
+		String type = request.getParameter("queryType");
+		if (arch != null && !arch.isEmpty() && !arch.equals("null")) {
+			archive = Long.valueOf(arch);
+		}
+		if (type != null && !type.isEmpty() && !type.equals("null")) {
+			queryType = Long.valueOf(type);
+		}
 		return startDate != null && endDate != null;
 	}
 
 	@Override
 	protected void getDocument(OutputStream out) {
 		generator.getDocument(Date.valueOf(startDate), Date.valueOf(endDate),
-				archive != null ? Long.valueOf(archive) : null, 
-				queryType != null ? Long.valueOf(queryType) : null,
-				out);
+				archive, queryType, out);
 	}
 
 	@Override

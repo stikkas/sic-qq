@@ -10,6 +10,8 @@ import ru.insoft.archive.qq.qualifier.Arial;
 import ru.insoft.archive.qq.qualifier.ArialBold;
 import ru.insoft.archive.qq.qualifier.ArialBoldItalic;
 import ru.insoft.archive.qq.qualifier.ArialItalic;
+import ru.insoft.archive.qq.qualifier.TimesNewRoman;
+import ru.insoft.archive.qq.qualifier.TimesNewRomanBold;
 
 /**
  * Предоставляет базовые шрифты для pdf документов.
@@ -40,6 +42,16 @@ public class Fonts {
 	@ArialItalic
 	public BaseFont getArialItalic() {
 		return getFont("fonts/Arial_Italic.ttf");
+	}
+	@Produces
+	@TimesNewRoman
+	public BaseFont getTimesNewRoman() {
+		return getFont("fonts/Times_New_Roman.ttf");
+	}
+	@Produces
+	@TimesNewRomanBold
+	public BaseFont getTimesNewRomanBold() {
+		return getFont("fonts/Times_New_Roman_Bold.ttf");
 	}
 
 	private BaseFont getFont(String resourceFileName) {

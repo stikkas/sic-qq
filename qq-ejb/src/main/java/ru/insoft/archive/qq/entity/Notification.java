@@ -43,6 +43,9 @@ public class Notification implements Serializable {
 	@Column(name = "DOC_TYPE_ID")
 	private Long docType;
 
+	@Column(name = "TO_WHOM")
+	private String toWhom;
+
 	@Basic(optional = false)
 	@NotNull
 	@Column(name = "EXECUTOR_ID")
@@ -90,6 +93,14 @@ public class Notification implements Serializable {
 
 	public void setDocType(Long docType) {
 		this.docType = docType;
+	}
+
+	public String getToWhom() {
+		return toWhom;
+	}
+
+	public void setToWhom(String toWhom) {
+		this.toWhom = toWhom;
 	}
 
 	public Long getExecutor() {

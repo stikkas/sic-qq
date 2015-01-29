@@ -41,9 +41,9 @@ Ext.define('qqext.view.notify.VNotify', {
 						me.setViewOnly(true);
 						me._disableButtons(true, 0);
 						me._disableButtons(!ns.user.isAllowed(ns.rules.reg), 1);
+						me._disableButtons(!r.get('executor'), 2);
 						me._files.loadRecord(r.files());
 					}});
-
 				ns.initRequired(me);
 			}
 			ns.viewport.doLayout();
@@ -77,7 +77,7 @@ Ext.define('qqext.view.notify.VNotify', {
 									model.set('notifyStatus', status);
 									model.save({callback: function (record, operation, success) {
 											if (success) {
-												me._disableButtons(false, 1);
+												me._disableButtons(false, 1, 2);
 												ns.infoChanged = true;
 											} else {
 												ns.showError("Ошибка сохранения", operation.getError());
@@ -117,6 +117,11 @@ Ext.define('qqext.view.notify.VNotify', {
 			me.setViewOnly(false);
 		}
 
+		// Выполняет печать (переправку пользователся на открытие документа) уведомление заявителя
+		function printNotify() {
+			var model = me.model;
+			window.open(ns.urls.reqnoti + '?id=' + model.get('id'));
+		}
 		//-------------------------------------------
 
 		var me = this,
@@ -127,7 +132,8 @@ Ext.define('qqext.view.notify.VNotify', {
 				stores = ns.stIds,
 				menu = createCmp('HButtonMenu', [
 					{text: labels.save, action: saveNotify, opts: {cls: 'save_btn'}},
-					{text: labels.edit, action: editNotify, opts: {cls: 'edit_btn'}}
+					{text: labels.edit, action: editNotify, opts: {cls: 'edit_btn'}},
+					{text: labels.print, action: printNotify, opts: {cls: 'print_btn'}}
 				], 'ToolButton', me);
 		Ext.applyIf(me, {
 			items: [
@@ -139,6 +145,11 @@ Ext.define('qqext.view.notify.VNotify', {
 				createCmp('FComboBox', notf.docType[1], 'docType', notf.docType[0], {
 					width: 450,
 					labelWidth: 150
+				}),
+				createCmp('FTextField', notf.toWhom[1], notf.toWhom[0], {
+					width: 450,
+					labelWidth: 150,
+					allowBlank: false
 				}),
 				me._df = createCmp('FDateField', notf.notificationDate[1], notf.notificationDate[0], {
 					width: 270,

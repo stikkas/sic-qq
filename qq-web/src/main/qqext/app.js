@@ -337,6 +337,8 @@ Ext.application({
 			vypiska: "/qq-web/reports/vypiska",
 			statexec1: "/qq-web/reports/statexecquery1",
 			statexec2: "/qq-web/reports/statexecquery2",
+			statexec3: "/qq-web/reports/statexecquery3",
+			statexec4: "/qq-web/reports/statexecquery4",
 			reqnoti: "/qq-web/reports/uvedomlenie"
 		};
 		/**

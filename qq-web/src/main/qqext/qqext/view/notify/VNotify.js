@@ -146,7 +146,7 @@ Ext.define('qqext.view.notify.VNotify', {
 					width: 450,
 					labelWidth: 150
 				}),
-				createCmp('FTextField', notf.toWhom[1], notf.toWhom[0], {
+				createCmp('FTextArea', notf.toWhom[1], notf.toWhom[0], {
 					width: 450,
 					labelWidth: 150,
 					allowBlank: false

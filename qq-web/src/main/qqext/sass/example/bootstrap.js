@@ -2536,6 +2536,8 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.view.reg.VRegForm": [],
   "qqext.view.report.StatisticSic1": [],
   "qqext.view.report.StatisticSic2": [],
+  "qqext.view.report.StatisticSic3": [],
+  "qqext.view.report.StatisticSic4": [],
   "qqext.view.report.VReportForm": [],
   "qqext.view.search.FioFieldContainer": [],
   "qqext.view.search.VSearchForm": [],
@@ -3722,6 +3724,12 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "qqext.view.report.StatisticSic2": [
     "widget.statisticsic2"
+  ],
+  "qqext.view.report.StatisticSic3": [
+    "widget.statisticsic3"
+  ],
+  "qqext.view.report.StatisticSic4": [
+    "widget.statisticsic4"
   ],
   "qqext.view.report.VReportForm": [
     "VReportForm"

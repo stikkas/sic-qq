@@ -1,17 +1,18 @@
 /**
- * Статистика исполнения запросов федеральными архивами и СИЦ
+ * Реестр запросов на контроле
  */
 
-Ext.define('qqext.view.report.StatisticSic1', {
+Ext.define('qqext.view.report.StatisticSic4', {
 	extend: 'qqext.view.StyledPanel',
-	alias: 'widget.statisticsic1',
+	alias: 'widget.statisticsic4',
 	requires: [
 		'hawk_common.cmp.DateField',
 		'Ext.form.FieldContainer',
 		'qqext.factory.DateField',
+		'qqext.factory.ComboBox',
 		'Ext.Date'
 	],
-	height: 107,
+	height: 140,
 	initComponent: function () {
 		var me = this,
 				ns = qqext,
@@ -25,8 +26,8 @@ Ext.define('qqext.view.report.StatisticSic1', {
 				labelSeparator: '',
 				items: [
 					me._start = create('FDateField', 'с', 'startDate', {
-						width: 120, 
-						cls: 'width120', 
+						width: 120,
+						cls: 'width120',
 						allowBlank: false,
 						listeners: {
 							change: function (field, value) {
@@ -52,14 +53,18 @@ Ext.define('qqext.view.report.StatisticSic1', {
 							}
 						}
 					})]
-			}];
+			},
+			me._arh = create('FComboBox', 'Архив', ns.stIds.execOrgs, 'archive', {
+				width: 600, labelWidth: 95, labelPad: 35
+			})
+		];
 		me.buttons = [
 			this._btn = create('Ext.button.Button', {
 				disabled: true,
 				text: ns.labels.generate,
 				handler: function (btn) {
-					window.open(ns.urls.statexec1 + '?startDate=' + format(me._start.getValue(), 'Y-m-d') +
-							'&endDate=' + format(me._end.getValue(), 'Y-m-d'));
+					window.open(ns.urls.statexec4 + '?startDate=' + format(me._start.getValue(), 'Y-m-d') +
+							'&endDate=' + format(me._end.getValue(), 'Y-m-d') + '&archive=' + me._arh.getValue());
 				}
 
 			})

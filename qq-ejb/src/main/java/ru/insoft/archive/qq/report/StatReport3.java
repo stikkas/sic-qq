@@ -12,7 +12,6 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.draw.LineSeparator;
 import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
@@ -60,10 +59,10 @@ public class StatReport3 {
 	private static Map<Long, String> archives;
 
 	private static String[] tableHeaders = new String[]{
-		"№ п/п", "Дата регистрации", "Литера", "Номер запроса",
+		"№ п/п", "Дата регистра- ции", "Литера", "Номер запроса",
 		"ФИО / Организация заявителя"};
 
-	private static int[] cellWidths = new int[] {1, 2, 2, 3, 9};
+	private static float[] cellWidths = new float[] {1f, 2f, 1.5f, 3f, 9f};
 
 	@PostConstruct
 	private void init() {
@@ -145,7 +144,7 @@ public class StatReport3 {
 				table.addCell(createCell(sdf.format(res.regDate)));
 				table.addCell(createCell("СИЦ"));
 				table.addCell(createCell(res.number));
-				table.addCell(createCell(res.fioOrgName));
+				table.addCell(createCell(res.fioOrgName.trim(), Element.ALIGN_LEFT));
 			}
 
 //			table.setHorizontalAlignment(PdfPTable.ALIGN_CENTER);
@@ -172,15 +171,27 @@ public class StatReport3 {
 	}
 
 	/**
-	 * Создает ячейку таблицы
+	 * Создает ячейку таблицы с горизонтальным выравнивание по центру
 	 * @param content содержимое для ячейки
 	 * @return ячейку
 	 */
 	private PdfPCell createCell(String content) {
+		return createCell(content, Element.ALIGN_CENTER);
+	}
+
+	/**
+	 * Создает ячейку таблицы 
+	 * @param content содержимое для ячейки
+	 * @param alignment горизонтальное выравнивание текста в ячейке
+	 * @return ячейку
+	 */
+	private PdfPCell createCell(String content, int alignment) {
 		PdfPCell cell = new PdfPCell(new Phrase(content, general));
-		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		cell.setHorizontalAlignment(alignment);
 		cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-		cell.setPadding(3);
+		cell.setPaddingLeft(3);
+		cell.setPaddingRight(3);
+		cell.setPaddingBottom(5);
 		return cell;
 	}
 	/**

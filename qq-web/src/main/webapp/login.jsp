@@ -39,36 +39,40 @@
 		</style>
 		<script type="text/javascript">
 			$.alerts.dialogClass = 'style_1';
+			function login() {
+				var user = $("input[name=j_username]").val(),
+						password = $("input[name=j_password]").val();
+				$.ajax('login', {
+					data: {j_username: user, j_password: password},
+					dataType: 'json',
+					error: function () {
+						jAlert('Ошибка подключения к серверу', 'ОК');
+						console.log(arguments);
+					},
+					success: function (answer) {
+						if (!answer.result)
+							jAlert('Неправильный логин/пароль', 'ОК');
+						else
+							window.location.href = '<%=request.getContextPath()%>';
+					}
+				});
+			}
 		</script>
     </head>
     <body class="welcomecontainer">
-		<%
-			String username = request.getParameter("j_username");
-			String password = request.getParameter("j_password");
-			username = username == null ? "" : username;
-			password = password == null ? "" : password;
-			String path = request.getRequestURL().toString();
-		%>
-		<!--		<div id="zagolovok">АИС Запросы</div> -->
 		<div id="subzagolovok">Справочно-информационный центр федеральных государственных архивов</div>
-        <form method="POST" action="j_security_check" class="login_panel">
+		<%--        <form method="POST" action="j_security_check" class="login_panel"> --%>
+        <form method="POST" action="login" class="login_panel">
 			<fieldset>
 				<legend align="center">Вход в систему</legend>
 				<div class="log_fields">
-					<label>Логин:</label><input type="text" name="j_username"
-												value='<%=username%>'/>
-					<label>Пароль:</label><input type="password" name="j_password"
-												 value='<%=password%>'/>
+					<label>Логин:</label><input type="text" name="j_username"/>
+					<%--value='<%=username%>'/> --%>
+					<label>Пароль:</label><input type="password" name="j_password"/>
+					<%--value='<%=password%>'/> --%>
 				</div>
 			</fieldset>
-			<div id="loginbutton"><input type="submit" value="Вход"/></div>
+			<div id="loginbutton"><input type="button" value="Вход" onclick="login()"/></div>
         </form>
-
-		<%  if (!username.isEmpty()) { %>
-		<script type="text/javascript">
-			jAlert('Неправильный логин/пароль', 'ОК');
-		</script>
-		<%}%>
-
 	</body>
 </html>

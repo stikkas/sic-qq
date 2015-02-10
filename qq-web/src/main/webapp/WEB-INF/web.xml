@@ -4,6 +4,7 @@
 		<web-resource-collection>
 			<web-resource-name>login page</web-resource-name>
 			<url-pattern>/login.jsp</url-pattern>
+			<url-pattern>/login</url-pattern>
 			<url-pattern>/Auth</url-pattern>
 		</web-resource-collection>
 		<web-resource-collection>

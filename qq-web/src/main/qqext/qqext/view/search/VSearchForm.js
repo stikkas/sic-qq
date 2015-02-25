@@ -39,6 +39,7 @@ Ext.define('qqext.view.search.VSearchForm', {
 			combo.setValue(me._org = qqext.user.get('organization'));
 			combo.hide();
 		}
+		me._grid.store.getProxy().timeout = 120000;
 	},
 	/**
 	 * Очищает все поля формы

@@ -73,12 +73,6 @@
 							<groupId>${project.groupId}</groupId>
 							<artifactId>sic-storage-web</artifactId>
 						</webModule>
-            <!--
-						<webModule>
-							<groupId>ru.insoft</groupId>
-							<artifactId>arm-admin</artifactId>
-						</webModule>
-            -->
 						<ejbModule>
 							<groupId>${project.groupId}</groupId>
 							<artifactId>qq-ejb</artifactId>

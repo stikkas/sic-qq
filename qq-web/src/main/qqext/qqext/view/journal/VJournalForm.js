@@ -389,8 +389,8 @@ Ext.define('qqext.view.journal.VJournalForm', {
 							}
 						}]}, {
 					text: 'Вид запроса',
-                                        minWidth: 60,
-                                        maxWidth: 60,
+					minWidth: 60,
+					maxWidth: 60,
 					dataIndex: 'queryType',
 					items: [createCmp('FComboBox', '', ns.stIds.queryType, 'filterQTypeCombo', {
 							width: '90%',
@@ -497,6 +497,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					.getById(ns.user.get('organization')).get('name'));
 
 		me.callParent();
+		me.store.getProxy().timeout = 120000;
 		me.store.addFilter(me._fltrs, false);
 		me.store.sort([{property: 'regDate', direction: 'DESC'}]);
 	}

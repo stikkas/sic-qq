@@ -58,7 +58,6 @@
 			<version>1.8.6</version>
 		</dependency>
 	</dependencies>
-
 	<profiles>
 		<profile>
 			<id>production</id>
@@ -76,7 +75,6 @@
 			</properties>
 		</profile>
 	</profiles>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -97,12 +95,21 @@
 					<ejbVersion>3.1</ejbVersion>
 				</configuration>
 			</plugin>
-
 		</plugins>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
 				<filtering>true</filtering>
+				<includes>
+					<include>META-INF/*.xml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+				<excludes>
+					<exclude>META-INF/*.xml</exclude>
+				</excludes>
 			</resource>
 		</resources>
 	</build>

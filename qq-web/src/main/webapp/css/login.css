@@ -76,6 +76,9 @@ fieldset input {
     padding:5px 3px;
     cursor:pointer;
 }
+#loginbutton input:disabled{
+    cursor:default;
+}
 /*сообщение об ошибке*/
 #popup_container.style_1 #popup_panel input[type="button"]{
     background-image:-moz-linear-gradient(top, #E5DCC5, #AA866D);

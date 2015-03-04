@@ -45,6 +45,7 @@ public class Login extends HttpServlet {
 		try (PrintWriter out = response.getWriter()) {
 			out.write(message);
 		}
+		System.out.println("There i'm call init some profile");
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -75,15 +76,5 @@ public class Login extends HttpServlet {
 			throws ServletException, IOException {
 		processRequest(request, response);
 	}
-
-	/**
-	 * Returns a short description of the servlet.
-	 *
-	 * @return a String containing servlet description
-	 */
-	@Override
-	public String getServletInfo() {
-		return "Short description";
-	}// </editor-fold>
 
 }

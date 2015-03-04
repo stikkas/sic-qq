@@ -1,0 +1,59 @@
+package ru.insoft.archive.qq.entity;
+
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+/**
+ *
+ * @author Благодатских С.
+ */
+@Entity
+@Table(name = "ADM_EMPLOYEE")
+@NamedQueries({
+	@NamedQuery(name = "AdmEmployee.findAll", query = "SELECT a FROM AdmEmployee a")})
+public class AdmEmployee implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	@Id
+	@Column(name = "EMPLOYEE_ID")
+	private Long employeeId;
+
+	@Column(name = "DEPARTMENT_ID")
+	private Long departmentId;
+
+	@JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")
+	@OneToOne
+	private AdmUser user;
+
+	public Long getEmployeeId() {
+		return employeeId;
+	}
+
+	public void setEmployeeId(Long employeeId) {
+		this.employeeId = employeeId;
+	}
+
+	public AdmUser getUser() {
+		return user;
+	}
+
+	public void setUser(AdmUser user) {
+		this.user = user;
+	}
+
+	public Long getDepartmentId() {
+		return departmentId;
+	}
+
+	public void setDepartmentId(Long departmentId) {
+		this.departmentId = departmentId;
+	}
+
+}

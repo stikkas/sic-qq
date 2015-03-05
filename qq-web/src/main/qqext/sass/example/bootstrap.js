@@ -2495,23 +2495,35 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.factory.TextField": [],
   "qqext.model.Applicant": [],
   "qqext.model.ApplicantDoc": [],
+  "qqext.model.ArchiveJvk": [],
   "qqext.model.Assistant": [],
   "qqext.model.Coordination": [],
   "qqext.model.DeliveryAction": [],
+  "qqext.model.Dict": [],
+  "qqext.model.DictSV": [],
   "qqext.model.ExecutionInfo": [],
   "qqext.model.JournalItem": [],
+  "qqext.model.Jvk": [],
   "qqext.model.Notification": [],
   "qqext.model.PreparedDoc": [],
   "qqext.model.Question": [],
   "qqext.model.SearchResultItem": [],
   "qqext.model.SendAction": [],
   "qqext.model.SendDoc": [],
+  "qqext.model.SicJvk": [],
   "qqext.model.Transmission": [],
   "qqext.model.UsedMaterial": [],
   "qqext.model.WayToSend": [],
+  "qqext.proxy.Combo": [],
+  "qqext.proxy.Table": [],
+  "qqext.store.ArchiveJvk": [],
   "qqext.store.CustomStore": [],
+  "qqext.store.Dict": [],
+  "qqext.store.DictSV": [],
   "qqext.store.DictStore": [],
   "qqext.store.DictValuesStore": [],
+  "qqext.store.Jvk": [],
+  "qqext.store.SicJvk": [],
   "qqext.view.MainPage": [],
   "qqext.view.StatusPanel": [],
   "qqext.view.StyledPanel": [],
@@ -3607,6 +3619,7 @@ Ext.ClassManager.addNameAliasMappings({
   "qqext.model.ApplicantDoc": [
     "ApplicantDocModel"
   ],
+  "qqext.model.ArchiveJvk": [],
   "qqext.model.Assistant": [],
   "qqext.model.Coordination": [
     "CoordinationModel"
@@ -3614,12 +3627,15 @@ Ext.ClassManager.addNameAliasMappings({
   "qqext.model.DeliveryAction": [
     "DeliveryActionModel"
   ],
+  "qqext.model.Dict": [],
+  "qqext.model.DictSV": [],
   "qqext.model.ExecutionInfo": [
     "ExecutionInfoModel"
   ],
   "qqext.model.JournalItem": [
     "JournalItemModel"
   ],
+  "qqext.model.Jvk": [],
   "qqext.model.Notification": [
     "NotificationModel"
   ],
@@ -3638,6 +3654,7 @@ Ext.ClassManager.addNameAliasMappings({
   "qqext.model.SendDoc": [
     "SendDocModel"
   ],
+  "qqext.model.SicJvk": [],
   "qqext.model.Transmission": [
     "TransmissionModel"
   ],
@@ -3647,13 +3664,28 @@ Ext.ClassManager.addNameAliasMappings({
   "qqext.model.WayToSend": [
     "WayToSendModel"
   ],
+  "qqext.proxy.Combo": [
+    "proxy.combo"
+  ],
+  "qqext.proxy.Table": [
+    "proxy.table"
+  ],
+  "qqext.store.ArchiveJvk": [],
   "qqext.store.CustomStore": [],
+  "qqext.store.Dict": [
+    "StoreDict"
+  ],
+  "qqext.store.DictSV": [
+    "StoreDictSV"
+  ],
   "qqext.store.DictStore": [
     "DictStore"
   ],
   "qqext.store.DictValuesStore": [
     "DictValuesStore"
   ],
+  "qqext.store.Jvk": [],
+  "qqext.store.SicJvk": [],
   "qqext.view.MainPage": [
     "MainPage"
   ],

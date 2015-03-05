@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "ADM_ACCESS_RULE")
 @NamedQueries({@NamedQuery(name = "AdmAccessRule.usersWithRule", query = 
-		"SELECT NEW ru.insoft.archive.qqejb.dto.DictDto(u.id, u.displayedName)"
+		"SELECT NEW ru.insoft.archive.qq.dto.DictDto(u.id, u.displayedName)"
 				+ " FROM AdmAccessRule r JOIN r.groups g JOIN g.users u WHERE r.ruleCode = :code")})
 public class AdmAccessRule implements Serializable {
 

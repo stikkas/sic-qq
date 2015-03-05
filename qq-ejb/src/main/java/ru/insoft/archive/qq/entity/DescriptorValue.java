@@ -2,8 +2,6 @@ package ru.insoft.archive.qq.entity;
 
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -13,74 +11,111 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
+ * Сущность справочника
  *
- * @author Благодатских С.
+ * @author stikkas<stikkas@yandex.ru>
  */
 @Entity
 @Table(name = "DESCRIPTOR_VALUE")
 @NamedQueries({
-	@NamedQuery(name = "DescriptorValue.findAll", query = "SELECT d FROM DescriptorValue d")})
+	@NamedQuery(name = "DescriptorValue.fullShortValues",
+			query = "SELECT NEW ru.insoft.archive.qq.dto.DictSVDto(d.id, d.fullValue, d.shortValue) "
+			+ "from DescriptorValue d WHERE d.groupId = :groupId"),
+	@NamedQuery(name = "DescriptorValue.fullValue",
+			query = "SELECT NEW ru.insoft.archive.qq.dto.DictDto(d.id, d.fullValue) "
+			+ "from DescriptorValue d WHERE d.groupId = :groupId"),
+	@NamedQuery(name = "DescriptorValue.idByCode",
+			query = "SELECT d.id FROM DescriptorValue d WHERE d.valueCode = :code"),
+	@NamedQuery(name = "DescriptorValue.literasArchive",
+			query = "SELECT NEW ru.insoft.archive.qq.dto.DictSVDto(d.id, d.fullValue, d.shortValue) "
+			+ "FROM DescriptorValue d WHERE d.id in (:sic, :archive)"),
+	@NamedQuery(name = "DescriptorValue.fullCodeValue",
+			query = "SELECT NEW ru.insoft.archive.qq.dto.DictSVDto(d.id, d.fullValue, d.valueCode) "
+			+ "FROM DescriptorValue d WHERE d.groupId = :groupId")
+})
 public class DescriptorValue implements Serializable {
+
 	private static final long serialVersionUID = 1L;
+
 	@Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "DESCRIPTOR_VALUE_ID")
-	private Long descriptorValueId;
-	@Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 4000)
-    @Column(name = "FULL_VALUE")
+	@Column(name = "DESCRIPTOR_VALUE_ID", insertable = false, updatable = false)
+	private Long id;
+
+	@Column(name = "FULL_VALUE", insertable = false, updatable = false)
 	private String fullValue;
-	@Size(max = 250)
-    @Column(name = "SHORT_VALUE")
+
+	@Column(name = "SHORT_VALUE", insertable = false, updatable = false)
 	private String shortValue;
-	@Size(max = 30)
-    @Column(name = "VALUE_CODE")
+
+	@Column(name = "VALUE_CODE", insertable = false, updatable = false)
 	private String valueCode;
-	@Basic(optional = false)
-    @NotNull
-    @Column(name = "SORT_ORDER")
-	private long sortOrder;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userTypeId")
-	private List<AdmUser> admUserList;
-	@OneToMany(mappedBy = "parentValueId")
-	private List<DescriptorValue> descriptorValueList;
-	@JoinColumn(name = "PARENT_VALUE_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID")
-    @ManyToOne
-	private DescriptorValue parentValueId;
-	@JoinColumn(name = "DESCRIPTOR_GROUP_ID", referencedColumnName = "DESCRIPTOR_GROUP_ID")
-    @ManyToOne(optional = false)
-	private DescriptorGroup descriptorGroupId;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "departmentId")
-	private List<AdmEmployee> admEmployeeList;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "positionId")
-	private List<AdmEmployee> admEmployeeList1;
+
+	@Column(name = "SORT_ORDER", insertable = false, updatable = false)
+	private Integer sortOrder;
+
+	@Column(name = "DESCRIPTOR_GROUP_ID", insertable = false, updatable = false)
+	private Long groupId;
+
+	@OneToMany(mappedBy = "parent")
+	private List<DescriptorValue> children;
+
+	@JoinColumn(name = "PARENT_VALUE_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
+			insertable = false, updatable = false)
+	@ManyToOne
+	private DescriptorValue parent;
+	/*
+	 @JoinColumn(name = "DESCRIPTOR_GROUP_ID", referencedColumnName = "DESCRIPTOR_GROUP_ID",
+	 insertable = false, updatable = false)
+	 @ManyToOne
+	 private DescriptorGroup group;
+	 */
 
 	public DescriptorValue() {
 	}
 
-	public DescriptorValue(Long descriptorValueId) {
-		this.descriptorValueId = descriptorValueId;
+	public Long getId() {
+		return id;
 	}
 
-	public DescriptorValue(Long descriptorValueId, String fullValue, long sortOrder) {
-		this.descriptorValueId = descriptorValueId;
-		this.fullValue = fullValue;
-		this.sortOrder = sortOrder;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public Long getDescriptorValueId() {
-		return descriptorValueId;
+	public List<DescriptorValue> getChildren() {
+		return children;
 	}
 
-	public void setDescriptorValueId(Long descriptorValueId) {
-		this.descriptorValueId = descriptorValueId;
+	public void addChild(DescriptorValue child) {
+		if (!children.contains(child)) {
+			children.add(child);
+			DescriptorValue parent = child.getParent();
+			if (parent != this) {
+				if (parent != null) {
+					parent.children.remove(child);
+				}
+				child.setParent(this);
+			}
+		}
 	}
+
+	public DescriptorValue getParent() {
+		return parent;
+	}
+
+	public void setParent(DescriptorValue parent) {
+		this.parent = parent;
+	}
+	/*
+	 public DescriptorGroup getGroup() {
+	 return group;
+	 }
+
+	 public void setGroup(DescriptorGroup group) {
+	 this.group = group;
+	 }
+	 */
 
 	public String getFullValue() {
 		return fullValue;
@@ -106,85 +141,20 @@ public class DescriptorValue implements Serializable {
 		this.valueCode = valueCode;
 	}
 
-	public long getSortOrder() {
+	public Integer getSortOrder() {
 		return sortOrder;
 	}
 
-	public void setSortOrder(long sortOrder) {
+	public void setSortOrder(Integer sortOrder) {
 		this.sortOrder = sortOrder;
 	}
 
-	public List<AdmUser> getAdmUserList() {
-		return admUserList;
+	public Long getGroupId() {
+		return groupId;
 	}
 
-	public void setAdmUserList(List<AdmUser> admUserList) {
-		this.admUserList = admUserList;
-	}
-
-	public List<DescriptorValue> getDescriptorValueList() {
-		return descriptorValueList;
-	}
-
-	public void setDescriptorValueList(List<DescriptorValue> descriptorValueList) {
-		this.descriptorValueList = descriptorValueList;
-	}
-
-	public DescriptorValue getParentValueId() {
-		return parentValueId;
-	}
-
-	public void setParentValueId(DescriptorValue parentValueId) {
-		this.parentValueId = parentValueId;
-	}
-
-	public DescriptorGroup getDescriptorGroupId() {
-		return descriptorGroupId;
-	}
-
-	public void setDescriptorGroupId(DescriptorGroup descriptorGroupId) {
-		this.descriptorGroupId = descriptorGroupId;
-	}
-
-	public List<AdmEmployee> getAdmEmployeeList() {
-		return admEmployeeList;
-	}
-
-	public void setAdmEmployeeList(List<AdmEmployee> admEmployeeList) {
-		this.admEmployeeList = admEmployeeList;
-	}
-
-	public List<AdmEmployee> getAdmEmployeeList1() {
-		return admEmployeeList1;
-	}
-
-	public void setAdmEmployeeList1(List<AdmEmployee> admEmployeeList1) {
-		this.admEmployeeList1 = admEmployeeList1;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		hash += (descriptorValueId != null ? descriptorValueId.hashCode() : 0);
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object object) {
-		// TODO: Warning - this method won't work in the case the id fields are not set
-		if (!(object instanceof DescriptorValue)) {
-			return false;
-		}
-		DescriptorValue other = (DescriptorValue) object;
-		if ((this.descriptorValueId == null && other.descriptorValueId != null) || (this.descriptorValueId != null && !this.descriptorValueId.equals(other.descriptorValueId))) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "ru.insoft.archive.qq.entity.DescriptorValue[ descriptorValueId=" + descriptorValueId + " ]";
+	public void setGroupId(Long groupId) {
+		this.groupId = groupId;
 	}
 
 }

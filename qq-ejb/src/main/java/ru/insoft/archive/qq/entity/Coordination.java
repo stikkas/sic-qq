@@ -8,8 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -22,10 +20,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "QQ_COORDINATION")
-@NamedQueries({
-	@NamedQuery(name = "Coordination.findAll", query = "SELECT c FROM Coordination c"),
-	@NamedQuery(name = "Coordination.findById", query = "SELECT c FROM Coordination c WHERE c.id = :id"),
-	@NamedQuery(name = "Coordination.findByStageDate", query = "SELECT c FROM Coordination c WHERE c.stageDate = :stageDate")})
+
 public class Coordination implements Serializable {
 
 	private static final long serialVersionUID = 1L;

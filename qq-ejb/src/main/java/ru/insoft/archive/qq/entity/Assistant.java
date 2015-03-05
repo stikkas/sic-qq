@@ -9,20 +9,14 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import ru.insoft.archive.core_model.table.adm.AdmUser;
 
 /**
  *
  * @author basa
  */
-@NamedQueries({
-	@NamedQuery(name = "Assistant.findByTrans", query = "SELECT a FROM Assistant a WHERE a.trans = :trans")
-})
 @Entity
 @Table(name = "QQ_ASSISTANTS")
 @IdClass(AssistantPK.class)
@@ -48,10 +42,7 @@ public class Assistant implements Serializable {
 	@Temporal(javax.persistence.TemporalType.TIMESTAMP)
 	private Date execDate;
 
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "TRANSMISSION_ID", referencedColumnName = "QUESTION_ID", insertable = false, updatable = false)
-	private Transmission trans;
+
 
 	@JsonIgnore
 	@ManyToOne
@@ -90,13 +81,7 @@ public class Assistant implements Serializable {
 		this.execDate = execDate;
 	}
 
-	public Transmission getTrans() {
-		return trans;
-	}
 
-	public void setTrans(Transmission trans) {
-		this.trans = trans;
-	}
 
 	public AdmUser getUserValue() {
 		return userValue;

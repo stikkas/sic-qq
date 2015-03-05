@@ -8,8 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -22,11 +20,6 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "QQ_SEND_ACTION")
-@NamedQueries({
-	@NamedQuery(name = "SendAction.findAll", query = "SELECT s FROM SendAction s"),
-	@NamedQuery(name = "SendAction.findById", query = "SELECT s FROM SendAction s WHERE s.id = :id"),
-	@NamedQuery(name = "SendAction.findBySendDate", query = "SELECT s FROM SendAction s WHERE s.sendDate = :sendDate"),
-	@NamedQuery(name = "SendAction.findBySendType", query = "SELECT s FROM SendAction s WHERE s.sendType = :sendType")})
 public class SendAction implements Serializable {
 
 	private static final long serialVersionUID = 1L;

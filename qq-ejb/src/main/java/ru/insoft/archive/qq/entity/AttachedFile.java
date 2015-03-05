@@ -9,14 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import ru.insoft.archive.core_model.table.desc.DescriptorValue;
 
 /**
  * Прикрепленные файлы. Могут быть в запросе и в ответе (два типа файлов)
@@ -25,10 +22,7 @@ import ru.insoft.archive.core_model.table.desc.DescriptorValue;
  */
 @Entity
 @Table(name = "QQ_ATTACHED_FILE")
-@NamedQueries({
-	@NamedQuery(name = "AttachedFile.findAll", query = "SELECT a FROM AttachedFile a"),
-	@NamedQuery(name = "AttachedFile.findById", query = "SELECT a FROM AttachedFile a WHERE a.id = :id"),
-	@NamedQuery(name = "AttachedFile.findByName", query = "SELECT a FROM AttachedFile a WHERE a.name = :name")})
+
 public class AttachedFile implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -56,10 +50,7 @@ public class AttachedFile implements Serializable {
 	@Column(name = "QUESTION_ID")
 	private Long question;
 
-	@JsonIgnore
-	@JoinColumn(name = "QUESTION_ID", referencedColumnName = "QUESTION_ID", updatable = false, insertable = false)
-	@ManyToOne
-	private Question questionValue;
+
 
 	@JsonIgnore
 	@JoinColumn(name = "FILE_TYPE_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID", updatable = false, insertable = false)
@@ -117,13 +108,6 @@ public class AttachedFile implements Serializable {
 		this.question = question;
 	}
 
-	public Question getQuestionValue() {
-		return questionValue;
-	}
-
-	public void setQuestionValue(Question questionValue) {
-		this.questionValue = questionValue;
-	}
 
 	public DescriptorValue getTypeValue() {
 		return typeValue;

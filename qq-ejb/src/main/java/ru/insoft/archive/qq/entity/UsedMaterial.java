@@ -7,8 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -21,14 +19,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "QQ_USED_MATERIAL")
-@NamedQueries({
-	@NamedQuery(name = "UsedMaterial.findAll", query = "SELECT u FROM UsedMaterial u"),
-	@NamedQuery(name = "UsedMaterial.findById", query = "SELECT u FROM UsedMaterial u WHERE u.id = :id"),
-	@NamedQuery(name = "UsedMaterial.findByFondNumber", query = "SELECT u FROM UsedMaterial u WHERE u.fondNumber = :fondNumber"),
-	@NamedQuery(name = "UsedMaterial.findByOpisNumber", query = "SELECT u FROM UsedMaterial u WHERE u.opisNumber = :opisNumber"),
-	@NamedQuery(name = "UsedMaterial.findBySeriesNumber", query = "SELECT u FROM UsedMaterial u WHERE u.seriesNumber = :seriesNumber"),
-	@NamedQuery(name = "UsedMaterial.findByStorageUnitNumber", query = "SELECT u FROM UsedMaterial u WHERE u.storageUnitNumber = :storageUnitNumber"),
-	@NamedQuery(name = "UsedMaterial.findByRemark", query = "SELECT u FROM UsedMaterial u WHERE u.remark = :remark")})
+
 public class UsedMaterial implements Serializable {
 
 	private static final long serialVersionUID = 1L;

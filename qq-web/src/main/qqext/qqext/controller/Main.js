@@ -33,23 +33,25 @@ Ext.define('qqext.controller.Main', {
 					journalExecutors: 'QQ_JOURNAL_EXECUTOR'
 				};
 
-		for (var key in kput)
-			createCmp('DictValuesStore', key, kput[key]);
-
-		createCmp('qqext.store.CustomStore', {
-			storeId: 'searchResults',
-			url: '/qq-web/api/Search',
-			pageSize: 12,
-			model: 'qqext.model.SearchResultItem',
-			remoteSort: true
-		});
-		createCmp('qqext.store.CustomStore', {
-			storeId: 'journal',
-			url: '/qq-web/api/Journal',
-			pageSize: 25,
-			remoteSort: true,
-			model: 'qqext.model.JournalItem',
-			remoteFilter: true
-		});
+		/*
+		 for (var key in kput)
+		 createCmp('DictValuesStore', key, kput[key]);
+		 
+		 createCmp('qqext.store.CustomStore', {
+		 storeId: 'searchResults',
+		 url: '/qq-web/api/Search',
+		 pageSize: 12,
+		 model: 'qqext.model.SearchResultItem',
+		 remoteSort: true
+		 });
+		 createCmp('qqext.store.CustomStore', {
+		 storeId: 'journal',
+		 url: '/qq-web/api/Journal',
+		 pageSize: 25,
+		 remoteSort: true,
+		 model: 'qqext.model.JournalItem',
+		 remoteFilter: true
+		 });
+		 */
 	}
 });

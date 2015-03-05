@@ -14,9 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
-import ru.insoft.archive.core_model.table.desc.DescriptorValue;
-import ru.insoft.archive.qq.entity.Execution;
-import ru.insoft.archive.qq.entity.Question;
+import ru.insoft.archive.qq.entity.DescriptorValue;
 
 /**
  * Собирает статистику по выполненым запросам за определенный период.
@@ -96,7 +94,7 @@ public class StatQuery1 {
 								SIC, GARF, RGAE, RGALI, RGANI, RGANTD, RGASPI, RGBA))
 				.getResultList();
 		for (DescriptorValue d : descs) {
-			String value = d.getCode();
+			String value = d.getValueCode();
 			Long id = d.getId();
 			descriptorIds.put(value, id);
 			descriptorValues.put(id, value);

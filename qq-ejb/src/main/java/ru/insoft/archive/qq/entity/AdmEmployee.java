@@ -5,8 +5,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -16,19 +14,17 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "ADM_EMPLOYEE")
-@NamedQueries({
-	@NamedQuery(name = "AdmEmployee.findAll", query = "SELECT a FROM AdmEmployee a")})
 public class AdmEmployee implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
-	@Column(name = "EMPLOYEE_ID")
+	@Column(name = "EMPLOYEE_ID", insertable = false, updatable = false)
 	private Long employeeId;
 
-	@Column(name = "DEPARTMENT_ID")
+	@Column(name = "DEPARTMENT_ID", insertable = false, updatable = false)
 	private Long departmentId;
 
-	@JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")
+	@JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", insertable = false, updatable = false)
 	@OneToOne
 	private AdmUser user;
 

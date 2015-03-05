@@ -21,11 +21,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import org.apache.commons.fileupload.FileItem;
-import ru.insoft.archive.extcommons.ejb.CommonDBHandler;
-import ru.insoft.archive.extcommons.ejb.FileUploadBean;
-import ru.insoft.archive.extcommons.ejb.JsonTools;
-import ru.insoft.archive.extcommons.utils.StringUtils;
 import ru.insoft.archive.qq.entity.AttachedFile;
 
 /**
@@ -34,20 +29,15 @@ import ru.insoft.archive.qq.entity.AttachedFile;
  * @author basa
  */
 @Stateless
-@TransactionManagement(TransactionManagementType.CONTAINER)
-public class AttachedFileHandler extends FileUploadBean {
+public class AttachedFileHandler  {
 
 	@PersistenceContext(unitName = "SicEntityManager")
 	EntityManager em;
 	private Map<String, Long> fileTypeMap;
 
-	@Inject
-	CommonDBHandler dbHandler;
-
-	@EJB
-	JsonTools jsonTools;
-
 	public Long getFileTypeId(String code) {
+		return 1l;
+		/*
 		if (fileTypeMap == null) {
 			fileTypeMap = new HashMap<>();
 		}
@@ -57,10 +47,10 @@ public class AttachedFileHandler extends FileUploadBean {
 			fileTypeMap.put(code, fileTypeId);
 		}
 		return fileTypeId;
+		*/
 	}
 
-	@Override
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	/*
 	protected void processUploadedFile(FileItem item, Map<String, String> params)
 		throws Exception {
 		Long question = Long.parseLong(params.get("question"));
@@ -84,7 +74,7 @@ public class AttachedFileHandler extends FileUploadBean {
 		}
 
 	}
-
+*/
 	/**
 	 * Проверяет есть ли в базе файл с таким же именем, такого же типа, и
 	 * принадлежащий этому же запросу.
@@ -92,6 +82,7 @@ public class AttachedFileHandler extends FileUploadBean {
 	 * @param entity файл для сохранения или обновления
 	 * @return сущность для вставки в таблицу
 	 */
+	/*
 	private AttachedFile createEntity(String name, Long type, Long question) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
 		CriteriaQuery<AttachedFile> cq = cb.createQuery(AttachedFile.class);
@@ -109,7 +100,6 @@ public class AttachedFileHandler extends FileUploadBean {
 		}
 	}
 
-	@Override
 	protected void beforeFilesUpload(Map<String, String> params) throws Exception {
 		String path = params.get("path") + params.get("question");
 
@@ -121,5 +111,6 @@ public class AttachedFileHandler extends FileUploadBean {
 			}
 		}
 	}
+	*/
 
 }

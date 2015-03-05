@@ -18,9 +18,12 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "ADM_USER")
 @NamedQueries({
-	@NamedQuery(name = "AdmUser.userByLogin", query
+	@NamedQuery(name = "AdmUser.userDataByLogin", query
 			= "SELECT u.id, u.displayedName, e.departmentId FROM AdmUser u "
-			+ "JOIN u.employee e WHERE u.login = :login")
+			+ "JOIN u.employee e WHERE lower(u.login) = lower(:login)"),
+	@NamedQuery(name = "AdmUser.userRules", query
+			= "SELECT r.ruleCode FROM AdmUser u JOIN u.groups g JOIN g.rules "
+					+ "r WHERE lower(u.login) = lower(:login)")
 })
 public class AdmUser implements Serializable {
 

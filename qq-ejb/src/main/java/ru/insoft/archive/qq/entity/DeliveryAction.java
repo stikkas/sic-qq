@@ -7,8 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -20,10 +18,6 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "QQ_DELIVERY_ACTION")
-@NamedQueries({
-	@NamedQuery(name = "DeliveryAction.findAll", query = "SELECT d FROM DeliveryAction d"),
-	@NamedQuery(name = "DeliveryAction.findById", query = "SELECT d FROM DeliveryAction d WHERE d.id = :id"),
-	@NamedQuery(name = "DeliveryAction.findByDocCount", query = "SELECT d FROM DeliveryAction d WHERE d.docCount = :docCount")})
 public class DeliveryAction implements Serializable {
 
 	private static final long serialVersionUID = 1L;

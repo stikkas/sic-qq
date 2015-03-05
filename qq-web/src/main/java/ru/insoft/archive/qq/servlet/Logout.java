@@ -1,31 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ru.insoft.archive.qq.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import ru.insoft.archive.qq.service.UserProfile;
+import javax.servlet.http.HttpSession;
 
 /**
- * Сервлет аутентификации. Используется вместо стандартного, чтобы более
- * наглядно определять результ авторизации через ajax запрос.
+ * Сервлет для завершения работы пользователя с системой
  *
  * @author Благодатских С.
  */
-@WebServlet(name = "Login", urlPatterns = {"/login"})
-public class Login extends HttpServlet {
-
-	@Inject
-	UserProfile up;
+@WebServlet(name = "Logout", urlPatterns = {"/logout"})
+public class Logout extends HttpServlet {
 
 	/**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,24 +27,14 @@ public class Login extends HttpServlet {
 	 */
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String password = request.getParameter("j_password");
-		String username = request.getParameter("j_username");
-		String message = "{\"result\": true}";
-		boolean resultLogin = false;
-		try {
-			request.login(username, password);
-			resultLogin = true;
-		} catch (ServletException e) {
-			message = "{\"result\": false, \"msg\": \"" + e.getLocalizedMessage() + "\"}";
+		// баг в sso jboss, поэтому сперва надо уничтожить сессию,
+		// потом только вызывать logout()
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			session.invalidate();
 		}
-		response.setContentType("text/plain;charset=UTF-8");
-		try (PrintWriter out = response.getWriter()) {
-			out.write(message);
-		}
-		// Вызываем чтобы иницилизировать bean перед тем как пользователь к нему обратится
-		if (resultLogin) {
-			up.isSic();
-		}
+		request.logout();
+		response.sendRedirect(request.getContextPath());
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

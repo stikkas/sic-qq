@@ -22,7 +22,7 @@ Ext.define('qqext.factory.ComboBox', {
 		me.fieldLabel = fieldLabel;
 		me.store = store;
 		me.name = name;
-		me.displayField = 'name';
+//		me.displayField = 'name';
 		me.valueField = 'id';
 		me._config(viewmode, opts);
 	}

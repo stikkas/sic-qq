@@ -18,8 +18,8 @@ Ext.application({
 		'hawk_common.store.UserLocalStorage',
 		'qqext.view.Viewport',
 		'qqext.Menu',
-		'qqext.store.DictValuesStore',
-		'qqext.store.DictStore',
+		'qqext.store.Dict',
+		'qqext.store.DictSV',
 		'Ext.util.Filter',
 		'qqext.view.StatusPanel',
 		'over.DatePicker',
@@ -31,7 +31,7 @@ Ext.application({
 	launch: function () {
 		var me = this;
 		Ext.Ajax.request({
-			url: '/qq-web/Rules',
+			url: 'rest/userinfo',
 			success: function (response) {
 				var authRes = Ext.decode(response.responseText),
 						ns = qqext,
@@ -39,18 +39,30 @@ Ext.application({
 						userStore = ns.userStore = Ext.create('hawk_common.store.UserLocalStorage');
 
 				user.set('id', 'current');
-				user.set('name', authRes.msg);
+				user.set('name', authRes.name);
 				user.set('access', authRes.access);
 				user.set('userId', authRes.userId);
 				user.set('organization', authRes.organization);
 				userStore.add(user);
 				userStore.sync();
+				ns.sicId = authRes.sicId;
+				ns.isSIC = authRes.sic;
+
 				// загружаем справочники
-				me.initStores(authRes.organization, user);
+				me.initStores();
+
 				// Настраиваем глобальные переменные
 				me.initQQ();
+
+				// Создаем главный виджет
 				Ext.create('Viewport', {});
 
+				// скрываем кнопку уведомления
+				if (!ns.isSIC)
+					ns.getButton(ns.btns.notify).hide();
+
+				// Настраиваем перенаправление на страницу авторизации в случае 
+				// прекращения сессии сервером
 				Ext.Ajax.on('requestexception', function (conn, response) {
 					if (response.status === 403)
 						ns.forceQuit();
@@ -66,7 +78,7 @@ Ext.application({
 				var codes = ['QQ_ANSWER_DOC', 'QQ_APPLICANT_DOC', 'QQ_INFO_DOC', 'QQ_DOC_ROOT',
 					'URL_ROOT', 'DOCUMENT_ROOT'];
 				Ext.Ajax.request({
-					url: '/qq-web/rest/coreparameter',
+					url: 'rest/dict/coreparameter',
 					method: 'GET',
 					params: {code: codes},
 					success: function (result) {
@@ -332,14 +344,14 @@ Ext.application({
 		 */
 		var urls = ns.urls = {
 			welcome: "/qq-web/",
-			login: "/qq-web/Auth?action=logout",
+			logout: "logout",
 			storage: "/sic-storage/index.html",
-			vypiska: "/qq-web/reports/vypiska",
-			statexec1: "/qq-web/reports/statexecquery1",
-			statexec2: "/qq-web/reports/statexecquery2",
-			statexec3: "/qq-web/reports/statexecquery3",
-			statexec4: "/qq-web/reports/statexecquery4",
-			reqnoti: "/qq-web/reports/uvedomlenie"
+			vypiska: "reports/vypiska",
+			statexec1: "reports/statexecquery1",
+			statexec2: "reports/statexecquery2",
+			statexec3: "reports/statexecquery3",
+			statexec4: "reports/statexecquery4",
+			reqnoti: "reports/uvedomlenie"
 		};
 		/**
 		 * @property {Object} btns
@@ -473,7 +485,7 @@ Ext.application({
 		ns.forceQuit = function () {
 			ns.userStore.removeAll(true);
 			window.location = urls.welcome;
-		}
+		};
 		/**
 		 * Вызывается когда нажали на кнопку 'Выйти'
 		 * @method quitAction
@@ -481,11 +493,7 @@ Ext.application({
 		ns.quitAction = function () {
 			// молча, без выстерла событий, удаляем все данные из хранилища
 			ns.userStore.removeAll(true);
-			Ext.Ajax.request({url: urls.login,
-				callback: function () {
-					window.location = urls.welcome;
-				}
-			});
+			window.location.href = urls.logout;
 		};
 		/**
 		 * @property {Obejct} applicant
@@ -703,7 +711,7 @@ Ext.application({
 		// создаем все меню
 		ns.Menu.init();
 	},
-	initStores: function (organization) {
+	initStores: function () {
 		var ns = qqext,
 				create = Ext.create,
 				ids = ns.stIds = {
@@ -712,61 +720,49 @@ Ext.application({
 					allusers: 'allusers',
 					regusers: 'regusers',
 					stats: 'statuses',
-					execOrgs: 'organizations',
 					sendType: 'sendtypes',
 					notiStats: 'notifystatuses',
 					queryType: 'querytypes'
 				};
 		// нужно инициализировать хранилище для информации об организациях
 		// и установить принадлежность пользователся к СИЦ
-		create('DictStore', ids.execOrgs, ids.execOrgs, {
-			listeners: {
-				load: function (st, records) {
-					var record, max = records.length, i = 0;
-					for (; i < max; ++i) {
-						record = records[i];
-						if (record.get('code') === 'Q_VALUE_MEMBER_SIC')
-							ns.sicId = record.get('id');
-					}
-					ns.isSIC = ns.sicId === organization;
-					if (!ns.isSIC)
-						ns.getButton(ns.btns.notify).hide();
-				}
-			}
-		});
-		create('DictStore', ids.litera, ids.litera, organization);
-		create('DictStore', ids.users, ids.users, organization);
-		create('DictStore', ids.allusers, ids.users);
-		create('DictStore', ids.regusers, ids.users, 'Q_RULE_REGISTRATOR');
-		create('DictStore', ids.sendType, ids.sendType);
-		create('DictStore', ids.queryType, ids.queryType);
-		create('DictStore', ids.stats, ids.stats, {
+		create('StoreDictSV', ids.litera);
+		/*		create('DictStore', ids.litera, ids.litera, organization);
+		 create('DictStore', ids.users, ids.users, organization);
+		 create('DictStore', ids.allusers, ids.users);
+		 create('DictStore', ids.regusers, ids.users, 'Q_RULE_REGISTRATOR');
+		 create('DictStore', ids.sendType, ids.sendType);
+		 create('DictStore', ids.queryType, ids.queryType);
+		 */
+		create('StoreDictSV', ids.stats, {
 			listeners: {
 				load: function (st, records) {
 					ns.statsId = {};
 					ns.statsName = {};
 					records.forEach(function (r) {
-						var code = r.get('code');
+						var code = r.get('shortValue');
 						ns.statsId[code] = r.get('id');
-						ns.statsName[code] = r.get('name');
+						ns.statsName[code] = r.get('text');
 					});
 					ns.statusPanel.fill();
 				}
 			}
 		});
-		create('DictStore', ids.notiStats, ids.notiStats, {
-			listeners: {
-				load: function (st, records) {
-					ns.notiStatsId = {};
-					ns.notiStatsName = {};
-					records.forEach(function (r) {
-						var code = r.get('code');
-						ns.notiStatsId[code] = r.get('id');
-						ns.notiStatsName[code] = r.get('name');
-					});
-				}
-			}
-		});
+		/*
+		 create('DictStore', ids.notiStats, ids.notiStats, {
+		 listeners: {
+		 load: function (st, records) {
+		 ns.notiStatsId = {};
+		 ns.notiStatsName = {};
+		 records.forEach(function (r) {
+		 var code = r.get('code');
+		 ns.notiStatsId[code] = r.get('id');
+		 ns.notiStatsName[code] = r.get('name');
+		 });
+		 }
+		 }
+		 });
+		 */
 	}
 });
 

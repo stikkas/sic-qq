@@ -5,8 +5,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -18,10 +16,6 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "QQ_WAY_TO_SEND")
-@NamedQueries({
-	@NamedQuery(name = "WayToSend.findAll", query = "SELECT w FROM WayToSend w"),
-	@NamedQuery(name = "WayToSend.findById", query = "SELECT w FROM WayToSend w WHERE w.id = :id"),
-	@NamedQuery(name = "WayToSend.findByRemark", query = "SELECT w FROM WayToSend w WHERE w.remark = :remark")})
 public class WayToSend implements Serializable {
 
 	private static final long serialVersionUID = 1L;

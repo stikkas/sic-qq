@@ -40,7 +40,7 @@ Ext.define('qqext.view.notify.VNotify', {
 						me.loadRecord(r);
 						me.setViewOnly(true);
 						me._disableButtons(true, 0);
-						me._disableButtons(!ns.user.isAllowed(ns.rules.reg), 1);
+						me._disableButtons(!ns.reg, 1);
 						me._disableButtons(!r.get('executor'), 2);
 						me._files.loadRecord(r.files());
 					}});

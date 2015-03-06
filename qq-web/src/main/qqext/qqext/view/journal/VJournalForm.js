@@ -148,25 +148,22 @@ Ext.define('qqext.view.journal.VJournalForm', {
 		var me = this,
 				createCmp = Ext.create,
 				ns = qqext,
-				rules = ns.rules,
 				user = ns.user,
 				execStore = ns.stIds.users;
 
 // Если пользователь чистый исполнитель, то выводим запросы только назначеные ему
-		if (user.isAllowed(rules.exec) && !user.isAllowed(rules.crd)
-				&& !user.isAllowed(rules.reg)) {
-			var userId = user.get('userId');
+		if (ns.exec && !ns.coor && !ns.reg) {
 			execStore = createCmp('Ext.data.Store', {
 				fields: ['id', 'name'],
-				data: [{id: userId, name: user.get('name')}]
+				data: [{id: ns.userId, text: ns.fio}]
 			});
 			me._fltrs.push(createCmp('Ext.util.Filter', {
 				property: 'executor',
-				value: userId
+				value: ns.userId
 			}));
 		}
 
-		if (user.isAllowed([rules.reg, rules.crd, rules.exec, rules.admin, rules.sexec]))
+		if (ns.reg || ns.coor || ns.exec || ns.visor || ns.superex)
 			me.listeners.itemdblclick = ns.openRequest;
 
 		if (ns.isSIC) // Запросы со статусом "На регистрации" с литерой архива для СИЦ не нужны

@@ -16,8 +16,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "DESCRIPTOR_GROUP")
 @NamedQueries({
-	@NamedQuery(name = "DescriptorGroup.idByCode",
-			query = "SELECT g.id FROM DescriptorGroup g WHERE g.groupCode = :code")
+	@NamedQuery(name = "DescriptorGroup.idsByCodes",
+			query = "SELECT g.groupCode, g.id FROM DescriptorGroup g WHERE g.groupCode in :codes")
 })
 public class DescriptorGroup implements Serializable {
 
@@ -32,10 +32,6 @@ public class DescriptorGroup implements Serializable {
 
 	@Column(name = "ALPHABETIC_SORT", insertable = false, updatable = false)
 	private short alphabeticSort;
-	/*
-	 @OneToMany(mappedBy = "group")
-	 private List<DescriptorValue> values;
-	 */
 
 	public DescriptorGroup() {
 	}
@@ -56,24 +52,6 @@ public class DescriptorGroup implements Serializable {
 		this.groupCode = groupCode;
 	}
 
-	/*
-	 public List<DescriptorValue> getValues() {
-	 return values;
-	 }
-
-	 public void addValue(DescriptorValue value) {
-	 if (!values.contains(value)) {
-	 values.add(value);
-	 DescriptorGroup group = value.getGroup();
-	 if (group != this) {
-	 if (group != null) {
-	 group.values.remove(value);
-	 }
-	 value.setGroup(this);
-	 }
-	 }
-	 }
-	 */
 	public short getAlphabeticSort() {
 		return alphabeticSort;
 	}

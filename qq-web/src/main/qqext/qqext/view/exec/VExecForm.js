@@ -36,7 +36,7 @@ Ext.define('qqext.view.exec.VExecForm', {
 				me.model.getTrans({
 					callback: function (r) {
 						me._disableButtons(!((r.get('executor') === ns.user.get('userId') || (
-								ns.user.isAllowed(ns.rules.sexec) && 
+								ns.superex && 
 								(ns.request.get('execOrg') === ns.user.get('organization')))) &&
 								(status === ns.statsId[ns.stats.onexec] || status === ns.statsId[ns.stats.exec])), 0);
 					}

@@ -8,7 +8,6 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import ru.insoft.archive.qq.ejb.DictCodes;
 
 /**
  * Получение информации о пользователе
@@ -39,22 +38,15 @@ public class AdmUserDao extends AbstractDao {
 	}
 
 	/**
-	 * Возвращает список кодов прав доступа пользователя
+	 * Возвращает список идентификаторов прав доступа пользователя
 	 *
-	 * @return список кодов
+	 * @param userId идентификатор пользователя
+	 * @return список идентификаторов
 	 */
-	public List<String> getUserRules() {
+	public List<Long> getUserRules(Long userId) {
 		return em.createNamedQuery("AdmUser.userRules")
-				.setParameter("login", ctx.getCallerPrincipal().getName())
+				.setParameter("id", userId)
 				.getResultList();
 	}
 
-	/**
-	 * Возвращает идентификатор для СИЦ
-	 *
-	 * @return идентификатор СИЦ
-	 */
-	public Long getSicId() {
-		return store.getIdByCode(DictCodes.Q_VALUE_MEMBER_SIC);
-	}
 }

@@ -120,7 +120,7 @@ Ext.define('qqext.Menu', {
 					// меню редактирования при выбранных подразделах: 'ЖВК', 'Поиск', 'Отчетные документы'
 					searchEdit = createCmp('HButtonMenu', [
 						{text: labels.add, action: add, name: btns.add, opts: {
-								disabled: !ns.user.isAllowed(ns.rules.reg),
+								disabled: !ns.reg,
 								cls: 'add_btn'}},
 						{text: labels.search, action: find, opts: {cls: 'search_btn'}},
 						{text: labels.clean, action: clear, opts: {cls: 'clean_btn'}}
@@ -156,7 +156,7 @@ Ext.define('qqext.Menu', {
 								name: btns.toSearch},
 							{text: labels.add, action: function () {
 									add(true);
-								}, opts: {disabled: !ns.user.isAllowed(ns.rules.reg),
+								}, opts: {disabled: !ns.reg,
 									cls: 'add_btn'}}], 'ToolButton'),
 						menus.editReqMenu],
 					cls: 'back_btn h'
@@ -210,7 +210,7 @@ Ext.define('qqext.Menu', {
 			 */
 			function add(force) {
 				// Только с ролью регистратор можно добавлять запрос
-				if (ns.user.isAllowed(ns.rules.reg)) {
+				if (ns.reg) {
 					if (force === true) {
 						ns.setCurrentForm(0);
 					} else {

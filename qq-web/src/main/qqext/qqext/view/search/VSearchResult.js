@@ -52,8 +52,8 @@ Ext.define('qqext.view.search.VSearchResult', {
 			}, {
 				text: 'Вид запроса',
 				dataIndex: 'requestType',
-                                minWidth: 70,
-                                maxWidth: 75
+				minWidth: 70,
+				maxWidth: 75
 			}, {
 				text: 'ФИО/Организация',
 				dataIndex: 'fioOrg',
@@ -77,10 +77,8 @@ Ext.define('qqext.view.search.VSearchResult', {
 		}
 	],
 	initComponent: function () {
-		var ns = qqext,
-				rules = ns.rules;
-
-		if (ns.user.isAllowed([rules.reg, rules.crd, rules.exec, rules.admin, rules.sexec]))
+		var ns = qqext;
+		if (ns.reg || ns.coor || ns.exec || ns.visor || ns.superex)
 			this.listeners = {itemdblclick: ns.openRequest};
 		this.callParent();
 	}

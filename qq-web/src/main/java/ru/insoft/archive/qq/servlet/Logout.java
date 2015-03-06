@@ -27,6 +27,9 @@ public class Logout extends HttpServlet {
 	 */
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		response.setHeader("Cache-Control", "no-cache, no-store");
+		response.setHeader("Pragma", "no-cache");
+		response.setHeader("Expires", new java.util.Date().toString());
 		// баг в sso jboss, поэтому сперва надо уничтожить сессию,
 		// потом только вызывать logout()
 		HttpSession session = request.getSession(false);

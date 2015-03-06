@@ -63,11 +63,11 @@ Ext.define('qqext.view.transmission.VTransmission', {
 						var stats = ns.stats,
 								statsId = ns.statsId,
 								status = model.get('status');
-						me._disableButtons(!(ns.user.isAllowed(ns.rules.crd) &&
+						me._disableButtons(!(ns.coor &&
 								status === statsId[stats.reg] &&
 								ns.user.get('organization') === execOrg ||
 								((status === statsId[stats.onexec] ||
-										status === statsId[stats.exec]) && ns.user.isAllowed(ns.rules.admin))), 0);
+										status === statsId[stats.exec]) && ns.visor)), 0);
 					}
 				});
 				ns.initRequired(me);

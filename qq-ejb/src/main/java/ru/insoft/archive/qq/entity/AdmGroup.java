@@ -8,11 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
  *
- * @author Благодатских С.
+ * @author stikkas<stikkas@yandex.ru>
  */
 @Entity
 @Table(name = "ADM_GROUP")
@@ -30,8 +31,8 @@ public class AdmGroup implements Serializable {
 	@ManyToMany
 	private List<AdmUser> users;
 
-	@ManyToMany(mappedBy = "groups")
-	private List<AdmAccessRule> rules;
+	@OneToMany(mappedBy = "group")
+	private List<AdmGroupRule> rules;
 
 	public AdmGroup() {
 	}
@@ -49,20 +50,20 @@ public class AdmGroup implements Serializable {
 	}
 
 	public void addUser(AdmUser user) {
-		if (!users.contains(user)){
+		if (!users.contains(user)) {
 			users.add(user);
 			user.addGroup(this);
 		}
 	}
 
-	public List<AdmAccessRule> getRules() {
+	public List<AdmGroupRule> getRules() {
 		return rules;
 	}
 
-	public void addRule(AdmAccessRule rule) {
+	public void addRule(AdmGroupRule rule) {
 		if (!rules.contains(rule)) {
 			rules.add(rule);
-			rule.addGroup(this);
+			rule.setGroup(this);
 		}
 	}
 

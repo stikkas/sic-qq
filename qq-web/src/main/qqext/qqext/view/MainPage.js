@@ -63,7 +63,7 @@ Ext.define('qqext.view.MainPage', {
 		this.callParent();
 
 		// Разрешаем добавлять запрос только пользователю с соответсвующими правами
-		ns.getButton(ns.btns.add).setDisabled(!ns.user.isAllowed(ns.rules.reg));
+		ns.getButton(ns.btns.add).setDisabled(!ns.reg);
 		/*
 		 * Показывает форму с заданным индексом
 		 * @param {Number} idx индекс формы (начинается с 0)

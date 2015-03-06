@@ -61,12 +61,12 @@ Ext.define('qqext.view.reg.VRegForm', {
 				model = me.initModel(ns.request);
 				me._disableButtons(true, 1, 3, 4);
 
-				var hasRegRule = ns.user.isAllowed(ns.rules.reg),
+				var hasRegRule = ns.reg,
 						wantedStatus = model.get('status') === ns.statsId[ns.stats.onreg],
 						belongToCreator = model.get('litera') === ns.user.get('organization');
 
 				me._disableButtons(!(hasRegRule && wantedStatus && belongToCreator ||
-						(!wantedStatus && ns.user.isAllowed(ns.rules.admin))), 0); // Редактировать
+						(!wantedStatus && ns.visor)), 0); // Редактировать
 				me._disableButtons(!(hasRegRule && !wantedStatus && belongToCreator), 2); // Печать
 
 				model.getAppl({

@@ -62,15 +62,12 @@ Ext.define('qqext.view.search.VSearchForm', {
 	 */
 	exec: function () {
 		var values = this._form.getValues(false, true),
-				ns = qqext,
-				user = ns.user,
-				rules = ns.rules;
+				ns = qqext;
 //		if (ns.isSIC)
 //			values.litera = ns.user.get('organization');
 
-		if (user.isAllowed(rules.exec) && !user.isAllowed(rules.crd)
-				&& !user.isAllowed(rules.reg))
-			values.executor = user.get('userId');
+		if (ns.exec && !ns.coor && !ns.reg)
+			values.executor = ns.userId;
 
 		Ext.getStore('searchResults').loadPage(1, {
 			params: {q: Ext.encode(values)}

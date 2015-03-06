@@ -83,8 +83,8 @@ public class DictService {
 	 */
 	@GET
 	@Path("notistats")
-	public List<DictDto> getNotiStats() {
-		return dvd.getFullValues(DictCodes.Q_DICT_NOTIFY_STATUSES);
+	public List<DictSVDto> getNotiStats() {
+		return dvd.getFullCodeValues(DictCodes.Q_DICT_NOTIFY_STATUSES);
 	}
 
 	/**

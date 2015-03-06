@@ -21,9 +21,12 @@ import javax.persistence.Table;
 	@NamedQuery(name = "AdmUser.userDataByLogin", query
 			= "SELECT u.id, u.displayedName, e.departmentId FROM AdmUser u "
 			+ "JOIN u.employee e WHERE lower(u.login) = lower(:login)"),
+	@NamedQuery(name = "AdmUser.usersWithRule", query
+			= "SELECT NEW ru.insoft.archive.qq.dto.DictDto(u.id, u.displayedName) "
+			+ "FROM AdmUser u JOIN u.groups g JOIN g.rules r WHERE r.ruleId = :id"),
 	@NamedQuery(name = "AdmUser.userRules", query
-			= "SELECT r.ruleCode FROM AdmUser u JOIN u.groups g JOIN g.rules "
-					+ "r WHERE lower(u.login) = lower(:login)")
+			= "SELECT r.ruleId FROM AdmUser u JOIN u.groups g JOIN g.rules r WHERE u.id = :id")
+
 })
 public class AdmUser implements Serializable {
 

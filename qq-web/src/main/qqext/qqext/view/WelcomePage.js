@@ -33,11 +33,6 @@ Ext.define('qqext.view.WelcomePage', {
 					icon: 'images/books.png',
 					width: 400
 				}),
-//				createCmp('FHrefButton', labels.admin, urls.admin, {cls: cls,
-//                                            icon:'images/adm_icon.png',
-//                                            margin:'220 0 0 0',
-//                                            width:340
-//                                        }),
 				createCmp('FHandlerButton', labels.asq, function () {
 					ns.setActivePage(1);
 				}, {cls: cls,

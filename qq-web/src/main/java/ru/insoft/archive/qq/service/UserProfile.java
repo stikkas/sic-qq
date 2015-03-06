@@ -6,6 +6,8 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import ru.insoft.archive.qq.dao.AdmUserDao;
+import ru.insoft.archive.qq.ejb.DictCodes;
+import ru.insoft.archive.qq.ejb.Store;
 
 /**
  * Предоставляет данные по пользователю сессии
@@ -17,6 +19,9 @@ public class UserProfile implements Serializable {
 
 	@Inject
 	private AdmUserDao userDao;
+
+	@Inject
+	private Store store;
 
 	/**
 	 * Данные пользователя. Делается именно так, иначе REST не может правильно
@@ -30,8 +35,16 @@ public class UserProfile implements Serializable {
 		data.userId = (Long) info[0];
 		data.name = (String) info[1];
 		data.organization = (Long) info[2];
-		data.access = userDao.getUserRules();
-		data.sicId = userDao.getSicId();
+
+		List<Long> rules = userDao.getUserRules(data.userId);
+		data.coor = rules.contains(store.getIdByCode(DictCodes.Q_RULE_COORDINATOR));
+		data.exec = rules.contains(store.getIdByCode(DictCodes.Q_RULE_EXECUTOR));
+		data.reg = rules.contains(store.getIdByCode(DictCodes.Q_RULE_REGISTRATOR));
+		data.superex = rules.contains(store.getIdByCode(DictCodes.Q_RULE_SEXECUTOR));
+		data.supervis = rules.contains(store.getIdByCode(DictCodes.Q_RULE_SUPERVISOR));
+
+		data.sicId = store.getIdByCode(DictCodes.Q_VALUE_MEMBER_SIC);
+
 		data.sic = data.organization.equals(data.sicId);
 	}
 
@@ -45,10 +58,6 @@ public class UserProfile implements Serializable {
 
 	public String getName() {
 		return data.name;
-	}
-
-	public List<String> getAccess() {
-		return data.access;
 	}
 
 	public Long getUserId() {

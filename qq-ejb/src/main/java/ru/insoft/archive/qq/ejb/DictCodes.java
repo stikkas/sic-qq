@@ -69,7 +69,6 @@ public class DictCodes {
 	 */
 	public static final String Q_DICT_APPLICANT_TYPE = "Q_DICT_APPLICANT_TYPE";
 
-
 	// Архивы
 	/**
 	 * Справочно-информационный центр
@@ -151,4 +150,27 @@ public class DictCodes {
 	 * Без уведомления
 	 */
 	public static final String Q_VALUE_NOTIFY_NONE = "Q_VALUE_NOTIFY_NONE";
+
+	// Права доступа
+	/**
+	 * Супервизор
+	 */
+	public static final String Q_RULE_SUPERVISOR = "Q_RULE_SUPERVISOR";
+	/**
+	 * Суперисполнитель
+	 */
+	public static final String Q_RULE_SEXECUTOR = "Q_RULE_SEXECUTOR";
+	/**
+	 * Регистратор
+	 */
+	public static final String Q_RULE_REGISTRATOR = "Q_RULE_REGISTRATOR";
+	/**
+	 * Координатор
+	 */
+	public static final String Q_RULE_COORDINATOR = "Q_RULE_COORDINATOR";
+	/**
+	 * Исполнитель
+	 */
+	public static final String Q_RULE_EXECUTOR = "Q_RULE_EXECUTOR";
+
 }

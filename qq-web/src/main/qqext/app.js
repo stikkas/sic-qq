@@ -33,9 +33,11 @@ Ext.application({
 		Ext.Ajax.request({
 			url: 'rest/userinfo',
 			success: function (response) {
+				// TODO В будущем, если расщепим storage и qq удалить сохранение в локальное хранилище
+				// Сейча здесь его не испльзуем, и объект user - тоже
 				var authRes = Ext.decode(response.responseText),
 						ns = qqext,
-						user = ns.user = Ext.create('hawk_common.model.User'),
+						user = Ext.create('hawk_common.model.User'),
 						userStore = ns.userStore = Ext.create('hawk_common.store.UserLocalStorage');
 
 				user.set('id', 'current');
@@ -43,10 +45,21 @@ Ext.application({
 				user.set('access', authRes.access);
 				user.set('userId', authRes.userId);
 				user.set('organization', authRes.organization);
-				userStore.add(user);
-				userStore.sync();
+
+				// Новые переменные в namespace qqext
+				ns.fio = authRes.name;
+				ns.userId = authRes.userId;
+				ns.orgId = authRes.organization;
+				ns.coor = authRes.coor;
+				ns.exec = authRes.exec;
+				ns.reg = authRes.reg;
+				ns.superex = authRes.superex;
+				ns.visor = authRes.supervis;
 				ns.sicId = authRes.sicId;
 				ns.isSIC = authRes.sic;
+
+				userStore.add(user);
+				userStore.sync();
 
 				// загружаем справочники
 				me.initStores();
@@ -266,7 +279,7 @@ Ext.application({
 		 */
 		ns.edit = function () {
 			var me = this,
-					admin = ns.user.isAllowed(rules.admin);
+					admin = ns.visor;
 			if (me === ns.regForm) {
 				if (admin &&
 						ns.request.get('status') !== ns.statsId[statuses.onreg]) {
@@ -335,7 +348,6 @@ Ext.application({
 			toBegin: "В начало",
 			quit: "Выйти",
 			storage: "База данных о местах хранения документов по личному составу",
-			admin: "АРМ-Администратор",
 			asq: "АИС Запросы",
 			generate: "Сформировать"
 		};
@@ -368,17 +380,6 @@ Ext.application({
 			exec: 7, // Кнопка "Исполнение запроса"
 			toSearch: 8, // Кнопка "Вернуться в поиск"
 			report: 9 // Кнопка "Отчетные документы"
-		};
-		/**
-		 * @property {Object} rules
-		 * кодовые значения для ролей пользователей.
-		 */
-		var rules = ns.rules = {
-			reg: 'Q_RULE_REGISTRATOR',
-			crd: 'Q_RULE_COORDINATOR',
-			exec: 'Q_RULE_EXECUTOR',
-			admin: 'Q_RULE_SUPERVISOR',
-			sexec: 'Q_RULE_SEXECUTOR'
 		};
 		/**
 		 * @property {Object} statsId
@@ -447,20 +448,20 @@ Ext.application({
 				switch (buttons[i]) {
 					case buttonNames.notify:
 						if (ns.isSIC) {
-							if (user.isAllowed([rules.reg, rules.crd, rules.exec, rules.admin, rules.sexec]) &&
+							if ((ns.reg || ns.coor || ns.exec || ns.visor || ns.superex) &&
 									request.get('status') !== onreg &&
 									request.get('execOrg') !== ns.sicId && request.get('litera') === ns.sicId)
 								ns.disableArticles(false, buttonNames.notify);
 						}
 						break;
 					case buttonNames.trans:
-						if (user.isAllowed([rules.crd, rules.exec, rules.reg, rules.admin, rules.sexec])) {
+						if ((ns.reg || ns.coor || ns.exec || ns.visor || ns.superex)) {
 							if (request.get('status') !== onreg)
 								ns.disableArticles(false, buttonNames.trans);
 						}
 						break;
 					case buttonNames.exec:
-						if (user.isAllowed([rules.exec, rules.crd, rules.reg, rules.admin, rules.sexec])) {
+						if ((ns.reg || ns.coor || ns.exec || ns.visor || ns.superex)) {
 							var status = request.get('status');
 							if (status === onexec || status === exec)
 								ns.disableArticles(false, buttonNames.exec);
@@ -587,8 +588,40 @@ Ext.application({
 		 *  Иницализируется в qqext.model.qq.WayToSend.
 		 */
 		/**
+		 * @property {String} fio
+		 * Отображаемое имя пользователя (ФИО)
+		 */
+		/**
+		 * @property {Number} userId
+		 * Идентификатор  пользователя 
+		 */
+		/**
+		 * @property {Number} orgId
+		 * Идентификатор  организации пользователя 
+		 */
+		/**
 		 * @property {Boolean} isSIC
 		 * Признак того, что пользователь является сотрудником SIC
+		 */
+		/**
+		 * @property {Boolean} reg
+		 * Признак того, что пользователь имеет право регистрировать запросы
+		 */
+		/**
+		 * @property {Boolean} coor
+		 * Признак того, что пользователь имеет право назначать исполнителей
+		 */
+		/**
+		 * @property {Boolean} exec
+		 * Признак того, что пользователь имеет право исполнять запросы
+		 */
+		/**
+		 * @property {Boolean} superex
+		 * Признак того, что пользователь имеет право суперисполнителя
+		 */
+		/**
+		 * @property {Boolean} visor
+		 * Признак того, что пользователь имеет право супервизора
 		 */
 		/**
 		 * @porperty {Ext.container.Container} statusPanel
@@ -721,16 +754,16 @@ Ext.application({
 					regusers: 'regusers',
 					stats: 'statuses',
 					sendType: 'sendtypes',
-					notiStats: 'notifystatuses',
+					notiStats: 'notistats',
 					queryType: 'querytypes'
 				};
 		// нужно инициализировать хранилище для информации об организациях
 		// и установить принадлежность пользователся к СИЦ
 		create('StoreDictSV', ids.litera);
-		/*		create('DictStore', ids.litera, ids.litera, organization);
-		 create('DictStore', ids.users, ids.users, organization);
-		 create('DictStore', ids.allusers, ids.users);
-		 create('DictStore', ids.regusers, ids.users, 'Q_RULE_REGISTRATOR');
+		create('StoreDict', ids.users);
+		create('StoreDict', ids.allusers);
+		create('StoreDict', ids.regusers);
+		/*
 		 create('DictStore', ids.sendType, ids.sendType);
 		 create('DictStore', ids.queryType, ids.queryType);
 		 */
@@ -748,21 +781,19 @@ Ext.application({
 				}
 			}
 		});
-		/*
-		 create('DictStore', ids.notiStats, ids.notiStats, {
-		 listeners: {
-		 load: function (st, records) {
-		 ns.notiStatsId = {};
-		 ns.notiStatsName = {};
-		 records.forEach(function (r) {
-		 var code = r.get('code');
-		 ns.notiStatsId[code] = r.get('id');
-		 ns.notiStatsName[code] = r.get('name');
-		 });
-		 }
-		 }
-		 });
-		 */
+		create('StoreDictSV', ids.notiStats, {
+			listeners: {
+				load: function (st, records) {
+					ns.notiStatsId = {};
+					ns.notiStatsName = {};
+					records.forEach(function (r) {
+						var code = r.get('shortValue');
+						ns.notiStatsId[code] = r.get('id');
+						ns.notiStatsName[code] = r.get('text');
+					});
+				}
+			}
+		});
 	}
 });
 

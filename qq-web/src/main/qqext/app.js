@@ -356,7 +356,7 @@ Ext.application({
 		 */
 		var urls = ns.urls = {
 			welcome: "/qq-web/",
-			logout: "logout",
+			logout: "/qq-web/logout",
 			storage: "/sic-storage/index.html",
 			vypiska: "reports/vypiska",
 			statexec1: "reports/statexecquery1",
@@ -494,7 +494,7 @@ Ext.application({
 		ns.quitAction = function () {
 			// молча, без выстерла событий, удаляем все данные из хранилища
 			ns.userStore.removeAll(true);
-			window.location.href = urls.logout;
+			window.location = urls.logout;
 		};
 		/**
 		 * @property {Obejct} applicant
@@ -748,25 +748,41 @@ Ext.application({
 		var ns = qqext,
 				create = Ext.create,
 				ids = ns.stIds = {
-					litera: 'litera',
-					users: 'users',
-					allusers: 'allusers',
-					regusers: 'regusers',
-					stats: 'statuses',
-					sendType: 'sendtypes',
-					notiStats: 'notistats',
-					queryType: 'querytypes'
+					litera: 'litera', // Литеры, названия архивов
+					execs: 'executors', // Исполнители определенного архива
+					allexecs: 'allexecutors', // Исполнители всех архивов
+					regusers: 'regusers', // регистраторы всех архивов
+					stats: 'statuses', // Статусы запроса
+					sendType: 'sendtypes', // Форма выдачи ответа (Способ отправки)
+					notiStats: 'notistats', // Статусы уведомления
+					queryType: 'querytypes', // Типы запросов
+					apltype: 'applicantypes', // Типы заявителей (юрик, физик)
+					aplcat: 'applicantcategory', // Категории заявителей 
+					resans: 'resultanswer', // Результаты ответа
+					docdeltype: 'docdeliverytype', // Способ передачи
+					doctype: 'doctype', // Типы документов
+					storage: 'storages', // Территория хранилица
+					tematic: 'answertematic', // Тематика ответа
+					difcat: 'difcategory', // Категория сложности
+					stage: 'coorstage' // Этап согласования документа
 				};
 		// нужно инициализировать хранилище для информации об организациях
 		// и установить принадлежность пользователся к СИЦ
 		create('StoreDictSV', ids.litera);
-		create('StoreDict', ids.users);
-		create('StoreDict', ids.allusers);
+		create('StoreDictSV', ids.apltype);
+		create('StoreDict', ids.aplcat);
+		create('StoreDict', ids.execs);
+		create('StoreDict', ids.docdeltype);
+		create('StoreDict', ids.allexecs);
 		create('StoreDict', ids.regusers);
-		/*
-		 create('DictStore', ids.sendType, ids.sendType);
-		 create('DictStore', ids.queryType, ids.queryType);
-		 */
+		create('StoreDict', ids.doctype);
+		create('StoreDict', ids.storage);
+		create('StoreDict', ids.sendType);
+		create('StoreDict', ids.tematic);
+		create('StoreDict', ids.difcat);
+		create('StoreDict', ids.stage);
+		create('StoreDictSV', ids.queryType);
+		create('StoreDictSV', ids.resans);
 		create('StoreDictSV', ids.stats, {
 			listeners: {
 				load: function (st, records) {

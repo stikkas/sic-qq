@@ -14,28 +14,29 @@ Ext.define('qqext.view.search.VSearchParams', {
 	],
 	title: 'Параметры поиска',
 	initComponent: function () {
-		var createCmp = Ext.create;
+		var createCmp = Ext.create,
+				ns = qqext;
 		Ext.applyIf(this, {
 			items: [
-				createCmp('FComboBox', 'Архив исполнитель', qqext.stIds.execOrgs, 'archiveId',
+				createCmp('FComboBox', 'Архив исполнитель', ns.stIds.litera, 'archiveId',
 						{width: 650, labelWidth: 150}),
-				createCmp('FComboBox', 'Вид запроса', qqext.stIds.queryType, 'queryTypeId',
+				createCmp('FComboBox', 'Вид запроса', ns.stIds.queryType, 'queryTypeId',
 						{width: 400, labelWidth: 150}),
 				createCmp('FTextField', 'Содержание запроса', 'queryContent',
 						{width: 950, labelWidth: 150}),
-				createCmp('FComboBox', 'Тип заявителя', 'applicantType', 'applicantTypeId',
+				createCmp('FComboBox', 'Тип заявителя', ns.stIds.apltype, 'applicantTypeId',
 						{width: 400, labelWidth: 150}),
-				createCmp('FComboBox', 'Категория заявителя', 'applicantCategory', 'applicantCategoryId',
+				createCmp('FComboBox', 'Категория заявителя', ns.stIds.aplcat, 'applicantCategoryId',
 						{width: 400, labelWidth: 150}),
 				createCmp('Ext.form.FieldContainer', {
 					fieldLabel: 'Дата регистрации',
 					labelWidth: 150,
-                                        cls:'label_style',
+					cls: 'label_style',
 					items: [
 						createCmp('FDateField', 'c', 'regDateStart',
-								{width: 110, labelWidth: 10, cls:'float_l mar_t0'}),
+								{width: 110, labelWidth: 10, cls: 'float_l mar_t0'}),
 						createCmp('FDateField', 'по', 'regDateEnd',
-								{width: 130, labelWidth: 25, cls:'mar_t0'})
+								{width: 130, labelWidth: 25, cls: 'mar_t0'})
 					]}),
 				createCmp('FLabel', 'На кого запрос', {cls: 'three_hor_lbl'}),
 				createCmp('FioFieldContainer', 'reqLastName', 'reqFirstName', 'reqMiddleName'),

@@ -57,8 +57,23 @@ public class DictDao extends AbstractDao {
 	 * @return справочник с двумя полями
 	 */
 	public List<DictDto> getUsersWithRule(String ruleCode) {
-		return em.createNamedQuery("AdmAccessRule.usersWithRule")
-				.setParameter("code", ruleCode).getResultList();
+		return em.createNamedQuery("AdmUser.usersWithRule")
+				.setParameter("id", store.getIdByCode(ruleCode)).getResultList();
+	}
+
+	/**
+	 * Возвращает значения id и ФИО пользователя с определенными правами
+	 * определенного архива
+	 *
+	 * @param ruleCode код права доступа
+	 * @param organizationId идентификатор интересущющего архива
+	 * @return справочник с двумя полями
+	 */
+	public List<DictDto> getUsersWithRule(String ruleCode, Long organizationId) {
+		return em.createNamedQuery("AdmUser.usersWithRuleOrganization")
+				.setParameter("id", store.getIdByCode(ruleCode))
+				.setParameter("orgId", organizationId)
+				.getResultList();
 	}
 
 	/**

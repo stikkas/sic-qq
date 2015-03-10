@@ -27,7 +27,7 @@ Ext.define('qqext.view.VTitleBar', {
 					},
 					{
 						xtype: 'label',
-						text: qqext.user.get('name'),
+						text: qqext.fio,
 						cls: 'user_name'
 					}
 				]

@@ -36,7 +36,7 @@ Ext.define('qqext.view.search.VSearchForm', {
 		me.callParent();
 		if (!qqext.isSIC) {
 			var combo = me._cmb = me._form.items.getAt(0);
-			combo.setValue(me._org = qqext.user.get('organization'));
+			combo.setValue(me._org = qqext.orgId);
 			combo.hide();
 		}
 		me._grid.store.getProxy().timeout = 120000;
@@ -64,7 +64,7 @@ Ext.define('qqext.view.search.VSearchForm', {
 		var values = this._form.getValues(false, true),
 				ns = qqext;
 //		if (ns.isSIC)
-//			values.litera = ns.user.get('organization');
+//			values.litera = ns.orgId;
 
 		if (ns.exec && !ns.coor && !ns.reg)
 			values.executor = ns.userId;

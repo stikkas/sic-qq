@@ -35,9 +35,9 @@ Ext.define('qqext.view.exec.VExecForm', {
 				var status = me.model.get('status');
 				me.model.getTrans({
 					callback: function (r) {
-						me._disableButtons(!((r.get('executor') === ns.user.get('userId') || (
+						me._disableButtons(!((r.get('executor') === ns.userId || (
 								ns.superex && 
-								(ns.request.get('execOrg') === ns.user.get('organization')))) &&
+								(ns.request.get('execOrg') === ns.orgId))) &&
 								(status === ns.statsId[ns.stats.onexec] || status === ns.statsId[ns.stats.exec])), 0);
 					}
 				});

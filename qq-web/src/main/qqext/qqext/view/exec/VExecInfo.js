@@ -18,8 +18,9 @@ Ext.define('qqext.view.exec.VExecInfo', {
 	},
 	initComponent: function () {
 		var me = this,
+				ns = qqext,
 				createCmp = Ext.create,
-				exec = qqext.execInfo;
+				exec = ns.execInfo;
 		Ext.applyIf(me, {
 			items: [
 				me.df1 = createCmp('FDateField', exec.date[1], exec.date[0], {width: 270}),
@@ -27,7 +28,7 @@ Ext.define('qqext.view.exec.VExecInfo', {
 					allowBlank: true,
 					width: 270
 				}),
-				createCmp('FComboBox', exec.result[1], 'resultOfAnswer', exec.result[0],
+				createCmp('FComboBox', exec.result[1], ns.stIds.resans, exec.result[0],
 						{
 							listeners: {
 								change: function xx(cb, value) {
@@ -52,11 +53,11 @@ Ext.define('qqext.view.exec.VExecInfo', {
 							width: 400
 						}),
 				me._rf = createCmp('FTextArea', '', exec.refer[0], {allowBlank: true, hidden: true}),
-				createCmp('FComboBox', exec.tema[1], 'tematicOfAnswer', exec.tema[0], {
+				createCmp('FComboBox', exec.tema[1], ns.stIds.tematic, exec.tema[0], {
 					editable: false,
 					width: 400
 				}),
-				createCmp('FComboBox', exec.category[1], 'diffCategory', exec.category[0],
+				createCmp('FComboBox', exec.category[1], ns.stIds.difcat, exec.category[0],
 						{width: 200, editable: false, allowBlank: true})
 			]
 		});

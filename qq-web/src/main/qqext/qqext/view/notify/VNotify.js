@@ -137,12 +137,12 @@ Ext.define('qqext.view.notify.VNotify', {
 				], 'ToolButton', me);
 		Ext.applyIf(me, {
 			items: [
-				createCmp('FComboBox', notf.executor[1], stores.users, notf.executor[0], {
+				createCmp('FComboBox', notf.executor[1], stores.execs, notf.executor[0], {
 					width: 450,
 					labelWidth: 150,
 					allowBlank: false
 				}),
-				createCmp('FComboBox', notf.docType[1], 'docType', notf.docType[0], {
+				createCmp('FComboBox', notf.docType[1], ns.stIds.doctype, notf.docType[0], {
 					width: 450,
 					labelWidth: 150
 				}),

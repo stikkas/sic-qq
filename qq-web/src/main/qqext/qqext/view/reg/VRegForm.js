@@ -37,9 +37,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 			ns.Menu.setEditMenu(me._idx);
 			if (ns.request === null) {
 				// Значит событие случилось по нажатию на кнопку "Добавить"
-				var
-						user = ns.user,
-						orgId = user.get('organization');
 				me.clear();
 				model = me.initModel();
 				//Кнопки "Редактировать" "Печать" и "Удалить"
@@ -49,9 +46,9 @@ Ext.define('qqext.view.reg.VRegForm', {
 				// Устанавливаем режим редактирования
 				me.setViewOnly(false);
 				// Литера
-				model.set('litera', orgId);
+				model.set('litera', ns.orgId);
 				if (!ns.isSIC)
-					model.set('execOrg', orgId);
+					model.set('execOrg', ns.orgId);
 				me.loadRecord();
 				ns.initRequired(me);
 				me.query.pd.setViewOnly(true);
@@ -63,7 +60,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 
 				var hasRegRule = ns.reg,
 						wantedStatus = model.get('status') === ns.statsId[ns.stats.onreg],
-						belongToCreator = model.get('litera') === ns.user.get('organization');
+						belongToCreator = model.get('litera') === ns.orgId;
 
 				me._disableButtons(!(hasRegRule && wantedStatus && belongToCreator ||
 						(!wantedStatus && ns.visor)), 0); // Редактировать
@@ -148,7 +145,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 			if (!ns.checkDates([me.query.pd, me.applicant.dt]))
 				return;
 			var model = me.model,
-					user = ns.user,
 					now = new Date(),
 					year = now.getYear() + 1900,
 					currentStatus = model.get('status'),
@@ -166,7 +162,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 				model.set('status', ns.statsId[ns.stats.onreg]);
 			// Заполняем обязательные поля:
 			if (!model.get('id')) { // Только для новых моделей
-				model.set('createOrg', user.get('organization'));
+				model.set('createOrg', ns.orgId);
 				me._saveModel(function () {
 					me._disableButtons(false, 0);
 				}, function () {
@@ -226,7 +222,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 			var model = me.model,
 					status;
 			if (me.validate()) {
-				var userId = ns.user.get('userId'),
+				var userId = ns.userId,
 						now = new Date();
 				/*
 				 if (me.query.mr.getValue()) { // Добавляем один день к плановой дате, если отказ

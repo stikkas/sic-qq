@@ -6,6 +6,6 @@ Ext.define('qqext.store.SicJvk', {
 	model: 'qqext.model.SicJvk',
 	proxy: {
 		type: 'table',
-		url: 'api/jvk/sic'
+		url: 'rest/jvk/sic'
 	}
 });

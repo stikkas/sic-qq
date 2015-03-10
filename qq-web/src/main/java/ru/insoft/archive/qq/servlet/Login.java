@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package ru.insoft.archive.qq.servlet;
 
 import java.io.IOException;
@@ -13,7 +8,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.MediaType;
+import org.codehaus.jackson.map.ObjectMapper;
 import ru.insoft.archive.qq.service.UserProfile;
+import ru.insoft.archive.qq.servlet.dto.AuthResulMessage;
 
 /**
  * Сервлет аутентификации. Используется вместо стандартного, чтобы более
@@ -40,25 +38,24 @@ public class Login extends HttpServlet {
 			throws ServletException, IOException {
 		String password = request.getParameter("j_password");
 		String username = request.getParameter("j_username");
-		String message = "{\"result\": true}";
-		boolean resultLogin = false;
+		AuthResulMessage answer = new AuthResulMessage();
 		try {
 			request.login(username, password);
-			resultLogin = true;
+			answer.setResult(true);
 		} catch (ServletException e) {
-			message = "{\"result\": false, \"msg\": \"" + e.getLocalizedMessage() + "\"}";
+			answer.setMsg(e.getLocalizedMessage());
 		}
-		response.setContentType("text/plain;charset=UTF-8");
+
+		response.setContentType(MediaType.APPLICATION_JSON);
 		try (PrintWriter out = response.getWriter()) {
-			out.write(message);
+			new ObjectMapper().writeValue(out, answer);
 		}
 		// Вызываем чтобы иницилизировать bean перед тем как пользователь к нему обратится
-		if (resultLogin) {
+		if (answer.isResult()) {
 			up.isSic();
 		}
 	}
 
-	// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *

@@ -13,6 +13,8 @@ Ext.define('qqext.view.journal.VJournalForm', {
 		'qqext.factory.Label',
 		'qqext.factory.TextField',
 		'qqext.model.Question',
+		'qqext.store.ArchiveJvk',
+		'qqext.store.SicJvk',
 		'Ext.toolbar.Paging',
 		'hawk_common.cmp.DateField'
 	],
@@ -21,7 +23,6 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	overflowY: 'auto',
 	//maxHeight: 300,
 	draggable: false,
-	store: 'journal',
 	margin: '0 5 10 5',
 	cls: 'journal_st',
 	border: true,
@@ -116,10 +117,11 @@ Ext.define('qqext.view.journal.VJournalForm', {
 			itm = clmn.items.get(0);
 			value = itm.getValue();
 			if (value) {
+				/*
 				if (itm.name === 'requestFromCombo') {
 					value = Ext.getStore('journalApplicantFilterStore')
 							.getById(value).get('name');
-				}
+				}*/
 				filters.push(Ext.create('Ext.util.Filter', {
 					property: clmn.dataIndex,
 					value: value
@@ -148,8 +150,12 @@ Ext.define('qqext.view.journal.VJournalForm', {
 		var me = this,
 				createCmp = Ext.create,
 				ns = qqext,
-				user = ns.user,
-				execStore = ns.stIds.users;
+				execStore = ns.stIds.execs,
+				store, items,
+				labelForTable = createCmp('FLabel', '', {
+					dock: 'top',
+					cls: 'journal_title_label'
+				});
 
 // Если пользователь чистый исполнитель, то выводим запросы только назначеные ему
 		if (ns.exec && !ns.coor && !ns.reg) {
@@ -166,28 +172,21 @@ Ext.define('qqext.view.journal.VJournalForm', {
 		if (ns.reg || ns.coor || ns.exec || ns.visor || ns.superex)
 			me.listeners.itemdblclick = ns.openRequest;
 
-		if (ns.isSIC) // Запросы со статусом "На регистрации" с литерой архива для СИЦ не нужны
-			me._fltrs.push(createCmp('Ext.util.Filter', {
-				property: 'requestor',
-				value: ns.sicId
-			}));
-		else { // Запросы со статусом "На регистрации" с литерой СИЦ для архивов не нужны
-			me._fltrs.push(createCmp('Ext.util.Filter', {
-				property: 'execOrg',
-				value: user.get('organization')
-			}));
-			me._fltrs.push(createCmp('Ext.util.Filter', {
-				property: 'noorganization',
-				value: ns.sicId
-			}));
-		}
 		me._fltrs.push(createCmp('Ext.util.Filter', {
 			property: 'nostatus',
 			value: ns.statsId[ns.stats.onreg]
 		}));
 
-		var labelForTable, items;
 		if (ns.isSIC) {
+			store = createCmp('qqext.store.SicJvk');
+			labelForTable.setText("Справочно-информационный центр федеральных государственных архивов");
+			// Запросы со статусом "На регистрации" с литерой архива для СИЦ не нужны
+			me._fltrs.push(createCmp('Ext.util.Filter', {
+				property: 'requestor',
+				value: ns.sicId
+			}));
+
+
 			items = [{
 					text: 'Литера',
 					dataIndex: 'litera',
@@ -195,6 +194,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					items: [
 						createCmp('FComboBox', '', ns.stIds.litera, 'filterLiteraCombo', {
 							width: '90%',
+							displayField: 'shortValue',
 							listeners: {
 								select: me._filterComboSelected,
 								render: me._render,
@@ -203,7 +203,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						})
 					]}, {
 					text: '№ вх. документа',
-					dataIndex: 'inboxDocNum',
+					dataIndex: 'number',
 					minWidth: 50,
 					items: [
 						createCmp('FTextField', '', 'docNumberTextField', {
@@ -244,7 +244,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					xtype: 'datecolumn',
 					text: 'Дата исполнения плановая',
 					minWidth: 65,
-					dataIndex: 'plannedDate',
+					dataIndex: 'planDate',
 					format: 'd.m.Y',
 					items: [{
 							width: '90%',
@@ -265,7 +265,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						}]}, {
 					text: 'Статус уведомления',
 					minWidth: 115,
-					dataIndex: 'notifyStatus',
+					dataIndex: 'notiStat',
 					items: [
 						createCmp('FComboBox', '', ns.stIds.notiStats, 'requestNotiStatus', {
 							width: '95%',
@@ -278,7 +278,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					]}, {
 					text: 'От кого поступил',
 					minWidth: 165,
-					dataIndex: 'fioOrg',
+					dataIndex: 'otKogo',
 					items: [
 						createCmp('FTextField', '', 'applicantField', {
 							width: '90%',
@@ -312,6 +312,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					minWidth: 65,
 					items: [
 						createCmp('FComboBox', '', ns.stIds.litera, 'requestExecOrgCombo', {
+							displayField: 'shortValue',
 							width: '90%',
 							listeners: {
 								select: me._filterComboSelected,
@@ -334,11 +335,25 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						})
 					]}];
 		} else {
+			store = createCmp('qqext.store.ArchiveJvk');
+			labelForTable.setText(Ext.getStore(ns.stIds.execOrgs)
+					.getById(ns.orgId).get('name'));
+
+			// Запросы со статусом "На регистрации" с литерой СИЦ для архивов не нужны
+			me._fltrs.push(createCmp('Ext.util.Filter', {
+				property: 'execOrg',
+				value: ns.orgId
+			}));
+			me._fltrs.push(createCmp('Ext.util.Filter', {
+				property: 'noorganization',
+				value: ns.sicId
+			}));
 			items = [{
 					text: 'Литера',
 					dataIndex: 'litera',
 					minWidth: 80,
 					items: [createCmp('FComboBox', '', ns.stIds.litera, 'filterLiteraCombo', {
+							displayField: 'shortValue',
 							width: '90%',
 							listeners: {
 								select: me._filterComboSelected,
@@ -348,7 +363,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						})
 					]}, {
 					text: '№ вх. документа',
-					dataIndex: 'inboxDocNum',
+					dataIndex: 'number',
 					minWidth: 80,
 					items: [createCmp('FTextField', '', 'docNumberTextField', {
 							width: '90%',
@@ -388,7 +403,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					text: 'Вид запроса',
 					minWidth: 60,
 					maxWidth: 60,
-					dataIndex: 'queryType',
+					dataIndex: 'questionType',
 					items: [createCmp('FComboBox', '', ns.stIds.queryType, 'filterQTypeCombo', {
 							width: '90%',
 							displayField: 'shortValue',
@@ -401,7 +416,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					]}, {
 					text: 'От кого поступил',
 					minWidth: 200,
-					dataIndex: 'fioOrg',
+					dataIndex: 'otKogo',
 					items: [
 						createCmp('FTextField', '', 'applicantField', {
 							width: '90%',
@@ -457,6 +472,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					minWidth: 115,
 					items: [
 						createCmp('FComboBox', '', execStore, 'requestExecutorCombo', {
+							value: ns.userId,
 							width: '90%',
 							listeners: {
 								select: me._filterComboSelected,
@@ -479,20 +495,12 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					xtype: 'pagingtoolbar',
 					dock: 'bottom',
 					displayInfo: true,
-					store: 'journal'
+					store: store
 				},
-				labelForTable = createCmp('FLabel', '', {
-					dock: 'top',
-					cls: 'journal_title_label'
-				})
+				labelForTable
 			]
 		});
-		if (ns.isSIC)
-			labelForTable.setText("Справочно-информационный центр федеральных государственных архивов");
-		else
-			labelForTable.setText(Ext.getStore(ns.stIds.execOrgs)
-					.getById(ns.user.get('organization')).get('name'));
-
+		me.store = store;
 		me.callParent();
 		me.store.getProxy().timeout = 120000;
 		me.store.addFilter(me._fltrs, false);

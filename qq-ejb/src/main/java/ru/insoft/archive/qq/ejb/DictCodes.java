@@ -68,6 +68,10 @@ public class DictCodes {
 	 * Тип заявителя
 	 */
 	public static final String Q_DICT_APPLICANT_TYPE = "Q_DICT_APPLICANT_TYPE";
+	/**
+	 * Этап согласования документа
+	 */
+	public static final String Q_DICT_THE_EHDORSEMENT = "Q_DICT_THE_EHDORSEMENT";
 
 	// Архивы
 	/**
@@ -172,5 +176,4 @@ public class DictCodes {
 	 * Исполнитель
 	 */
 	public static final String Q_RULE_EXECUTOR = "Q_RULE_EXECUTOR";
-
 }

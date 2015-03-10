@@ -30,4 +30,3 @@ Ext.define('qqext.model.Jvk', {
 		{name: 'executor', type: 'string'}
 	]
 });
-

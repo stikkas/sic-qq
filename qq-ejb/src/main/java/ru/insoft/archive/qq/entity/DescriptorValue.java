@@ -22,16 +22,24 @@ import javax.persistence.Table;
 @NamedQueries({
 	@NamedQuery(name = "DescriptorValue.fullShortValues",
 			query = "SELECT NEW ru.insoft.archive.qq.dto.DictSVDto(d.id, d.fullValue, d.shortValue) "
-			+ "from DescriptorValue d WHERE d.groupId = :groupId"),
+			+ "from DescriptorValue d JOIN d.group g WHERE d.groupId = :groupId "
+			+ "ORDER BY CASE WHEN g.alphabeticSort != 0 THEN d.fullValue "
+			+ "ELSE CONCAT(d.sortOrder,'') END"),
 	@NamedQuery(name = "DescriptorValue.fullValue",
 			query = "SELECT NEW ru.insoft.archive.qq.dto.DictDto(d.id, d.fullValue) "
-			+ "from DescriptorValue d WHERE d.groupId = :groupId"),
+			+ "from DescriptorValue d JOIN d.group g WHERE d.groupId = :groupId "
+			+ "ORDER BY CASE WHEN g.alphabeticSort != 0 THEN d.fullValue "
+			+ "ELSE CONCAT(d.sortOrder,'') END"),
 	@NamedQuery(name = "DescriptorValue.literasArchive",
 			query = "SELECT NEW ru.insoft.archive.qq.dto.DictSVDto(d.id, d.fullValue, d.shortValue) "
-			+ "FROM DescriptorValue d WHERE d.id in (:sic, :archive)"),
+			+ "FROM DescriptorValue d JOIN d.group g WHERE d.id in (:sic, :archive) "
+			+ "ORDER BY CASE WHEN g.alphabeticSort != 0 THEN d.fullValue "
+			+ "ELSE CONCAT(d.sortOrder,'') END"),
 	@NamedQuery(name = "DescriptorValue.fullCodeValue",
 			query = "SELECT NEW ru.insoft.archive.qq.dto.DictSVDto(d.id, d.fullValue, d.valueCode) "
-			+ "FROM DescriptorValue d WHERE d.groupId = :groupId"),
+			+ "FROM DescriptorValue d JOIN d.group g WHERE d.groupId = :groupId "
+			+ "ORDER BY CASE WHEN g.alphabeticSort != 0 THEN d.fullValue "
+			+ "ELSE CONCAT(d.sortOrder,'') END"),
 	@NamedQuery(name = "DescriptorValue.idsByCodes",
 			query = "SELECT d.valueCode, d.id FROM DescriptorValue d WHERE d.valueCode in :codes")
 })
@@ -65,12 +73,11 @@ public class DescriptorValue implements Serializable {
 			insertable = false, updatable = false)
 	@ManyToOne
 	private DescriptorValue parent;
-	/*
-	 @JoinColumn(name = "DESCRIPTOR_GROUP_ID", referencedColumnName = "DESCRIPTOR_GROUP_ID",
-	 insertable = false, updatable = false)
-	 @ManyToOne
-	 private DescriptorGroup group;
-	 */
+
+	@JoinColumn(name = "DESCRIPTOR_GROUP_ID", referencedColumnName = "DESCRIPTOR_GROUP_ID",
+			insertable = false, updatable = false)
+	@ManyToOne
+	private DescriptorGroup group;
 
 	public DescriptorValue() {
 	}
@@ -155,6 +162,14 @@ public class DescriptorValue implements Serializable {
 
 	public void setGroupId(Long groupId) {
 		this.groupId = groupId;
+	}
+
+	public DescriptorGroup getGroup() {
+		return group;
+	}
+
+	public void setGroup(DescriptorGroup group) {
+		this.group = group;
 	}
 
 }

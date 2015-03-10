@@ -23,7 +23,13 @@ import javax.persistence.Table;
 			+ "JOIN u.employee e WHERE lower(u.login) = lower(:login)"),
 	@NamedQuery(name = "AdmUser.usersWithRule", query
 			= "SELECT NEW ru.insoft.archive.qq.dto.DictDto(u.id, u.displayedName) "
-			+ "FROM AdmUser u JOIN u.groups g JOIN g.rules r WHERE r.ruleId = :id"),
+			+ "FROM AdmUser u JOIN u.groups g JOIN g.rules r WHERE r.ruleId = :id "
+					+ "ORDER BY u.displayedName"),
+	@NamedQuery(name = "AdmUser.usersWithRuleOrganization", query
+			= "SELECT NEW ru.insoft.archive.qq.dto.DictDto(u.id, u.displayedName) "
+			+ "FROM AdmUser u JOIN u.groups g JOIN g.rules r JOIN u.employee e "
+					+ "WHERE r.ruleId = :id AND e.departmentId = :orgId "
+					+ "ORDER BY u.displayedName"),
 	@NamedQuery(name = "AdmUser.userRules", query
 			= "SELECT r.ruleId FROM AdmUser u JOIN u.groups g JOIN g.rules r WHERE u.id = :id")
 

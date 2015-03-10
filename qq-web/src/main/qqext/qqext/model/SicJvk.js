@@ -8,5 +8,3 @@ Ext.define('qqext.model.SicJvk', {
 		{name: 'execOrg', type: 'string'}
 	]
 });
-
-

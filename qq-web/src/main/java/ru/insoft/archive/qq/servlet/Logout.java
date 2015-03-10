@@ -9,7 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- * Сервлет для завершения работы пользователя с системой
+ * Сервлет для завершения работы пользователя с системой. Правильный вариант
+ * выхода, который работает и через прокси и напрямую. Для работы через прокси не
+ * забыть собрать сенчу и в клиентском коде надо указывать url от корня с
+ * контестом, например, '/qq-web/logout', url.rewrite почему-то срабатывает не
+ * так как ожидалось (речь идет о lighttpd).
  *
  * @author Благодатских С.
  */
@@ -40,7 +44,6 @@ public class Logout extends HttpServlet {
 		response.sendRedirect(request.getContextPath());
 	}
 
-	// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
 	/**
 	 * Handles the HTTP <code>GET</code> method.
 	 *

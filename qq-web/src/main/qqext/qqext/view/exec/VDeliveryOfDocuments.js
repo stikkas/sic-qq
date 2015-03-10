@@ -96,7 +96,7 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 					},
 					items: [
 						createCmp('ComboColumn', delAction.type[1], delAction.type[0],
-								delAction.type[0], 1),
+								ns.stIds.doctype, 1),
 						{
 							text: delAction.count[1],
 							dataIndex: delAction.count[0],

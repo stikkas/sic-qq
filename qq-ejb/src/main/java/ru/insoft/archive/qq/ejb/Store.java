@@ -38,7 +38,8 @@ public class Store {
 				DictCodes.Q_DICT_DIFF_CATEGORY, DictCodes.Q_DICT_FILE_TYPE,
 				DictCodes.Q_DICT_QUESTION_STATUSES, DictCodes.Q_DICT_ANSWER_FORM,
 				DictCodes.Q_DICT_QUEST_TYPE, DictCodes.QQ_TRANSMISSION_MODE,
-				DictCodes.Q_DICT_NOTIFY_STATUSES, DictCodes.Q_DICT_APPLICANT_TYPE));
+				DictCodes.Q_DICT_NOTIFY_STATUSES, DictCodes.Q_DICT_APPLICANT_TYPE,
+				DictCodes.Q_DICT_THE_EHDORSEMENT));
 
 		fillIds("DescriptorValue.idsByCodes", Arrays.asList(DictCodes.Q_VALUE_MEMBER_SIC,
 				DictCodes.Q_VALUE_MEMBER_GARF, DictCodes.Q_VALUE_MEMBER_RGANTD,

@@ -70,7 +70,7 @@ Ext.define('qqext.view.exec.VCoordination', {
 								menuDisabled: true
 							}, items: [
 								createCmp('ComboColumn', coor.stage[1], coor.stage[0],
-										'coordinationStage', 1),
+										qqext.stIds.stage, 1),
 								{
 									text: coor.date[1],
 									dataIndex: coor.date[0],

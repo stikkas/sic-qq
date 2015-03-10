@@ -42,7 +42,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 
 				var model = me.model = ns.request,
 						execOrg = model.get('execOrg'),
-						rightStore = (ns.isSIC && execOrg !== ns.sicId) ? ns.stIds.allusers : ns.stIds.users;
+						rightStore = (ns.isSIC && execOrg !== ns.sicId) ? ns.stIds.allexecs : ns.stIds.execs;
 
 				// Выставляем список правильных пользователей для исполниетелей.
 				me.items.each(function (fc) {
@@ -65,7 +65,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 								status = model.get('status');
 						me._disableButtons(!(ns.coor &&
 								status === statsId[stats.reg] &&
-								ns.user.get('organization') === execOrg ||
+								ns.orgId === execOrg ||
 								((status === statsId[stats.onexec] ||
 										status === statsId[stats.exec]) && ns.visor)), 0);
 					}
@@ -231,7 +231,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 					layout: 'hbox',
 					cls: 'right_date',
 					items: [
-						me._be = createCmp('FComboBox', trans.bossExecutor[1], ns.stIds.users,
+						me._be = createCmp('FComboBox', trans.bossExecutor[1], ns.stIds.execs,
 								trans.bossExecutor[0], {
 							allowBlank: false,
 							width: 450,
@@ -245,7 +245,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 					layout: 'hbox',
 					cls: 'right_date coexec',
 					items: [
-						me._ex = createCmp('FComboBox', trans.executor[1], ns.stIds.users, trans.executor[0], {
+						me._ex = createCmp('FComboBox', trans.executor[1], ns.stIds.execs, trans.executor[0], {
 							allowBlank: false,
 							width: 450,
 							labelWidth: 150,
@@ -297,7 +297,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 							width: 450,
 							labelWidth: 150
 						}),
-						createCmp('FComboBox', trans.storageTerritory[1], 'storageTerritory',
+						createCmp('FComboBox', trans.storageTerritory[1], ns.stIds.storage,
 								trans.storageTerritory[0], {
 							width: 450,
 							labelWidth: 150
@@ -353,7 +353,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 
 		if (arguments[0] instanceof Ext.button.Button) {
 			assistant = null;
-			store = ns.stIds.users;
+			store = ns.stIds.execs;
 		}
 
 		var container = create('FieldContainer', {

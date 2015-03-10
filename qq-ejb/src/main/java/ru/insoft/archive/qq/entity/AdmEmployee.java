@@ -17,13 +17,22 @@ import javax.persistence.Table;
 public class AdmEmployee implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	/**
+	 * Идентификатор работника
+	 */
 	@Id
 	@Column(name = "EMPLOYEE_ID", insertable = false, updatable = false)
 	private Long employeeId;
 
+	/**
+	 * Идентификатор организации работника
+	 */
 	@Column(name = "DEPARTMENT_ID", insertable = false, updatable = false)
 	private Long departmentId;
 
+	/**
+	 * Идентификатор пользователя системы
+	 */
 	@JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID", insertable = false, updatable = false)
 	@OneToOne
 	private AdmUser user;

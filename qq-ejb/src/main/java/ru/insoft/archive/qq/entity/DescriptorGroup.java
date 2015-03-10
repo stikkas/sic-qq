@@ -31,7 +31,7 @@ public class DescriptorGroup implements Serializable {
 	private String groupCode;
 
 	@Column(name = "ALPHABETIC_SORT", insertable = false, updatable = false)
-	private short alphabeticSort;
+	private Short alphabeticSort;
 
 	public DescriptorGroup() {
 	}
@@ -52,11 +52,11 @@ public class DescriptorGroup implements Serializable {
 		this.groupCode = groupCode;
 	}
 
-	public short getAlphabeticSort() {
+	public Short getAlphabeticSort() {
 		return alphabeticSort;
 	}
 
-	public void setAlphabeticSort(short alphabeticSort) {
+	public void setAlphabeticSort(Short alphabeticSort) {
 		this.alphabeticSort = alphabeticSort;
 	}
 

@@ -6,8 +6,7 @@ Ext.define('qqext.proxy.Table', {
 	alias: 'proxy.table',
 	reader: {
 		type: 'json',
-		rootProperty: 'items',
-		totalProperty: 'total'
+		root: 'items'
 	}
 });
 

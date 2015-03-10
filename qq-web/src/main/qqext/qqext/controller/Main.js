@@ -5,7 +5,6 @@ Ext.define('qqext.controller.Main', {
 	extend: 'Ext.app.Controller',
 	views: ['qqext.view.VTitleBar'],
 	requires: [
-		'qqext.model.JournalItem',
 		'qqext.model.SearchResultItem',
 		'qqext.store.DictValuesStore',
 		'qqext.store.CustomStore',
@@ -18,40 +17,14 @@ Ext.define('qqext.controller.Main', {
 	currentModel: null,
 	searchParams: null,
 	init: function () {
-		var createCmp = Ext.create,
-				kput = {
-					resultOfAnswer: 'Q_DICT_RESULT_ANSER',
-					applicantCategory: 'Q_DICT_APP_CATEGORY',
-					applicantType: 'Q_DICT_APPLICANT_TYPE',
-					inboxDocDeliveryType: 'QQ_TRANSMISSION_MODE',
-					docType: 'Q_DICT_DOC_TYPES',
-					storageTerritory: 'Q_DICT_STORAGE',
-					tematicOfAnswer: 'Q_DICT_THEMATIC_ANSW',
-					diffCategory: 'Q_DICT_DIFF_CATEGORY',
-					coordinationStage: 'Q_DICT_THE_EHDORSEMENT',
-					journalApplicantFilterStore: 'QQ_JOURNAL_APPLICANT_FILTER',
-					journalExecutors: 'QQ_JOURNAL_EXECUTOR'
-				};
+		var createCmp = Ext.create;
 
-		/*
-		 for (var key in kput)
-		 createCmp('DictValuesStore', key, kput[key]);
-		 
-		 createCmp('qqext.store.CustomStore', {
-		 storeId: 'searchResults',
-		 url: '/qq-web/api/Search',
-		 pageSize: 12,
-		 model: 'qqext.model.SearchResultItem',
-		 remoteSort: true
-		 });
-		 createCmp('qqext.store.CustomStore', {
-		 storeId: 'journal',
-		 url: '/qq-web/api/Journal',
-		 pageSize: 25,
-		 remoteSort: true,
-		 model: 'qqext.model.JournalItem',
-		 remoteFilter: true
-		 });
-		 */
+		createCmp('qqext.store.CustomStore', {
+			storeId: 'searchResults',
+			url: '/qq-web/api/Search',
+			pageSize: 12,
+			model: 'qqext.model.SearchResultItem',
+			remoteSort: true
+		});
 	}
 });

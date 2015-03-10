@@ -35,7 +35,7 @@ Ext.define('qqext.view.reg.VApplicant', {
 		Ext.applyIf(me, {
 			items: [
 				me.appType = createCmp('FComboBox', applicant.applicantType[1],
-						applicant.applicantType[0], applicant.applicantType[0], {
+						ns.stIds.apltype, applicant.applicantType[0], {
 					allowBlank: false,
 					width: 450,
 					labelWidth: 150,
@@ -63,7 +63,7 @@ Ext.define('qqext.view.reg.VApplicant', {
 				org = createCmp('FTextArea', applicant.organization[1], applicant.organization[0],
 						{width: 950, labelWidth: 150, hidden: true}),
 				appCat = createCmp('FComboBox', applicant.applicantCategory[1],
-						applicant.applicantCategory[0], applicant.applicantCategory[0], {
+						ns.stIds.aplcat, applicant.applicantCategory[0], {
 					hidden: true,
 					width: 410,
 					labelWidth: 150

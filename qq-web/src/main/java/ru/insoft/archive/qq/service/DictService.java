@@ -55,14 +55,36 @@ public class DictService {
 	}
 
 	/**
-	 * Возвращает список пользователей с правом исполнителя
+	 * Возвращает список пользователей определенного архива с правом исполнителя
 	 *
 	 * @return справочник
 	 */
 	@GET
 	@Path("executors")
 	public List<DictDto> getExecutors() {
-		return dvd.getUsersWithRule("Q_RULE_EXECUTOR");
+		return dvd.getUsersWithRule(DictCodes.Q_RULE_EXECUTOR, up.getOrganization());
+	}
+
+	/**
+	 * Возвращает список пользователей всех архивов с правом исполнителя
+	 *
+	 * @return справочник
+	 */
+	@GET
+	@Path("allexecutors")
+	public List<DictDto> getAllExecutors() {
+		return dvd.getUsersWithRule(DictCodes.Q_RULE_EXECUTOR);
+	}
+
+	/**
+	 * Возвращает список пользователей всех архивов с правом регистратора
+	 *
+	 * @return справочник
+	 */
+	@GET
+	@Path("regusers")
+	public List<DictDto> getRegistrators() {
+		return dvd.getUsersWithRule(DictCodes.Q_RULE_REGISTRATOR);
 	}
 
 	/**
@@ -71,9 +93,20 @@ public class DictService {
 	 * @return справочник
 	 */
 	@GET
-	@Path("questiontypes")
+	@Path("querytypes")
 	public List<DictSVDto> getQuestionTypes() {
 		return dvd.getFullShortValues(DictCodes.Q_DICT_QUEST_TYPE);
+	}
+
+	/**
+	 * Возвращает список форм выдачи ответов
+	 *
+	 * @return справочник
+	 */
+	@GET
+	@Path("sendtypes")
+	public List<DictDto> getSendTypes() {
+		return dvd.getFullValues(DictCodes.Q_DICT_ANSWER_FORM);
 	}
 
 	/**
@@ -85,6 +118,103 @@ public class DictService {
 	@Path("notistats")
 	public List<DictSVDto> getNotiStats() {
 		return dvd.getFullCodeValues(DictCodes.Q_DICT_NOTIFY_STATUSES);
+	}
+
+	/**
+	 * Возвращает список типов заявителей (юридическое, физическое лицо)
+	 *
+	 * @return справочник
+	 */
+	@GET
+	@Path("applicantypes")
+	public List<DictSVDto> getApplicants() {
+		return dvd.getFullCodeValues(DictCodes.Q_DICT_APPLICANT_TYPE);
+	}
+
+	/**
+	 * Возвращает список результатов ответа
+	 *
+	 * @return справочник
+	 */
+	@GET
+	@Path("resultanswer")
+	public List<DictSVDto> getResultAnswer() {
+		return dvd.getFullCodeValues(DictCodes.Q_DICT_RESULT_ANSER);
+	}
+
+	/**
+	 * Возвращает список категорий заявителей
+	 *
+	 * @return справочник
+	 */
+	@GET
+	@Path("applicantcategory")
+	public List<DictDto> getAppCategories() {
+		return dvd.getFullValues(DictCodes.Q_DICT_APP_CATEGORY);
+	}
+
+	/**
+	 * Возвращает список способов передачи
+	 *
+	 * @return справочник
+	 */
+	@GET
+	@Path("docdeliverytype")
+	public List<DictDto> getDocDeliveryType() {
+		return dvd.getFullValues(DictCodes.QQ_TRANSMISSION_MODE);
+	}
+
+	/**
+	 * Возвращает список типов документов
+	 *
+	 * @return справочник
+	 */
+	@GET
+	@Path("doctype")
+	public List<DictDto> getDocType() {
+		return dvd.getFullValues(DictCodes.Q_DICT_DOC_TYPES);
+	}
+
+	/**
+	 * Возвращает список хранилищ документов
+	 *
+	 * @return справочник
+	 */
+	@GET
+	@Path("storages")
+	public List<DictDto> getStorageTerritory() {
+		return dvd.getFullValues(DictCodes.Q_DICT_STORAGE);
+	}
+
+	/**
+	 * Возвращает список хранилищ документов
+	 *
+	 * @return справочник
+	 */
+	@GET
+	@Path("answertematic")
+	public List<DictDto> getAnswerTematic() {
+		return dvd.getFullValues(DictCodes.Q_DICT_THEMATIC_ANSW);
+	}
+	/**
+	 * Возвращает список категорий сложности
+	 *
+	 * @return справочник
+	 */
+	@GET
+	@Path("difcategory")
+	public List<DictDto> getDifCategory() {
+		return dvd.getFullValues(DictCodes.Q_DICT_DIFF_CATEGORY);
+	}
+	/**
+	 * Возвращает список этапов соглосования документа
+	 *
+	 * @return справочник
+	 */
+	@GET
+	@Path("coorstage")
+	public List<DictDto> getCoordinationStage() {
+		return dvd.getFullValues(DictCodes.Q_DICT_THE_EHDORSEMENT);
 	}
 
 	/**

@@ -43,7 +43,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					status = record.get('status');
 			var date = record.get('controlDate');
 			if (!date) {
-				date = record.get('plannedDate');
+				date = record.get('planDate');
 			}
 			if (date && status !== statsName[stats.onreg] &&
 					status !== statsName[stats.exec]) {
@@ -81,7 +81,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	 * Приводит форму в первоначальное состояние
 	 */
 	reset: function () {
-		var store = this.getStore();
+		var store = this.store;
 		store.filters.clear();
 		store.addFilter(this._fltrs);
 		this.clearCriterias();
@@ -151,14 +151,14 @@ Ext.define('qqext.view.journal.VJournalForm', {
 				createCmp = Ext.create,
 				ns = qqext,
 				execStore = ns.stIds.execs,
-				store, items,
+				store, items, onlyExecutor,
 				labelForTable = createCmp('FLabel', '', {
 					dock: 'top',
 					cls: 'journal_title_label'
 				});
 
 // Если пользователь чистый исполнитель, то выводим запросы только назначеные ему
-		if (ns.exec && !ns.coor && !ns.reg) {
+		if (onlyExecutor = (ns.exec && !ns.coor && !ns.reg)) {
 			execStore = createCmp('Ext.data.Store', {
 				fields: ['id', 'name'],
 				data: [{id: ns.userId, text: ns.fio}]
@@ -172,20 +172,9 @@ Ext.define('qqext.view.journal.VJournalForm', {
 		if (ns.reg || ns.coor || ns.exec || ns.visor || ns.superex)
 			me.listeners.itemdblclick = ns.openRequest;
 
-		me._fltrs.push(createCmp('Ext.util.Filter', {
-			property: 'nostatus',
-			value: ns.statsId[ns.stats.onreg]
-		}));
-
 		if (ns.isSIC) {
 			store = createCmp('qqext.store.SicJvk');
 			labelForTable.setText("Справочно-информационный центр федеральных государственных архивов");
-			// Запросы со статусом "На регистрации" с литерой архива для СИЦ не нужны
-			me._fltrs.push(createCmp('Ext.util.Filter', {
-				property: 'requestor',
-				value: ns.sicId
-			}));
-
 
 			items = [{
 					text: 'Литера',
@@ -336,18 +325,11 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					]}];
 		} else {
 			store = createCmp('qqext.store.ArchiveJvk');
-			labelForTable.setText(Ext.getStore(ns.stIds.execOrgs)
-					.getById(ns.orgId).get('name'));
+			labelForTable.setText(Ext.getStore(ns.stIds.litera)
+					.getById(ns.orgId).get('text'));
 
 			// Запросы со статусом "На регистрации" с литерой СИЦ для архивов не нужны
-			me._fltrs.push(createCmp('Ext.util.Filter', {
-				property: 'execOrg',
-				value: ns.orgId
-			}));
-			me._fltrs.push(createCmp('Ext.util.Filter', {
-				property: 'noorganization',
-				value: ns.sicId
-			}));
+
 			items = [{
 					text: 'Литера',
 					dataIndex: 'litera',
@@ -472,7 +454,7 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					minWidth: 115,
 					items: [
 						createCmp('FComboBox', '', execStore, 'requestExecutorCombo', {
-							value: ns.userId,
+							value: onlyExecutor ? ns.userId : null,
 							width: '90%',
 							listeners: {
 								select: me._filterComboSelected,

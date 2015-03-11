@@ -3,8 +3,10 @@ package ru.insoft.archive.qq.dao;
 import java.util.List;
 import javax.ejb.Stateless;
 import ru.insoft.archive.qq.dto.ArchiveJvkDto;
+import ru.insoft.archive.qq.dto.Filter;
 import ru.insoft.archive.qq.dto.PageDto;
 import ru.insoft.archive.qq.dto.SicJvkDto;
+import ru.insoft.archive.qq.dto.Sort;
 import ru.insoft.archive.qq.ejb.DictCodes;
 
 /**
@@ -18,18 +20,30 @@ public class JvkDao extends AbstractDao {
 	/**
 	 * Одинаковая часть зароса для СИЦ
 	 */
-	private static final String generalSic = " from SicJvk j LEFT OUTER JOIN "
-			+ "j.executor e LEFT OUTER JOIN j.notificationStatus n WHERE "
-			+ "j.literaId = :sic OR (j.literaId != :sic AND j.statusId != :onreg) ";
-	private static final String defaultOrder = " ORDER BY j.regDate DESC";
+	// Внешние JOIN используется для полей, которые могуть быть пустыми
+	private static final String generalSic = " FROM SicJvk j LEFT OUTER JOIN "
+			+ "j.executor e LEFT OUTER JOIN j.notificationStatus n "
+			+ "JOIN j.litera l LEFT OUTER JOIN j.execOrganization eo JOIN j.status s WHERE "
+			+ "j.literaId = :sic OR (j.literaId != :sic AND j.statusId != :onreg)";
+
+	/**
+	 * Одинаковая часть зароса для Архивов
+	 */
+	private static final String generalArchive = " FROM ArchiveJvk j LEFT OUTER JOIN "
+			+ "j.executor e LEFT OUTER JOIN j.questionType qt JOIN j.litera l JOIN j.status s WHERE "
+			+ "j.literaId = :orgId OR "
+			+ "(j.literaId = :sic AND j.statusId != :onreg AND j.execOrgId = :orgId)";
+
 	/**
 	 * Возвращает одну страницу ЖВК для СИЦ
 	 *
 	 * @param start начальная запись
 	 * @param limit максимальное число отдаваемых записей
+	 * @param sort параметр сортировки
+	 * @param filter критерии поиска (может быть null)
 	 * @return массив записей для одной страницы
 	 */
-	public PageDto<SicJvkDto> getSicJvk(int start, int limit) {
+	public PageDto<SicJvkDto> getSicJvk(int start, int limit, Sort sort, Filter filter) {
 		Long sicId = store.getIdByCode(DictCodes.Q_VALUE_MEMBER_SIC);
 		Long onregId = store.getIdByCode(DictCodes.Q_VALUE_QSTAT_ONREG);
 
@@ -37,12 +51,13 @@ public class JvkDao extends AbstractDao {
 				.setParameter("sic", sicId)
 				.setParameter("onreg", onregId).getSingleResult();
 
-		List<SicJvkDto> values = em.createQuery("SELECT NEW ru.insoft.archive.qq.dto.SicJvkDto(j.id, "
-				+ "j.litera.shortValue, CONCAT(CONCAT(j.numPrefix, '/'), j.numSufix), "
+		List<SicJvkDto> values = em.createQuery("SELECT NEW ru.insoft.archive.qq.dto.SicJvkDto(j.id as id, "
+				+ "l.shortValue as litera, CONCAT(CONCAT(j.numPrefix, '/'), j.numSufix), "
 				+ "j.regDate, j.controlDate, j.planDate, COALESCE(j.organization, "
-				+ "CONCAT(CONCAT(CONCAT(CONCAT(NULLIF(j.famaly,''), ' '), NULLIF(j.name,'')), ' '), "
-				+ "NULLIF(j.otchestvo, ''))), j.status.fullValue, e.displayedName, n.fullValue, "
-				+ "j.execOrganization.shortValue)" + generalSic + defaultOrder)
+				+ "CONCAT(CONCAT(CONCAT(CONCAT(NULLIF(j.famaly,''), ' '),NULLIF(j.name,'')), ' '),"
+				+ "NULLIF(j.otchestvo, ''))) as otKogo, s.fullValue as status, e.displayedName as executor, "
+				+ "n.fullValue as notiStat, "
+				+ "eo.shortValue as execOrg)" + generalSic + sort)
 				.setParameter("sic", sicId)
 				.setParameter("onreg", onregId)
 				.setFirstResult(start).setMaxResults(limit).getResultList();
@@ -54,26 +69,31 @@ public class JvkDao extends AbstractDao {
 	 *
 	 * @param start начальная запись
 	 * @param limit максимальное число отдаваемых записей
+	 * @param sort параметры сортировки
+	 * @param archiveId идентификатор организации пользователя
+	 * @param filter критерии поиска (может быть null)
 	 * @return массив записей для одной страницы
 	 */
-	public PageDto<ArchiveJvkDto> getArchiveJvk(int start, int limit) {
+	public PageDto<ArchiveJvkDto> getArchiveJvk(int start, int limit, Sort sort,
+			Long archiveId, Filter filter) {
 		Long sicId = store.getIdByCode(DictCodes.Q_VALUE_MEMBER_SIC);
 		Long onregId = store.getIdByCode(DictCodes.Q_VALUE_QSTAT_ONREG);
 
-		Long count = em.createQuery("SELECT COUNT(j.id)" + generalSic, Long.class)
-				.setParameter("sic", sicId)
-				.setParameter("onreg", onregId).getSingleResult();
-
-		List<ArchiveJvkDto> values = em.createQuery("SELECT NEW ru.insoft.archive.qq.dto.SicJvkDto(j.id, "
-				+ "j.litera.shortValue, CONCAT(CONCAT(j.numPrefix, '/'), j.numSufix), "
-				+ "j.regDate, j.controlDate, j.planDate, COALESCE(j.organization, "
-				+ "CONCAT(CONCAT(CONCAT(CONCAT(NULLIF(j.famaly,''), ' '), NULLIF(j.name,'')), ' '), "
-				+ "NULLIF(j.otchestvo, ''))), j.status.fullValue, e.displayedName, n.fullValue, "
-				+ "j.execOrganization.shortValue)" + generalSic + defaultOrder)
+		Long count = em.createQuery("SELECT COUNT(j.id)" + generalArchive, Long.class)
 				.setParameter("sic", sicId)
 				.setParameter("onreg", onregId)
+				.setParameter("orgId", archiveId)
+				.getSingleResult();
+		List<ArchiveJvkDto> values = em.createQuery("SELECT NEW ru.insoft.archive.qq.dto.ArchiveJvkDto(j.id as id, "
+				+ "l.shortValue as litera, CONCAT(CONCAT(j.numPrefix, '/'), j.numSufix), "
+				+ "j.regDate, j.controlDate, j.planDate, COALESCE(j.organization, "
+				+ "CONCAT(CONCAT(CONCAT(CONCAT(NULLIF(j.famaly,''), ' '), NULLIF(j.name,'')), ' '), "
+				+ "NULLIF(j.otchestvo, ''))) as otKogo, s.fullValue as status, e.displayedName as executor,"
+				+ "qt.shortValue as questionType, j.execDate)" + generalArchive + sort)
+				.setParameter("sic", sicId)
+				.setParameter("onreg", onregId)
+				.setParameter("orgId", archiveId)
 				.setFirstResult(start).setMaxResults(limit).getResultList();
-		return new PageDto<ArchiveJvkDto>(count, values);
+		return new PageDto<>(count, values);
 	}
-
 }

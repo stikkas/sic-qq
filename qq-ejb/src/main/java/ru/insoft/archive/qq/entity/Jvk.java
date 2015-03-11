@@ -3,7 +3,6 @@ package ru.insoft.archive.qq.entity;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -28,7 +27,7 @@ public abstract class Jvk implements Serializable {
 
 	@JoinColumn(name = "LITERA_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
 			insertable = false, updatable = false)
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne
 	private DescriptorValue litera;
 
 	@Column(name = "PREFIX_VHOD_DOC", insertable = false, updatable = false)
@@ -49,6 +48,9 @@ public abstract class Jvk implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date controlDate;
 
+	@Column(name = "EXEC_ORG_ID", insertable = false, updatable = false)
+	private Long execOrgId;
+
 	@Column(name = "FAMALY", insertable = false, updatable = false)
 	private String famaly;
 
@@ -66,7 +68,7 @@ public abstract class Jvk implements Serializable {
 
 	@JoinColumn(name = "STATUS_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
 			insertable = false, updatable = false)
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne
 	private DescriptorValue status;
 
 	@Column(name = "EXECUTOR_ID", insertable = false, updatable = false)
@@ -74,7 +76,7 @@ public abstract class Jvk implements Serializable {
 
 	@JoinColumn(name = "EXECUTOR_ID", referencedColumnName = "USER_ID",
 			insertable = false, updatable = false)
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne
 	private AdmUser executor;
 
 	public Long getId() {
@@ -139,6 +141,14 @@ public abstract class Jvk implements Serializable {
 
 	public void setControlDate(Date controlDate) {
 		this.controlDate = controlDate;
+	}
+
+	public Long getExecOrgId() {
+		return execOrgId;
+	}
+
+	public void setExecOrgId(Long execOrgId) {
+		this.execOrgId = execOrgId;
 	}
 
 	public String getFamaly() {

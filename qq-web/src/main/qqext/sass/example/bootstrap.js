@@ -2502,7 +2502,6 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.model.Dict": [],
   "qqext.model.DictSV": [],
   "qqext.model.ExecutionInfo": [],
-  "qqext.model.JournalItem": [],
   "qqext.model.Jvk": [],
   "qqext.model.Notification": [],
   "qqext.model.PreparedDoc": [],
@@ -3631,9 +3630,6 @@ Ext.ClassManager.addNameAliasMappings({
   "qqext.model.DictSV": [],
   "qqext.model.ExecutionInfo": [
     "ExecutionInfoModel"
-  ],
-  "qqext.model.JournalItem": [
-    "JournalItemModel"
   ],
   "qqext.model.Jvk": [],
   "qqext.model.Notification": [

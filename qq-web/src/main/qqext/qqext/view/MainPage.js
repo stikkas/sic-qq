@@ -41,13 +41,7 @@ Ext.define('qqext.view.MainPage', {
 			layout: 'card',
 			region: 'center',
 			items: [
-				ns.jvkForm = createCmp('VJournalForm'),
-				ns.searchForm = createCmp('VSearchForm'),
-				ns.reportForm = createCmp('VReportForm'),
-				ns.regForm = createCmp('VRegForm'),
-				ns.notifyForm = createCmp('VNotify'),
-				ns.transForm = createCmp('VTransmission'),
-				ns.execForm = createCmp('VExecForm')
+				ns.jvkForm = createCmp('VJournalForm')
 			]
 		});
 		mainPanelLayout = mainPanel.getLayout();
@@ -64,6 +58,18 @@ Ext.define('qqext.view.MainPage', {
 
 		// Разрешаем добавлять запрос только пользователю с соответсвующими правами
 		ns.getButton(ns.btns.add).setDisabled(!ns.reg);
+
+		// Отрисовываем все страницы немного погодя, через 1 секунду,
+		// надеемся на то, что пользователь не супер шустрый.
+		setTimeout(function () {
+			mainPanel.add([
+				ns.searchForm = createCmp('VSearchForm'),
+				ns.reportForm = createCmp('VReportForm'),
+				ns.regForm = createCmp('VRegForm'),
+				ns.notifyForm = createCmp('VNotify'),
+				ns.transForm = createCmp('VTransmission'),
+				ns.execForm = createCmp('VExecForm')]);
+		}, 1000);
 		/*
 		 * Показывает форму с заданным индексом
 		 * @param {Number} idx индекс формы (начинается с 0)

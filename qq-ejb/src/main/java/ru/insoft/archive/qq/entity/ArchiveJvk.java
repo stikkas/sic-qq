@@ -3,7 +3,6 @@ package ru.insoft.archive.qq.entity;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -24,7 +23,7 @@ public class ArchiveJvk extends Jvk {
 
 	@JoinColumn(name = "QUESTION_VID_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
 			insertable = false, updatable = false)
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne
 	private DescriptorValue questionType;
 
 	@Column(name = "EXEC_DATE", columnDefinition = "DATE", insertable = false, updatable = false)

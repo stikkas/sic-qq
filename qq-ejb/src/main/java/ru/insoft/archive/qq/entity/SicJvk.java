@@ -17,7 +17,7 @@ import javax.persistence.Table;
 public class SicJvk extends Jvk {
 
 	@Column(name = "NOTI_STATUS_ID", insertable = false, updatable = false)
-	private Long notificationStatusId;
+	private Long notiStatId;
 
 	@JoinColumn(name = "NOTI_STATUS_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID",
 			insertable = false, updatable = false)
@@ -29,12 +29,12 @@ public class SicJvk extends Jvk {
 	@ManyToOne
 	private DescriptorValue execOrganization;
 
-	public Long getNotificationStatusId() {
-		return notificationStatusId;
+	public Long getNotiStatId() {
+		return notiStatId;
 	}
 
-	public void setNotificationStatusId(Long notificationStatusId) {
-		this.notificationStatusId = notificationStatusId;
+	public void setNotiStatId(Long notificationStatusId) {
+		this.notiStatId = notificationStatusId;
 	}
 
 	public DescriptorValue getNotificationStatus() {

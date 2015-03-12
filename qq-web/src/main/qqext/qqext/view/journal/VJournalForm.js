@@ -89,62 +89,84 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	},
 	/**
 	 * Запускает процесс поиска данных на сервере
+	 * @deprecated за ненадобностью
 	 */
-	exec: function () {
-		var store = this.getStore();
-		this._fltrs.forEach(function (fltr) {
-			var exists = false;
-			store.filters.each(function (f) {
-				if (f.property === fltr.property) {
-					exists = true;
-					return false;
-				}
-			});
-			if (!exists)
-				store.addFilter(fltr);
-		});
-		store.reload();
-	},
+	/*
+	 exec: function () {
+	 var store = this.getStore();
+	 this._fltrs.forEach(function (fltr) {
+	 var exists = false;
+	 store.filters.each(function (f) {
+	 if (f.property === fltr.property) {
+	 exists = true;
+	 return false;
+	 }
+	 });
+	 if (!exists)
+	 store.addFilter(fltr);
+	 });
+	 store.reload();
+	 },
+	 */
 	applyFilter: function () {
 		var me = this,
 				filters = [],
 				columns = me.columns,
 				max = columns.length,
 				i = 0, value, clmn, itm,
-				store = me.getStore();
+				store = me.store;
 		for (; i < max; ++i) {
 			clmn = columns[i];
 			itm = clmn.items.get(0);
 			value = itm.getValue();
 			if (value) {
 				/*
-				if (itm.name === 'requestFromCombo') {
-					value = Ext.getStore('journalApplicantFilterStore')
-							.getById(value).get('name');
-				}*/
+				 if (itm.name === 'requestFromCombo') {
+				 value = Ext.getStore('journalApplicantFilterStore')
+				 .getById(value).get('name');
+				 }*/
 				filters.push(Ext.create('Ext.util.Filter', {
 					property: clmn.dataIndex,
 					value: value
 				}));
 			}
 		}
-		filters = filters.concat(me._fltrs);
 		store.filters.clear();
-		store.addFilter(filters, true);
+
+		filters = filters.concat(me._fltrs);
+		store.addFilter(filters);
+		// Когда добавляем пустой список то хранилище не отправляет запрос на сервер
+		if (filters.length === 0) {
+			store.loadPage(1);
+		}
 	},
-	_filterDateSelected: function (field, value, eopts) {
-		field.ownerCt.ownerCt.ownerCt.applyFilter();
-	},
-	_filterComboSelected: function (combo, records, eopts) {
-		combo.ownerCt.ownerCt.ownerCt.applyFilter();
+	_filterSelected: function () {
+		this.applyFilter();
 	},
 	_render: function (comp, eopts) {
 		comp.getEl().addListener('click', function () {
 			comp.focus();
 		});
 	},
+	/**
+	 * Обработка событий кнопки для комбобоксов
+	 * @param {type} comp комбобокс
+	 * @param {type} event событие
+	 * @param {type} eopts опции
+	 */
 	_specialKeyStop: function (comp, event, eopts) {
 		event.stopPropagation();
+	},
+	/**
+	 * @private
+	 * Обработка события кнопки для тектсовых полей и полей даты 
+	 * @param {type} field поле
+	 * @param {type} event событие
+	 */
+	_specKey: function (field, event) {
+		event.stopPropagation();
+		if (event.getKey() === event.ENTER)
+			this.applyFilter();
 	},
 	initComponent: function () {
 		var me = this,
@@ -185,9 +207,10 @@ Ext.define('qqext.view.journal.VJournalForm', {
 							width: '90%',
 							displayField: 'shortValue',
 							listeners: {
-								select: me._filterComboSelected,
+								select: me._filterSelected,
 								render: me._render,
-								specialkey: me._specialKeyStop
+								specialkey: me._specialKeyStop,
+								scope: me
 							}
 						})
 					]}, {
@@ -198,14 +221,9 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						createCmp('FTextField', '', 'docNumberTextField', {
 							width: '90%',
 							listeners: {
-								specialkey: function (tf, event, eopts) {
-									event.stopPropagation();
-									if (event.getKey() === event.ENTER) {
-										var grid = tf.ownerCt.ownerCt.ownerCt;
-										grid.applyFilter();
-									}
-								},
-								render: me._render
+								specialkey: me._specKey,
+								render: me._render,
+								scope: me
 							}
 						})
 					]}, {
@@ -219,15 +237,10 @@ Ext.define('qqext.view.journal.VJournalForm', {
 							width: '90%',
 							xtype: 'hawkDateField',
 							listeners: {
-								select: me._filterDateSelected,
+								select: me._filterSelected,
 								render: me._render,
-								specialkey: function (tf, event, eopts) {
-									event.stopPropagation();
-									if (event.getKey() === event.ENTER) {
-										var grid = tf.ownerCt.ownerCt.ownerCt;
-										grid.applyFilter();
-									}
-								}
+								specialkey: me._specKey,
+								scope: me
 							}
 						}]}, {
 					xtype: 'datecolumn',
@@ -241,15 +254,10 @@ Ext.define('qqext.view.journal.VJournalForm', {
 							xtype: 'hawkDateField',
 							focusOnToFront: false,
 							listeners: {
-								select: me._filterDateSelected,
+								select: me._filterSelected,
 								render: me._render,
-								specialkey: function (tf, event, eopts) {
-									event.stopPropagation();
-									if (event.getKey() === event.ENTER) {
-										var grid = tf.ownerCt.ownerCt.ownerCt;
-										grid.applyFilter();
-									}
-								}
+								specialkey: me._specKey,
+								scope: me
 							}
 						}]}, {
 					text: 'Статус уведомления',
@@ -259,9 +267,10 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						createCmp('FComboBox', '', ns.stIds.notiStats, 'requestNotiStatus', {
 							width: '95%',
 							listeners: {
-								select: me._filterComboSelected,
+								select: me._filterSelected,
 								render: me._render,
-								specialkey: me._specialKeyStop
+								specialkey: me._specialKeyStop,
+								scope: me
 							}
 						})
 					]}, {
@@ -272,14 +281,9 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						createCmp('FTextField', '', 'applicantField', {
 							width: '90%',
 							listeners: {
-								specialkey: function (tf, event) {
-									event.stopPropagation();
-									if (event.getKey() === event.ENTER) {
-										var grid = tf.ownerCt.ownerCt.ownerCt;
-										grid.applyFilter();
-									}
-								},
-								render: me._render
+								specialkey: me._specKey,
+								render: me._render,
+								scope: me
 							}
 						})
 					]}, {
@@ -290,9 +294,10 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						createCmp('FComboBox', '', ns.stIds.stats, 'requestStatusCombo', {
 							width: '90%',
 							listeners: {
-								select: me._filterComboSelected,
+								select: me._filterSelected,
 								render: me._render,
-								specialkey: me._specialKeyStop
+								specialkey: me._specialKeyStop,
+								scope: me
 							}
 						})
 					]}, {
@@ -304,9 +309,10 @@ Ext.define('qqext.view.journal.VJournalForm', {
 							displayField: 'shortValue',
 							width: '90%',
 							listeners: {
-								select: me._filterComboSelected,
+								select: me._filterSelected,
 								render: me._render,
-								specialkey: me._specialKeyStop
+								specialkey: me._specialKeyStop,
+								scope: me
 							}
 						})
 					]}, {
@@ -317,9 +323,10 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						createCmp('FComboBox', '', execStore, 'rlequestExecutorCombo', {
 							width: '90%',
 							listeners: {
-								select: me._filterComboSelected,
+								select: me._filterSelected,
 								render: me._render,
-								specialkey: me._specialKeyStop
+								specialkey: me._specialKeyStop,
+								scope: me
 							}
 						})
 					]}];
@@ -338,9 +345,10 @@ Ext.define('qqext.view.journal.VJournalForm', {
 							displayField: 'shortValue',
 							width: '90%',
 							listeners: {
-								select: me._filterComboSelected,
+								select: me._filterSelected,
 								render: me._render,
-								specialkey: me._specialKeyStop
+								specialkey: me._specialKeyStop,
+								scope: me
 							}
 						})
 					]}, {
@@ -350,14 +358,9 @@ Ext.define('qqext.view.journal.VJournalForm', {
 					items: [createCmp('FTextField', '', 'docNumberTextField', {
 							width: '90%',
 							listeners: {
-								specialkey: function (tf, event, eopts) {
-									event.stopPropagation();
-									if (event.getKey() === event.ENTER) {
-										var grid = tf.ownerCt.ownerCt.ownerCt;
-										grid.applyFilter();
-									}
-								},
-								render: me._render
+								specialkey: me._specKey,
+								render: me._render,
+								scope: me
 							}
 						})
 					]}, {
@@ -371,15 +374,10 @@ Ext.define('qqext.view.journal.VJournalForm', {
 							width: '90%',
 							xtype: 'hawkDateField',
 							listeners: {
-								select: me._filterDateSelected,
+								select: me._filterSelected,
 								render: me._render,
-								specialkey: function (tf, event, eopts) {
-									event.stopPropagation();
-									if (event.getKey() === event.ENTER) {
-										var grid = tf.ownerCt.ownerCt.ownerCt;
-										grid.applyFilter();
-									}
-								}
+								specialkey: me._specKey,
+								scope: me
 							}
 						}]}, {
 					text: 'Вид запроса',
@@ -390,9 +388,10 @@ Ext.define('qqext.view.journal.VJournalForm', {
 							width: '90%',
 							displayField: 'shortValue',
 							listeners: {
-								select: me._filterComboSelected,
+								select: me._filterSelected,
 								render: me._render,
-								specialkey: me._specialKeyStop
+								specialkey: me._specialKeyStop,
+								scope: me
 							}
 						})
 					]}, {
@@ -403,14 +402,9 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						createCmp('FTextField', '', 'applicantField', {
 							width: '90%',
 							listeners: {
-								specialkey: function (tf, event) {
-									event.stopPropagation();
-									if (event.getKey() === event.ENTER) {
-										var grid = tf.ownerCt.ownerCt.ownerCt;
-										grid.applyFilter();
-									}
-								},
-								render: me._render
+								specialkey: me._specKey,
+								render: me._render,
+								scope: me
 							}
 						})
 					]}, {
@@ -421,9 +415,10 @@ Ext.define('qqext.view.journal.VJournalForm', {
 						createCmp('FComboBox', '', ns.stIds.stats, 'requestStatusCombo', {
 							width: '90%',
 							listeners: {
-								select: me._filterComboSelected,
+								select: me._filterSelected,
 								render: me._render,
-								specialkey: me._specialKeyStop
+								specialkey: me._specialKeyStop,
+								scope: me
 							}
 						})
 					]}, {
@@ -438,15 +433,10 @@ Ext.define('qqext.view.journal.VJournalForm', {
 							xtype: 'hawkDateField',
 							focusOnToFront: false,
 							listeners: {
-								select: me._filterDateSelected,
+								select: me._filterSelected,
 								render: me._render,
-								specialkey: function (tf, event, eopts) {
-									event.stopPropagation();
-									if (event.getKey() === event.ENTER) {
-										var grid = tf.ownerCt.ownerCt.ownerCt;
-										grid.applyFilter();
-									}
-								}
+								specialkey: me._specKey,
+								scope: me
 							}
 						}]}, {
 					text: 'Исполнитель',
@@ -457,9 +447,10 @@ Ext.define('qqext.view.journal.VJournalForm', {
 							value: onlyExecutor ? ns.userId : null,
 							width: '90%',
 							listeners: {
-								select: me._filterComboSelected,
+								select: me._filterSelected,
 								render: me._render,
-								specialkey: me._specialKeyStop
+								specialkey: me._specialKeyStop,
+								scope: me
 							}
 						})
 					]

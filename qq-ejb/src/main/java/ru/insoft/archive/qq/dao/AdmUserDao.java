@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
@@ -20,6 +21,7 @@ public class AdmUserDao extends AbstractDao {
 	@Resource
 	private EJBContext ctx;
 
+
 	/**
 	 * Возвращает массив из трех объектов: 0 - идентификатор пользователя
 	 * системы 1 - отображаемое имя, например, Иванов И.И. 2 - идентификатор
@@ -28,12 +30,16 @@ public class AdmUserDao extends AbstractDao {
 	 * @return массив объектов
 	 */
 	public Object[] getUserInfo() {
+		String name = ctx.getCallerPrincipal().getName();
 		try {
 			return (Object[]) em.createNamedQuery("AdmUser.userDataByLogin")
-					.setParameter("login", ctx.getCallerPrincipal().getName())
+					.setParameter("login", name)
 					.getSingleResult();
 		} catch (NoResultException | NonUniqueResultException ex) {
-			throw new WebApplicationException(ex, Response.Status.INTERNAL_SERVER_ERROR);
+
+			throw new WebApplicationException(Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+					.entity("Не возможно получить информацию по пользователю '" + name + "'")
+					.type(MediaType.TEXT_PLAIN).build());
 		}
 	}
 

@@ -1,9 +1,9 @@
 /** 
- * Хранилище с моделью DictSV
+ * Хранилище с моделью DictSCV
  */
-Ext.define('qqext.store.DictSV', {
+Ext.define('qqext.store.DictSCV', {
 	extend: 'Ext.data.Store',
-	model: 'qqext.model.DictSV',
+	model: 'qqext.model.DictSCV',
 	requires: ['qqext.proxy.Combo'],
 	autoLoad: true,
 	proxy: {
@@ -25,5 +25,3 @@ Ext.define('qqext.store.DictSV', {
 		this.callParent();
 	}
 });
-
-

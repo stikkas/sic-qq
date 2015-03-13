@@ -20,6 +20,7 @@ Ext.application({
 		'qqext.Menu',
 		'qqext.store.Dict',
 		'qqext.store.DictSV',
+		'qqext.store.DictSCV',
 		'Ext.util.Filter',
 		'qqext.view.StatusPanel',
 		'over.DatePicker',
@@ -765,25 +766,28 @@ Ext.application({
 					tematic: 'answertematic', // Тематика ответа
 					difcat: 'difcategory', // Категория сложности
 					stage: 'coorstage' // Этап согласования документа
-				};
+				},
+		dictSV = 'qqext.store.DictSV',
+				dict = 'qqext.store.Dict',
+				dictSCV = 'qqext.store.DictSCV';
 		// нужно инициализировать хранилище для информации об организациях
 		// и установить принадлежность пользователся к СИЦ
-		create('StoreDictSV', ids.litera);
-		create('StoreDictSV', ids.apltype);
-		create('StoreDict', ids.aplcat);
-		create('StoreDict', ids.execs);
-		create('StoreDict', ids.docdeltype);
-		create('StoreDict', ids.allexecs);
-		create('StoreDict', ids.regusers);
-		create('StoreDict', ids.doctype);
-		create('StoreDict', ids.storage);
-		create('StoreDict', ids.sendType);
-		create('StoreDict', ids.tematic);
-		create('StoreDict', ids.difcat);
-		create('StoreDict', ids.stage);
-		create('StoreDictSV', ids.queryType);
-		create('StoreDictSV', ids.resans);
-		create('StoreDictSV', ids.stats, {
+		create(dictSV, ids.litera);
+		create(dictSV, ids.apltype);
+		create(dict, ids.aplcat);
+		create(dict, ids.execs);
+		create(dict, ids.docdeltype);
+		create(dict, ids.allexecs);
+		create(dict, ids.regusers);
+		create(dict, ids.doctype);
+		create(dict, ids.storage);
+		create(dict, ids.sendType);
+		create(dict, ids.tematic);
+		create(dict, ids.difcat);
+		create(dict, ids.stage);
+		create(dictSCV, ids.queryType);
+		create(dictSV, ids.resans);
+		create(dictSV, ids.stats, {
 			listeners: {
 				load: function (st, records) {
 					ns.statsId = {};
@@ -797,7 +801,7 @@ Ext.application({
 				}
 			}
 		});
-		create('StoreDictSV', ids.notiStats, {
+		create(dictSV, ids.notiStats, {
 			listeners: {
 				load: function (st, records) {
 					ns.notiStatsId = {};

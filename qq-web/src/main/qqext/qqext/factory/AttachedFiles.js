@@ -82,22 +82,14 @@ Ext.define('qqext.factory.AttachedFiles', {
 	},
 	/**
 	 * Загружает информацию о файлах
-	 * @param {Ext.data.Storage} store хранилище с информацией о файлах
+	 * @param {Object[]} store хранилище с информацией о файлах {id, qid, name}
 	 * @param {Boolean} setOnly только установить, не загружать данные с сервера
 	 */
 	loadRecord: function (store, setOnly) {
 		var me = this;
 		me._st = store;
 		if (!setOnly && qqext.request)
-			store.load({
-				/*
-				params: {
-					filter: Ext.encode([{property: "question", value: qqext.request.get('id')}])
-				},
-				*/
-				callback: function () {
-					me.showFiles();
-				}});
+			me.showFiles();
 	},
 	/**
 	 * Отображает файлы, информация о которых находится во внутреннем хранилище
@@ -106,14 +98,11 @@ Ext.define('qqext.factory.AttachedFiles', {
 		var me = this,
 				store = me._st;
 		me._fl.clearFiles();
-		if (store.count()) {
-			var path = me._url + store.getAt(0).get('question')
-					+ "/";
-			store.each(function (file) {
-				var name = file.get('name');
-				me._fl.addExistingFile({name: name,
-					id: file.get('id'),
-					link: path + name});
+		if (store.length) {
+			var path = me._url + store[0].qid + "/";
+			store.forEach(function (file) {
+				var name = file.name;
+				me._fl.addExistingFile({name: name, id: file.id, link: path + name});
 			});
 		}
 		if (me._mode) {// Режим только просмотра

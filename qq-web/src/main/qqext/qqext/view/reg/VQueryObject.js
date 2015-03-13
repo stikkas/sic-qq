@@ -21,10 +21,10 @@ Ext.define('qqext.view.reg.VQueryObject', {
 
 		Ext.applyIf(this, {
 			items: [
-				createCmp('FTextField', 'Фамилия', 'objectLName', {labelWidth:150}),
-				createCmp('FTextField', 'Имя', 'objectFName', {labelWidth:150}),
-				createCmp('FTextField', 'Отчество', 'objectMName', {labelWidth:150}),
-				year = createCmp('FNumberField', 'Год рождения', 'objectBirthYear', {
+				createCmp('FTextField', 'Фамилия', 'objLName', {labelWidth:150}),
+				createCmp('FTextField', 'Имя', 'objFName', {labelWidth:150}),
+				createCmp('FTextField', 'Отчество', 'objMName', {labelWidth:150}),
+				year = createCmp('FNumberField', 'Год рождения', 'objBYear', {
 					width: 230,
 					labelWidth: 150,
 					spinDownEnabled: false,

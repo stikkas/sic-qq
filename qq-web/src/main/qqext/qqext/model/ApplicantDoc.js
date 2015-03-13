@@ -7,10 +7,11 @@ Ext.define('qqext.model.ApplicantDoc', {
 	fields: [
 		{name: 'id', type: 'int', convert: null, defaultValue: null, isNull: true},
 		{name: 'name', type: 'string'},
-		{name: 'type', type: 'int', defaultValue: null, convert: null},
-		{name: 'question', type: 'int', defaultValue: null, convert: null}
+//		{name: 'type', type: 'int', defaultValue: null, convert: null},
+		{name: 'qid', type: 'int', defaultValue: null, convert: null}
 	],
-	belongsTo: 'qqext.model.Question',
+	proxy: {type: 'memory'}
+/*	
 	requires: ['Ext.data.proxy.Rest'],
 	proxy: {
 		type: 'rest',
@@ -18,5 +19,6 @@ Ext.define('qqext.model.ApplicantDoc', {
 		reader: 'json',
 		writer: 'json'
 	}
+	*/
 });
 

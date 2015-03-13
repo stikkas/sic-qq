@@ -2,69 +2,110 @@
  * Модель запроса
  */
 Ext.define('qqext.model.Question', {
-	alias: 'QuestionModel',
 	extend: 'Ext.data.Model',
 	requires: [
-		'qqext.model.Transmission',
-		'qqext.model.Applicant',
-		'Ext.data.AbstractStore',
 		'qqext.model.ApplicantDoc',
-		'qqext.model.Notification',
-		'qqext.model.ExecutionInfo',
 		'Ext.data.proxy.Rest'
 	],
 	fields: [
 		{name: 'id', type: 'int', defaultValue: null, convert: null, isNull: true},
-		{name: 'status', type: 'int', defaultValue: null, convert: null},
-		{name: 'createOrg', type: 'int', defaultValue: null, convert: null},
+		// Литера
 		{name: 'litera', type: 'int', defaultValue: null, convert: null},
-		{name: 'prefixNum', type: 'int', defaultValue: null, convert: null},
-		{name: 'sufixNum', type: 'int', defaultValue: null, convert: null},
+		// № Входящего документа, префикс
+		{name: 'prefix', type: 'int', defaultValue: null, convert: null},
+		// № Входящего документа, суффикс
+		{name: 'sufix', type: 'int', defaultValue: null, convert: null},
+		// Дата регистрации
 		{name: 'regDate', type: 'date', convert: function (v) {
 				if (v)
 					return new Date(v);
 			}},
-		{name: 'transferType', type: 'int', defaultValue: null, convert: null},
-		{name: 'notifyStatus', type: 'int', defaultValue: null, convert: null},
+		// Способ передачи
+		{name: 'transferMethod', type: 'int', defaultValue: null, convert: null},
+		// Исполняющая организация
 		{name: 'execOrg', type: 'int', defaultValue: null, convert: null},
-		{name: 'questionType', type: 'int', defaultValue: null, convert: null},
+		// Регистратор
 		{name: 'registrator', type: 'int', defaultValue: null, convert: null},
-		{name: 'plannedFinishDate', type: 'date', convert: function (v) {
+		// Тип запроса (Биографический, Социально-...)
+		{name: 'questionType', type: 'int', defaultValue: null, convert: null},
+		// Плановая дата исполнения запроса
+		// TODO: проверить работу без костыля, может уже зарасло
+		{name: 'planDate', type: 'date', convert: function (v) {
 				if (v)
 					return new Date(v.valueOf() + qqext.msPhour); // Костыль
 			}},
+		// Содержание запроса
 		{name: 'content', type: 'string', defaultValue: null},
-		{name: 'answerFormType', type: 'int', defaultValue: null, convert: null},
-		{name: 'motivatedRefusal', type: 'boolean', defaultValue: false, convert: null},
-		{name: 'objectLName', type: 'string', defaultValue: null, convert: null},
-		{name: 'objectFName', type: 'string', defaultValue: null, convert: null},
-		{name: 'objectMName', type: 'string', defaultValue: null, convert: null},
-		{name: 'objectBirthYear', type: 'int', defaultValue: null, convert: null}
-	],
-	associations: [
-		{type: 'hasOne', model: 'qqext.model.Transmission', foreignKey: 'id',
-			setterName: 'setTrans', getterName: 'getTrans'},
-		{type: 'hasOne', model: 'qqext.model.Applicant', foreignKey: 'id',
-			associationKey: 'applicant', 
-			setterName: 'setAppl', getterName: 'getAppl'},
-		{type: 'hasOne', model: 'qqext.model.Notification', foreignKey: 'id',
-			setterName: 'setNoti', getterName: 'getNoti'},
-		{type: 'hasOne', model: 'qqext.model.ExecutionInfo', foreignKey: 'id',
-			setterName: 'setExec', getterName: 'getExec'},
-		{type: 'hasMany', model: 'qqext.model.ApplicantDoc',
-			name: 'files', foreignKey: 'question'}
+		// Форма выдачи ответа
+		{name: 'replyForm', type: 'int', defaultValue: null, convert: null},
+		// Мотивированный отказ
+		{name: 'motivRefuse', type: 'int', defaultValue: 0, convert: null},
+		// Тип заявителя
+		{name: 'applType', type: 'int', defaultValue: null, convert: null},
+		// Фамилия
+		{name: 'lName', type: 'string', defaultValue: null},
+		// Имя
+		{name: 'fName', type: 'string', defaultValue: null},
+		// Отчество
+		{name: 'mName', type: 'string', defaultValue: null},
+		// Страна
+		{name: 'country', type: 'string', defaultValue: null},
+		// Адрес
+		{name: 'adres', type: 'string', defaultValue: null},
+		// Телефон
+		{name: 'phone', type: 'string', defaultValue: null},
+		// Организация
+		{name: 'orgName', type: 'string', defaultValue: null},
+		// Категория заявителя
+		{name: 'applCat', type: 'int', defaultValue: null, convert: null},
+		// № Исходящего документа
+		{name: 'issueDocNum', type: 'string', defaultValue: null},
+		// Дата исходящего документа
+		{name: 'issueDocDate', type: 'date', convert: function (v) {
+				if (v)
+					return new Date(v);
+			}},
+		// ФИО юр. лица (кто подписал исходящий документ)
+		{name: 'issueDocFio', type: 'string', defaultValue: null},
+		// Приложения
+		{name: 'apps', type: 'string', defaultValue: null},
+		// На кого запрос, Фамилия
+		{name: 'objLName', type: 'string', defaultValue: null, convert: null},
+		// На кого запрос, Имя
+		{name: 'objFName', type: 'string', defaultValue: null, convert: null},
+		// На кого запрос, Отчество
+		{name: 'objMName', type: 'string', defaultValue: null, convert: null},
+		// На кого запрос, год рождения
+		{name: 'objBYear', type: 'int', defaultValue: null, convert: null},
+		// Статус запроса
+		{name: 'status', type: 'int', defaultValue: null, convert: null}
 	],
 	proxy: {
 		type: 'rest',
-		url: '/qq-web/rest/question',
-		reader: 'json',
-		writer: {
+		url: 'rest/question',
+		reader: {
 			type: 'json',
-			getRecordData: function (record) {
-				var data = record.data;
-				data.applicant = record.getAppl().data;
-				return data;
+			/** 
+			 * решил отказаться от ассоциаций, что-то автоматом они не подключются
+			 * использую обыкновенный массив объектов
+			 * поля для файлов: 
+			 * id - идентификатор файла, name - имя файла, без  пути, 
+			 * qid - идентификатор запроса
+			 * @param {Object} data объект с данными по запросу
+			 */
+			readRecords: function (data) {
+				var question = new qqext.model.Question(data);
+				question.files = data.files;
+				return new Ext.data.ResultSet({
+					success: true,
+					total: 1,
+					records: [question]
+				});
+
 			}
+		},
+		writer: {
+			type: 'json'
 		},
 		listeners: {
 			exception: function (proxy, answer, operation) {

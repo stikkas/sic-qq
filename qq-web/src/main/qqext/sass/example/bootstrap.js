@@ -2500,6 +2500,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.model.Coordination": [],
   "qqext.model.DeliveryAction": [],
   "qqext.model.Dict": [],
+  "qqext.model.DictSCV": [],
   "qqext.model.DictSV": [],
   "qqext.model.ExecutionInfo": [],
   "qqext.model.Jvk": [],
@@ -2518,6 +2519,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.store.ArchiveJvk": [],
   "qqext.store.CustomStore": [],
   "qqext.store.Dict": [],
+  "qqext.store.DictSCV": [],
   "qqext.store.DictSV": [],
   "qqext.store.DictStore": [],
   "qqext.store.DictValuesStore": [],
@@ -3627,6 +3629,7 @@ Ext.ClassManager.addNameAliasMappings({
     "DeliveryActionModel"
   ],
   "qqext.model.Dict": [],
+  "qqext.model.DictSCV": [],
   "qqext.model.DictSV": [],
   "qqext.model.ExecutionInfo": [
     "ExecutionInfoModel"
@@ -3638,9 +3641,7 @@ Ext.ClassManager.addNameAliasMappings({
   "qqext.model.PreparedDoc": [
     "PreparedDocModel"
   ],
-  "qqext.model.Question": [
-    "QuestionModel"
-  ],
+  "qqext.model.Question": [],
   "qqext.model.SearchResultItem": [
     "SearchResultItemModel"
   ],
@@ -3670,6 +3671,9 @@ Ext.ClassManager.addNameAliasMappings({
   "qqext.store.CustomStore": [],
   "qqext.store.Dict": [
     "StoreDict"
+  ],
+  "qqext.store.DictSCV": [
+    "StoreSCV"
   ],
   "qqext.store.DictSV": [
     "StoreDictSV"

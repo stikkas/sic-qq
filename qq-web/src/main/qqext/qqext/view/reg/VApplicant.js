@@ -21,28 +21,25 @@ Ext.define('qqext.view.reg.VApplicant', {
 	curCode: null,
 	/**
 	 * @property {qqext.cmp.FieldSet} _adds поля для "Дополнительные сведения"
-	 * @private
 	 */
 	initComponent: function () {
 		var
 				me = this,
 				ns = qqext,
-				applicant = ns.applicant,
 				createCmp = Ext.create,
 				surname, name, fatherName, appCat, org,
 				allusers, fisic, uric,
 				typef = 'Q_VALUE_APP_TYPE_FFACE';
 		Ext.applyIf(me, {
 			items: [
-				me.appType = createCmp('FComboBox', applicant.applicantType[1],
-						ns.stIds.apltype, applicant.applicantType[0], {
+				me.appType = createCmp('FComboBox', 'Тип заявителя', ns.stIds.apltype, 'applType', {
 					allowBlank: false,
 					width: 450,
 					labelWidth: 150,
 					listeners: {
 						change: function (cb, newv) {
 							if (newv)
-								switchTypeUser(cb.getStore().getById(newv).get('code'));
+								switchTypeUser(cb.getStore().getById(newv).get('shortValue'));
 							else {
 								allusers.forEach(function (v) {
 									v.hide();
@@ -51,31 +48,31 @@ Ext.define('qqext.view.reg.VApplicant', {
 						}
 					}
 				}),
-				surname = createCmp('FTextField', applicant.lastName[1], applicant.lastName[0], {
+				surname = createCmp('FTextField', 'Фамилия', 'lName', {
 					hidden: true, labelWidth: 150
 				}),
-				name = createCmp('FTextField', applicant.firstName[1], applicant.firstName[0], {
+				name = createCmp('FTextField', 'Имя', 'fName', {
 					hidden: true, labelWidth: 150
 				}),
-				fatherName = createCmp('FTextField', applicant.middleName[1], applicant.middleName[0], {
+				fatherName = createCmp('FTextField', 'Отчество', 'mName', {
 					hidden: true, labelWidth: 150
 				}),
-				org = createCmp('FTextArea', applicant.organization[1], applicant.organization[0],
+				org = createCmp('FTextArea', 'Организация', 'orgName',
 						{width: 950, labelWidth: 150, hidden: true}),
-				appCat = createCmp('FComboBox', applicant.applicantCategory[1],
-						ns.stIds.aplcat, applicant.applicantCategory[0], {
-					hidden: true,
-					width: 410,
-					labelWidth: 150
-				}),
-				createCmp('FTextField', applicant.country[1], applicant.country[0], {
+				appCat = createCmp('FComboBox', 'Категория заявителя',
+						ns.stIds.aplcat, 'applCat', {
+							hidden: true,
+							width: 410,
+							labelWidth: 150
+						}),
+				createCmp('FTextField', 'Страна', 'country', {
 					allowBlank: false,
 					width: 350,
 					labelWidth: 150
 				}),
-				createCmp('FTextField', applicant.address[1], applicant.address[0], {
+				createCmp('FTextField', 'Адрес', 'adres', {
 					width: 950, labelWidth: 150}),
-				createCmp('FTextField', applicant.phone[1], applicant.phone[0], {
+				createCmp('FTextField', 'Телефон', 'phone', {
 					width: 500,
 					labelWidth: 150}),
 				me._adds = createCmp('FieldSet', {
@@ -86,17 +83,17 @@ Ext.define('qqext.view.reg.VApplicant', {
 					width: 900,
 					collapsed: true,
 					items: [
-						createCmp('FTextField', applicant.issueDocNum[1], applicant.issueDocNum[0], {
+						createCmp('FTextField', '№ исходящего документа', 'issueDocNum', {
 							width: 500, labelWidth: 150
 						}),
-						me.dt = createCmp('FDateField', applicant.issueDocDate[1], applicant.issueDocDate[0], {
+						me.dt = createCmp('FDateField', 'Дата', 'issueDocDate', {
 							width: 270, labelWidth: 150
 						}),
-						createCmp('FTextField', applicant.fioJurPerson[1], applicant.fioJurPerson[0], {
+						createCmp('FTextField', 'ФИО юр. лица (кто подписал)', 'issueDocFio', {
 							width: 350,
 							labelWidth: 150
 						}),
-						createCmp('FTextField', applicant.appends[1], applicant.appends[0], {
+						createCmp('FTextField', 'Приложения', 'apps', {
 							width: 500, labelWidth: 150
 						})
 					]

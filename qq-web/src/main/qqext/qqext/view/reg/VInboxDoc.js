@@ -30,9 +30,10 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 					items: [
 						me.litera = createCmp('FComboBox', 'Литера', ns.stIds.litera, 'litera',
 								true, {width: 240,
+									displayField: 'shortValue',
 									labelWidth: 150,
 									viewOnly: true}),
-						me.prefix = createCmp('FTextField', '№ Входящего документа', 'prefixNum', true, {
+						me.prefix = createCmp('FTextField', '№ Входящего документа', 'prefix', true, {
 //							maskRe: /\d/,
 							viewOnly: true,
 							labelAlign: 'right',
@@ -40,7 +41,7 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 							labelWidth: 200,
 							cls: 'two_col_fld'
 						}),
-						me.sufix = createCmp('FTextField', '/', 'sufixNum', true, {
+						me.sufix = createCmp('FTextField', '/', 'sufix', true, {
 							labelSeparator: '',
 							viewOnly: true,
 							labelWidth: 5,
@@ -52,9 +53,9 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 				me.datereg = createCmp('FDateField', 'Дата регистрации', 'regDate', true,
 						{viewOnly: true, width: 250, labelWidth: 150}), // Выставляется программно в модели
 				me._sp = createCmp('FComboBox', 'Способ передачи', ns.stIds.docdeltype,
-						'transferType', {allowBlank: false, width: 300, labelWidth: 150}),
+						'transferMethod', {allowBlank: false, width: 300, labelWidth: 150}),
 				me.executor = createCmp('FComboBox', 'Исполняющая организация',
-						ns.stIds.execOrgs, 'execOrg', {
+						ns.stIds.litera, 'execOrg', {
 							width: 650, labelWidth: 150,
 							listeners: {
 								change: function (combo, value) {

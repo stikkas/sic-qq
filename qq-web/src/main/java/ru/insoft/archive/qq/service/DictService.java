@@ -10,6 +10,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import ru.insoft.archive.qq.dao.DictDao;
 import ru.insoft.archive.qq.dto.DictDto;
+import ru.insoft.archive.qq.dto.DictSCVDto;
 import ru.insoft.archive.qq.dto.DictSVDto;
 import ru.insoft.archive.qq.ejb.DictCodes;
 import ru.insoft.archive.qq.entity.CoreParameter;
@@ -88,14 +89,14 @@ public class DictService {
 	}
 
 	/**
-	 * Возвращает список типов запросов и их сокращения
+	 * Возвращает список типов запросов, их сокращения и коды
 	 *
 	 * @return справочник
 	 */
 	@GET
 	@Path("querytypes")
-	public List<DictSVDto> getQuestionTypes() {
-		return dvd.getFullShortValues(DictCodes.Q_DICT_QUEST_TYPE);
+	public List<DictSCVDto> getQuestionTypes() {
+		return dvd.getFullShortCodeValues(DictCodes.Q_DICT_QUEST_TYPE);
 	}
 
 	/**

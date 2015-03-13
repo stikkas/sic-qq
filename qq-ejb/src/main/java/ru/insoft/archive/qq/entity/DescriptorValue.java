@@ -25,6 +25,11 @@ import javax.persistence.Table;
 			+ "from DescriptorValue d JOIN d.group g WHERE d.groupId = :groupId "
 			+ "ORDER BY CASE WHEN g.alphabeticSort != 0 THEN d.fullValue "
 			+ "ELSE CONCAT(d.sortOrder,'') END"),
+	@NamedQuery(name = "DescriptorValue.fullShortCodeValues",
+			query = "SELECT NEW ru.insoft.archive.qq.dto.DictSCVDto(d.id, d.fullValue, d.shortValue, d.valueCode) "
+			+ "from DescriptorValue d JOIN d.group g WHERE d.groupId = :groupId "
+			+ "ORDER BY CASE WHEN g.alphabeticSort != 0 THEN d.fullValue "
+			+ "ELSE CONCAT(d.sortOrder,'') END"),
 	@NamedQuery(name = "DescriptorValue.fullValue",
 			query = "SELECT NEW ru.insoft.archive.qq.dto.DictDto(d.id, d.fullValue) "
 			+ "from DescriptorValue d JOIN d.group g WHERE d.groupId = :groupId "

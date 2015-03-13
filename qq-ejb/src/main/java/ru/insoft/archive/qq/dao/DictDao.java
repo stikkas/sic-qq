@@ -3,6 +3,7 @@ package ru.insoft.archive.qq.dao;
 import java.util.List;
 import javax.ejb.Stateless;
 import ru.insoft.archive.qq.dto.DictDto;
+import ru.insoft.archive.qq.dto.DictSCVDto;
 import ru.insoft.archive.qq.dto.DictSVDto;
 import ru.insoft.archive.qq.ejb.DictCodes;
 import ru.insoft.archive.qq.entity.CoreParameter;
@@ -25,6 +26,17 @@ public class DictDao extends AbstractDao {
 		return em.createNamedQuery("DescriptorValue.fullShortValues")
 				.setParameter("groupId", store.getIdByCode(groupCode)).getResultList();
 	}
+	/**
+	 * Возвращает значения id, полных, сокращенных значений и коды
+	 *
+	 * @param groupCode код группы справочника
+	 * @return справочник с четырьмя полями
+	 */
+	public List<DictSCVDto> getFullShortCodeValues(String groupCode) {
+		return em.createNamedQuery("DescriptorValue.fullShortCodeValues")
+				.setParameter("groupId", store.getIdByCode(groupCode)).getResultList();
+	}
+
 
 	/**
 	 * Возвращает значения id, полных и сокращенных значений организаций для

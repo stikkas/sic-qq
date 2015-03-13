@@ -66,12 +66,8 @@ Ext.define('qqext.view.reg.VRegForm', {
 						(!wantedStatus && ns.visor)), 0); // Редактировать
 				me._disableButtons(!(hasRegRule && !wantedStatus && belongToCreator), 2); // Печать
 
-				model.getAppl({
-					callback: function () {
-						me.setViewOnly(true);
-						me.loadRecord();
-					}
-				});
+				me.setViewOnly(true);
+				me.loadRecord();
 				ns.initRequired(me);
 			}
 
@@ -106,7 +102,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 
 							// Полный успех. Сохраняем файлы
 							me.loadRecord(true);
-							me.files.loadRecord(model.files(), true);
+							me.files.loadRecord(model.files, true);
 							me.files.save(model.get('id'), function () {
 								success();
 								ns.statusPanel.setStatus();
@@ -355,8 +351,8 @@ Ext.define('qqext.view.reg.VRegForm', {
 			f[action](model);
 		});
 		if (!withoutFiles) {
-			me.applicant[action](model.getAppl());
-			me.files[action](model.files());
+			me.applicant[action](model);
+			me.files[action](model.files);
 		}
 	},
 	/**
@@ -382,7 +378,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 		if (model)
 			return me.model = model;
 		var createCmp = Ext.create,
-				model = me.model = createCmp('QuestionModel');
+				model = me.model = createCmp('qqext.model.Question');
 		model.setAppl(createCmp('ApplicantModel'));
 		return model;
 	},

@@ -1,28 +1,30 @@
 package ru.insoft.archive.qq.entity;
 
 import java.io.Serializable;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
- * Прикрепленные файлы. Могут быть в запросе и в ответе (два типа файлов)
+ * Прикрепленные файлы. Могут быть в запросе, в ответе или в уведомлении
  *
  * @author С. Благодатских
  */
+@NamedQueries({
+	@NamedQuery(name = "AttachedFile.questionFilesWithType",
+			query = "SELECT a from AttachedFile a WHERE a.qid = :question and a.type = :type")})
 @Entity
 @Table(name = "QQ_ATTACHED_FILE")
-
 public class AttachedFile implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -30,51 +32,24 @@ public class AttachedFile implements Serializable {
 	@Id
 	@GeneratedValue(generator = "attachedGen", strategy = GenerationType.SEQUENCE)
 	@SequenceGenerator(name = "attachedGen", sequenceName = "SEQ_QQ_ATTACHED_FILE",
-		allocationSize = 1)
+			allocationSize = 1)
 	@Column(name = "ATTACHED_FILE_ID")
 	private Long id;
 
-	@Basic(optional = false)
-	@NotNull
-	@Size(min = 1, max = 256)
 	@Column(name = "FILE_NAME")
 	private String name;
 
-	@Basic(optional = false)
-	@NotNull
+	@JsonIgnore
 	@Column(name = "FILE_TYPE_ID")
 	private Long type;
 
-	@Basic(optional = false)
-	@NotNull
 	@Column(name = "QUESTION_ID")
-	private Long question;
-
-
+	private Long qid;
 
 	@JsonIgnore
-	@JoinColumn(name = "FILE_TYPE_ID", referencedColumnName = "DESCRIPTOR_VALUE_ID", updatable = false, insertable = false)
-	@ManyToOne
-	private DescriptorValue typeValue;
-
-	public AttachedFile() {
-	}
-
-	public AttachedFile(Long id) {
-		this.id = id;
-	}
-
-	public AttachedFile(Long id, String name, Long type) {
-		this.id = id;
-		this.name = name;
-		this.type = type;
-	}
-
-	public AttachedFile(String name, Long type, Long question) {
-		this.name = name;
-		this.type = type;
-		this.question = question;
-	}
+	@JoinColumn(name = "QUESTION_ID", referencedColumnName = "ID", insertable = false, updatable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Question question;
 
 	public Long getId() {
 		return id;
@@ -100,23 +75,21 @@ public class AttachedFile implements Serializable {
 		this.name = name;
 	}
 
-	public Long getQuestion() {
+	public Long getQid() {
+		return qid;
+	}
+
+	public void setQid(Long qid) {
+		this.qid = qid;
+	}
+
+	public Question getQuestion() {
 		return question;
 	}
 
-	public void setQuestion(Long question) {
+	public void setQuestion(Question question) {
 		this.question = question;
 	}
-
-
-	public DescriptorValue getTypeValue() {
-		return typeValue;
-	}
-
-	public void setTypeValue(DescriptorValue typeValue) {
-		this.typeValue = typeValue;
-	}
-
 
 	@Override
 	public int hashCode() {

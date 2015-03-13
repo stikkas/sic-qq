@@ -49,13 +49,13 @@ Ext.define('qqext.view.reg.VQuery', {
 					},
 					width: 370
 				}),
-				me.pd = createCmp('FDateField', 'Плановая дата исполнения запроса', 'plannedFinishDate', {
+				me.pd = createCmp('FDateField', 'Плановая дата исполнения запроса', 'planDate', {
 					allowBlank: true,
 					viewOnly: true,
 					width: 270}),
 				createCmp('FTextArea', 'Содержание запроса', 'content', {width: 950}),
-				createCmp('FComboBox', 'Форма выдачи ответа', ns.stIds.sendType, 'answerFormType'),
-				me.mr = createCmp('FCheckbox', 'Мотивированный отказ', 'motivatedRefusal', {hidden: !ns.isSIC})
+				createCmp('FComboBox', 'Форма выдачи ответа', ns.stIds.sendType, 'replyForm'),
+				me.mr = createCmp('FCheckbox', 'Мотивированный отказ', 'motivRefuse', {hidden: !ns.isSIC})
 			]
 		});
 		me.callParent();

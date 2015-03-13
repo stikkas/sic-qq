@@ -54,7 +54,7 @@ Ext.define('qqext.view.report.StatisticSic2', {
 						}
 					})]
 			},
-			me._arh = create('FComboBox', 'Архив', ns.stIds.execOrgs, 'archive', {
+			me._arh = create('FComboBox', 'Архив', ns.stIds.litera, 'archive', {
 				width: 600, labelWidth: 95, labelPad: 35
 			}),
 			me._qt = create('FComboBox', 'Вид запроса', ns.stIds.queryType, 'queryType', {

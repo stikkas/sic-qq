@@ -21,8 +21,8 @@ Ext.define('qqext.view.StatusPanel', {
 		me.fill = function () {
 			Ext.getStore(ns.stIds.stats).each(function (record) {
 				var id = record.get('id'),
-						name = record.get('name');
-				switch (record.get('code')) {
+						name = record.get('text');
+				switch (record.get('shortValue')) {
 					case statuses.onreg:
 						stats.insert(0, id, createCmp('ImageLabel',
 								url + 'onreg.png', name));

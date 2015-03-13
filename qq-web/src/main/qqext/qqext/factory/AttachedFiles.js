@@ -89,7 +89,9 @@ Ext.define('qqext.factory.AttachedFiles', {
 		var me = this;
 		me._st = store;
 		if (!setOnly && qqext.request)
-			me.showFiles();
+			setTimeout(function () {
+				me.showFiles();
+			}, 1000);
 	},
 	/**
 	 * Отображает файлы, информация о которых находится во внутреннем хранилище
@@ -134,7 +136,7 @@ Ext.define('qqext.factory.AttachedFiles', {
 		var me = this;
 		me.getForm().submit({
 			clientValidation: false,
-			url: '/qq-web/api/SaveAttachedFiles',
+			url: 'rest/SaveAttachedFiles',
 			params: {
 				type: me._type,
 				question: id,

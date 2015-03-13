@@ -1,11 +1,13 @@
 package ru.insoft.archive.qq.dto;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.codehaus.jackson.JsonParser;
+import org.codehaus.jackson.JsonToken;
+import org.codehaus.jackson.map.MappingJsonFactory;
 
 /**
  * Класс для передачи критериев поиска
@@ -33,21 +35,6 @@ public class Filter {
 	 */
 	private String condition;
 
-	private static final Pattern dictPattern = Pattern.compile(
-			"\\{\"property\":\"(?<dictp>litera|questionType|status|executor|"
-			+ "notiStat|execOrg)\",\"value\":(?<dictv>\\d+)\\}");
-
-	private static final Pattern datePattern = Pattern.compile(
-			"\\{\"property\":\"(?<datep>regDate|execDate|planDate)\","
-			+ "\"value\":\"(?<datev>\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2})\"\\}");
-
-	private static final Pattern linePattern = Pattern.compile(
-			"\\{\"property\":\"(?<linep>number|otKogo)\","
-			+ "\"value\":\"(?<linev>(\\p{L}|\\P{L}|\\w|\\.|\"|'|,|\\s)*?)\"\\}");
-
-	private static final Pattern fullPattern = Pattern.compile("^\\[((" + dictPattern.pattern() + "|"
-			+ datePattern.pattern() + "|" + linePattern.pattern() + "),?){1,9}\\]$");
-
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
 	/**
@@ -71,73 +58,89 @@ public class Filter {
 	}
 
 	/**
-	 * Типы объектов используемых фильтром
-	 */
-	private static enum ObjectType {
-
-		STRING, LONG, DATE
-	};
-
-	/**
-	 * Преобразует json строку в объект. Выбираем преобразование с помощью
-	 * регулярок по тем же соображениям что и сортировку.
+	 * Преобразует json строку в объект. Регулярные выражения себя не оправдали
+	 * в отношении юникодовых последовательностей (\u0040..) поэтому без всяких
+	 * бубнов используем то что работает.
 	 *
 	 * @param json строка определенного формата
 	 * @return объект Filter
 	 */
 	public static Filter fromString(String json) {
 
-		Filter filter = new Filter();
-
 		try {
-			if (fullPattern.matcher(json).matches()) {
-				createFilter(dictPattern.matcher(json), "dictp", "dictv", ObjectType.LONG, filter);
-				createFilter(datePattern.matcher(json), "datep", "datev", ObjectType.DATE, filter);
-				createFilter(linePattern.matcher(json), "linep", "linev", ObjectType.STRING, filter);
-			} else {
-				throwError(json);
+			Filter filter = new Filter(); // Общий фильтр, содержащий в себе другие
+
+			JsonParser parser = new MappingJsonFactory().createJsonParser(json);
+
+			JsonToken current = parser.nextToken();
+			if (current == JsonToken.START_ARRAY) {
+				current = parser.nextToken(); // Должен начинаться объект
+				while (current != JsonToken.END_ARRAY) { // Перебираем все объекты пока не закончится массив или выпадет ошибка
+					if (current != JsonToken.START_OBJECT) { // Каждый заход цикла начинается с нового объекта
+						throw new RuntimeException("Неправильный формат данных");
+					}
+
+					// Локальные переменные для временного хранения промежуточных данных
+					String property = null;
+					Object value = null;
+					boolean added = false; // Определяет был ли добавлен фильтр, нужен для параметра number
+
+					for (int i = 0; i < 2; ++i) { // Каждый объект имеет два свойства - property и value
+						parser.nextToken(); //Токен имени свойста
+						String fieldName = parser.getCurrentName();
+						if (fieldName.equals("property")) {
+							parser.nextToken(); // Токен значения свойста (Всегда латиница из определенного набора)
+							property = parser.getText();
+						} else if (fieldName.equals("value")) {
+							parser.nextToken(); // Токен значения свойста (Можеть быть строка даты формата '2015-03-22T00:03:00',
+							// число (long) или текст с юникодовой последовательностью)
+							switch (property) { // если value будет идти раньше property то тут будет NullPointerException
+								case "litera":
+								case "questionType":
+								case "status":
+								case "executor":
+								case "notiStat":
+								case "execOrg":
+									filter.condition += " AND j." + property + "Id = :" + property;
+									value = parser.getLongValue();
+									break;
+								case "regDate":
+								case "execDate":
+								case "planDate":
+									filter.condition += " AND trunc(j." + property + ") = trunc(:" + property + ")";
+									value = dateFormat.parse(parser.getText());
+									break;
+								case "otKogo":
+									filter.condition += " AND (lower(j.organization) like :"
+											+ property + " OR lower(j.famaly) like :" + property + ")";
+									value = "%" + parser.getText().toLowerCase() + "%";
+									break;
+								case "number":
+									addNumberProperty(filter, parser.getText());
+									added = true;
+									break;
+								default:
+									throw new RuntimeException("Недопустимое значение критерия поиска: " + property);
+							}
+						} else {
+							throw new RuntimeException("Неизвестное свойство объекта: " + fieldName);
+						}
+					}
+					current = parser.nextToken();
+					if (current != JsonToken.END_OBJECT) {
+						throw new RuntimeException("Неправильный формат данных");
+					}
+					if (!added) {
+						filter.filters.add(new Filter(property, value));
+					}
+					// Следующий объект или конец массива
+					current = parser.nextToken();
+				}
 			}
 
-		} catch (Exception ex) {
-			throwError(json);
-		}
-		return filter;
-	}
-
-	private static <T> void createFilter(Matcher matcher, String pgroup, String vgroup,
-			ObjectType type, Filter filter) throws ParseException {
-		int start = 0;
-		while (matcher.find(start)) {
-			String prop = matcher.group(pgroup);
-			String val = matcher.group(vgroup);
-
-			start = matcher.end();
-
-			if (prop.equals("number")) {
-				addNumberProperty(filter, val);
-				continue;
-			}
-
-			switch (prop) {
-				case "litera":
-				case "questionType":
-				case "status":
-				case "executor":
-				case "notiStat":
-				case "execOrg":
-					filter.condition += " AND j." + prop + "Id = :" + prop;
-					break;
-				case "regDate":
-				case "execDate":
-				case "planDate":
-					filter.condition += " AND trunc(j." + prop + ") = trunc(:" + prop + ")";
-					break;
-				case "otKogo":
-					filter.condition += " AND (lower(j.organization) like :"
-							+ prop + " OR lower(j.famaly) like :" + prop + ")";
-			}
-
-			filter.filters.add(new Filter(prop, parseObject(val, type)));
+			return filter;
+		} catch (IOException | ParseException ex) {
+			throw new RuntimeException(ex.getMessage());
 		}
 	}
 
@@ -164,32 +167,6 @@ public class Filter {
 		filter.condition += " AND j." + prefix + " = :" + prefix + " AND j." + sufix + " = :" + sufix;
 		filter.filters.add(new Filter(prefix, prefixVal));
 		filter.filters.add(new Filter(sufix, sufixVal));
-	}
-
-	/**
-	 * Метод для запуска сообщения с обшибкой для клиента
-	 *
-	 * @param json полученая json строка в запросе
-	 */
-	private static void throwError(String json) {
-		throw new RuntimeException(json);
-		/*
-		throw new WebApplicationException(Response.status(Response.Status.PRECONDITION_FAILED)
-				.entity("Плохой запрос: " + json).type(MediaType.TEXT_PLAIN).build());
-		*/
-	}
-
-	/**
-	 * Преобразует строку либо к дате либо к числу либо к строке
-	 */
-	private static Object parseObject(String source, ObjectType type) throws ParseException {
-		if (type == ObjectType.DATE) {
-			return dateFormat.parse(source);
-		} else if (type == ObjectType.LONG) {
-			return Long.valueOf(source);
-		}
-		System.out.println(source);
-		return "%" + source.toLowerCase() + "%";
 	}
 
 	public String getProperty() {

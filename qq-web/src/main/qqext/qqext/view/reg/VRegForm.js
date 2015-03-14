@@ -80,51 +80,45 @@ Ext.define('qqext.view.reg.VRegForm', {
 		}
 	},
 	/**
-	 * Сохраняет модель Question с Applicant
+	 * Сохраняет модель Question
 	 * Глобалная ссылка на модель устанавливается после сохранения Question на сервере и получения
-	 * id от сервера.
 	 * @param {Function} success будет вызвана в случае полного успеха, т.е. после сохранения Applicant
-	 * @param {Function} fail1 будет вызвана в случае несохранения Question, т.е. ничего не сохранилось
-	 * @param {Function} fail2 будет вызвана в случае несохранения Applicant, т.е. Question сохранилось
 	 * @param {Boolean} inEditMode в режиме редактирования уже зарегистрированого запроса
 	 * @private
 	 */
-	_saveModel: function (success, fail1, fail2, inEditMode) {
+	_saveModel: function (success, inEditMode) {
 		var me = this,
 				model = me.model,
-				ns = qqext;
-		model.save({
-			callback: function (record, operation, status) {
-				if (status) {
-					qqext.model.Question.load(record.get('id'), {callback: function (model) {
-							ns.request = me.model = model;
-//							model.getAppl().set('id', model.get('id'));
+				ns = qqext,
+				id = model.get('id'),
+				files = me.files;
 
-							// Полный успех. Сохраняем файлы
-							me.loadRecord(true);
-							me.files.loadRecord(model.files, true);
-							me.files.save(model.get('id'), function () {
-								success();
-								ns.statusPanel.setStatus();
-								ns.infoChanged = true;
-							}, function () {
-								if (inEditMode)
-									me.setAdminMode();
-								else
-									me.setViewOnly(false);
-								// Провал на втором уровне
-								fail2();
-							});
-						}});
-
+		files.getForm().submit({
+			clientValidation: false,
+			url: 'rest/question',
+			method: id ? 'PUT' : 'POST',
+			params: {
+				deletedFiles: Ext.encode(files.deletedFiles),
+				question: Ext.encode(model.getData())
+			},
+			success: function (form, action) {
+				var data = action.result.data;
+				ns.request = me.model = Ext.create('qqext.model.Question', data);
+				me.model.files = data.files;
+				me.loadRecord();
+				ns.statusPanel.setStatus();
+				ns.infoChanged = true;
+				success();
+			},
+			failure: function (form, action) {
+				ns.showError("Ошибка сохранения", action.response.responseText);
+				files.showFiles();
+				if (inEditMode) {
+					me._disableButtons(false, 1);
+					me.setAdminMode();
 				} else {
-					ns.showError("Ошибка сохранения запроса", operation.getError());
-					if (inEditMode)
-						me.setAdminMode();
-					else
-						me.setViewOnly(false);
-					// Провал на первом уровне
-					fail1();
+					me._disableButtons(false, 1, 4);
+					me.setViewOnly(false);
 				}
 			}
 		});
@@ -154,33 +148,9 @@ Ext.define('qqext.view.reg.VRegForm', {
 			me.setViewOnly(true);
 			me.updateRecord();
 
-			if (!inEditMode)
-				model.set('status', ns.statsId[ns.stats.onreg]);
-			// Заполняем обязательные поля:
-			if (!model.get('id')) { // Только для новых моделей
-				model.set('createOrg', ns.orgId);
-				me._saveModel(function () {
-					me._disableButtons(false, 0);
-				}, function () {
-					me._disableButtons(false, 1, 4);
-				}, function () {
-					me._disableButtons(false, 1, 3, 4);
-				});
-			} else {
-				me._saveModel(function () {
-					me._disableButtons(false, 0);
-				}, function () {
-					if (inEditMode)
-						me._disableButtons(false, 1);
-					else
-						me._disableButtons(false, 1, 4);
-				}, function () {
-					if (inEditMode)
-						me._disableButtons(false, 1);
-					else
-						me._disableButtons(false, 1, 3, 4);
-				}, inEditMode);
-			}
+			me._saveModel(function () {
+				me._disableButtons(false, 0);
+			}, inEditMode);
 		}
 		/**
 		 * Обрабатывает событие 'click' на кнопке "Удалить"
@@ -251,10 +221,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 				me._saveModel(function () {
 					ns.turnOnArticles(ns.btns.notify, ns.btns.trans);
 					me._disableButtons(false, 2);
-				}, function () { // Не смогли сохранить ничего
-					me._disableButtons(false, 1, 4);
-				}, function () { // Не смогли сохранить заявителя
-					me._disableButtons(false, 1, 3, 4);
 				});
 //					}
 			} else { // Валидация не прошла
@@ -374,13 +340,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 * @returns {qqext.model.Question} модель
 	 */
 	initModel: function (model) {
-		var me = this;
-		if (model)
-			return me.model = model;
-		var createCmp = Ext.create,
-				model = me.model = createCmp('qqext.model.Question');
-		model.setAppl(createCmp('ApplicantModel'));
-		return model;
+		return this.model = model ? model : Ext.create('qqext.model.Question');
 	},
 	/**
 	 * Проверяет форму на валидность (для прохождения регистрации).
@@ -416,7 +376,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 		me.target.hide();
 		me.applicant.appType.setValue(null);
 		qqext.statusPanel.setStatus('');
-		me.doLayout();
+//		me.doLayout();
 	},
 	/**
 	 * Устанавливает плановую дату исполнения запроса.

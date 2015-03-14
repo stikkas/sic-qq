@@ -89,25 +89,26 @@ Ext.define('qqext.view.journal.VJournalForm', {
 	},
 	/**
 	 * Запускает процесс поиска данных на сервере
-	 * @deprecated за ненадобностью
+	 * Вызывается только при обновлении модели, программно (не по нажатия на кнопку)
+	 * Поэтому фильтры обновлять не нужно
 	 */
-	/*
-	 exec: function () {
-	 var store = this.getStore();
-	 this._fltrs.forEach(function (fltr) {
-	 var exists = false;
-	 store.filters.each(function (f) {
-	 if (f.property === fltr.property) {
-	 exists = true;
-	 return false;
-	 }
-	 });
-	 if (!exists)
-	 store.addFilter(fltr);
-	 });
-	 store.reload();
-	 },
-	 */
+	exec: function () {
+		var store = this.getStore();
+		/*
+		this._fltrs.forEach(function (fltr) {
+			var exists = false;
+			store.filters.each(function (f) {
+				if (f.property === fltr.property) {
+					exists = true;
+					return false;
+				}
+			});
+			if (!exists)
+				store.addFilter(fltr);
+		});
+		*/
+		store.reload();
+	},
 	applyFilter: function () {
 		var me = this,
 				filters = [],

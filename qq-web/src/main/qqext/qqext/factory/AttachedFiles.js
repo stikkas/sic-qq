@@ -87,7 +87,7 @@ Ext.define('qqext.factory.AttachedFiles', {
 	 */
 	loadRecord: function (store, setOnly) {
 		var me = this;
-		me._st = store;
+		me._st = store ? store : [];
 		if (!setOnly && qqext.request)
 			setTimeout(function () {
 				me.showFiles();
@@ -132,6 +132,7 @@ Ext.define('qqext.factory.AttachedFiles', {
 	 * @param {Function} success вызывается в случае успешного сохранения
 	 * @param {Function} fail вызывается в случае ошибки сохранения
 	 */
+	/*
 	save: function (id, success, fail) {
 		var me = this;
 		me.getForm().submit({
@@ -166,12 +167,13 @@ Ext.define('qqext.factory.AttachedFiles', {
 				fail();
 			}
 		});
-	},
+	},*/
 	/**
 	 * Удаляем все файлы на сервере. this._st содержит данные о файлах,
 	 * которые существуют на сервере. Информация о файлах в базе уже нет, удалилась
 	 * когда удалили запрос.
 	 */
+	/*
 	remove: function () {
 		var store = this._st;
 		if (store.count()) {
@@ -186,6 +188,7 @@ Ext.define('qqext.factory.AttachedFiles', {
 			});
 		}
 	},
+	*/
 	isValid: function () {
 		if (this.allowBlank === false && this._fl.items.getCount() < 2) {
 			this._errors = "<p>" + this._title + ": Необходимо прикрепить файлы<br/></p>";

@@ -51,6 +51,15 @@ public class AttachedFile implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Question question;
 
+	public AttachedFile() {
+	}
+
+	public AttachedFile(String name, Long type, Long qid) {
+		this.name = name;
+		this.type = type;
+		this.qid = qid;
+	}
+
 	public Long getId() {
 		return id;
 	}

@@ -27,6 +27,7 @@ Ext.define('qqext.view.reg.VQuery', {
 				me.vz = createCmp('FComboBox', 'Вид запроса', ns.stIds.queryType, 'questionType', {
 					listeners: {
 						change: function (box, value) {
+							console.log(value);
 							var target = ns.regForm.target,
 									code = box.getStore().getById(value).get('code');
 							if (code === 'Q_VALUE_QUEST_TYPE_TEMATIC')

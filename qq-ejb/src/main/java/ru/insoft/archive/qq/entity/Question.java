@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -20,6 +22,9 @@ import javax.persistence.TemporalType;
  *
  * @author Благодатских С.
  */
+@NamedQueries({
+	@NamedQuery(name = "Question.maxNumber",
+			query = "SELECT MAX(q.prefix) FROM Question q WHERE q.litera = :litera AND q.sufix = :sufix")})
 @Entity
 @Table(name = "SIC_QUESTION")
 public class Question implements Serializable {
@@ -27,8 +32,8 @@ public class Question implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(generator = "SEQ_SIC_QUESTION", strategy = GenerationType.SEQUENCE)
-	@SequenceGenerator(name = "SEQ_SIC_QUESTION", sequenceName = "SEQ_SIC_QUESTION", allocationSize = 1)
+	@GeneratedValue(generator = "sicQuestionGen", strategy = GenerationType.SEQUENCE)
+	@SequenceGenerator(name = "sicQuestionGen", sequenceName = "SEQ_SIC_QUESTION", allocationSize = 1)
 	@Column(name = "ID")
 	private Long id;
 
@@ -104,7 +109,7 @@ public class Question implements Serializable {
 	 * Мотивированный отказ
 	 */
 	@Column(name = "MOTIV_OTKAZ")
-	private Short motivRefuse;
+	private Boolean motivRefuse;
 
 	/**
 	 * Тип заявителя
@@ -317,11 +322,11 @@ public class Question implements Serializable {
 		this.replyForm = replyForm;
 	}
 
-	public Short getMotivRefuse() {
+	public Boolean getMotivRefuse() {
 		return motivRefuse;
 	}
 
-	public void setMotivRefuse(Short motivRefuse) {
+	public void setMotivRefuse(Boolean motivRefuse) {
 		this.motivRefuse = motivRefuse;
 	}
 

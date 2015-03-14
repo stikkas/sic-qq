@@ -39,7 +39,7 @@ Ext.define('qqext.model.Question', {
 		// Форма выдачи ответа
 		{name: 'replyForm', type: 'int', defaultValue: null, convert: null},
 		// Мотивированный отказ
-		{name: 'motivRefuse', type: 'int', defaultValue: 0, convert: null},
+		{name: 'motivRefuse', type: 'boolean', defaultValue: false, convert: null},
 		// Тип заявителя
 		{name: 'applType', type: 'int', defaultValue: null, convert: null},
 		// Фамилия

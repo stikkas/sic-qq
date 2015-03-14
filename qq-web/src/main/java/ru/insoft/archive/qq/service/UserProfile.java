@@ -1,13 +1,16 @@
 package ru.insoft.archive.qq.service;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import ru.insoft.archive.qq.dao.AdmUserDao;
+import ru.insoft.archive.qq.dao.DictDao;
 import ru.insoft.archive.qq.ejb.DictCodes;
 import ru.insoft.archive.qq.ejb.Store;
+import ru.insoft.archive.qq.entity.CoreParameter;
 
 /**
  * Предоставляет данные по пользователю сессии
@@ -20,9 +23,32 @@ public class UserProfile implements Serializable {
 	@Inject
 	private AdmUserDao userDao;
 
+	@Inject 
+	private DictDao dd;
+
 	@Inject
 	private Store store;
 
+	/**
+	 * Корень файловой системы для прикрепленных файлов
+	 */
+	private String rootPath;
+	/**
+	 * Папка для файлов этого приложения
+	 */
+	private String qqPath;
+	/**
+	 * Папка для файлов уведомления заявителю
+	 */
+	private String notiFilesPath;
+	/**
+	 * Папка для файлов заявителя
+	 */
+	private String applicantFilesPath;
+	/**
+	 * Папка для файлов ответа
+	 */
+	private String replyFilesPath;
 	/**
 	 * Данные пользователя. Делается именно так, иначе REST не может правильно
 	 * игнорировать userDao при передаче пользователю и вываливается с ошибкой.
@@ -46,6 +72,26 @@ public class UserProfile implements Serializable {
 		data.sicId = store.getIdByCode(DictCodes.Q_VALUE_MEMBER_SIC);
 
 		data.sic = data.organization.equals(data.sicId);
+		for (CoreParameter p : dd.getCoreParams(Arrays.asList(DictCodes.DOCUMENT_ROOT,
+				DictCodes.QQ_DOC_ROOT, DictCodes.QQ_INFO_DOC, DictCodes.QQ_APPLICANT_DOC,
+				DictCodes.QQ_ANSWER_DOC))) {
+			switch (p.getCode()) {
+				case DictCodes.DOCUMENT_ROOT:
+					rootPath = p.getValue();
+					break;
+				case DictCodes.QQ_DOC_ROOT:
+					qqPath = p.getValue();
+					break;
+				case DictCodes.QQ_INFO_DOC:
+					notiFilesPath = p.getValue();
+					break;
+				case DictCodes.QQ_APPLICANT_DOC:
+					applicantFilesPath = p.getValue();
+					break;
+				case DictCodes.QQ_ANSWER_DOC:
+					replyFilesPath = p.getValue();
+			}
+		}
 	}
 
 	public Long getOrganization() {
@@ -70,6 +116,26 @@ public class UserProfile implements Serializable {
 
 	public AdmUserDao getUserDao() {
 		return userDao;
+	}
+
+	public String getRootPath() {
+		return rootPath;
+	}
+
+	public String getQqPath() {
+		return qqPath;
+	}
+
+	public String getNotiFilesPath() {
+		return notiFilesPath;
+	}
+
+	public String getApplicantFilesPath() {
+		return applicantFilesPath;
+	}
+
+	public String getReplyFilesPath() {
+		return replyFilesPath;
 	}
 
 }

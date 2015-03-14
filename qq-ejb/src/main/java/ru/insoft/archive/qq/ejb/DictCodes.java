@@ -176,4 +176,26 @@ public class DictCodes {
 	 * Исполнитель
 	 */
 	public static final String Q_RULE_EXECUTOR = "Q_RULE_EXECUTOR";
+
+	// Параметры настройки
+	/**
+	 * Корень файловой системы
+	 */
+	public static final String DOCUMENT_ROOT = "DOCUMENT_ROOT";
+	/**
+	 * Папка для файлов
+	 */
+	public static final String QQ_DOC_ROOT = "QQ_DOC_ROOT";
+	/**
+	 * Папка для файлов уведомления заявителю
+	 */
+	public static final String QQ_INFO_DOC = "QQ_INFO_DOC";
+	/**
+	 * Папка для файлов заявителя
+	 */
+	public static final String QQ_APPLICANT_DOC = "QQ_APPLICANT_DOC";
+	/**
+	 * Папка для файлов ответа
+	 */
+	public static final String QQ_ANSWER_DOC = "QQ_ANSWER_DOC";
 }

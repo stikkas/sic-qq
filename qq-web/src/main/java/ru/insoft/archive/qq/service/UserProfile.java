@@ -1,6 +1,8 @@
 package ru.insoft.archive.qq.service;
 
+import ru.insoft.archive.qq.service.dto.UserData;
 import java.io.Serializable;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -29,10 +31,6 @@ public class UserProfile implements Serializable {
 	@Inject
 	private Store store;
 
-	/**
-	 * Корень файловой системы для прикрепленных файлов
-	 */
-	private String rootPath;
 	/**
 	 * Папка для файлов этого приложения
 	 */
@@ -72,6 +70,7 @@ public class UserProfile implements Serializable {
 		data.sicId = store.getIdByCode(DictCodes.Q_VALUE_MEMBER_SIC);
 
 		data.sic = data.organization.equals(data.sicId);
+		String rootPath = "";
 		for (CoreParameter p : dd.getCoreParams(Arrays.asList(DictCodes.DOCUMENT_ROOT,
 				DictCodes.QQ_DOC_ROOT, DictCodes.QQ_INFO_DOC, DictCodes.QQ_APPLICANT_DOC,
 				DictCodes.QQ_ANSWER_DOC))) {
@@ -92,6 +91,7 @@ public class UserProfile implements Serializable {
 					replyFilesPath = p.getValue();
 			}
 		}
+		qqPath = Paths.get(rootPath, qqPath).toString();
 	}
 
 	public Long getOrganization() {
@@ -116,10 +116,6 @@ public class UserProfile implements Serializable {
 
 	public AdmUserDao getUserDao() {
 		return userDao;
-	}
-
-	public String getRootPath() {
-		return rootPath;
 	}
 
 	public String getQqPath() {

@@ -1,4 +1,4 @@
-package ru.insoft.archive.qq.service;
+package ru.insoft.archive.qq.service.dto;
 
 /**
  * Класс для передачи данных после выполнени действия submit формы. если вернуть

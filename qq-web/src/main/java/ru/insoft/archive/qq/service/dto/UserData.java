@@ -1,6 +1,4 @@
-package ru.insoft.archive.qq.service;
-
-import java.util.List;
+package ru.insoft.archive.qq.service.dto;
 
 /**
  * Класс для хранения данных о текущем пользователе

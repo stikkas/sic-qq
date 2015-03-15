@@ -21,19 +21,19 @@ Ext.define('qqext.controller.AttachedFiles', {
 		this.control({
 			'vregform attachedfiles filesList button[action=removeExisting]': {
 				click: function (btn) {
-					this.getAppl().deletedFiles.push(btn.fileId);
+					this.getAppl().deletedFiles.push([btn.fileId, btn.fileName]);
 					btn.up('filesList').remove(btn.up());
 				}
 			},
 			'vexecform attachedfiles filesList button[action=removeExisting]': {
 				click: function (btn) {
-					this.getAnsw().deletedFiles.push(btn.fileId);
+					this.getAnsw().deletedFiles.push([btn.fileId, btn.fileName]);
 					btn.up('filesList').remove(btn.up());
 				}
 			},
 			'vinfoform attachedfiles filesList button[action=removeExisting]': {
 				click: function (btn) {
-					this.getInfo().deletedFiles.push(btn.fileId);
+					this.getInfo().deletedFiles.push([btn.fileId, btn.fileName]);
 					btn.up('filesList').remove(btn.up());
 				}
 			}

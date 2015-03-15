@@ -100,6 +100,7 @@ Ext.define('qqext.factory.AttachedFiles', {
 		var me = this,
 				store = me._st;
 		me._fl.clearFiles();
+		me.deletedFiles = [];
 		if (store.length) {
 			var path = me._url + store[0].qid + "/";
 			store.forEach(function (file) {
@@ -133,62 +134,62 @@ Ext.define('qqext.factory.AttachedFiles', {
 	 * @param {Function} fail вызывается в случае ошибки сохранения
 	 */
 	/*
-	save: function (id, success, fail) {
-		var me = this;
-		me.getForm().submit({
-			clientValidation: false,
-			url: 'rest/SaveAttachedFiles',
-			params: {
-				type: me._type,
-				question: id,
-				path: me._path,
-				deletedFiles: Ext.encode(me.deletedFiles)
-			},
-			success: function (form, action) {
-				// Обновляем данные в хранилище, после успешного сохранения файлов
-				me._st.load({
-					callback: function (records, operation, stat) {
-						if (stat) {
-							me.reset();
-							me.showFiles();
-							me.setViewOnly(true);
-							success();
-							me.deletedFiles = [];
-						} else {
-							qqext.showError("Ошибка загрузки данных", operation.getError());
-							fail();
-						}
-					}});
-			},
-			failure: function (form, action) {
-				qqext.showError("Ошибка сохранения файлов", action.response.responseText);
-				me.reset();
-				me.showFiles();
-				fail();
-			}
-		});
-	},*/
+	 save: function (id, success, fail) {
+	 var me = this;
+	 me.getForm().submit({
+	 clientValidation: false,
+	 url: 'rest/SaveAttachedFiles',
+	 params: {
+	 type: me._type,
+	 question: id,
+	 path: me._path,
+	 deletedFiles: Ext.encode(me.deletedFiles)
+	 },
+	 success: function (form, action) {
+	 // Обновляем данные в хранилище, после успешного сохранения файлов
+	 me._st.load({
+	 callback: function (records, operation, stat) {
+	 if (stat) {
+	 me.reset();
+	 me.showFiles();
+	 me.setViewOnly(true);
+	 success();
+	 me.deletedFiles = [];
+	 } else {
+	 qqext.showError("Ошибка загрузки данных", operation.getError());
+	 fail();
+	 }
+	 }});
+	 },
+	 failure: function (form, action) {
+	 qqext.showError("Ошибка сохранения файлов", action.response.responseText);
+	 me.reset();
+	 me.showFiles();
+	 fail();
+	 }
+	 });
+	 },*/
 	/**
 	 * Удаляем все файлы на сервере. this._st содержит данные о файлах,
 	 * которые существуют на сервере. Информация о файлах в базе уже нет, удалилась
 	 * когда удалили запрос.
 	 */
 	/*
-	remove: function () {
-		var store = this._st;
-		if (store.count()) {
-			var dir = this._path + store.getAt(0).get('question') + "/",
-					names = [];
-			store.each(function (rec) {
-				names.push(rec.get('name'));
-			});
-			Ext.Ajax.request({
-				url: '/qq-web/rest/attachedfile/delete',
-				jsonData: {name: names, dir: dir}
-			});
-		}
-	},
-	*/
+	 remove: function () {
+	 var store = this._st;
+	 if (store.count()) {
+	 var dir = this._path + store.getAt(0).get('question') + "/",
+	 names = [];
+	 store.each(function (rec) {
+	 names.push(rec.get('name'));
+	 });
+	 Ext.Ajax.request({
+	 url: '/qq-web/rest/attachedfile/delete',
+	 jsonData: {name: names, dir: dir}
+	 });
+	 }
+	 },
+	 */
 	isValid: function () {
 		if (this.allowBlank === false && this._fl.items.getCount() < 2) {
 			this._errors = "<p>" + this._title + ": Необходимо прикрепить файлы<br/></p>";

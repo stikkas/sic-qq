@@ -1,5 +1,6 @@
 package ru.insoft.archive.qq.service;
 
+import ru.insoft.archive.qq.service.dto.UserData;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

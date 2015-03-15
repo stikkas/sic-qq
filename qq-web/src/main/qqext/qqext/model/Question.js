@@ -78,7 +78,9 @@ Ext.define('qqext.model.Question', {
 		// На кого запрос, год рождения
 		{name: 'objBYear', type: 'int', defaultValue: null, convert: null},
 		// Статус запроса
-		{name: 'status', type: 'int', defaultValue: null, convert: null}
+		{name: 'status', type: 'int', defaultValue: null, convert: null},
+		// Статус уведомления
+		{name: 'notiStatus', type: 'int', defaultValue: null, convert: null}
 	],
 	proxy: {
 		type: 'rest',
@@ -86,7 +88,7 @@ Ext.define('qqext.model.Question', {
 		reader: {
 			type: 'json',
 			/** 
-			 * решил отказаться от ассоциаций, что-то автоматом они не подключются
+			 * решил отказаться от ассоциаций, что-то автоматом они не подключаются
 			 * использую обыкновенный массив объектов
 			 * поля для файлов: 
 			 * id - идентификатор файла, name - имя файла, без  пути, 

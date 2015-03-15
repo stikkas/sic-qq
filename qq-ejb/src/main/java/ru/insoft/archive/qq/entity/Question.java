@@ -221,6 +221,12 @@ public class Question implements Serializable {
 	private Long status;
 
 	/**
+	 * Статус уведомления
+	 */
+	@Column(name = "NOTI_STATUS_ID")
+	private Long notiStatus;
+
+	/**
 	 * Документы заявителя, устанавливаются при получении запроса по id
 	 */
 	@OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
@@ -480,6 +486,14 @@ public class Question implements Serializable {
 
 	public void setFiles(List<AttachedFile> files) {
 		this.files = files;
+	}
+
+	public Long getNotiStatus() {
+		return notiStatus;
+	}
+
+	public void setNotiStatus(Long notiStatus) {
+		this.notiStatus = notiStatus;
 	}
 
 }

@@ -90,16 +90,15 @@ Ext.define('qqext.view.reg.VRegForm', {
 		var me = this,
 				model = me.model,
 				ns = qqext,
-				id = model.get('id'),
 				files = me.files;
 
 		files.getForm().submit({
 			clientValidation: false,
 			url: 'rest/question',
-			method: id ? 'PUT' : 'POST',
+			method: 'POST',
 			params: {
 				deletedFiles: Ext.encode(files.deletedFiles),
-				question: Ext.encode(model.getData())
+				model: Ext.encode(model.getData())
 			},
 			success: function (form, action) {
 				var data = action.result.data;
@@ -135,8 +134,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 			if (!ns.checkDates([me.query.pd, me.applicant.dt]))
 				return;
 			var model = me.model,
-					now = new Date(),
-					year = now.getYear() + 1900,
 					currentStatus = model.get('status'),
 					inEditMode = currentStatus && currentStatus !== ns.statsId[ns.stats.onreg];
 
@@ -188,8 +185,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 			var model = me.model,
 					status;
 			if (me.validate()) {
-				var userId = ns.userId,
-						now = new Date();
+				var now = new Date();
 				/*
 				 if (me.query.mr.getValue()) { // Добавляем один день к плановой дате, если отказ
 				 var plannedDateCombo = me.query.pd,
@@ -209,20 +205,20 @@ Ext.define('qqext.view.reg.VRegForm', {
 				me.updateRecord();
 
 				model.set('status', ns.statsId[status]);
-				if (model.get('litera') === ns.sicId) {
+				if (ns.isSIC) {
+//				if (model.get('litera') === ns.sicId) {
 					if (model.get('execOrg') === ns.sicId)
-						model.set('notifyStatus', ns.notiStatsId[ns.notiStats.none]);
+						model.set('notiStatus', ns.notiStatsId[ns.notiStats.none]);
 					else
-						model.set('notifyStatus', ns.notiStatsId[ns.notiStats.noexec]);
+						model.set('notiStatus', ns.notiStatsId[ns.notiStats.noexec]);
 				}
-				model.set('registrator', userId);
+				model.set('registrator', ns.userId);
 				model.set('regDate', now);
 
 				me._saveModel(function () {
 					ns.turnOnArticles(ns.btns.notify, ns.btns.trans);
 					me._disableButtons(false, 2);
 				});
-//					}
 			} else { // Валидация не прошла
 				me._disableButtons(false, 1, 3, 4);
 				me.setViewOnly(false);

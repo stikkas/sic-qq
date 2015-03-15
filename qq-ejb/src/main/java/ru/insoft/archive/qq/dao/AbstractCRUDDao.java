@@ -21,7 +21,7 @@ public abstract class AbstractCRUDDao<T> extends AbstractDao{
 	}
 
 	public T update(T entity) {
-		em.persist(entity);
+		em.merge(entity);
 		return entity;
 	}
 
@@ -29,7 +29,7 @@ public abstract class AbstractCRUDDao<T> extends AbstractDao{
 		return em.find(type, id);
 	}
 
-	public void remove(T entity) {
-		em.remove(entity);
+	public void remove(Long id) {
+		em.remove(em.find(type, id));
 	}
 }

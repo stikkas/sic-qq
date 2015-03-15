@@ -23,7 +23,7 @@ public class ApplicationConfig extends Application {
 	 * out calling this method in getClasses().
 	 */
 	private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(ru.insoft.archive.qq.service.DictService.class);
+		resources.add(ru.insoft.archive.qq.service.DictService.class);
 		resources.add(ru.insoft.archive.qq.service.JvkService.class);
 		resources.add(ru.insoft.archive.qq.service.QuestionService.class);
 		resources.add(ru.insoft.archive.qq.service.UserService.class);

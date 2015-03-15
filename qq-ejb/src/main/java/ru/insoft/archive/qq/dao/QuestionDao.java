@@ -3,8 +3,6 @@ package ru.insoft.archive.qq.dao;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import ru.insoft.archive.qq.ejb.DictCodes;
 import ru.insoft.archive.qq.entity.Question;
 
@@ -24,12 +22,14 @@ public class QuestionDao extends AbstractCRUDDao<Question> {
 	public Question find(Long id) {
 		Question entity = super.find(id);
 		if (entity != null) {
-			entity.setFiles(em.createNamedQuery("AttachedFile.questionFilesWithType")
-					.setParameter("question", id)
-					.setParameter("type", store.getIdByCode(DictCodes.Q_VALUE_FILE_TYPE_APP_DOCS))
-					.getResultList());
+			return setFiles(entity);
 		}
 		return entity;
+	}
+
+	@Override
+	public Question update(Question entity) {
+		return setFiles(super.update(entity));
 	}
 
 	@Override
@@ -54,4 +54,16 @@ public class QuestionDao extends AbstractCRUDDao<Question> {
 		return super.create(entity);
 	}
 
+	/**
+	 * Устанавливает список файлов, принадлежащих запросу
+	 *
+	 * @param entity сущность запроса
+	 */
+	private Question setFiles(Question entity) {
+		entity.setFiles(em.createNamedQuery("AttachedFile.questionFilesWithType")
+				.setParameter("question", entity.getId())
+				.setParameter("type", store.getIdByCode(DictCodes.Q_VALUE_FILE_TYPE_APP_DOCS))
+				.getResultList());
+		return entity;
+	}
 }

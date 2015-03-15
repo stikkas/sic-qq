@@ -17,6 +17,7 @@ public class AttachedFileDao extends AbstractCRUDDao<AttachedFile> {
 
 	/**
 	 * Создает записи по прикрепленным файлам в базе
+	 *
 	 * @param fileNames список имен файлов
 	 * @param fileType тип файла
 	 * @param ownerId идентификатор запроса
@@ -25,5 +26,15 @@ public class AttachedFileDao extends AbstractCRUDDao<AttachedFile> {
 		for (String fileName : fileNames) {
 			create(new AttachedFile(fileName, store.getIdByCode(fileType), ownerId));
 		}
+	}
+
+	/**
+	 * Удаляет записи по прикрепленным файлам в базе
+	 *
+	 * @param ids список идентификаторов файлов для удаления
+	 */
+	public void remove(Set<Long> ids) {
+		em.createQuery("DELETE FROM AttachedFile a WHERE a.id in :ids")
+				.setParameter("ids", ids).executeUpdate();
 	}
 }

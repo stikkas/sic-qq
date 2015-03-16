@@ -195,7 +195,7 @@ Ext.define('qqext.Menu', {
 			 */
 			function returnToSearch(btn) {
 				// Удаляем ссылку на запрос, с которым работали
-				ns.request = null;
+				ns.resetModel();
 				editMenuLayout.setActiveItem(0);
 				articleMenuLayout.setActiveItem(0);
 				ns.setCurrentForm(btn.form);
@@ -216,7 +216,7 @@ Ext.define('qqext.Menu', {
 					} else {
 						getButton(btns.toSearch).form = ns.getCurrentForm();
 					}
-					ns.request = null;
+					ns.resetModel();
 					// Переключаем форму, дальше все выполняется в форме по событию
 					// 'activate'
 					articleMenuLayout.setActiveItem(1);

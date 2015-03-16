@@ -78,13 +78,17 @@ Ext.define('qqext.factory.AttachedFiles', {
 	loadRecord: function (store, setOnly) {
 		var me = this;
 		me._st = store ? store : [];
-		if (!setOnly && qqext.request)
+		if (!setOnly && qqext.creq.q)
 			setTimeout(function () {
 				me.showFiles();
 			}, 1000);
 	},
 	/**
 	 * Отображает файлы, информация о которых находится во внутреннем хранилище
+	 * Каждый объект внутреннего хранилища компонента представляет собой:
+	 * {id: идентификатор файла
+	 * 	name: имя файла,
+	 *  qid: идентификатор запроса, которому принадлежит файл}
 	 */
 	showFiles: function () {
 		var me = this,
@@ -116,70 +120,7 @@ Ext.define('qqext.factory.AttachedFiles', {
 	reset: function () {
 		this._fl.clearFiles();
 	},
-	/**
-	 * Сохраняет файлы на сервере. Информацию в базу записывает
-	 * сам сервер.
-	 * @param {Number/String} id идентификатор запроса
-	 * @param {Function} success вызывается в случае успешного сохранения
-	 * @param {Function} fail вызывается в случае ошибки сохранения
-	 */
-	/*
-	 save: function (id, success, fail) {
-	 var me = this;
-	 me.getForm().submit({
-	 clientValidation: false,
-	 url: 'rest/SaveAttachedFiles',
-	 params: {
-	 type: me._type,
-	 question: id,
-	 path: me._path,
-	 deletedFiles: Ext.encode(me.deletedFiles)
-	 },
-	 success: function (form, action) {
-	 // Обновляем данные в хранилище, после успешного сохранения файлов
-	 me._st.load({
-	 callback: function (records, operation, stat) {
-	 if (stat) {
-	 me.reset();
-	 me.showFiles();
-	 me.setViewOnly(true);
-	 success();
-	 me.deletedFiles = [];
-	 } else {
-	 qqext.showError("Ошибка загрузки данных", operation.getError());
-	 fail();
-	 }
-	 }});
-	 },
-	 failure: function (form, action) {
-	 qqext.showError("Ошибка сохранения файлов", action.response.responseText);
-	 me.reset();
-	 me.showFiles();
-	 fail();
-	 }
-	 });
-	 },*/
-	/**
-	 * Удаляем все файлы на сервере. this._st содержит данные о файлах,
-	 * которые существуют на сервере. Информация о файлах в базе уже нет, удалилась
-	 * когда удалили запрос.
-	 */
-	/*
-	 remove: function () {
-	 var store = this._st;
-	 if (store.count()) {
-	 var dir = this._path + store.getAt(0).get('question') + "/",
-	 names = [];
-	 store.each(function (rec) {
-	 names.push(rec.get('name'));
-	 });
-	 Ext.Ajax.request({
-	 url: '/qq-web/rest/attachedfile/delete',
-	 jsonData: {name: names, dir: dir}
-	 });
-	 }
-	 },
-	 */
+
 	isValid: function () {
 		if (this.allowBlank === false && this._fl.items.getCount() < 2) {
 			this._errors = "<p>" + this._title + ": Необходимо прикрепить файлы<br/></p>";

@@ -35,10 +35,10 @@ Ext.define('qqext.view.reg.VRegForm', {
 					model;
 			ns.switchArticleButton(ns.getButton(ns.btns.reg));
 			ns.Menu.setEditMenu(me._idx);
-			if (ns.request === null) {
+			if (ns.creq.q === null) {
 				// Значит событие случилось по нажатию на кнопку "Добавить"
 				me.clear();
-				model = me.initModel();
+				model = ns.creq.q = Ext.create('qqext.model.Question');
 				//Кнопки "Редактировать" "Печать" и "Удалить"
 				me._disableButtons(true, 0, 2, 3);
 				//Кнопки "Сохранить" и "Регистрировать"
@@ -55,7 +55,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 			} else if (prev === ns.searchForm || prev === ns.jvkForm) {
 				// Значит пришли по двойному клику на существуещем запросе, (открыли существующий запрос)
 				me.clear();
-				model = me.initModel(ns.request);
+				model = ns.creq.q;
 				me._disableButtons(true, 1, 3, 4);
 
 				var hasRegRule = ns.reg,
@@ -72,6 +72,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 			}
 
 			if (!ns.isSIC) {
+				// Скрываем выбор исполнителя
 				var executor = me.inbox.executor;
 				executor.setViewOnly(true);
 				executor.viewOnly = true;
@@ -88,7 +89,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 	 */
 	_saveModel: function (success, inEditMode) {
 		var me = this,
-				model = me.model,
 				ns = qqext,
 				files = me.files;
 
@@ -98,12 +98,12 @@ Ext.define('qqext.view.reg.VRegForm', {
 			method: 'POST',
 			params: {
 				deletedFiles: Ext.encode(files.deletedFiles),
-				model: Ext.encode(model.getData())
+				model: Ext.encode(ns.creq.q.getData())
 			},
 			success: function (form, action) {
 				var data = action.result.data;
-				ns.request = me.model = Ext.create('qqext.model.Question', data);
-				me.model.files = data.files;
+				ns.creq.q = Ext.create('qqext.model.Question', data);
+				ns.creq.q.files = data.files;
 				me.loadRecord();
 				ns.statusPanel.setStatus();
 				ns.infoChanged = true;
@@ -133,8 +133,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 		function save() {
 			if (!ns.checkDates([me.query.pd, me.applicant.dt]))
 				return;
-			var model = me.model,
-					currentStatus = model.get('status'),
+			var currentStatus = ns.creq.q.get('status'),
 					inEditMode = currentStatus && currentStatus !== ns.statsId[ns.stats.onreg];
 
 			if (inEditMode && !me.validate())
@@ -155,12 +154,10 @@ Ext.define('qqext.view.reg.VRegForm', {
 		 * @returns {undefined}
 		 */
 		function remove() {
-			//			var me = this;
-			me.model.destroy({
+			ns.creq.q.destroy({
 				callback: function (recs, operation) {
 					if (operation.success) {
 						me.files.remove();
-						me.model = ns.request = null;
 						ns.infoChanged = true;
 						ns.getButton(ns.btns.toSearch).fireEvent('click');
 					} else {
@@ -182,7 +179,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 			me._disableButtons(true, 1, 3, 4);
 			me.setViewOnly(true);
 			me._setPD();
-			var model = me.model,
+			var model = ns.creq.q,
 					status;
 			if (me.validate()) {
 				var now = new Date();
@@ -226,9 +223,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 		}
 		// Выполняет печать (переправку пользователся на открытие документа) выписки создания запроса
 		function print() {
-			var model = me.model;
-			console.log(ns.urls.vypiska + '?prefix=' + model.get('prefix') +
-					'&sufix=' + model.get('sufix') + '&litera=' + model.get('litera'));
+			var model = ns.creq.q;
 			window.open(ns.urls.vypiska + '?prefix=' + model.get('prefix') +
 					'&sufix=' + model.get('sufix') + '&litera=' + model.get('litera'));
 		}
@@ -302,42 +297,28 @@ Ext.define('qqext.view.reg.VRegForm', {
 	/**
 	 * Метод для выполнения операций loadRecord и updateRecord
 	 * @param {String} action операция для выполнения
-	 * @param {Boolean} withoutFiles не загружать модель файлов
 	 * @private
 	 */
-	_mAction: function (action, withoutFiles) {
+	_mAction: function (action) {
 		var me = this,
-				model = me.model;
-		[me.inbox, me.query,
-			me.target
-		].forEach(function (f) {
+				model = qqext.creq.q;
+		[me.inbox, me.query, me.target].forEach(function (f) {
 			f[action](model);
 		});
-		if (!withoutFiles) {
-			me.applicant[action](model);
-			me.files[action](model.files);
-		}
+		me.applicant[action](model);
+		me.files[action](model.files);
 	},
 	/**
 	 * Загружает данные из модели на форму
-	 * @param {Boolean} withoutFiles не загружать модель файлов
 	 */
-	loadRecord: function (withoutFiles) {
-		this._mAction('loadRecord', withoutFiles);
+	loadRecord: function () {
+		this._mAction('loadRecord');
 	},
 	/**
 	 * Сохраняет данные формы в модели
 	 */
 	updateRecord: function () {
 		this._mAction('updateRecord');
-	},
-	/**
-	 * Инициализирует модель для формы, если глобальная модель не задана, то создается новая
-	 * @param {qqext.model.Question} model если задана то модель формы инициализируется ей
-	 * @returns {qqext.model.Question} модель
-	 */
-	initModel: function (model) {
-		return this.model = model ? model : Ext.create('qqext.model.Question');
 	},
 	/**
 	 * Проверяет форму на валидность (для прохождения регистрации).

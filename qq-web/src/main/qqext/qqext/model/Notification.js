@@ -1,45 +1,36 @@
-Ext.define('qqext.model.Notification', (function () {
-	var ns = Ext.ns('qqext'),
-			notf = ns.notification = {
-				executor: ['executor', 'ФИО исполнителя'],
-				docType: ['docType', 'Тип документов'],
-				toWhom: ['toWhom', 'Кому'],
-				deliveryType: ['deliveryType', 'Способ передачи'],
-				notificationDate: ['notificationDate', 'Дата уведомления'],
-				issueDate: ['issueDate', 'Дата выдачи/отправки документа']
-			};
-
-	return {
-		alias: 'NotificationModel',
-		extend: 'Ext.data.Model',
-		idProperty: 'id',
-		fields: [
-			{name: 'id', type: 'int', convert: null, defaultValue: null},
-			{name: notf.executor[0], type: 'int', convert: null, defaultValue: null},
-			{name: notf.docType[0], type: 'int', convert: null, defaultValue: null},
-			{name: notf.toWhom[0], type: 'string', convert: null, defaultValue: null},
-			{name: notf.deliveryType[0], type: 'int', convert: null, defaultValue: null},
-			{name: notf.notificationDate[0], type: 'date', convert: function (v) {
-					if (v)
-						return new Date(v);
-				}},
-			{name: notf.issueDate[0], type: 'date', convert: function (v) {
-					if (v)
-						return new Date(v);
-				}}
-		],
-		belongsTo: 'qqext.model.Question',
-		associations: [
-			{type: 'hasMany', model: 'qqext.model.PreparedDoc',
-				name: 'files', foreignKey: 'question'}
-		],
-		requires: ['Ext.data.proxy.Rest',
-			'qqext.model.PreparedDoc'],
-		proxy: {
-			type: 'rest',
-			url: '/qq-web/rest/notification',
-			reader: 'json',
-			writer: 'json'
-		}
-	};
-})());
+/**
+ * Модель для формы "Уведомление заявителю"
+ */
+Ext.define('qqext.model.Notification',  {
+	extend: 'Ext.data.Model',
+	requires: [
+		'Ext.data.proxy.Rest',
+		'qqext.cmp.FilesReader'
+	],
+	idProperty: 'id',
+	fields: [
+		{name: 'id', type: 'int', convert: null, defaultValue: null},
+		{name: 'status', type: 'int', convert: null, defaultValue: null},
+		{name: 'executor', type: 'int', convert: null, defaultValue: null},
+		{name: 'docType', type: 'int', convert: null, defaultValue: null},
+		{name: 'toWhom', type: 'string', convert: null, defaultValue: null},
+		{name: 'delType', type: 'int', convert: null, defaultValue: null},
+		{name: 'notiDate', type: 'date', convert: function (v) {
+				if (v)
+					return new Date(v);
+			}},
+		{name: 'issueDate', type: 'date', convert: function (v) {
+				if (v)
+					return new Date(v);
+			}}
+	],
+	proxy: {
+		type: 'rest',
+		url: 'rest/notification',
+		reader: {
+			type: 'files',
+			model: 'qqext.model.Notification'
+		},
+		writer: 'json'
+	}
+});

@@ -231,9 +231,23 @@ Ext.application({
 		 * Хранилище с правами пользователей. Иницализируется при старте приложения.
 		 */
 		/**
-		 * @property {Ext.data.Model} request
-		 * Текущий запрос (модель Question)
+		 * @property {Object} model
+		 * Объект с моделями текущего запроса.
 		 */
+		ns.creq = {
+			q: null, // Модель регистрации запроса
+			n: null, // Модель уведомления запроса
+			t: null, // Модель передачи на исполнение запроса
+			e: null // Модель исполнения запроса
+		};
+		/**
+		 * Устанавливает модель в первоначальное состояние (обнуляет)
+		 * @method resetModel
+		 */
+		ns.resetModel = function () {
+			for (var o in ns.creq)
+				ns.creq[o] = null;
+		};
 		/**
 		 * @property {Number} msPhour
 		 * кол-во миллисекунд в часу
@@ -280,10 +294,11 @@ Ext.application({
 		 */
 		ns.edit = function () {
 			var me = this,
-					admin = ns.visor;
+					admin = ns.visor,
+					model = ns.creq.q;
 			if (me === ns.regForm) {
 				if (admin &&
-						ns.request.get('status') !== ns.statsId[statuses.onreg]) {
+						model.get('status') !== ns.statsId[statuses.onreg]) {
 					me._disableButtons(false, 1);
 					me.setAdminMode();
 				} else {
@@ -292,7 +307,7 @@ Ext.application({
 				}
 			} else if (me === ns.transForm) {
 				if (admin &&
-						ns.request.get('status') !== ns.statsId[statuses.reg]) {
+						model.get('status') !== ns.statsId[statuses.reg]) {
 					me._disableButtons(false, 1);
 					me.setAdminMode();
 				} else {
@@ -300,7 +315,7 @@ Ext.application({
 					me._disableButtons(false, 1, 2, 3);
 				}
 			} else { // Исполнение запроса
-				var status = ns.request.get('status');
+				var status = model.get('status');
 				if (status === ns.statsId[statuses.onexec]) {
 					me.setViewOnly(false);
 					me._disableButtons(false, 1, 2, 3);
@@ -434,7 +449,7 @@ Ext.application({
 		ns.turnOnArticles = function toa() {
 			var
 					user = ns.user,
-					request = ns.request,
+					model = ns.creq.q,
 					statsId = ns.statsId,
 					onreg = toa.onreg || (toa.onreg = statsId[statuses.onreg]),
 					registered = toa.reg || (toa.reg = statsId[statuses.reg]),
@@ -450,20 +465,20 @@ Ext.application({
 					case buttonNames.notify:
 						if (ns.isSIC) {
 							if ((ns.reg || ns.coor || ns.exec || ns.visor || ns.superex) &&
-									request.get('status') !== onreg &&
-									request.get('execOrg') !== ns.sicId && request.get('litera') === ns.sicId)
+									model.get('status') !== onreg &&
+									model.get('execOrg') !== ns.sicId && model.get('litera') === ns.sicId)
 								ns.disableArticles(false, buttonNames.notify);
 						}
 						break;
 					case buttonNames.trans:
 						if ((ns.reg || ns.coor || ns.exec || ns.visor || ns.superex)) {
-							if (request.get('status') !== onreg)
+							if (model.get('status') !== onreg)
 								ns.disableArticles(false, buttonNames.trans);
 						}
 						break;
 					case buttonNames.exec:
 						if ((ns.reg || ns.coor || ns.exec || ns.visor || ns.superex)) {
-							var status = request.get('status');
+							var status = model.get('status');
 							if (status === onexec || status === exec)
 								ns.disableArticles(false, buttonNames.exec);
 						}
@@ -653,9 +668,10 @@ Ext.application({
 		 * @method openRequest
 		 */
 		ns.openRequest = function (view, record) {
+			ns.resetModel();
 			ns.model.Question.load(record.get('id'), {callback: function (r, o, s) {
 					if (s) {
-						ns.request = r;
+						ns.creq.q = r;
 						ns.disableArticles(true, buttonNames.notify, buttonNames.trans, buttonNames.exec);
 						ns.turnOnArticles();
 						ns.Menu.setArticleMenu(1);

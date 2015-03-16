@@ -22,7 +22,10 @@ import org.codehaus.jackson.annotate.JsonIgnore;
  */
 @NamedQueries({
 	@NamedQuery(name = "AttachedFile.questionFilesWithType",
-			query = "SELECT a from AttachedFile a WHERE a.qid = :question and a.type = :type")})
+			query = "SELECT a from AttachedFile a WHERE a.qid = :question and a.type = :type"),
+	@NamedQuery(name = "AttachedFile.removeFilesByOwner",
+			query = "DELETE FROM AttachedFile a WHERE a.qid = :onwer and a.type = :type")
+})
 @Entity
 @Table(name = "QQ_ATTACHED_FILE")
 public class AttachedFile implements Serializable {
@@ -50,6 +53,11 @@ public class AttachedFile implements Serializable {
 	@JoinColumn(name = "QUESTION_ID", referencedColumnName = "ID", insertable = false, updatable = false)
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Question question;
+
+	@JsonIgnore
+	@JoinColumn(name = "QUESTION_ID", referencedColumnName = "ID", insertable = false, updatable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Notification notification;
 
 	public AttachedFile() {
 	}
@@ -98,6 +106,14 @@ public class AttachedFile implements Serializable {
 
 	public void setQuestion(Question question) {
 		this.question = question;
+	}
+
+	public Notification getNotification() {
+		return notification;
+	}
+
+	public void setNotification(Notification notification) {
+		this.notification = notification;
 	}
 
 	@Override

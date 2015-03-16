@@ -4,8 +4,8 @@
 Ext.define('qqext.model.Question', {
 	extend: 'Ext.data.Model',
 	requires: [
-		'qqext.model.ApplicantDoc',
-		'Ext.data.proxy.Rest'
+		'Ext.data.proxy.Rest',
+		'qqext.cmp.FilesReader'
 	],
 	fields: [
 		{name: 'id', type: 'int', defaultValue: null, convert: null, isNull: true},
@@ -86,29 +86,10 @@ Ext.define('qqext.model.Question', {
 		type: 'rest',
 		url: 'rest/question',
 		reader: {
-			type: 'json',
-			/** 
-			 * решил отказаться от ассоциаций, что-то автоматом они не подключаются
-			 * использую обыкновенный массив объектов
-			 * поля для файлов: 
-			 * id - идентификатор файла, name - имя файла, без  пути, 
-			 * qid - идентификатор запроса
-			 * @param {Object} data объект с данными по запросу
-			 */
-			readRecords: function (data) {
-				var question = new qqext.model.Question(data);
-				question.files = data.files;
-				return new Ext.data.ResultSet({
-					success: true,
-					total: 1,
-					records: [question]
-				});
-
-			}
+			type: 'files',
+			model: 'qqext.model.Question'
 		},
-		writer: {
-			type: 'json'
-		},
+		writer: 'json',
 		listeners: {
 			exception: function (proxy, answer, operation) {
 				operation.error = answer.responseText;

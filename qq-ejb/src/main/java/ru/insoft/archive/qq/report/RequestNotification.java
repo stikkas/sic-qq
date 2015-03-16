@@ -226,18 +226,16 @@ public class RequestNotification {
 	 * @return объект с данными
 	 */
 	private Result getData(Long questionId) {
-		String query = "select n.to_whom,to_char(q.REG_DATE, 'DD.MM.YYYY'),"
-				+ "concat(concat(q.PREFIX_NUM, '/'), q.sufix_num), app.issue_doc_num, q.CONTENT, d.full_value,"
-				+ "attr.av from QQ_QUESTION q LEFT JOIN QQ_APPLICANT app on q.QUESTION_ID = app.QUESTION_ID "
-				+ "LEFT JOIN QQ_NOTIFICATION n on q.QUESTION_ID = n.QUESTION_ID "
-				+ "LEFT JOIN DESCRIPTOR_VALUE d  on q.EXEC_ORG_ID = d.DESCRIPTOR_VALUE_ID "
+		List<Object[]> results = em.createNativeQuery("SELECT q.NOTI_KOMU, to_char(q.REG_DATE, 'DD.MM.YYYY'), "
+				+ "concat(concat(q.PREFIX_VHOD_DOC, '/'), q.SUFIX_VHOD_DOC), q.NUM_ISHOD_DOC, q.CONTENT, d.FULL_VALUE,"
+				+ "attr.av from SIC_QUESTION q LEFT JOIN DESCRIPTOR_VALUE d on q.EXEC_ORG_ID = d.DESCRIPTOR_VALUE_ID "
 				+ "LEFT JOIN  "
-				+ "(SELECT da.DESCRIPTOR_VALUE_ID as dv, da.attr_value as av from DESCRIPTOR_VALUE_ATTR  "
-				+ "da LEFT JOIN  DESCRIPTOR_GROUP_ATTR dg  "
-				+ "on da.DESCRIPTOR_GROUP_ATTR_ID = dg.DESCRIPTOR_GROUP_ATTR_ID where dg.ATTR_CODE='ORG_ADDRESS') attr "
+				+ "(SELECT da.DESCRIPTOR_VALUE_ID as dv, da.attr_value as av from DESCRIPTOR_VALUE_ATTR  da "
+				+ "LEFT JOIN  DESCRIPTOR_GROUP_ATTR dg on da.DESCRIPTOR_GROUP_ATTR_ID = dg.DESCRIPTOR_GROUP_ATTR_ID "
+				+ "where dg.ATTR_CODE='ORG_ADDRESS') attr "
 				+ "on q.EXEC_ORG_ID = attr.dv "
-				+ "where q.QUESTION_ID = " + questionId;
-		List<Object[]> results = em.createNativeQuery(query).getResultList();
+				+ "where q.ID = " + questionId)
+				.getResultList();
 		Object[] source;
 		if (results.isEmpty()) {
 			source = new Object[]{"", "", "", "", "", "", ""};

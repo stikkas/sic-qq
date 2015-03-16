@@ -29,24 +29,29 @@ Ext.define('qqext.view.notify.VNotify', {
 	 */
 	_idx: 4,
 	listeners: {
-		activate: function (me, prev) {
+		activate: function (me) {
 			var ns = qqext;
 			ns.switchArticleButton(ns.getButton(ns.btns.notify));
 			ns.Menu.setEditMenu(me._idx);
-			if (ns.request !== me.model) {
+			if (!ns.creq.n) {
 				// Значит новый запрос (не тот который был до этого)
-				var model = me.model = ns.request;
-				model.getNoti({callback: function (r) {
-						me.loadRecord(r);
+				ns.model.Notification.load(ns.creq.q.get('id'), {
+					success: function (record) {
+						ns.creq.n = record;
+						me.loadRecord(record);
 						me.setViewOnly(true);
 						me._disableButtons(true, 0);
 						me._disableButtons(!ns.reg, 1);
-						me._disableButtons(!r.get('executor'), 2);
-						me._files.loadRecord(r.files());
-					}});
+						me._disableButtons(!record.get('executor'), 2);
+						me._files.loadRecord(record.files);
+					},
+					failure: function (record, operation) {
+						ns.showError("Ошибка сохранения", operation.getError());
+					}
+				});
 				ns.initRequired(me);
 			}
-			ns.viewport.doLayout();
+//		ns.viewport.doLayout();
 		}
 	},
 	initComponent: function () {
@@ -54,54 +59,44 @@ Ext.define('qqext.view.notify.VNotify', {
 		function saveNotify() {
 			if (!ns.checkDates([me._df, me._idf]))
 				return;
-
-			var model = me.model,
-					noti = model.getNoti();
-
+			var noti = ns.creq.n;
 			me._disableButtons(true, 0, 1);
 			me.setViewOnly(true);
 			me.updateRecord(noti);
 			if (me.isValid()) {
-				var ntf = ns.notification,
-						status = null;
+				var status,
+						files = me._files;
 
-				if (noti.get(ntf.issueDate[0]))
+				if (noti.get('issueDate'))
 					status = ns.notiStatsId[ns.notiStats.send];
-				else if (noti.get(ntf.notificationDate[0]))
+				else if (noti.get('notiDate'))
 					status = ns.notiStatsId[ns.notiStats.exec];
 
-				noti.save({callback: function (rec, op, suc) {
-						if (suc) {
-							me.saveFiles(function () {
-								if (status) {// Обновляем модель запроса (статус уведомления)
-									model.set('notifyStatus', status);
-									model.save({callback: function (record, operation, success) {
-											if (success) {
-												me._disableButtons(false, 1, 2);
-												ns.infoChanged = true;
-											} else {
-												ns.showError("Ошибка сохранения", operation.getError());
-												me.setViewOnly(false);
-												// Включаем кнопку сохранить
-												me._disableButtons(false, 0);
-												me._files.remove();
-												noti.destroy();
-											}
-										}
-									});
-								} else {
-									me._disableButtons(false, 1);
-								}
-							}, function () {
-								ns.showError("Ошибка сохранения", "Ошибка сохранения файлов");
-								me.setViewOnly(false);
-								me._disableButtons(false, 0);
-							});
-						} else {
-							ns.showError("Ошибка сохранения", op.getError());
-							me.setViewOnly(false);
-							me._disableButtons(false, 0);
-						}
+				noti.set('status', status);
+
+				files.getForm().submit({
+					clientValidation: false,
+					url: 'rest/notification',
+					method: 'POST',
+					params: {
+						deletedFiles: Ext.encode(files.deletedFiles),
+						model: Ext.encode(noti.getData())
+					},
+					success: function (form, action) {
+						var data = action.result.data;
+						noti = ns.creq.n = Ext.create('qqext.model.Notification', data);
+						noti.files = data.files;
+						me.loadRecord(noti);
+						me._files.loadRecord(noti.files);
+						me._disableButtons(false, 1, 2);
+						ns.infoChanged = true;
+					},
+					failure: function (form, action) {
+						ns.showError("Ошибка сохранения", action.response.responseText);
+						me.setViewOnly(false);
+						// Включаем кнопку сохранить
+						me._disableButtons(false, 0);
+						files.showFiles();
 					}
 				});
 			} else {
@@ -119,8 +114,7 @@ Ext.define('qqext.view.notify.VNotify', {
 
 		// Выполняет печать (переправку пользователся на открытие документа) уведомление заявителя
 		function printNotify() {
-			var model = me.model;
-			window.open(ns.urls.reqnoti + '?id=' + model.get('id'));
+			window.open(ns.urls.reqnoti + '?id=' + ns.creq.n.get('id'));
 		}
 		//-------------------------------------------
 
@@ -128,7 +122,6 @@ Ext.define('qqext.view.notify.VNotify', {
 				ns = qqext,
 				createCmp = Ext.create,
 				labels = ns.labels,
-				notf = ns.notification,
 				stores = ns.stIds,
 				menu = createCmp('HButtonMenu', [
 					{text: labels.save, action: saveNotify, opts: {cls: 'save_btn'}},
@@ -137,35 +130,34 @@ Ext.define('qqext.view.notify.VNotify', {
 				], 'ToolButton', me);
 		Ext.applyIf(me, {
 			items: [
-				createCmp('FComboBox', notf.executor[1], stores.execs, notf.executor[0], {
+				createCmp('FComboBox', 'ФИО исполнителя', stores.execs, 'executor', {
 					width: 450,
 					labelWidth: 150,
 					allowBlank: false
 				}),
-				createCmp('FComboBox', notf.docType[1], ns.stIds.doctype, notf.docType[0], {
+				createCmp('FComboBox', 'Тип документов', ns.stIds.doctype, 'docType', {
 					width: 450,
 					labelWidth: 150
 				}),
-				createCmp('FTextArea', notf.toWhom[1], notf.toWhom[0], {
+				createCmp('FTextArea', 'Кому', 'toWhom', {
 					width: 450,
 					labelWidth: 150,
 					allowBlank: false
 				}),
-				me._df = createCmp('FDateField', notf.notificationDate[1], notf.notificationDate[0], {
+				me._df = createCmp('FDateField', 'Дата уведомления', 'notiDate', {
 					width: 270,
 					labelWidth: 150
 				}),
-				createCmp('FComboBox', notf.deliveryType[1], stores.sendType, notf.deliveryType[0], {
+				createCmp('FComboBox', 'Способ передачи', stores.sendType, 'delType', {
 					width: 270,
 					labelWidth: 150
 				}),
-				me._idf = createCmp('FDateField', notf.issueDate[1], notf.issueDate[0], {
+				me._idf = createCmp('FDateField', 'Дата выдачи/отправки документа', 'issueDate', {
 					width: 270,
 					labelWidth: 150
 				}),
 				me._files = createCmp('FAttachedFiles', "Подготовленный документ",
-						'Q_VALUE_FILE_TYPE_INFO', ns.atpaths.finfo,
-						ns.atpaths.uinfo, {
+						'Q_VALUE_FILE_TYPE_INFO', 'rest/files', {
 							collapsible: true,
 							collapsed: true,
 							cls: 'collapse_section attached_section'
@@ -175,17 +167,5 @@ Ext.define('qqext.view.notify.VNotify', {
 		me._btns = menu.items;
 		me.callParent();
 		ns.Menu.editReqMenu.insert(1, menu);
-	},
-	/**
-	 * Сохраняем файлы
-	 * @param {Function} success выполняется в случае успешного сохранения
-	 * @param {Function} fail выполняется в случае ошибки
-	 */
-	saveFiles: function (success, fail) {
-		var me = this,
-				noti = me.model.getNoti();
-		me._files.loadRecord(noti.files(), true);
-		me._files.save(noti.get('id'), success, fail);
 	}
-
 });

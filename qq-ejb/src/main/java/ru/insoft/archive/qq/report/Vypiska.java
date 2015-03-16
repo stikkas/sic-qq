@@ -41,7 +41,7 @@ public class Vypiska {
 	@ArialBold
 	private BaseFont arialBold;
 
-	public void getDocument(Long prefix, Long sufix, Long litera,
+	public void getDocument(Long prefix, Integer sufix, Long litera,
 		OutputStream out) {
 		try {
 			VypiskaInfo vi = getData(prefix, sufix, litera);
@@ -207,14 +207,11 @@ public class Vypiska {
 		}
 		return table;
 	}
-
-	private VypiskaInfo getData(Long prefix, Long sufix, Long litera) {
+	private VypiskaInfo getData(Long prefix, Integer sufix, Long litera) {
 		List<VypiskaInfo> results = em.createQuery("SELECT NEW ru.insoft.archive.qq.report.VypiskaInfo("
-			+ "q.regDate, q.applicant.organization, q.applicant.lastName, "
-			+ "q.applicant.firstName, q.applicant.middleName, q.applicant.address, "
-			+ "q.applicant.phone, q.content, q.plannedFinishDate, "
-			+ "q.registratorId.name) from Question q WHERE "
-			+ "q.prefixNum = :prefix and q.sufixNum = :sufix and q.litera = :litera")
+			+ "q.regDate, q.orgName, q.lName, q.fName, q.mName, q.adres, q.phone, q.content, q.planDate, "
+			+ "u.displayedName) from Question q JOIN q.registratorValue u WHERE "
+			+ "q.prefix = :prefix and q.sufix = :sufix and q.litera = :litera")
 			.setParameter("prefix", prefix).setParameter("sufix", sufix).setParameter("litera", litera)
 			.getResultList();
 		if (results.isEmpty()) {

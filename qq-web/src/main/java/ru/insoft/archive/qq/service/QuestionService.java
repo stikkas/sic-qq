@@ -1,15 +1,11 @@
 package ru.insoft.archive.qq.service;
 
-import java.io.File;
 import ru.insoft.archive.qq.service.dto.SubmitAnswer;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
@@ -22,11 +18,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import ru.insoft.archive.qq.dao.QuestionDao;
 import ru.insoft.archive.qq.ejb.DictCodes;
 import ru.insoft.archive.qq.entity.Question;
@@ -63,77 +54,39 @@ public class QuestionService {
 	}
 
 	/**
-	 * Создает новый запрос и обновляет существующий ExtJS (по ходу и вообще
-	 * HTML) submit action может отправлять только POST или GET Поэтому
+	 * Создает новый запрос и обновляет существующий. ExtJS (по ходу и вообще
+	 * HTML) submit action может отправлять только POST или GET, поэтому
 	 * приходится в одном методе разруливать разные ситуации
 	 *
 	 * @param req объект запроса
-	 * @return
+	 * @return в случае успеха объект с обновленной / созданной сущностью
+	 * запроса, иначе выбрасывается RuntimeError и REST механизм должен его
+	 * обработать
 	 */
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public SubmitAnswer<Question> createQuestion(@Context HttpServletRequest req) {
-		try {
-			req.setCharacterEncoding("UTF-8");
-		} catch (UnsupportedEncodingException ex) {
-			// В этом случае русские имена файлов будут в неправильной кодировке
-			Logger.getLogger(QuestionService.class.getName()).log(Level.SEVERE, null, ex);
-		}
-
-		DiskFileItemFactory factory = new DiskFileItemFactory();
-
-		// Максимальный буфера данных в байтах,
-		// при его привышении данные начнут записываться на диск во временную директорию
-		// устанавливаем четыре мегабайт
-		factory.setSizeThreshold(4096 * 1024);
-		// устанавливаем временную директорию
-		factory.setRepository(new File(System.getProperty("jboss.server.temp.dir")));
-		//Создаём сам загрузчик
-		ServletFileUpload upload = new ServletFileUpload(factory);
-		List<FileItem> items;
-		try {
-			items = (List<FileItem>) upload.parseRequest(req);
-		} catch (FileUploadException ex) {
-			Logger.getLogger(QuestionService.class.getName()).log(Level.SEVERE, null, ex);
-			throw new RuntimeException("Невозможно разобрать данные запроса");
-		}
-
+		Map<String, String> params = new HashMap<>();
 		List<FileItem> files = new ArrayList<>();
-		for (FileItem item : items) {
-			if (item.isFormField()) {
-				if (item.getFieldName().equals("model")) {
-					try {
-						Question question = new ObjectMapper().readValue(item.getString(), Question.class);
-					} catch (IOException ex) {
-						Logger.getLogger(QuestionService.class.getName()).log(Level.SEVERE, null, ex);
-					}
-				}
-			} else if (!item.getName().isEmpty()) {
-				System.out.println(item.getName());
-				files.add(item);
-			}
+		af.parseRequest(req, params, files);
+
+		Question q = af.getEntity(params.get("model"), Question.class);
+		Long id = q.getId();
+
+		if (id != null) {
+			return updateQuestion(id, q, params.get("deletedFiles"), files);
 		}
-		return new SubmitAnswer<>(true, new Question());
+		q = qd.create(q);
+		id = q.getId();
+		// Создаем файлы и заносим информацию в базу
+		af.createFiles(files, Paths.get(up.getQqPath(), up.getApplicantFilesPath(), id.toString()).toString(),
+				DictCodes.Q_VALUE_FILE_TYPE_APP_DOCS, id);
+
+		// Возвращаем сущность запроса вместе с файлами
+		return new SubmitAnswer<>(true, qd.find(id));
+
 	}
 
-//	public SubmitAnswer<Question> createQuestion(MultipartFormDataInput input) {
-//		Map<String, List<InputPart>> parts = input.getFormDataMap();
-//
-//		Question question = getEntity(parts.remove("model").get(0));
-//		Long id = question.getId();
-//		if (id != null) {
-//			return updateQuestion(id, question, parts);
-//		}
-//
-//		question = qd.create(question);
-//		id = question.getId();
-//		// при создании не может быть удаленных файлов
-//		parts.remove("deletedFiles");
-//		af.createFiles(parts, Paths.get(up.getQqPath(), up.getApplicantFilesPath(), id.toString()).toString(),
-//				DictCodes.Q_VALUE_FILE_TYPE_APP_DOCS, id);
-//
-//		return new SubmitAnswer<>(true, qd.find(id));
-//	}
 	/**
 	 * Удаляет запрос с указанным id
 	 *
@@ -150,32 +103,23 @@ public class QuestionService {
 	/**
 	 * Обновляет информацию у уже существующего запроса
 	 *
-	 * @param input информация для обновления
-	 * @return запрос
+	 * @param id идентификатор запроса
+	 * @param question запрос
+	 * @param deletedFiles json представление массива файлов для удаления
+	 * @param files файлы, полученные в запросе клиента
+	 * @return в случае успеха объект с обновленной сущностью запроса, иначе
+	 * выбрасывается RuntimeError и REST механизм должен его обработать
 	 */
-	private SubmitAnswer<Question> updateQuestion(Long id, Question question, Map<String, List<InputPart>> parts) {
+	private SubmitAnswer<Question> updateQuestion(Long id, Question question,
+			String deletedFiles, List<FileItem> files) {
 
 		String dir = Paths.get(up.getQqPath(), up.getApplicantFilesPath(), id.toString()).toString();
 
-		af.removeFiles(parts.remove("deletedFiles").get(0), dir, DictCodes.Q_VALUE_FILE_TYPE_APP_DOCS, id);
-		af.createFiles(parts, dir, DictCodes.Q_VALUE_FILE_TYPE_APP_DOCS, id);
+		af.removeFiles(deletedFiles, dir);
+		af.createFiles(files, dir, DictCodes.Q_VALUE_FILE_TYPE_APP_DOCS, id);
 
+		// Возвращаем сущность запроса вместе с файлами
 		return new SubmitAnswer<>(true, qd.update(question));
-	}
-
-	/**
-	 * Извлекает сущность из формы, пришедшей от клиента
-	 *
-	 * @param part данные формы
-	 * @return сущность запроса
-	 */
-	private Question getEntity(InputPart part) {
-		try {
-			return new ObjectMapper().readValue(part.getBodyAsString(), Question.class);
-		} catch (IOException ex) {
-			Logger.getLogger(QuestionService.class.getName()).log(Level.SEVERE, null, ex);
-			throw new RuntimeException("Неправильный формат сущности");
-		}
 	}
 
 }

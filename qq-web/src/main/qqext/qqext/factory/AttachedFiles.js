@@ -20,15 +20,8 @@ Ext.define('qqext.factory.AttachedFiles', {
 	 * @private
 	 */
 	/**
-	 * @property {String} _type тип файлов (Документы заявителя или Файлы ответа)
-	 * @private
-	 */
-	/**
-	 * @property {String} _path путь для хранения файлов в файловой системе
-	 * @private
-	 */
-	/**
-	 * @property {String} _url путь для получения файлов по ссылке
+	 * @property {String} _url путь для получения файлов по ссылке. Полная ссылка получается как:
+	 * _url/question_id/file_name
 	 * @private
 	 */
 	/**
@@ -38,12 +31,11 @@ Ext.define('qqext.factory.AttachedFiles', {
 	/**
 	 * Иницализация компонента
 	 * @param {String} title заголовок для панели
-	 * @param {String} type тип файлов
-	 * @param {String} path путь в файловой системе для сохранения
+	 * @param {String} type тип файлов (заявителя, уведомления, ответа)
 	 * @param {String} url путь, относительно которого строится ссылки на файлы
 	 * @param {Object} cfg другие настройки для Ext.form.Panel
 	 */
-	constructor: function (title, type, path, url, cfg) {
+	constructor: function (title, type, url, cfg) {
 		var me = this;
 		Ext.apply(me, {
 			items: [me._fl = Ext.create('hawk_common.cmp.FilesList', {
@@ -52,9 +44,7 @@ Ext.define('qqext.factory.AttachedFiles', {
 				})],
 			deletedFiles: [],
 			title: title,
-			_type: type,
-			_path: path,
-			_url: url
+			_url: url + "/" + type + "/"
 		});
 		Ext.apply(me, cfg);
 		me.callParent();

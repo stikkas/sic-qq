@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -16,6 +18,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  * Сущность запроса. Применяется на вкладке "Регистрация запроса"
@@ -231,6 +234,12 @@ public class Question implements Serializable {
 	 */
 	@OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
 	private List<AttachedFile> files;
+
+	@JsonIgnore
+	@JoinColumn(name = "REGISTRATOR_ID", referencedColumnName = "USER_ID", insertable = false,
+			updatable = false)
+	@ManyToOne
+	private AdmUser registratorValue;
 
 	public Long getId() {
 		return id;
@@ -494,6 +503,14 @@ public class Question implements Serializable {
 
 	public void setNotiStatus(Long notiStatus) {
 		this.notiStatus = notiStatus;
+	}
+
+	public AdmUser getRegistratorValue() {
+		return registratorValue;
+	}
+
+	public void setRegistratorValue(AdmUser registratorValue) {
+		this.registratorValue = registratorValue;
 	}
 
 }

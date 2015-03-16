@@ -38,7 +38,7 @@ public class Vypiska extends ReportServlet {
 
 	@Override
 	protected void getDocument(OutputStream out) {
-		generator.getDocument(Long.parseLong(prefix), Long.parseLong(sufix),
+		generator.getDocument(Long.parseLong(prefix), Integer.parseInt(sufix),
 			Long.parseLong(litera), out);
 	}
 

@@ -227,8 +227,10 @@ Ext.define('qqext.view.reg.VRegForm', {
 		// Выполняет печать (переправку пользователся на открытие документа) выписки создания запроса
 		function print() {
 			var model = me.model;
-			window.open(ns.urls.vypiska + '?prefix=' + model.get('prefixNum') +
-					'&sufix=' + model.get('sufixNum') + '&litera=' + model.get('litera'));
+			console.log(ns.urls.vypiska + '?prefix=' + model.get('prefix') +
+					'&sufix=' + model.get('sufix') + '&litera=' + model.get('litera'));
+			window.open(ns.urls.vypiska + '?prefix=' + model.get('prefix') +
+					'&sufix=' + model.get('sufix') + '&litera=' + model.get('litera'));
 		}
 		//----------------------------------------------
 		var me = this,
@@ -277,8 +279,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 					hidden: true
 				}),
 				me.files = createCmp('FAttachedFiles', 'Документы заявителя',
-						'Q_VALUE_FILE_TYPE_APP_DOCS', ns.atpaths.fappl,
-						ns.atpaths.uappl, {
+						'Q_VALUE_FILE_TYPE_APP_DOCS', 'rest/files', {
 							allowBlank: ns.isSIC ? false : true,
 							border: true,
 							collapsible: true,

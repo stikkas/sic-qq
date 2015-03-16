@@ -1,16 +1,19 @@
 package ru.insoft.archive.qq.service.ejb;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
+import java.nio.file.CopyOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashSet;
 import java.util.List;
@@ -18,10 +21,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import ru.insoft.archive.qq.dao.AttachedFileDao;
 
 /**
@@ -32,56 +40,83 @@ import ru.insoft.archive.qq.dao.AttachedFileDao;
 @Stateless
 public class AttachedFileBean {
 
+	private static Logger logger;
+
+	@PostConstruct
+	private void init() {
+		if (logger == null) {
+			logger = Logger.getLogger(getClass().getName());
+		}
+	}
+
 	@Inject
 	private AttachedFileDao afd;
 
 	/**
-	 * Сохраняет файлы на файловой системе и заносин информацию в базу.
+	 * Разбирает запрос, пришедший от клиента.
 	 *
-	 * @param parts данные формы, полученный от клиента
+	 * @param req http запрос
+	 * @param params параметры запроса
+	 * @param files файлы
+	 */
+	public void parseRequest(HttpServletRequest req, Map<String, String> params,
+			List<FileItem> files) {
+		try {
+			req.setCharacterEncoding("UTF-8");
+		} catch (UnsupportedEncodingException ex) {
+			// В этом случае русские имена файлов будут в неправильной кодировке
+			logger.log(Level.SEVERE, null, ex);
+		}
+
+		DiskFileItemFactory factory = new DiskFileItemFactory();
+
+		// Максимальный буфера данных в байтах,
+		// при его привышении данные начнут записываться на диск во временную директорию
+		// устанавливаем четыре мегабайт
+		factory.setSizeThreshold(4096 * 1024);
+		// устанавливаем временную директорию
+		factory.setRepository(new File(System.getProperty("jboss.server.temp.dir")));
+		ServletFileUpload upload = new ServletFileUpload(factory);
+
+		try {
+			for (FileItem item : (List<FileItem>) upload.parseRequest(req)) {
+				if (item.isFormField()) {
+					params.put(item.getFieldName(), item.getString());
+				} else if (item.getName().isEmpty()) {
+					logger.log(Level.WARNING, "У загружаемого файла нет имени");
+				} else {
+					files.add(item);
+				}
+			}
+		} catch (FileUploadException ex) {
+			logger.log(Level.SEVERE, null, ex);
+			throw new RuntimeException("Ошибка разбора запроса клента");
+		}
+	}
+
+	/**
+	 * Сохраняет файлы на файловой системе и заносит информацию в базу.
+	 *
+	 * @param files файлы, полученные из формы запроса
 	 * @param dir папка для файлов, абсолютный путь
 	 * @param type тип файлов
 	 * @param id идентификатор владельца файлов
 	 */
-	public void createFiles(Map<String, List<InputPart>> parts, String dir,
+	public void createFiles(List<FileItem> files, String dir,
 			String type, Long id) {
-
-		Set<String> savedFiles = new HashSet<>();
 
 		try {
 			Files.createDirectories(Paths.get(dir));
 		} catch (IOException ex) {
-			Logger.getLogger(AttachedFileBean.class.getName()).log(Level.SEVERE, null, ex);
+			logger.log(Level.SEVERE, null, ex);
 			throw new RuntimeException("Невозможно создать папку: " + dir);
 		}
 
-		for (List<InputPart> ps : parts.values()) {
-			for (InputPart part : ps) {
-
-				String header = part.getHeaders().get("Content-Disposition").get(0);
-				System.out.println("Before coding: " + header);
-
-				try {
-					System.out.println("After coding: "  + new String(header.getBytes(Charset.forName("US-ASCII")), "UTF-8"));
-					System.out.println("After coding: "  + new String(header.getBytes(Charset.forName("ISO-8859-1")), "UTF-8"));
-					System.out.println("After coding: "  + new String(header.getBytes(Charset.forName("UTF-8")),"US-ASCII"));
-				} catch (UnsupportedEncodingException ex) {
-					Logger.getLogger(AttachedFileBean.class.getName()).log(Level.SEVERE, null, ex);
-				}
-
-				for (String chunk : header.split(";")) {
-					if (chunk.trim().startsWith("filename")) {
-						String fileName = chunk.split("=", 2)[1];
-						// Удаляем кавычки
-						fileName = fileName.substring(1, fileName.length() - 1);
-
-						if (saveFile(Paths.get(dir, fileName), part)) {
-							savedFiles.add(fileName);
-						}
-						break;
-					}
-
-				}
+		Set<String> savedFiles = new HashSet<>();
+		for (FileItem file : files) {
+			String fileName = file.getName();
+			if (saveFile(Paths.get(dir, fileName), file)) {
+				savedFiles.add(fileName);
 			}
 		}
 
@@ -91,17 +126,15 @@ public class AttachedFileBean {
 	}
 
 	/**
-	 * Удаляет файлы из файловой системы и базы,
-	 * deletedFiles представляет собой массив [[id, fileName],....]
+	 * Удаляет файлы из файловой системы и базы, deletedFiles представляет собой
+	 * массив [[id, fileName],....]
 	 *
-	 * @param part данные формы полученные от пользователя
+	 * @param jsonArrayFiles строка с массивом файлов для удаления
 	 * @param dir папка где находятся файлы
-	 * @param type тип файлов
-	 * @param id идентификатор владельца (запроса) файлов
 	 */
-	public void removeFiles(InputPart part, String dir, String type, Long id) {
+	public void removeFiles(String jsonArrayFiles, String dir) {
 		try {
-			String[][] files = new ObjectMapper().readValue(part.getBodyAsString(), String[][].class);
+			String[][] files = new ObjectMapper().readValue(jsonArrayFiles, String[][].class);
 			if (files.length > 0) {
 				Set<Long> ids = new HashSet<>(files.length);
 				for (String[] file : files) {
@@ -111,31 +144,26 @@ public class AttachedFileBean {
 				afd.remove(ids);
 			}
 		} catch (IOException ex) {
-			Logger.getLogger(AttachedFileBean.class.getName()).log(Level.SEVERE, null, ex);
+			logger.log(Level.SEVERE, null, ex);
 			throw new RuntimeException("Невозможно получить список файлов для удаления");
 		}
 	}
 
 	/**
-	 * Записывает файлы на файловую систему
+	 * Извлекает сущность из строки
 	 *
-	 * @param fileName имя файла
-	 * @param part данные формы
-	 * @return в случае успешной записи - true, иначе - false
+	 * @param <T> тип возвращаемой сущности
+	 * @param input json строка
+	 * @param type класс возвращаемой сущности
+	 * @return сущность запроса
 	 */
-	private boolean saveFile(Path fileName, InputPart part) {
-		try (OutputStream out = new BufferedOutputStream(Files.newOutputStream(fileName));
-				InputStream in = part.getBody(InputStream.class, null)) {
-			byte[] buffer = new byte[4096];
-			int readBytes;
-			while ((readBytes = in.read(buffer)) > 0) {
-				out.write(buffer, 0, readBytes);
-			}
+	public <T> T getEntity(String input, Class<T> type) {
+		try {
+			return new ObjectMapper().readValue(input, type);
 		} catch (IOException ex) {
-			Logger.getLogger(AttachedFileBean.class.getName()).log(Level.SEVERE, null, ex);
-			return false;
+			logger.log(Level.SEVERE, null, ex);
+			throw new RuntimeException("Неправильный формат сущности");
 		}
-		return true;
 	}
 
 	/**
@@ -160,8 +188,25 @@ public class AttachedFileBean {
 					}
 				});
 			} catch (IOException ex) {
-				Logger.getLogger(AttachedFileBean.class.getName()).log(Level.SEVERE, null, ex);
+				logger.log(Level.SEVERE, null, ex);
 			}
 		}
+	}
+
+	/**
+	 * Записывает файл на файловую систему
+	 *
+	 * @param fileName имя файла
+	 * @param file данные формы
+	 * @return в случае успешной записи - true, иначе - false
+	 */
+	private boolean saveFile(Path fileName, FileItem file) {
+		try (InputStream is = new BufferedInputStream(file.getInputStream())) {
+			Files.copy(is, fileName, StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException ex) {
+			logger.log(Level.SEVERE, null, ex);
+			return false;
+		}
+		return true;
 	}
 }

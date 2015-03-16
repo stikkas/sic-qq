@@ -5,7 +5,7 @@ Ext.define('qqext.model.Question', {
 	extend: 'Ext.data.Model',
 	requires: [
 		'Ext.data.proxy.Rest',
-		'qqext.cmp.FilesReader'
+		'qqext.cmp.ManyOneReader'
 	],
 	fields: [
 		{name: 'id', type: 'int', defaultValue: null, convert: null, isNull: true},
@@ -86,7 +86,8 @@ Ext.define('qqext.model.Question', {
 		type: 'rest',
 		url: 'rest/question',
 		reader: {
-			type: 'files',
+			type: 'manyone',
+			hasField: 'files',
 			model: 'qqext.model.Question'
 		},
 		writer: 'json',

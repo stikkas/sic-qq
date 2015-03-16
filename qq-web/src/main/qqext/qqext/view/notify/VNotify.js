@@ -46,7 +46,7 @@ Ext.define('qqext.view.notify.VNotify', {
 						me._files.loadRecord(record.files);
 					},
 					failure: function (record, operation) {
-						ns.showError("Ошибка сохранения", operation.getError());
+						ns.showError("Ошибка получения данных", operation.getError());
 					}
 				});
 				ns.initRequired(me);

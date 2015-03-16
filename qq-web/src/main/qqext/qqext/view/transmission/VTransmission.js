@@ -33,15 +33,14 @@ Ext.define('qqext.view.transmission.VTransmission', {
 			var ns = qqext;
 			ns.switchArticleButton(ns.getButton(ns.btns.trans));
 			ns.Menu.setEditMenu(me._idx);
-			if (ns.request !== me.model) {
+			if (!ns.creq.t) {
 				// Значит новый запрос (не тот который был до этого)
 
 				while (me._execs.length > 1)
 					me._execs.pop().destroy();
 				me._coex = 2; // индекс, с которого начинаются поля для соисполнителей
 
-				var model = me.model = ns.request,
-						execOrg = model.get('execOrg'),
+				var execOrg = ns.creq.q.get('execOrg'),
 						rightStore = (ns.isSIC && execOrg !== ns.sicId) ? ns.stIds.allexecs : ns.stIds.execs;
 
 				// Выставляем список правильных пользователей для исполниетелей.
@@ -51,10 +50,12 @@ Ext.define('qqext.view.transmission.VTransmission', {
 					fc.items.getAt(0).bindStore(rightStore);
 				});
 
-				model.getTrans({
-					callback: function (r) {
+				ns.model.Transmission.load(ns.creq.q.get('id'), {
+					success: function (r) {
+						ns.creq.t = r;
 						me.loadRecord(r);
-						r.assistants().each(function (it) {
+
+						r.assistants.forEach(function (it) {
 							me.addExecutor(it, rightStore);
 						});
 
@@ -62,18 +63,21 @@ Ext.define('qqext.view.transmission.VTransmission', {
 						me._disableButtons(true, 1, 2, 3);
 						var stats = ns.stats,
 								statsId = ns.statsId,
-								status = model.get('status');
+								status = ns.creq.q.get('status');
 						me._disableButtons(!(ns.coor &&
 								status === statsId[stats.reg] &&
 								ns.orgId === execOrg ||
 								((status === statsId[stats.onexec] ||
 										status === statsId[stats.exec]) && ns.visor)), 0);
+					},
+					failure: function (record, operation) {
+						ns.showError("Ошибка получения данных", operation.getError());
 					}
 				});
 				ns.initRequired(me);
 			}
 			me.collapseAdds();
-			me.doLayout();
+//			me.doLayout();
 		}
 	},
 	/**
@@ -379,8 +383,8 @@ Ext.define('qqext.view.transmission.VTransmission', {
 		me.insert(me._coex++, container);
 		me._execs.push(container);
 		if (assistant) {
-			cb.setValue(assistant.get('user'));
-			df.setValue(assistant.get('execDate'));
+			cb.setValue(assistant.user);
+			df.setValue(assistant.execDate);
 		}
 	},
 	validate: function () {
@@ -395,14 +399,13 @@ Ext.define('qqext.view.transmission.VTransmission', {
 	 * @param {qqext.model.Transmission}  model модель для передачи на сервер
 	 */
 	updateAssistants: function (model) {
-		var store = model.assistants();
-		store.removeAll(true);
+		model.assistants = [];
 		this._execs.forEach(function (it, i) {
 			if (i !== 0) {
 				var items = it.items,
 						user = items.getAt(0).getValue();
 				if (user) // молча пропускаем пустой элемент
-					store.add({
+					model.assistans.push({
 						user: user,
 						execDate: items.getAt(1).getValue()
 					});

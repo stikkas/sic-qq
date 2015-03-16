@@ -5,7 +5,7 @@ Ext.define('qqext.model.Notification',  {
 	extend: 'Ext.data.Model',
 	requires: [
 		'Ext.data.proxy.Rest',
-		'qqext.cmp.FilesReader'
+		'qqext.cmp.ManyOneReader'
 	],
 	idProperty: 'id',
 	fields: [
@@ -28,7 +28,8 @@ Ext.define('qqext.model.Notification',  {
 		type: 'rest',
 		url: 'rest/notification',
 		reader: {
-			type: 'files',
+			type: 'manyone',
+			hasField: 'files',
 			model: 'qqext.model.Notification'
 		},
 		writer: 'json'

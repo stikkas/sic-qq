@@ -121,11 +121,6 @@ Ext.define('qqext.view.journal.VJournalForm', {
 			itm = clmn.items.get(0);
 			value = itm.getValue();
 			if (value) {
-				/*
-				 if (itm.name === 'requestFromCombo') {
-				 value = Ext.getStore('journalApplicantFilterStore')
-				 .getById(value).get('name');
-				 }*/
 				filters.push(Ext.create('Ext.util.Filter', {
 					property: clmn.dataIndex,
 					value: value

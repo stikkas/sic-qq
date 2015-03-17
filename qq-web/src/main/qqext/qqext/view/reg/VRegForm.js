@@ -83,7 +83,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 	/**
 	 * Сохраняет модель Question
 	 * Глобалная ссылка на модель устанавливается после сохранения Question на сервере и получения
-	 * @param {Function} success будет вызвана в случае полного успеха, т.е. после сохранения Applicant
+	 * @param {Function} success будет вызвана в случае успеха
 	 * @param {Boolean} inEditMode в режиме редактирования уже зарегистрированого запроса
 	 * @private
 	 */
@@ -105,7 +105,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 				ns.creq.q = Ext.create('qqext.model.Question', data);
 				ns.creq.q.files = data.files;
 				me.loadRecord();
-				ns.statusPanel.setStatus();
+				ns.statusPanel.setStatus(ns.creq.q.get('status'));
 				ns.infoChanged = true;
 				success();
 			},

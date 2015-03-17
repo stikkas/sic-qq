@@ -198,11 +198,12 @@ Ext.define('qqext.view.exec.VExecForm', {
 			}
 			if (me.validate()) {
 				me._saveData(function () {
-					model.set('status', ns.statsId[ns.stats.exec]);
+					var status = ns.statsId[ns.stats.exec];
+					model.set('status', status);
 					model.save({
 						callback: function (r, o, s) {
 							if (s) {
-								ns.statusPanel.setStatus();
+								ns.statusPanel.setStatus(status);
 							} else {
 								ns.showError("Ошибка обновления статуса", o.getError());
 							}

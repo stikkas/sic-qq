@@ -9,14 +9,24 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import javax.validation.constraints.NotNull;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
+ * Класс соисполнителей запроса
  *
  * @author basa
  */
+@NamedQueries({
+	@NamedQuery(name = "Assistant.removeTransmission",
+			query = "DELETE FROM Assistant a WHERE a.id = :id"),
+	@NamedQuery(name = "Assistant.assistTransmission",
+			query = "SELECT a FROM Assistant a WHERE a.id = :id")
+})
 @Entity
 @Table(name = "QQ_ASSISTANTS")
 @IdClass(AssistantPK.class)
@@ -25,14 +35,17 @@ public class Assistant implements Serializable {
 	/**
 	 * Уникальный идентификатор запроса
 	 */
+	@JsonIgnore
 	@Id
+	@NotNull
 	@Column(name = "TRANSMISSION_ID", nullable = false)
-	private Long transmission;
+	private Long id;
 
 	/**
 	 * Уникальный идентификатор помощника
 	 */
 	@Id
+	@NotNull
 	@Column(name = "ASSISTANT_ID", nullable = false)
 	private Long user;
 	/**
@@ -42,27 +55,25 @@ public class Assistant implements Serializable {
 	@Temporal(javax.persistence.TemporalType.TIMESTAMP)
 	private Date execDate;
 
-
-
 	@JsonIgnore
+	@JoinColumn(name = "TRANSMISSION_ID", referencedColumnName = "ID", insertable = false, updatable = false)
 	@ManyToOne
-	@JoinColumn(name = "ASSISTANT_ID", referencedColumnName = "USER_ID", insertable = false, updatable = false)
-	private AdmUser userValue;
+	private Transmission transmission;
 
 	public Assistant() {
 	}
 
-	public Assistant(Long transmission, Long user) {
-		this.transmission = transmission;
+	public Assistant(Long id, Long user) {
+		this.id = id;
 		this.user = user;
 	}
 
-	public Long getTransmission() {
-		return transmission;
+	public Long getId() {
+		return id;
 	}
 
-	public void setTransmission(Long transmission) {
-		this.transmission = transmission;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Long getUser() {
@@ -81,20 +92,18 @@ public class Assistant implements Serializable {
 		this.execDate = execDate;
 	}
 
-
-
-	public AdmUser getUserValue() {
-		return userValue;
+	public Transmission getTransmission() {
+		return transmission;
 	}
 
-	public void setUserValue(AdmUser userValue) {
-		this.userValue = userValue;
+	public void setTransmission(Transmission transmission) {
+		this.transmission = transmission;
 	}
 
 	@Override
 	public int hashCode() {
 		int hash = 7;
-		hash = 37 * hash + Objects.hashCode(this.transmission);
+		hash = 37 * hash + Objects.hashCode(this.id);
 		hash = 37 * hash + Objects.hashCode(this.user);
 		return hash;
 	}
@@ -108,7 +117,7 @@ public class Assistant implements Serializable {
 			return false;
 		}
 		final Assistant other = (Assistant) obj;
-		return Objects.equals(this.transmission, other.transmission)
+		return Objects.equals(this.id, other.id)
 				&& Objects.equals(this.user, other.user);
 	}
 

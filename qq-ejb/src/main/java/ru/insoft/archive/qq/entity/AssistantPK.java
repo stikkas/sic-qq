@@ -9,24 +9,24 @@ import java.util.Objects;
  */
 public class AssistantPK implements Serializable {
 
-	private Long transmission;
+	private Long id;
 
 	private Long user;
 
 	public AssistantPK() {
 	}
 
-	public AssistantPK(Long transmission, Long user) {
-		this.transmission = transmission;
+	public AssistantPK(Long id, Long user) {
+		this.id = id;
 		this.user = user;
 	}
 
-	public Long getTransmission() {
-		return transmission;
+	public Long getId() {
+		return id;
 	}
 
-	public void setTransmission(Long transmission) {
-		this.transmission = transmission;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Long getUser() {
@@ -40,8 +40,8 @@ public class AssistantPK implements Serializable {
 	@Override
 	public int hashCode() {
 		int hash = 7;
-		hash = 29 * hash + Objects.hashCode(this.transmission);
-		hash = 29 * hash + Objects.hashCode(this.user);
+		hash = 29 * hash + Objects.hashCode(id);
+		hash = 29 * hash + Objects.hashCode(user);
 		return hash;
 	}
 
@@ -49,8 +49,8 @@ public class AssistantPK implements Serializable {
 	public boolean equals(Object obj) {
 		if (obj instanceof AssistantPK) {
 			AssistantPK pk = (AssistantPK)obj;
-			return pk.transmission.equals(this.transmission) && 
-					pk.user.equals(this.user);
+			return pk.id.equals(id) && 
+					pk.user.equals(user);
 		}
 		return false;
 	}

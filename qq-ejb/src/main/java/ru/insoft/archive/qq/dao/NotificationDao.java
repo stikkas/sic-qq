@@ -10,24 +10,18 @@ import ru.insoft.archive.qq.entity.Notification;
  * @author Благодатских С.
  */
 @Stateless
-public class NotificationDao extends AbstractCRUDDao<Notification> {
+public class NotificationDao extends AbstractDao {
 
-	public NotificationDao() {
-		super(Notification.class);
-	}
-
-	@Override
 	public Notification find(Long id) {
-		Notification entity = super.find(id);
+		Notification entity = em.find(Notification.class, id);
 		if (entity != null) {
 			return setFiles(entity);
 		}
 		return entity;
 	}
 
-	@Override
 	public Notification update(Notification entity) {
-		return setFiles(super.update(entity));
+		return setFiles(em.merge(entity));
 	}
 
 	/**
@@ -37,7 +31,6 @@ public class NotificationDao extends AbstractCRUDDao<Notification> {
 	 *
 	 * @param id идентификатор запроса
 	 */
-	@Override
 	public void remove(Long id) {
 		em.createNamedQuery("AttachedFile.removeFilesByOwner")
 				.setParameter("owner", id)
@@ -46,17 +39,6 @@ public class NotificationDao extends AbstractCRUDDao<Notification> {
 		em.merge(new Notification(id));
 	}
 
-	/**
-	 * Никогда не должен использоваться. Служит для подстраховки, если кто-то
-	 * вызовет его
-	 *
-	 * @param entity Сущность
-	 * @return сущность
-	 */
-	@Override
-	public Notification create(Notification entity) {
-		return update(entity);
-	}
 
 	/**
 	 * Устанавливает список файлов, принадлежащих запросу

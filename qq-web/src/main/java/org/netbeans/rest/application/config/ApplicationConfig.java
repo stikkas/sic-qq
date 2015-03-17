@@ -28,6 +28,7 @@ public class ApplicationConfig extends Application {
 		resources.add(ru.insoft.archive.qq.service.NotificationService.class);
 		resources.add(ru.insoft.archive.qq.service.QuestionService.class);
 		resources.add(ru.insoft.archive.qq.service.StaticFileService.class);
+		resources.add(ru.insoft.archive.qq.service.TransmissionService.class);
 		resources.add(ru.insoft.archive.qq.service.UserService.class);
 	}
 

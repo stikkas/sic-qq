@@ -27,7 +27,7 @@ public class Notification implements Serializable {
 
 	@Id
 	@NotNull
-	@Column(name = "ID")
+	@Column(name = "ID", insertable = false, updatable = false)
 	private Long id;
 
 	/**

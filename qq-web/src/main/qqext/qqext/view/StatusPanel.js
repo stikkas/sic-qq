@@ -53,12 +53,12 @@ Ext.define('qqext.view.StatusPanel', {
 
 		/**
 		 *  Отображает статус запроса
-		 *  @param {String} label
+		 *  @param {Number} status идентификатор статуса
 		 */
-		me.setStatus = function (label) {
+		me.setStatus = function (status) {
 			me.setVisible(false);
-			if (label === undefined) {
-				var index = stats.indexOfKey(qqext.creq.q.get('status')),
+			if (status) {
+				var index = stats.indexOfKey(status),
 						items = [];
 				for (var i = 0; i <= index; ++i)
 					items.push(i);

@@ -677,7 +677,7 @@ Ext.application({
 						ns.Menu.setArticleMenu(1);
 						getButton(buttonNames.toSearch).form = ns.getCurrentForm();
 						getButton(buttonNames.reg).fireEvent('click');
-						ns.statusPanel.setStatus();
+						ns.statusPanel.setStatus(r.get('status'));
 					} else {
 						ns.showError("Ошибка загрузки данных", o.getError());
 					}

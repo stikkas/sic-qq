@@ -12,7 +12,6 @@ Ext.define('qqext.Menu', {
 		'qqext.button.ToolButton',
 		'qqext.button.ArticleButton',
 		'qqext.model.Notification',
-		'qqext.model.Applicant',
 		'qqext.model.ExecutionInfo',
 		'qqext.model.WayToSend'
 	],

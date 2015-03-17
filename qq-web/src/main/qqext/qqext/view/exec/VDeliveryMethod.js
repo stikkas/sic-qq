@@ -36,26 +36,25 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 		return result;
 	},
 	/**
-	 * Обновляет данные на сервере для таблицы
+	 * Сохраняет данные из таблицы  на сервер
 	 */
-	sync: function () {
-		var store = this._sf.getStore();
-		store.sync({callback: function () {
+	save: function () {
+		var records = [],
+				store = this._sf.getStore();
+
+		store.data.each(function(it){
+			records.push(it.data);
+		});
+		Ext.Ajax.request({
+			method: 'POST',
+			url: store.proxy.url, 
+			params: {data: Ext.encode(records)},
+			success: function() {
 				store.load();
-			}});
-	},
-	/**
-	 * Сохраняет данные из таблицы и прикрепленных файлов на сервер
-	 * @param {Number/String} id идентификатор запроса
-	 * @param {Function} success функция для вызова в случае удачного сохранения файлов
-	 * @param {Function} fail функция для вызова в случае ошибки при сохранении файлов
-	 */
-	save: function (id, success, fail) {
-		this.sync();
-		this._ff.save(id, success, fail);
+			}
+		});
 	},
 	remove: function () {
-		this._ff.remove();
 		this._ff.reset();
 	},
 	/**
@@ -68,31 +67,35 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 		this._ff.loadRecord(model.files);
 	},
 	/**
-	 * Устанавливает хранилища для своих таблиц. Хранилища берутся
-	 * из ассоциаций текущего запроса.
+	 * Устанавливает хранилища для своих таблиц.
 	 */
 	setStorage: function () {
-		this._sf.reconfigure(qqext.request.getExec().sendactions());
+		this._sf.reconfigure(
+				Ext.create('Ext.data.Store', {
+					model: 'qqext.model.SendAction',
+					proxy: {
+						type: 'ajax',
+						url: 'rest/sendaction/' + qqext.creq.e.get('id'),
+						reader: 'json'
+					}
+				}));
 	},
 	initComponent: function () {
 		var me = this,
 				ns = qqext,
-				createCmp = Ext.create,
-				way = ns.wayToSend,
-				action = ns.sendAction;
-
+				createCmp = Ext.create;
 		Ext.apply(me, {
 			items: [
-				me._sf = createCmp('FPanelGrid', 'SendActionModel', {
+				me._sf = createCmp('FPanelGrid', 'qqext.model.SendAction', {
 					defaults: {
 						sortable: false,
 						menuDisabled: true
 					}, items: [
-						createCmp('ComboColumn', action.type[1], action.type[0],
+						createCmp('ComboColumn', 'Способ отправки', 'sendType',
 								ns.stIds.sendType, 1),
 						{
-							text: action.date[1],
-							dataIndex: action.date[0],
+							text: 'Дата',
+							dataIndex: 'sendDate',
 							editor: {xtype: 'hawkDateField'},
 							renderer: function (value) {
 								return Ext.Date.format(value, 'd.m.Y');

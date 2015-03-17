@@ -73,11 +73,11 @@ Ext.define('qqext.view.exec.VExecForm', {
 			me._ef.df2.viewOnly = false;
 			me._prodlen = false;
 		}
-		me._mf.loadRecord(model);
 
 		[me._df, me._cf, me._mf].forEach(function (v) {
 			v.setStorage();
 		});
+		me._mf.loadRecord(model);
 		me._df.loadRecord();
 		me._cf.loadRecord();
 	},
@@ -99,7 +99,7 @@ Ext.define('qqext.view.exec.VExecForm', {
 							if (st) {
 								me._df.sync();
 								me._cf.sync();
-								me._mf.save(model.get('id'), success, failure);
+								me._mf.save();
 								qqext.infoChanged = true;
 								if (!me._prodlen && model.get('renewalNotice')) {
 									me.model.set('plannedFinishDate',

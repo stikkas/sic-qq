@@ -17,6 +17,10 @@ public class ExecutionDao extends AbstractDao {
 	private SendActionDao sa;
 	@Inject
 	private UsedMaterialDao um;
+	@Inject 
+	private CoordinationDao cd;
+	@Inject
+	private DeliveryActionDao da;
 
 	public Execution find(Long id) {
 		Execution entity = em.find(Execution.class, id);
@@ -46,6 +50,8 @@ public class ExecutionDao extends AbstractDao {
 		em.merge(new Execution(id, store.getIdByCode(DictCodes.Q_VALUE_QSTAT_ONEXEC)));
 		sa.remove(id);
 		um.remove(id);
+		cd.remove(id);
+		da.remove(id);
 	}
 
 	/**

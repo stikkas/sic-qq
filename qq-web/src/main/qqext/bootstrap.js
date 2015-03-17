@@ -69,7 +69,6 @@ Ext.Loader.addClassPathMappings({
   "hawk_common.sys.Consts": "packages/hawk_common/src/sys/Consts.js",
   "hawk_common.sys.Utils": "packages/hawk_common/src/sys/Utils.js",
   "over": "overrides",
-  "qq": "qqext",
   "qqext.view.transmission.VTransmission": "qqext/view/transmission/VTransmission.js"
 });
 
@@ -894,7 +893,6 @@ Ext.ClassManager.addNameAlternateMappings({
   "hawk_common.sys.Utils": [],
   "over.ComboBox": [],
   "over.DatePicker": [],
-  "qq.model.ControlledObject": [],
   "qqext.Menu": [],
   "qqext.button.ArticleButton": [],
   "qqext.button.ToolButton": [],
@@ -907,6 +905,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.cmp.ErrorGetter": [],
   "qqext.cmp.FieldContainer": [],
   "qqext.cmp.FieldSet": [],
+  "qqext.cmp.ManyOneReader": [],
   "qqext.cmp.Number": [],
   "qqext.cmp.Panel": [],
   "qqext.cmp.PanelEditViewMode": [],
@@ -928,10 +927,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.factory.PanelGrid": [],
   "qqext.factory.TextArea": [],
   "qqext.factory.TextField": [],
-  "qqext.model.Applicant": [],
-  "qqext.model.ApplicantDoc": [],
   "qqext.model.ArchiveJvk": [],
-  "qqext.model.Assistant": [],
   "qqext.model.Coordination": [],
   "qqext.model.DeliveryAction": [],
   "qqext.model.Dict": [],
@@ -940,11 +936,9 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.model.ExecutionInfo": [],
   "qqext.model.Jvk": [],
   "qqext.model.Notification": [],
-  "qqext.model.PreparedDoc": [],
   "qqext.model.Question": [],
   "qqext.model.SearchResultItem": [],
   "qqext.model.SendAction": [],
-  "qqext.model.SendDoc": [],
   "qqext.model.SicJvk": [],
   "qqext.model.Transmission": [],
   "qqext.model.UsedMaterial": [],
@@ -1953,9 +1947,6 @@ Ext.ClassManager.addNameAliasMappings({
   "hawk_common.sys.Utils": [],
   "over.ComboBox": [],
   "over.DatePicker": [],
-  "qq.model.ControlledObject": [
-    "ControlledObjectModel"
-  ],
   "qqext.Menu": [],
   "qqext.button.ArticleButton": [
     "ArticleButton",
@@ -1990,6 +1981,9 @@ Ext.ClassManager.addNameAliasMappings({
   "qqext.cmp.FieldSet": [
     "FieldSet",
     "widget.fieldsetcmp"
+  ],
+  "qqext.cmp.ManyOneReader": [
+    "reader.manyone"
   ],
   "qqext.cmp.Number": [
     "NumberField",
@@ -2049,14 +2043,7 @@ Ext.ClassManager.addNameAliasMappings({
   "qqext.factory.TextField": [
     "FTextField"
   ],
-  "qqext.model.Applicant": [
-    "ApplicantModel"
-  ],
-  "qqext.model.ApplicantDoc": [
-    "ApplicantDocModel"
-  ],
   "qqext.model.ArchiveJvk": [],
-  "qqext.model.Assistant": [],
   "qqext.model.Coordination": [
     "CoordinationModel"
   ],
@@ -2070,12 +2057,7 @@ Ext.ClassManager.addNameAliasMappings({
     "ExecutionInfoModel"
   ],
   "qqext.model.Jvk": [],
-  "qqext.model.Notification": [
-    "NotificationModel"
-  ],
-  "qqext.model.PreparedDoc": [
-    "PreparedDocModel"
-  ],
+  "qqext.model.Notification": [],
   "qqext.model.Question": [],
   "qqext.model.SearchResultItem": [
     "SearchResultItemModel"
@@ -2083,13 +2065,8 @@ Ext.ClassManager.addNameAliasMappings({
   "qqext.model.SendAction": [
     "SendActionModel"
   ],
-  "qqext.model.SendDoc": [
-    "SendDocModel"
-  ],
   "qqext.model.SicJvk": [],
-  "qqext.model.Transmission": [
-    "TransmissionModel"
-  ],
+  "qqext.model.Transmission": [],
   "qqext.model.UsedMaterial": [
     "UsedMaterialModel"
   ],
@@ -2104,15 +2081,9 @@ Ext.ClassManager.addNameAliasMappings({
   ],
   "qqext.store.ArchiveJvk": [],
   "qqext.store.CustomStore": [],
-  "qqext.store.Dict": [
-    "StoreDict"
-  ],
-  "qqext.store.DictSCV": [
-    "StoreSCV"
-  ],
-  "qqext.store.DictSV": [
-    "StoreDictSV"
-  ],
+  "qqext.store.Dict": [],
+  "qqext.store.DictSCV": [],
+  "qqext.store.DictSV": [],
   "qqext.store.DictStore": [
     "DictStore"
   ],

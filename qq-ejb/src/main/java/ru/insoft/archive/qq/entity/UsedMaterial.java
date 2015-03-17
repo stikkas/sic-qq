@@ -7,19 +7,25 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  * Данные по используемым материалам. Закладка "исполнение запроса".
  *
  * @author С. Благодатских
  */
+@NamedQueries({
+	@NamedQuery(name = "UsedMaterial.materialByQid",
+			query = "SELECT m FROM UsedMaterial m WHERE m.qid = :id"),
+	@NamedQuery(name = "UsedMaterial.delMaterialByQid",
+			query = "DELETE FROM UsedMaterial m WHERE m.qid = :id")})
 @Entity
 @Table(name = "QQ_USED_MATERIAL")
-
 public class UsedMaterial implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -31,30 +37,26 @@ public class UsedMaterial implements Serializable {
 	@Column(name = "USED_MATERIAL_ID")
 	private Long id;
 
-	@Size(max = 255)
 	@Column(name = "FOND_NUMBER")
 	private String fondNumber;
 
-	@Size(max = 255)
 	@Column(name = "OPIS_NUMBER")
 	private String opisNumber;
 
-	@Size(max = 255)
 	@Column(name = "SERIES_NUMBER")
 	private String seriesNumber;
 
-	@Size(max = 255)
 	@Column(name = "STORAGE_UNIT_NUMBER")
 	private String storageUnitNumber;
 
-	@Size(max = 255)
 	@Column(name = "REMARK")
 	private String remark;
 
+	@JsonIgnore
 	@Basic(optional = false)
 	@NotNull
 	@Column(name = "QUESTION_ID")
-	private Long question;
+	private Long qid;
 
 	public UsedMaterial() {
 	}
@@ -111,13 +113,14 @@ public class UsedMaterial implements Serializable {
 		this.remark = remark;
 	}
 
-	public Long getQuestion() {
-		return question;
+	public Long getQid() {
+		return qid;
 	}
 
-	public void setQuestion(Long question) {
-		this.question = question;
+	public void setQid(Long qid) {
+		this.qid = qid;
 	}
+
 
 	@Override
 	public int hashCode() {

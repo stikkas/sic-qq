@@ -9,11 +9,7 @@ import ru.insoft.archive.qq.entity.AttachedFile;
  * @author stikkas<stikkas@yandex.ru>
  */
 @Stateless
-public class AttachedFileDao extends AbstractCRUDDao<AttachedFile> {
-
-	public AttachedFileDao() {
-		super(AttachedFile.class);
-	}
+public class AttachedFileDao extends AbstractDao {
 
 	/**
 	 * Создает записи по прикрепленным файлам в базе
@@ -24,7 +20,7 @@ public class AttachedFileDao extends AbstractCRUDDao<AttachedFile> {
 	 */
 	public void create(Set<String> fileNames, String fileType, Long ownerId) {
 		for (String fileName : fileNames) {
-			create(new AttachedFile(fileName, store.getIdByCode(fileType), ownerId));
+			em.persist(new AttachedFile(fileName, store.getIdByCode(fileType), ownerId));
 		}
 	}
 

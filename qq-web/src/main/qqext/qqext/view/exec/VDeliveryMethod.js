@@ -60,13 +60,12 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 	},
 	/**
 	 * Загружает данные в форму
-	 * @param {Ext.data.Store} files хранилище для файлов
-	 * @param {Ext.data.Model} model модель для остальных полей формы
+	 * @param {qqext.model.Execution} model модель для полей формы
 	 */
-	loadRecord: function (files, model) {
+	loadRecord: function (model) {
 		this._sf.getStore().load();
 		this.callParent([model]);
-		this._ff.loadRecord(files);
+		this._ff.loadRecord(model.files);
 	},
 	/**
 	 * Устанавливает хранилища для своих таблиц. Хранилища берутся
@@ -102,36 +101,21 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 					]
 				}),
 				createCmp('Ext.Component', {autoEl: 'hr'}),
-				me._in = createCmp('FTextField', way.number[1], way.number[0], {
+				me._in = createCmp('FTextField', 'Исходящий №', 'issueNum', {
 					width: 270,
 					labelWidth: 150
 				}),
-				me._rm = createCmp('FTextArea', way.remark[1], way.remark[0], {
+				me._rm = createCmp('FTextArea', 'Примечание', 'remark', {
 					width: 800,
 					labelWidth: 150
 				}),
 				me._ff = createCmp('FAttachedFiles', 'Ответ',
-						'Q_VALUE_FILE_TYPE_ANSWER', ns.atpaths.fsend,
-						ns.atpaths.usend, {
+						'Q_VALUE_FILE_TYPE_ANSWER', 'rest/files', {
 							allowBlank: ns.isSIC ? false : true,
 							collapsible: true,
 							collapsed: true,
 							cls: 'collapse_section attached_section'
 						})
-
-						/*
-						 createCmp('FieldSet', {
-						 title: 'Ответ',
-						 collapsible: true,
-						 collapsed: true,
-						 cls: 'collapse_section attached_section legend70',
-						 items: [me._ff = createCmp('FAttachedFiles', '',
-						 'Q_VALUE_FILE_TYPE_ANSWER', ns.atpaths.fsend,
-						 ns.atpaths.usend, {
-						 allowBlank: ns.isSIC ? false : true
-						 })]
-						 })
-						 */
 			]
 		});
 

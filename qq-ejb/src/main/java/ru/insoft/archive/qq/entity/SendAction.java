@@ -8,25 +8,35 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
+ * Класс сущности "Способ отправки"
  *
  * @author С. Благодатских
  */
+@NamedQueries({
+	@NamedQuery(name = "SendAction.actionByQid",
+			query = "SELECT a FROM SendAction a WHERE a.qid = :id"),
+	@NamedQuery(name = "SendAction.delActionByQid",
+			query = "DELETE FROM SendAction a WHERE a.qid = :id")})
 @Entity
 @Table(name = "QQ_SEND_ACTION")
 public class SendAction implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(generator = "sendActionGen", strategy = GenerationType.SEQUENCE)
 	@SequenceGenerator(name = "sendActionGen", sequenceName = "SEQ_QQ_SEND_ACTION",
-		allocationSize = 1)
+			allocationSize = 1)
 	@Column(name = "SEND_ACTION_ID")
 	private Long id;
 
@@ -37,10 +47,11 @@ public class SendAction implements Serializable {
 	@Column(name = "SEND_TYPE_ID")
 	private Long sendType;
 
+	@JsonIgnore
 	@Basic(optional = false)
 	@NotNull
 	@Column(name = "QUESTION_ID")
-	private Long question;
+	private Long qid;
 
 	public SendAction() {
 	}
@@ -73,12 +84,12 @@ public class SendAction implements Serializable {
 		this.sendType = sendType;
 	}
 
-	public Long getQuestion() {
-		return question;
+	public Long getQid() {
+		return qid;
 	}
 
-	public void setQuestion(Long question) {
-		this.question = question;
+	public void setQid(Long qid) {
+		this.qid = qid;
 	}
 
 	@Override

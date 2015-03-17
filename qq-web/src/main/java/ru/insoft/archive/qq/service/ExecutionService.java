@@ -17,23 +17,23 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import org.apache.commons.fileupload.FileItem;
-import ru.insoft.archive.qq.dao.NotificationDao;
+import ru.insoft.archive.qq.dao.ExecutionDao;
 import ru.insoft.archive.qq.ejb.DictCodes;
-import ru.insoft.archive.qq.entity.Notification;
+import ru.insoft.archive.qq.entity.Execution;
 import ru.insoft.archive.qq.service.dto.SubmitAnswer;
 import ru.insoft.archive.qq.service.ejb.AttachedFileBean;
 
 /**
- * Класс для работы с вкладкой "Уведомление заявителю"
+ * Класс для работы с вкладкой "Исполнение запроса"
  *
  * @author Благодатских С.
  */
 @Produces(MediaType.APPLICATION_JSON)
-@Path("notification")
-public class NotificationService {
+@Path("execution")
+public class ExecutionService {
 
 	@Inject
-	private NotificationDao nd;
+	private ExecutionDao ed;
 
 	@Inject
 	private AttachedFileBean af;
@@ -42,19 +42,19 @@ public class NotificationService {
 	private UserProfile up;
 
 	/**
-	 * Возвращает уведомление с интересующим id
+	 * Возвращает исполнение запроса с интересующим id
 	 *
-	 * @param id идентификатор уведомления
-	 * @return найденое уведомление или null
+	 * @param id идентификатор запроса
+	 * @return найденое исполнение или null
 	 */
 	@Path("{id}")
 	@GET
-	public Notification get(@PathParam("id") Long id) {
-		return nd.find(id);
+	public Execution get(@PathParam("id") Long id) {
+		return ed.find(id);
 	}
 
 	/**
-	 * Обновляет уведомление.
+	 * Обновляет исполнение запроса.
 	 *
 	 * @param req объект запроса
 	 * @return в случае успеха объект с обновленной сущностью запроса, иначе
@@ -62,25 +62,25 @@ public class NotificationService {
 	 */
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public SubmitAnswer<Notification> update(@Context HttpServletRequest req) {
+	public SubmitAnswer<Execution> update(@Context HttpServletRequest req) {
 		Map<String, String> params = new HashMap<>();
 		List<FileItem> files = new ArrayList<>();
 		af.parseRequest(req, params, files);
 
-		Notification n = af.getEntity(params.get("model"), Notification.class);
-		Long id = n.getId();
+		Execution e = af.getEntity(params.get("model"), Execution.class);
+		Long id = e.getId();
 
-		String dir = Paths.get(up.getQqPath(), up.getNotiFilesPath(), id.toString()).toString();
+		String dir = Paths.get(up.getQqPath(), up.getReplyFilesPath(), id.toString()).toString();
 
 		af.removeFiles(params.get("deletedFiles"), dir);
-		af.createFiles(files, dir, DictCodes.Q_VALUE_FILE_TYPE_INFO, id);
+		af.createFiles(files, dir, DictCodes.Q_VALUE_FILE_TYPE_ANSWER, id);
 
 		// Возвращаем сущность запроса вместе с файлами
-		return new SubmitAnswer<>(true, nd.update(n));
+		return new SubmitAnswer<>(true, ed.update(e));
 	}
 
 	/**
-	 * Удаляет информацию о уведомлении с указанным id
+	 * Удаляет информацию о исполнении запроса с указанным id
 	 *
 	 * @param id идентификатор уведомления для удаления
 	 */
@@ -88,7 +88,7 @@ public class NotificationService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@DELETE
 	public void remove(@PathParam("id") Long id) {
-		nd.remove(id); 
-		af.removeDir(Paths.get(up.getQqPath(), up.getNotiFilesPath(), id.toString()));
+		ed.remove(id);
+		af.removeDir(Paths.get(up.getQqPath(), up.getReplyFilesPath(), id.toString()));
 	}
 }

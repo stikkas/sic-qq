@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -18,6 +20,11 @@ import javax.validation.constraints.NotNull;
  *
  * @author С. Благодатских
  */
+@NamedQueries({
+	@NamedQuery(name = "Coordination.coorByQid",
+			query = "SELECT c FROM Coordination c WHERE c.qid = :id"),
+	@NamedQuery(name = "Coordination.delCoorByQid",
+			query = "DELETE FROM Coordination c WHERE c.qid = :id")})
 @Entity
 @Table(name = "QQ_COORDINATION")
 
@@ -28,7 +35,7 @@ public class Coordination implements Serializable {
 	@Id
 	@GeneratedValue(generator = "coordinationGen", strategy = GenerationType.SEQUENCE)
 	@SequenceGenerator(name = "coordinationGen", sequenceName = "SEQ_QQ_COORDINATION",
-		allocationSize = 1)
+			allocationSize = 1)
 	@Column(name = "COORDINATION_ID")
 	private Long id;
 
@@ -42,7 +49,7 @@ public class Coordination implements Serializable {
 	@Basic(optional = false)
 	@NotNull
 	@Column(name = "QUESTION_ID")
-	private Long question;
+	private Long qid;
 
 	public Coordination() {
 	}
@@ -75,12 +82,12 @@ public class Coordination implements Serializable {
 		this.stageDate = stageDate;
 	}
 
-	public Long getQuestion() {
-		return question;
+	public Long getQid() {
+		return qid;
 	}
 
-	public void setQuestion(Long question) {
-		this.question = question;
+	public void setQid(Long qid) {
+		this.qid = qid;
 	}
 
 	@Override

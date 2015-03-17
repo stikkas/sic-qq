@@ -12,7 +12,7 @@ Ext.define('qqext.view.exec.VExecForm', {
 		'qqext.view.exec.VDeliveryMethod',
 		'qqext.button.ToolButton',
 		'qqext.view.menu.HButtonMenu',
-		'qqext.model.ExecutionInfo',
+		'qqext.model.Execution',
 		'qqext.Menu'
 	],
 	mixins: ['qqext.cmp.DisableButtons'],
@@ -28,65 +28,60 @@ Ext.define('qqext.view.exec.VExecForm', {
 			var ns = qqext;
 			ns.switchArticleButton(ns.getButton(ns.btns.exec));
 			ns.Menu.setEditMenu(me._idx);
-			if (ns.request !== me.model) {
+			if (!ns.creq.e) {
 				// Значит новый запрос (не тот который был до этого)
-				me.model = ns.request;
-				me._disableButtons(true, 1, 2, 3);
-				var status = me.model.get('status');
-				me.model.getTrans({
-					callback: function (r) {
-						me._disableButtons(!((r.get('executor') === ns.userId || (
-								ns.superex && 
-								(ns.request.get('execOrg') === ns.orgId))) &&
+				ns.model.Execution.load(ns.creq.q.get('id'), {
+					success: function (record) {
+						var status = record.get('status');
+						ns.creq.e = record;
+						ns.creq.e.files = record.files;
+						me._initData();
+						me._disableButtons(!((record.get('executor') === ns.userId || (
+								ns.superex &&
+								(ns.creq.q.get('execOrg') === ns.orgId))) &&
 								(status === ns.statsId[ns.stats.onexec] || status === ns.statsId[ns.stats.exec])), 0);
+					},
+					failure: function (record, operation) {
+						ns.showError("Ошибка получения данных", operation.getError());
 					}
 				});
-
-				me._initData();
+				me._disableButtons(true, 1, 2, 3);
 				ns.initRequired(me);
 				var store = Ext.getStore(ns.stIds.queryType);
-
-				if (me.model.get('questionType') ===
+				if (ns.creq.q.get('questionType') ===
 						store.getAt(store.find('code', 'Q_VALUE_QUEST_TYPE_SOCIAL')).get('id'))
 					me._ef.df2.show();
 				else
 					me._ef.df2.hide();
-
 				me.setViewOnly(true);
 			}
-			ns.viewport.doLayout();
+//			ns.viewport.doLayout();
 		}
 	},
 	_initData: function () {
 		var me = this,
-				model = me.model;
+				model = qqext.creq.e;
 		// Очистим все ошибки
 		me.items.each(function (it) {
 			it.reset();
 		});
-		model.getExec({
-			callback: function (r1) {
-				me._ef.loadRecord(r1);
-				if (r1.get('renewalNotice')) {
-					me._ef.df2.viewOnly = true;
-					me._prodlen = true;
-				} else {
-					me._ef.df2.viewOnly = false;
-					me._prodlen = false;
-				}
-				r1.getWay({
-					callback: function (r2) {
-						me._mf.loadRecord(r1.files(), r2);
-					}
-				});
-			}
-		});
+		me._ef.loadRecord(model);
+		if (model.get('prolongDate')) {
+			me._ef.df2.viewOnly = true;
+			me._prodlen = true;
+		} else {
+			me._ef.df2.viewOnly = false;
+			me._prodlen = false;
+		}
+		me._mf.loadRecord(model);
+
 		[me._df, me._cf, me._mf].forEach(function (v) {
 			v.setStorage();
 		});
 		me._df.loadRecord();
 		me._cf.loadRecord();
 	},
+
 	_saveData: function (success, failure) {
 		// TODO: Может стоит обновить дату и пользователя обновления запроса
 		var me = this;
@@ -162,14 +157,10 @@ Ext.define('qqext.view.exec.VExecForm', {
 		 * @returns {undefined}
 		 */
 		function remove() {
-			var model = me.model;
-			model.getExec().destroy({
+			ns.creq.e.destroy({
 				callback: function (r, o) {
 					if (o.success) {
 						me._mf.remove();
-						model.setExec(createCmp('ExecutionInfoModel', {
-							id: model.get('id')
-						}));
 						me._disableButtons(true, 0, 2);
 						me._disableButtons(false, 1, 3);
 						me._initData();

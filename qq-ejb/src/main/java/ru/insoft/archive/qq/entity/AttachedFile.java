@@ -59,6 +59,11 @@ public class AttachedFile implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Notification notification;
 
+	@JsonIgnore
+	@JoinColumn(name = "QUESTION_ID", referencedColumnName = "ID", insertable = false, updatable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Execution execution;
+
 	public AttachedFile() {
 	}
 
@@ -114,6 +119,14 @@ public class AttachedFile implements Serializable {
 
 	public void setNotification(Notification notification) {
 		this.notification = notification;
+	}
+
+	public Execution getExecution() {
+		return execution;
+	}
+
+	public void setExecution(Execution execution) {
+		this.execution = execution;
 	}
 
 	@Override

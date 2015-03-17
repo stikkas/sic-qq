@@ -27,7 +27,6 @@ Ext.define('qqext.model.Coordination', (function() {
 		validations: [{type: 'presence', field: coor.stage[0], message: coor.stage[1] + ' должен быть указан'},
 			{type: 'presence', field: coor.date[0], message: coor.date[1] + ' должна быть указана'}
 		],
-		belongsTo: 'qqext.model.ExecutionInfo',
 		proxy: {
 			type: 'rest',
 			url: '/qq-web/rest/coordination',

@@ -12,27 +12,20 @@ import ru.insoft.archive.qq.entity.Question;
  * @author Благодатских С.
  */
 @Stateless
-public class QuestionDao extends AbstractCRUDDao<Question> {
+public class QuestionDao extends AbstractDao {
 
-	public QuestionDao() {
-		super(Question.class);
-	}
-
-	@Override
 	public Question find(Long id) {
-		Question entity = super.find(id);
+		Question entity = em.find(Question.class, id);
 		if (entity != null) {
 			return setFiles(entity);
 		}
 		return entity;
 	}
 
-	@Override
 	public Question update(Question entity) {
-		return setFiles(super.update(entity));
+		return setFiles(em.merge(entity));
 	}
 
-	@Override
 	public Question create(Question entity) {
 		// Устанавливаем обязательные параметры
 		Integer year = new GregorianCalendar().get(Calendar.YEAR);
@@ -51,7 +44,8 @@ public class QuestionDao extends AbstractCRUDDao<Question> {
 		if (entity.getStatus() == null) {
 			entity.setStatus(store.getIdByCode(DictCodes.Q_VALUE_QSTAT_ONREG));
 		}
-		return super.create(entity);
+		em.persist(entity);
+		return entity;
 	}
 
 	/**
@@ -65,5 +59,9 @@ public class QuestionDao extends AbstractCRUDDao<Question> {
 				.setParameter("type", store.getIdByCode(DictCodes.Q_VALUE_FILE_TYPE_APP_DOCS))
 				.getResultList());
 		return entity;
+	}
+
+	public void remove(Long id) {
+		em.remove(em.find(Question.class, id));
 	}
 }

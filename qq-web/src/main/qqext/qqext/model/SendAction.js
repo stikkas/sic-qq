@@ -22,7 +22,6 @@ Ext.define('qqext.model.SendAction', (function () {
 		validations: [{type: 'presence', field: send.type[0], message: send.type[1] + ' должен быть указан'},
 			{type: 'presence', field: send.date[0], message: send.date[1] + ' должна быть указана'}
 		],
-		belongsTo: 'qqext.model.ExecutionInfo',
 		proxy: {
 			type: 'rest',
 			url: '/qq-web/rest/sendaction',

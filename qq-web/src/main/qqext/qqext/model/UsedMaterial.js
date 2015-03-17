@@ -27,7 +27,6 @@ Ext.define('qqext.model.UsedMaterial', (function() {
 			{type: 'presence', field: mat.storage[0], message: mat.storage[1] + ' должен быть указан'},
 			{type: 'presence', field: mat.pages[0], message: mat.pages[1] + ' должен быть указан'}
 		],
-		belongsTo: 'qqext.model.ExecutionInfo',
 		proxy: {
 			type: 'rest',
 			url: '/qq-web/rest/usedmaterial',

@@ -19,45 +19,41 @@ Ext.define('qqext.view.exec.VExecInfo', {
 	initComponent: function () {
 		var me = this,
 				ns = qqext,
-				createCmp = Ext.create,
-				exec = ns.execInfo;
+				createCmp = Ext.create;
 		Ext.applyIf(me, {
 			items: [
-				me.df1 = createCmp('FDateField', exec.date[1], exec.date[0], {width: 270}),
-				me.df2 = createCmp('FDateField', exec.notice[1], exec.notice[0], {
+				me.df1 = createCmp('FDateField', 'Дата исполнения', 'execDate', {width: 270}),
+				me.df2 = createCmp('FDateField', 'Уведомление о продлении сроков', 'prolongDate', {
 					allowBlank: true,
 					width: 270
 				}),
-				createCmp('FComboBox', exec.result[1], ns.stIds.resans, exec.result[0],
-						{
-							listeners: {
-								change: function xx(cb, value) {
-									if (xx.adr === undefined) {
-										var store = cb.store;
-										xx.adr = store.getAt(store.find('code', 'Q_VALUE_RESULT_REDIRECT')).get('id');
-										xx.rec = store.getAt(store.find('code', 'Q_VALUE_RESULT_DOP_INFO')).get('id');
-									}
-									me._rf.reset();
-									if (value === xx.adr) {
-										me._rf.show();
-										me._rf.setFieldLabel(exec.refer[1]);
-									} else if (value === xx.rec) {
-										me._rf.show();
-										me._rf.setFieldLabel(exec.refer[2]);
-									} else {
-										me._rf.hide();
-									}
-								}
-							},
-							editable: false,
-							width: 400
-						}),
-				me._rf = createCmp('FTextArea', '', exec.refer[0], {allowBlank: true, hidden: true}),
-				createCmp('FComboBox', exec.tema[1], ns.stIds.tematic, exec.tema[0], {
+				createCmp('FComboBox', 'Результат ответа', ns.stIds.resans, 'replyRes', {
+					listeners: {
+						change: function xx(cb, value) {
+							if (xx.adr === undefined) {
+								var store = cb.store;
+								xx.adr = store.getAt(store.find('code', 'Q_VALUE_RESULT_REDIRECT')).get('id');
+								xx.rec = store.getAt(store.find('code', 'Q_VALUE_RESULT_DOP_INFO')).get('id');
+							}
+							me._rf.reset();
+							if (value === xx.adr) {
+								me._rf.show();
+								me._rf.setFieldLabel('Переадресовка');
+							} else if (value === xx.rec) {
+								me._rf.show();
+								me._rf.setFieldLabel('Рекомендация');
+							} else {
+								me._rf.hide();
+							}
+						}
+					},
 					editable: false,
 					width: 400
 				}),
-				createCmp('FComboBox', exec.category[1], ns.stIds.difcat, exec.category[0],
+				me._rf = createCmp('FTextArea', '', 'refer', {allowBlank: true, hidden: true}),
+				createCmp('FComboBox', 'Тематика ответа', ns.stIds.tematic, 'replyTema', {
+					editable: false, width: 400}),
+				createCmp('FComboBox', 'Категория сложности', ns.stIds.difcat, 'difCat',
 						{width: 200, editable: false, allowBlank: true})
 			]
 		});

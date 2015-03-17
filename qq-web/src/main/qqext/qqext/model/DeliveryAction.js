@@ -20,7 +20,6 @@ Ext.define('qqext.model.DeliveryAction', (function () {
 		validations: [{type: 'presence', field: del.type[0], message: del.type[1] + ' должен быть указан'},
 			{type: 'format', field: del.count[0], matcher: /[1-9][0-9]*/, message: del.count[1] + ' должно быть больше нуля'}
 		],
-		belongsTo: 'qqext.model.ExecutionInfo',
 		proxy: {
 			type: 'rest',
 			url: '/qq-web/rest/deliveryaction',

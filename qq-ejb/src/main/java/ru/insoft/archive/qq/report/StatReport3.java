@@ -205,7 +205,7 @@ public class StatReport3 {
 			return archives.get(archiveId);
 		}
 
-		List<String> res = em.createQuery("SELECT d.value from DescriptorValue d WHERE d.id = :id")
+		List<String> res = em.createQuery("SELECT d.fullValue from DescriptorValue d WHERE d.id = :id")
 				.setParameter("id", archiveId)
 				.getResultList();
 		if (res.isEmpty()) {
@@ -233,10 +233,10 @@ public class StatReport3 {
 		end = cal.getTime();
 
 		List<Object[]> objects = em.createQuery("SELECT q.regDate, "
-				+ "q.prefixNum, q.sufixNum, q.applicant.organization, q.applicant.lastName, "
-				+ "q.applicant.firstName, q.applicant.middleName FROM Question q WHERE "
+				+ "q.prefix, q.sufix, q.orgName, q.lName, "
+				+ "q.fName, q.mName FROM Question q WHERE "
 				+ "q.regDate BETWEEN :start AND :end AND q.execOrg = :archive AND q.litera = :litera"
-				+ " ORDER BY q.regDate, q.prefixNum")
+				+ " ORDER BY q.regDate, q.prefix")
 				.setParameter("start", start)
 				.setParameter("end", end)
 				.setParameter("archive", archiveId)

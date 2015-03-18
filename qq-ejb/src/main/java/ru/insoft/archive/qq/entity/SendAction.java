@@ -26,7 +26,9 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 	@NamedQuery(name = "SendAction.actionByQid",
 			query = "SELECT a FROM SendAction a WHERE a.qid = :id"),
 	@NamedQuery(name = "SendAction.delActionByQid",
-			query = "DELETE FROM SendAction a WHERE a.qid = :id")})
+			query = "DELETE FROM SendAction a WHERE a.qid = :id"),
+	@NamedQuery(name = "SendAction.delActionByIds",
+			query = "DELETE FROM SendAction a WHERE a.id in :ids")})
 @Entity
 @Table(name = "QQ_SEND_ACTION")
 public class SendAction implements Serializable {

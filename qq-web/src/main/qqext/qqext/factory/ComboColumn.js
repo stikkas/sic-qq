@@ -20,7 +20,7 @@ Ext.define('qqext.factory.ComboColumn', {
 	constructor: function (text, dataIndex, storeId,
 			flex, displayField, valueField) {
 		var me = this;
-		displayField = displayField || 'name';
+		displayField = displayField || 'text';
 		valueField = valueField || 'id';
 		me.text = text;
 		me.dataIndex = dataIndex;

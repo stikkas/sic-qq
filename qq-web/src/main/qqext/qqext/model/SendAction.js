@@ -1,7 +1,6 @@
 Ext.define('qqext.model.SendAction', {
 	extend: 'Ext.data.Model',
 	requires: [
-		'Ext.data.proxy.Rest',
 		'Ext.data.validations'
 	],
 	idProperty: 'id',
@@ -16,12 +15,6 @@ Ext.define('qqext.model.SendAction', {
 	validations: [
 		{type: 'presence', field: 'sendType', message: 'Способ отправки должен быть указан'},
 		{type: 'presence', field: 'sendDate', message: 'Дата должна быть указана'}
-	]/*,
-	proxy: {
-		type: 'rest',
-		url: 'rest/sendaction',
-		reader: 'json',
-		writer: 'json'
-	}*/
+	]
 });
 

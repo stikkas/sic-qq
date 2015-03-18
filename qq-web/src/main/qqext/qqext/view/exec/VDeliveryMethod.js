@@ -39,20 +39,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 	 * Сохраняет данные из таблицы  на сервер
 	 */
 	save: function () {
-		var records = [],
-				store = this._sf.getStore();
-
-		store.data.each(function(it){
-			records.push(it.data);
-		});
-		Ext.Ajax.request({
-			method: 'POST',
-			url: store.proxy.url, 
-			params: {data: Ext.encode(records)},
-			success: function() {
-				store.load();
-			}
-		});
+		this._sf.save();
 	},
 	remove: function () {
 		this._ff.reset();
@@ -62,7 +49,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 	 * @param {qqext.model.Execution} model модель для полей формы
 	 */
 	loadRecord: function (model) {
-		this._sf.getStore().load();
+		this._sf.store.load();
 		this.callParent([model]);
 		this._ff.loadRecord(model.files);
 	},
@@ -70,15 +57,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 	 * Устанавливает хранилища для своих таблиц.
 	 */
 	setStorage: function () {
-		this._sf.reconfigure(
-				Ext.create('Ext.data.Store', {
-					model: 'qqext.model.SendAction',
-					proxy: {
-						type: 'ajax',
-						url: 'rest/sendaction/' + qqext.creq.e.get('id'),
-						reader: 'json'
-					}
-				}));
+		this._sf.changeUrl(qqext.creq.e.get('id'));
 	},
 	initComponent: function () {
 		var me = this,
@@ -86,7 +65,7 @@ Ext.define('qqext.view.exec.VDeliveryMethod', {
 				createCmp = Ext.create;
 		Ext.apply(me, {
 			items: [
-				me._sf = createCmp('FPanelGrid', 'qqext.model.SendAction', {
+				me._sf = createCmp('FPanelGrid', 'qqext.model.SendAction', 'rest/sendaction/', {
 					defaults: {
 						sortable: false,
 						menuDisabled: true

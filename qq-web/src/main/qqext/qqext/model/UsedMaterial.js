@@ -1,37 +1,23 @@
-Ext.define('qqext.model.UsedMaterial', (function() {
-	var ns = Ext.ns('qqext'),
-			mat = ns.usedMaterial = {
-				fond: ['fondNumber', '№ фонда'],
-				opis: ['opisNumber', '№ описи'],
-				storage: ['storageUnitNumber', '№ ед. хранения'],
-				pages: ['seriesNumber', '№ листов'],
-				remark: ['remark', 'примечание']
-			};
-	return {
-		alias: 'UsedMaterialModel',
+Ext.define('qqext.model.UsedMaterial', {
 		extend: 'Ext.data.Model',
-		requires: ['Ext.data.proxy.Rest',
-			'Ext.data.validations'],
+		requires: ['Ext.data.validations'],
 		idProperty: 'id',
 		fields: [
 			{name: 'id', type: 'int', convert: null, defaultValue: null, isNull: true},
-			{name: 'question', type: 'int', convert: null, defaultValue: null},
-			{name: mat.fond[0], type: 'string'},
-			{name: mat.opis[0], type: 'string'},
-			{name: mat.storage[0], type: 'string'},
-			{name: mat.pages[0], type: 'string'},
-			{name: mat.remark[0], type: 'string'}
+			// Номер фонда
+			{name: 'fondNum', type: 'string'},
+			// Номер описи
+			{name: 'opisNum', type: 'string'},
+			// Номер единицы хранения
+			{name: 'storeUnitNum', type: 'string'},
+			// Номер листов
+			{name: 'seriesNum', type: 'string'},
+			// примечание
+			{name: 'remark', type: 'string'}
 		],
-		validations: [{type: 'presence', field: mat.fond[0], message: mat.fond[1] + ' должен быть указан'},
-			{type: 'presence', field: mat.opis[0], message: mat.opis[1] + ' должен быть указан'},
-			{type: 'presence', field: mat.storage[0], message: mat.storage[1] + ' должен быть указан'},
-			{type: 'presence', field: mat.pages[0], message: mat.pages[1] + ' должен быть указан'}
-		],
-		proxy: {
-			type: 'rest',
-			url: '/qq-web/rest/usedmaterial',
-			reader: 'json',
-			writer: 'json'
-		}
-	};
-})());
+		validations: [{type: 'presence', field: 'fondNum', message: '№ фонда должен быть указан'},
+			{type: 'presence', field: 'opisNum', message: '№ описи должен быть указан'},
+			{type: 'presence', field: 'storeUnitNum', message: '№ ед. хранения должен быть указан'},
+			{type: 'presence', field: 'seriesNum', message: '№ листов должен быть указан'}
+		]
+});

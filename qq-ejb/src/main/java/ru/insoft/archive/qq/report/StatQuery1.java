@@ -14,7 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
-import ru.insoft.archive.qq.entity.DescriptorValue;
+import ru.insoft.archive.qq.ejb.DictCodes;
 
 /**
  * Собирает статистику по выполненым запросам за определенный период.
@@ -32,8 +32,8 @@ public class StatQuery1 {
 
 	public static final String[] typesQuery = new String[]{
 		social, tematic, genea, bio
-	};
 
+	};
 // Состояние запроса
 	private static final String complited = "Q_VALUE_QSTAT_EXEC";
 
@@ -49,14 +49,14 @@ public class StatQuery1 {
 	public static final String complyCanceled = "Q_VALUE_RESULT_REJECTED";
 
 // Организации (Архивы)
-	public static final String SIC = "Q_VALUE_MEMBER_SIC";
-	public static final String GARF = "Q_VALUE_MEMBER_GARF";
-	public static final String RGANTD = "Q_VALUE_MEMBER_RGANTD";
-	public static final String RGAE = "Q_VALUE_MEMBER_RGAE";
-	public static final String RGALI = "Q_VALUE_MEMBER_RGALI";
-	public static final String RGASPI = "Q_VALUE_MEMBER_RGASPI";
-	public static final String RGANI = "Q_VALUE_MEMBER_RGANI";
-	public static final String RGBA = "Q_VALUE_MEMBER_RGBA";
+	public static final String SIC = DictCodes.Q_VALUE_MEMBER_SIC;
+	public static final String GARF = DictCodes.Q_VALUE_MEMBER_GARF;
+	public static final String RGANTD = DictCodes.Q_VALUE_MEMBER_RGANTD;
+	public static final String RGAE = DictCodes.Q_VALUE_MEMBER_RGAE;
+	public static final String RGALI = DictCodes.Q_VALUE_MEMBER_RGALI;
+	public static final String RGASPI = DictCodes.Q_VALUE_MEMBER_RGASPI;
+	public static final String RGANI = DictCodes.Q_VALUE_MEMBER_RGANI;
+	public static final String RGBA = DictCodes.Q_VALUE_MEMBER_RGBA;
 
 // Фиктивное значение для колонки литера СИЦ
 	public static final String SICLITERA = "siclitera";
@@ -86,16 +86,16 @@ public class StatQuery1 {
 	private void initIdsData() {
 		descriptorIds = new HashMap<>();
 		descriptorValues = new HashMap<>();
-		List<DescriptorValue> descs = em.createQuery("SELECT d from DescriptorValue d WHERE d.code IN :values")
-				.setParameter("values", Arrays.asList(social, tematic, genea, bio,
+		List<Object[]> descs = em.createNamedQuery("DescriptorValue.idsByCodes")
+				.setParameter("codes", Arrays.asList(social, tematic, genea, bio,
 								complited, complyCanceled,
 								positive, positivePaid, negative, negativeNoProfil, negativePaid,
 								negativeWithRecomendation, negativeWithRedirect, negativeWithView,
-								SIC, GARF, RGAE, RGALI, RGANI, RGANTD, RGASPI, RGBA))
+								GARF, RGAE, RGANTD, RGALI, RGASPI, RGANI, RGBA, SIC))
 				.getResultList();
-		for (DescriptorValue d : descs) {
-			String value = d.getValueCode();
-			Long id = d.getId();
+		for (Object[] d : descs) {
+			String value = (String) d[0];
+			Long id = (Long) d[1];
 			descriptorIds.put(value, id);
 			descriptorValues.put(id, value);
 		}
@@ -128,20 +128,18 @@ public class StatQuery1 {
 		List<Object[]> results = query.getResultList();
 		for (Object[] res : results) {
 			if (res[0].equals(descriptorIds.get(social))) {
-				countRecived(archives, 0, (Long)res[1], (Long)res[2]);
+				countRecived(archives, 0, (Long) res[1], (Long) res[2]);
 			} else if (res[0].equals(descriptorIds.get(tematic))) {
-				countRecived(archives, 1, (Long)res[1], (Long)res[2]);
+				countRecived(archives, 1, (Long) res[1], (Long) res[2]);
 			} else if (res[0].equals(descriptorIds.get(genea))) {
-				countRecived(archives, 2, (Long)res[1], (Long)res[2]);
+				countRecived(archives, 2, (Long) res[1], (Long) res[2]);
 			} else if (res[0].equals(descriptorIds.get(bio))) {
-				countRecived(archives, 3, (Long)res[1], (Long)res[2]);
+				countRecived(archives, 3, (Long) res[1], (Long) res[2]);
 			}
 		}
 
-		query = em.createQuery("SELECT q.questionType, q.litera, q.execOrg, "
-				+ "q.motivatedRefusal, e.answerResult FROM Question q "
-				+ "LEFT JOIN q.execution e WHERE q.status = :status "
-				+ "AND e.execDate BETWEEN :start AND :end")
+		query = em.createQuery("SELECT q.questionType, q.litera, q.execOrg, q.motivRefuse, q.replyRes "
+				+ "FROM Question q WHERE q.status = :status AND q.execDate BETWEEN :start AND :end")
 				.setParameter("status", descriptorIds.get(complited))
 				.setParameter("start", start, TemporalType.DATE)
 				.setParameter("end", end, TemporalType.DATE);

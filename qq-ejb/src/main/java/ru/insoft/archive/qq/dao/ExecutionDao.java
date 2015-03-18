@@ -1,9 +1,16 @@
 package ru.insoft.archive.qq.dao;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import ru.insoft.archive.qq.ejb.DictCodes;
 import ru.insoft.archive.qq.entity.Execution;
+import ru.insoft.archive.qq.qualifier.Coordination;
+import ru.insoft.archive.qq.qualifier.DeliveryAction;
+import ru.insoft.archive.qq.qualifier.SendAction;
+import ru.insoft.archive.qq.qualifier.UsedMaterial;
 
 /**
  * Для доступа к Исполнения запроса
@@ -14,13 +21,20 @@ import ru.insoft.archive.qq.entity.Execution;
 public class ExecutionDao extends AbstractDao {
 
 	@Inject
-	private SendActionDao sa;
+	@SendAction
+	private TableDao<ru.insoft.archive.qq.entity.SendAction> sa;
+
 	@Inject
-	private UsedMaterialDao um;
-	@Inject 
-	private CoordinationDao cd;
+	@UsedMaterial
+	private TableDao<ru.insoft.archive.qq.entity.UsedMaterial> um;
+
 	@Inject
-	private DeliveryActionDao da;
+	@Coordination
+	private TableDao<ru.insoft.archive.qq.entity.Coordination> cd;
+
+	@Inject
+	@DeliveryAction
+	private TableDao<ru.insoft.archive.qq.entity.DeliveryAction> da;
 
 	public Execution find(Long id) {
 		Execution entity = em.find(Execution.class, id);
@@ -38,7 +52,8 @@ public class ExecutionDao extends AbstractDao {
 	 * Обнуляет запись и удаляет записи о файлах, которыми владеет сущность.
 	 * т.к. у нас несколько сущностей занимают одну таблицу то удаление скажется
 	 * и на других сущностях. Удаляем все дополнительные сущности, связанные с
-	 * вкладкой "Исполнение зароса"
+	 * вкладкой "Исполнение зароса". Возвращаем плановую дату на место, если
+	 * изменяли в случае продления. не забываем установить исполнителя.
 	 *
 	 * @param id идентификатор запроса
 	 */
@@ -47,7 +62,20 @@ public class ExecutionDao extends AbstractDao {
 				.setParameter("owner", id)
 				.setParameter("type", store.getIdByCode(DictCodes.Q_VALUE_FILE_TYPE_ANSWER))
 				.executeUpdate();
-		em.merge(new Execution(id, store.getIdByCode(DictCodes.Q_VALUE_QSTAT_ONEXEC)));
+		Execution entity = em.find(Execution.class, id);
+
+		Date prolong = entity.getProlongDate();
+		Calendar date = new GregorianCalendar();
+		date.setTime(entity.getPlanDate());
+
+		entity = new Execution(id, store.getIdByCode(DictCodes.Q_VALUE_QSTAT_ONEXEC), entity.getExecutor());
+
+		if (prolong != null) {
+			date.add(Calendar.DATE, -30);
+		}
+		entity.setPlanDate(date.getTime());
+
+		em.merge(entity);
 		sa.remove(id);
 		um.remove(id);
 		cd.remove(id);

@@ -24,7 +24,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 	@NamedQuery(name = "AttachedFile.questionFilesWithType",
 			query = "SELECT a from AttachedFile a WHERE a.qid = :question and a.type = :type"),
 	@NamedQuery(name = "AttachedFile.removeFilesByOwner",
-			query = "DELETE FROM AttachedFile a WHERE a.qid = :onwer and a.type = :type")
+			query = "DELETE FROM AttachedFile a WHERE a.qid = :owner and a.type = :type")
 })
 @Entity
 @Table(name = "QQ_ATTACHED_FILE")

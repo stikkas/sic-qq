@@ -23,7 +23,9 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 	@NamedQuery(name = "DeliveryAction.actionByQid",
 			query = "SELECT a FROM DeliveryAction a WHERE a.qid = :id"),
 	@NamedQuery(name = "DeliveryAction.delActionByQid",
-			query = "DELETE FROM DeliveryAction a WHERE a.qid = :id")})
+			query = "DELETE FROM DeliveryAction a WHERE a.qid = :id"),
+	@NamedQuery(name = "DeliveryAction.delActionByIds",
+			query = "DELETE FROM DeliveryAction d WHERE d.id in :ids")})
 @Entity
 @Table(name = "QQ_DELIVERY_ACTION")
 public class DeliveryAction implements Serializable {
@@ -100,7 +102,7 @@ public class DeliveryAction implements Serializable {
 			return false;
 		}
 		DeliveryAction other = (DeliveryAction) object;
-		return !this.id.equals(other.id);
+		return this.id.equals(other.id);
 	}
 
 	@Override

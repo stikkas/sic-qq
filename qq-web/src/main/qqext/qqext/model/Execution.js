@@ -33,7 +33,14 @@ Ext.define('qqext.model.Execution', {
 		// Примечание
 		{name: 'remark', type: 'string'},
 		// Статус запроса
-		{name: 'status', type: 'int', defaultValue: null, convert: null}
+		{name: 'status', type: 'int', defaultValue: null, convert: null},
+		// Плановая дата выполнения запроса
+		{name: 'planDate', type: 'date', convert: function (v) {
+				if (v)
+					return new Date(v);
+			}, defaultValue: null},
+		// Исполнитель, нужен только для чтения
+		{name: 'executor', type: 'int', defaultValue: null, convert: null}
 	],
 	associations: [
 		{type: 'hasMany', model: 'qqext.model.DeliveryAction',

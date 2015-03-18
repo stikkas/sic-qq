@@ -23,7 +23,10 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 	@NamedQuery(name = "UsedMaterial.materialByQid",
 			query = "SELECT m FROM UsedMaterial m WHERE m.qid = :id"),
 	@NamedQuery(name = "UsedMaterial.delMaterialByQid",
-			query = "DELETE FROM UsedMaterial m WHERE m.qid = :id")})
+			query = "DELETE FROM UsedMaterial m WHERE m.qid = :id"),
+	@NamedQuery(name = "UsedMaterial.delMaterialByIds",
+			query = "DELETE FROM UsedMaterial m WHERE m.id in :ids")
+})
 @Entity
 @Table(name = "QQ_USED_MATERIAL")
 public class UsedMaterial implements Serializable {
@@ -38,16 +41,16 @@ public class UsedMaterial implements Serializable {
 	private Long id;
 
 	@Column(name = "FOND_NUMBER")
-	private String fondNumber;
+	private String fondNum;
 
 	@Column(name = "OPIS_NUMBER")
-	private String opisNumber;
+	private String opisNum;
 
 	@Column(name = "SERIES_NUMBER")
-	private String seriesNumber;
+	private String seriesNum;
 
 	@Column(name = "STORAGE_UNIT_NUMBER")
-	private String storageUnitNumber;
+	private String storeUnitNum;
 
 	@Column(name = "REMARK")
 	private String remark;
@@ -73,36 +76,36 @@ public class UsedMaterial implements Serializable {
 		this.id = id;
 	}
 
-	public String getFondNumber() {
-		return fondNumber;
+	public String getFondNum() {
+		return fondNum;
 	}
 
-	public void setFondNumber(String fondNumber) {
-		this.fondNumber = fondNumber;
+	public void setFondNum(String fondNum) {
+		this.fondNum = fondNum;
 	}
 
-	public String getOpisNumber() {
-		return opisNumber;
+	public String getOpisNum() {
+		return opisNum;
 	}
 
-	public void setOpisNumber(String opisNumber) {
-		this.opisNumber = opisNumber;
+	public void setOpisNum(String opisNum) {
+		this.opisNum = opisNum;
 	}
 
-	public String getSeriesNumber() {
-		return seriesNumber;
+	public String getSeriesNum() {
+		return seriesNum;
 	}
 
-	public void setSeriesNumber(String seriesNumber) {
-		this.seriesNumber = seriesNumber;
+	public void setSeriesNum(String seriesNum) {
+		this.seriesNum = seriesNum;
 	}
 
-	public String getStorageUnitNumber() {
-		return storageUnitNumber;
+	public String getStoreUnitNum() {
+		return storeUnitNum;
 	}
 
-	public void setStorageUnitNumber(String storageUnitNumber) {
-		this.storageUnitNumber = storageUnitNumber;
+	public void setStoreUnitNum(String storeUnitNum) {
+		this.storeUnitNum = storeUnitNum;
 	}
 
 	public String getRemark() {
@@ -131,7 +134,6 @@ public class UsedMaterial implements Serializable {
 
 	@Override
 	public boolean equals(Object object) {
-		// TODO: Warning - this method won't work in the case the id fields are not set
 		if (!(object instanceof UsedMaterial)) {
 			return false;
 		}

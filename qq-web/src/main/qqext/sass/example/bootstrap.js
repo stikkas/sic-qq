@@ -2498,7 +2498,7 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.model.Dict": [],
   "qqext.model.DictSCV": [],
   "qqext.model.DictSV": [],
-  "qqext.model.ExecutionInfo": [],
+  "qqext.model.Execution": [],
   "qqext.model.Jvk": [],
   "qqext.model.Notification": [],
   "qqext.model.Question": [],
@@ -2507,7 +2507,6 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.model.SicJvk": [],
   "qqext.model.Transmission": [],
   "qqext.model.UsedMaterial": [],
-  "qqext.model.WayToSend": [],
   "qqext.proxy.Combo": [],
   "qqext.proxy.Table": [],
   "qqext.store.ArchiveJvk": [],
@@ -3609,35 +3608,22 @@ Ext.ClassManager.addNameAliasMappings({
     "FTextField"
   ],
   "qqext.model.ArchiveJvk": [],
-  "qqext.model.Coordination": [
-    "CoordinationModel"
-  ],
-  "qqext.model.DeliveryAction": [
-    "DeliveryActionModel"
-  ],
+  "qqext.model.Coordination": [],
+  "qqext.model.DeliveryAction": [],
   "qqext.model.Dict": [],
   "qqext.model.DictSCV": [],
   "qqext.model.DictSV": [],
-  "qqext.model.ExecutionInfo": [
-    "ExecutionInfoModel"
-  ],
+  "qqext.model.Execution": [],
   "qqext.model.Jvk": [],
   "qqext.model.Notification": [],
   "qqext.model.Question": [],
   "qqext.model.SearchResultItem": [
     "SearchResultItemModel"
   ],
-  "qqext.model.SendAction": [
-    "SendActionModel"
-  ],
+  "qqext.model.SendAction": [],
   "qqext.model.SicJvk": [],
   "qqext.model.Transmission": [],
-  "qqext.model.UsedMaterial": [
-    "UsedMaterialModel"
-  ],
-  "qqext.model.WayToSend": [
-    "WayToSendModel"
-  ],
+  "qqext.model.UsedMaterial": [],
   "qqext.proxy.Combo": [
     "proxy.combo"
   ],

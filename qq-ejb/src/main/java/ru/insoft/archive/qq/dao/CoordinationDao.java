@@ -1,11 +1,14 @@
 package ru.insoft.archive.qq.dao;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.Stateless;
 import ru.insoft.archive.qq.entity.Coordination;
 
+@ru.insoft.archive.qq.qualifier.Coordination
 @Stateless
-public class CoordinationDao extends AbstractDao {
+public class CoordinationDao extends AbstractDao implements TableDao<Coordination> {
 
 	/**
 	 * Возвращает согласование документа для определенного запроса
@@ -13,6 +16,7 @@ public class CoordinationDao extends AbstractDao {
 	 * @param questionId идентификатор запроса
 	 * @return массив согласований
 	 */
+	@Override
 	public List<Coordination> find(Long questionId) {
 		return em.createNamedQuery("Coordination.coorByQid")
 				.setParameter("id", questionId).getResultList();
@@ -23,6 +27,7 @@ public class CoordinationDao extends AbstractDao {
 	 *
 	 * @param questionId идентификатор запроса
 	 */
+	@Override
 	public void remove(Long questionId) {
 		em.createNamedQuery("Coordination.delCoorByQid")
 				.setParameter("id", questionId)
@@ -36,23 +41,30 @@ public class CoordinationDao extends AbstractDao {
 	 * @param questionId идентификатор запроса
 	 * @return Обновленный список
 	 */
+	@Override
 	public List<Coordination> update(List<Coordination> actions, Long questionId) {
-		remove(questionId);
-		return create(actions, questionId);
-	}
-
-	/**
-	 * Создает список согласований для определенного запроса
-	 *
-	 * @param actions список согласований для вставки
-	 * @param questionId идентификатор запроса
-	 * @return Обновленный список
-	 */
-	public List<Coordination> create(List<Coordination> actions, Long questionId) {
+		List<Coordination> oldies = find(questionId);
 		for (Coordination action : actions) {
 			action.setQid(questionId);
-			em.persist(action);
+			if (action.getId() == null) {
+				em.persist(action);
+			} else {
+				em.merge(action);
+			}
+			oldies.remove(action);
+		}
+
+		if (!oldies.isEmpty()) {
+			// Удаляем старые
+			Set<Long> ids = new HashSet<>();
+
+			for (Coordination coor : oldies) {
+				ids.add(coor.getId());
+			}
+			em.createNamedQuery("Coordination.delCoorByIds")
+					.setParameter("ids", ids).executeUpdate();
 		}
 		return actions;
 	}
+
 }

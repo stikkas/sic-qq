@@ -34,29 +34,25 @@ Ext.define('qqext.view.exec.VCoordination', {
 	/**
 	 * Обновляет данные на сервере
 	 */
-	sync: function() {
-		var store = this._cf.getStore();
-		store.sync({callback: function() {
-				store.load();
-			}});
+	save: function() {
+		this._cf.save();
 	},
 	/**
 	 * Загружает данные в форму
 	 */
 	loadRecord: function() {
-		this._cf.getStore().load();
+		this._cf.store.load();
 	},
 	/**
 	 * Устанавливает хранилища для своих таблиц. Хранилища берутся
 	 * из ассоциаций текущего запроса.
 	 */
 	setStorage: function() {
-		this._cf.reconfigure(qqext.request.getExec().coordinations());
+		this._cf.changeUrl(qqext.creq.e.get('id'));
 	},
 	initComponent: function() {
 		var me = this,
-				createCmp = Ext.create,
-				coor = qqext.coordination;
+				createCmp = Ext.create;
 
 		Ext.applyIf(me, {
 			items: [createCmp('FieldSet', {
@@ -64,16 +60,16 @@ Ext.define('qqext.view.exec.VCoordination', {
 					collapsed: true,
 					cls: 'collapse_section',
 					title: 'Согласование документа',
-					items: [me._cf = createCmp('FPanelGrid', 'CoordinationModel', {
+					items: [me._cf = createCmp('FPanelGrid', 'qqext.model.Coordination', 'rest/coordination/', {
 							defaults: {
 								sortable: false,
 								menuDisabled: true
 							}, items: [
-								createCmp('ComboColumn', coor.stage[1], coor.stage[0],
+								createCmp('ComboColumn', 'Этап согласования документа', 'stage',
 										qqext.stIds.stage, 1),
 								{
-									text: coor.date[1],
-									dataIndex: coor.date[0],
+									text: 'Дата',
+									dataIndex: 'stageDate',
 									editor: {xtype: 'hawkDateField'},
 									renderer: function(value) {
 										return Ext.Date.format(value, 'd.m.Y');

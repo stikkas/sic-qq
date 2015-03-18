@@ -51,6 +51,12 @@ public class Execution implements Serializable {
 	private Long replyRes;
 
 	/**
+	 * Исполнитель
+	 */
+	@Column(name = "EXECUTOR_ID", insertable = false, updatable = false)
+	private Long executor;
+
+	/**
 	 * Тематика ответа
 	 */
 	@Column(name = "TEMATIC_ANS_ID")
@@ -87,6 +93,13 @@ public class Execution implements Serializable {
 	private Long status;
 
 	/**
+	 * Плановая дата исполнения запроса
+	 */
+	@Column(name = "PLAN_EXEC_DATE", columnDefinition = "DATE")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date planDate;
+
+	/**
 	 * Файлы ответа, устанавливаются при получении информации по id
 	 */
 	@OneToMany(mappedBy = "execution", fetch = FetchType.LAZY)
@@ -95,9 +108,10 @@ public class Execution implements Serializable {
 	public Execution() {
 	}
 
-	public Execution(Long id, Long status) {
+	public Execution(Long id, Long status, Long executor) {
 		this.id = id;
 		this.status = status;
+		this.executor = executor;
 	}
 
 	public Long getId() {
@@ -180,12 +194,28 @@ public class Execution implements Serializable {
 		this.status = status;
 	}
 
+	public Date getPlanDate() {
+		return planDate;
+	}
+
+	public void setPlanDate(Date planDate) {
+		this.planDate = planDate;
+	}
+
 	public List<AttachedFile> getFiles() {
 		return files;
 	}
 
 	public void setFiles(List<AttachedFile> files) {
 		this.files = files;
+	}
+
+	public Long getExecutor() {
+		return executor;
+	}
+
+	public void setExecutor(Long executor) {
+		this.executor = executor;
 	}
 
 }

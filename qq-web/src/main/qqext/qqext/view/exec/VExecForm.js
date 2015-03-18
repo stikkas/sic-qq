@@ -24,7 +24,7 @@ Ext.define('qqext.view.exec.VExecForm', {
 	 */
 	_idx: 6,
 	listeners: {
-		activate: function (me, prev) {
+		activate: function (me) {
 			var ns = qqext;
 			ns.switchArticleButton(ns.getButton(ns.btns.exec));
 			ns.Menu.setEditMenu(me._idx);
@@ -81,57 +81,51 @@ Ext.define('qqext.view.exec.VExecForm', {
 		me._df.loadRecord();
 		me._cf.loadRecord();
 	},
-
 	_saveData: function (success, failure) {
-		// TODO: Может стоит обновить дату и пользователя обновления запроса
-		var me = this;
-		if (!qqext.checkDates([me._ef.df1, me._ef.df2]))
+		var me = this,
+				ns = qqext,
+				files = me._mf._ff,
+				model = ns.creq.e;
+		if (!ns.checkDates([me._ef.df1, me._ef.df2]))
 			return;
 		me.setViewOnly(true);
 		me._disableButtons(true, 0, 1, 2, 3);
-		var model = me.model.getExec();
 		me.updateRecord();
-		model.save({
-			callback: function (r, o, s) {
-				if (s) {
-					model.getWay().save({
-						callback: function (rec, op, st) {
-							if (st) {
-								me._df.sync();
-								me._cf.sync();
-								me._mf.save();
-								qqext.infoChanged = true;
-								if (!me._prodlen && model.get('renewalNotice')) {
-									me.model.set('plannedFinishDate',
-											me.model.get('plannedFinishDate').valueOf() + 30 * qqext.msPday);
-									me.model.save({
-										callback: function (rec, op, st) {
-											if (st) {
-												me._prodlen = true;
-												me._ef.df2.viewOnly = true;
-											} else {
-												qqext.showError("Ошибка продления выполнения", op.getError());
-												failure();
-											}
-										}
-									});
-								}
-							} else {
-								qqext.showError("Ошибка сохранение данных", o.getError());
-								failure();
-							}
-						}
-					});
-				} else {
-					qqext.showError("Ошибка сохранение данных", o.getError());
-					failure();
-				}
+
+		if (!me._prodlen && model.get('prolongDate'))
+			model.set('planDate', model.get('planDate').valueOf() + 30 * ns.msPday);
+
+		files.getForm().submit({
+			clientValidation: false,
+			url: 'rest/execution',
+			method: 'POST',
+			params: {
+				deletedFiles: Ext.encode(files.deletedFiles),
+				model: Ext.encode(ns.creq.e.getData())
+			},
+			success: function (form, action) {
+				var data = action.result.data;
+				ns.creq.e = Ext.create('qqext.model.Execution', data);
+				ns.creq.e.files = data.files;
+				me._df.save();
+				me._cf.save();
+				me._mf.save();
+				files.loadRecord(data.files);
+				ns.infoChanged = true;
+				// Синхронизируем с вкладкой регистрации
+				ns.regForm.query.pd.setValue(new Date(data.planDate));
+				me._disableButtons(false, 0);
+				success();
+			},
+			failure: function (form, action) {
+				ns.showError("Ошибка сохранения", action.response.responseText);
+				files.showFiles();
+				failure();
 			}
 		});
 	},
 	initComponent: function () {
 		//----------обработчики для кнопок меню---------
-		//sc - контекст для обработчика
 
 		/**
 		 * Обрабатывает событие 'click' на кнопке "Сохранить"
@@ -140,9 +134,8 @@ Ext.define('qqext.view.exec.VExecForm', {
 		 */
 		function save() {
 			me._saveData(function () {
-				me._disableButtons(false, 0);
 			}, function () {
-				if (me.model.get('status') === ns.statsId[ns.stats.exec]) {
+				if (qqext.creq.e.get('status') === ns.statsId[ns.stats.exec]) {
 					me._disableButtons(false, 1);
 					me.setEditMode();
 				} else {
@@ -160,11 +153,9 @@ Ext.define('qqext.view.exec.VExecForm', {
 			ns.creq.e.destroy({
 				callback: function (r, o) {
 					if (o.success) {
-						me._mf.remove();
-						me._disableButtons(true, 0, 2);
-						me._disableButtons(false, 1, 3);
-						me._initData();
 						ns.infoChanged = true;
+						ns.creq.e = null;
+						me.fireEvent('activate', me);
 					} else {
 						ns.showError("Ошибка удаления записи", o.getError());
 					}
@@ -183,24 +174,19 @@ Ext.define('qqext.view.exec.VExecForm', {
 			}
 
 			var issueNumberField = me._mf._in,
-					model = me.model;
+					model = ns.creq.q;
 			if (!issueNumberField.getValue()) {
-				issueNumberField.setValue(model.get('prefixNum') + '/' + model.get('sufixNum'));
+				issueNumberField.setValue(model.get('prefix') + '/' + model.get('sufix'));
 			}
 			if (me.validate()) {
+				var status = ns.statsId[ns.stats.exec];
+				ns.creq.e.set('status', status);
 				me._saveData(function () {
-					var status = ns.statsId[ns.stats.exec];
-					model.set('status', status);
-					model.save({
-						callback: function (r, o, s) {
-							if (s) {
-								ns.statusPanel.setStatus(status);
-							} else {
-								ns.showError("Ошибка обновления статуса", o.getError());
-							}
-							me._disableButtons(false, 0);
-						}
-					});
+					ns.statusPanel.setStatus(status);
+					// На всякий случай синхронизируем 
+					ns.creq.q.set('status', status);
+					if (ns.creq.n)
+						ns.creq.n.set('status', status);
 				}, failure);
 			} else { // Валидация не прошла
 				failure();
@@ -250,10 +236,9 @@ Ext.define('qqext.view.exec.VExecForm', {
 		ns.Menu.editReqMenu.insert(3, menu);
 	},
 	updateRecord: function () {
-		var me = this,
-				model = me.model.getExec();
-		me._ef.updateRecord(model);
-		me._mf.updateRecord(model.getWay());
+		var model = qqext.creq.e;
+		this._ef.updateRecord(model);
+		this._mf.updateRecord(model);
 	},
 	/**
 	 * Проверяет форму на валидность (для прохождения регистрации).

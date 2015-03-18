@@ -32,8 +32,8 @@ Ext.define('qqext.view.exec.VExecInfo', {
 						change: function xx(cb, value) {
 							if (xx.adr === undefined) {
 								var store = cb.store;
-								xx.adr = store.getAt(store.find('code', 'Q_VALUE_RESULT_REDIRECT')).get('id');
-								xx.rec = store.getAt(store.find('code', 'Q_VALUE_RESULT_DOP_INFO')).get('id');
+								xx.adr = store.getAt(store.find('shortValue', 'Q_VALUE_RESULT_REDIRECT')).get('id');
+								xx.rec = store.getAt(store.find('shortValue', 'Q_VALUE_RESULT_DOP_INFO')).get('id');
 							}
 							me._rf.reset();
 							if (value === xx.adr) {

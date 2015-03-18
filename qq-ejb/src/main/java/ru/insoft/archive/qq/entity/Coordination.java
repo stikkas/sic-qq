@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  *
@@ -24,7 +25,10 @@ import javax.validation.constraints.NotNull;
 	@NamedQuery(name = "Coordination.coorByQid",
 			query = "SELECT c FROM Coordination c WHERE c.qid = :id"),
 	@NamedQuery(name = "Coordination.delCoorByQid",
-			query = "DELETE FROM Coordination c WHERE c.qid = :id")})
+			query = "DELETE FROM Coordination c WHERE c.qid = :id"),
+	@NamedQuery(name = "Coordination.delCoorByIds",
+			query = "DELETE FROM Coordination c WHERE c.id in :ids"),
+})
 @Entity
 @Table(name = "QQ_COORDINATION")
 
@@ -46,6 +50,7 @@ public class Coordination implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date stageDate;
 
+	@JsonIgnore
 	@Basic(optional = false)
 	@NotNull
 	@Column(name = "QUESTION_ID")

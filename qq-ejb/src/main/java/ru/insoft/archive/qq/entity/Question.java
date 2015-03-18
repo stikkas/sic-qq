@@ -230,6 +230,23 @@ public class Question implements Serializable {
 	private Long notiStatus;
 
 	/**
+	 * Результат ответа
+	 * Используется при построении отчета по статистики
+	 */
+	@JsonIgnore
+	@Column(name = "ANS_RESULT_ID", insertable = false, updatable = false)
+	private Long replyRes;
+
+	/**
+	 * Дата исполнения
+	 * Используется при построении отчета по статистики
+	 */
+	@JsonIgnore
+	@Column(name = "EXEC_DATE", columnDefinition = "DATE", insertable = false, updatable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date execDate;
+
+	/**
 	 * Документы заявителя, устанавливаются при получении запроса по id
 	 */
 	@OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
@@ -511,6 +528,22 @@ public class Question implements Serializable {
 
 	public void setRegistratorValue(AdmUser registratorValue) {
 		this.registratorValue = registratorValue;
+	}
+
+	public Long getReplyRes() {
+		return replyRes;
+	}
+
+	public void setReplyRes(Long replyRes) {
+		this.replyRes = replyRes;
+	}
+
+	public Date getExecDate() {
+		return execDate;
+	}
+
+	public void setExecDate(Date execDate) {
+		this.execDate = execDate;
 	}
 
 }

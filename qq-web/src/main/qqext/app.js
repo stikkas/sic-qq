@@ -577,15 +577,19 @@ Ext.application({
 		 * @method openRequest
 		 */
 		ns.openRequest = function (view, record) {
+			var form = ns.getCurrentForm();
+			form.getEl().mask("Выполниние");
 			ns.resetModel();
 			ns.model.Question.load(record.get('id'), {callback: function (r, o, s) {
+					form.unmask();
 					if (s) {
 						ns.creq.q = r;
 						ns.disableArticles(true, buttonNames.notify, buttonNames.trans, buttonNames.exec);
 						ns.turnOnArticles();
 						ns.Menu.setArticleMenu(1);
-						getButton(buttonNames.toSearch).form = ns.getCurrentForm();
-						getButton(buttonNames.reg).fireEvent('click');
+						getButton(buttonNames.toSearch).form = form;
+//						 getButton(buttonNames.reg).fireEvent('click');
+						ns.setCurrentForm(3);
 						ns.statusPanel.setStatus(r.get('status'));
 					} else {
 						ns.showError("Ошибка загрузки данных", o.getError());

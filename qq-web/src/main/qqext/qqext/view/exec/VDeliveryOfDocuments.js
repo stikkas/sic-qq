@@ -33,8 +33,6 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 		if (me._errors.length)
 			error += "<p>" + me._errors.join('') + "</p>";
 		return error;
-
-
 	},
 	/**
 	 * Проверяет правильность заполнения формы
@@ -59,47 +57,42 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 	/**
 	 * Обновляет данные на сервере
 	 */
-	sync: function () {
-		[this._df.getStore(), this._uf.getStore()].forEach(function (v) {
-			v.sync({callback: function () {
-					v.load();
-				}});
-		});
+	save: function () {
+		this._df.save();
+		this._uf.save();
 	},
 	/**
 	 * Загружает данные в форму
 	 */
 	loadRecord: function () {
-		this._df.getStore().load();
-		this._uf.getStore().load();
+		this._df.store.load();
+		this._uf.store.load();
 	},
 	/**
 	 * Устанавливает хранилища для своих таблиц. Хранилища берутся
 	 * из ассоциаций текущего запроса.
 	 */
 	setStorage: function () {
-		var model = qqext.request.getExec();
-		this._df.reconfigure(model.deliveryactions());
-		this._uf.reconfigure(model.usedmaterials());
+		var id = qqext.creq.e.get('id');
+		this._df.changeUrl(id);
+		this._uf.changeUrl(id);
 	},
 	initComponent: function () {
 		var me = this,
 				createCmp = Ext.create,
-				ns = qqext,
-				mat = ns.usedMaterial,
-				delAction = ns.delAction;
+				ns = qqext;
 		Ext.applyIf(me, {
-			items: [me._df = createCmp('FPanelGrid', 'DeliveryActionModel', {
+			items: [me._df = createCmp('FPanelGrid', 'qqext.model.DeliveryAction', 'rest/delaction/', {
 					defaults: {
 						sortable: false,
 						menuDisabled: true
 					},
 					items: [
-						createCmp('ComboColumn', delAction.type[1], delAction.type[0],
+						createCmp('ComboColumn', 'Тип документов', 'docType',
 								ns.stIds.doctype, 1),
 						{
-							text: delAction.count[1],
-							dataIndex: delAction.count[0],
+							text: 'Количество документов',
+							dataIndex: 'docCount',
 							editor: {xtype: 'numberfield', minValue: 1}
 						}
 					]
@@ -110,35 +103,35 @@ Ext.define('qqext.view.exec.VDeliveryOfDocuments', {
 					collapsed: true,
 					cls: 'collapse_section inner_section',
 					items: [
-						me._uf = createCmp('FPanelGrid', 'UsedMaterialModel', {
+						me._uf = createCmp('FPanelGrid', 'qqext.model.UsedMaterial', 'rest/usedmaterial/', {
 							defaults: {
 								sortable: false,
 								menuDisabled: true,
 								flex: 1
 							}, items: [
 								{
-									text: mat.fond[1],
-									dataIndex: mat.fond[0],
+									text: '№ фонда',
+									dataIndex: 'fondNum',
 									editor: {xtype: 'textfield'}
 								},
 								{
-									text: mat.opis[1],
-									dataIndex: mat.opis[0],
+									text: '№ описи',
+									dataIndex: 'opisNum',
 									editor: {xtype: 'textfield'}
 								},
 								{
-									text: mat.storage[1],
-									dataIndex: mat.storage[0],
+									text: '№ ед. хранения',
+									dataIndex: 'storeUnitNum',
 									editor: {xtype: 'textfield'}
 								},
 								{
-									text: mat.pages[1],
-									dataIndex: mat.pages[0],
+									text: '№ листов',
+									dataIndex: 'seriesNum',
 									editor: {xtype: 'textfield'}
 								},
 								{
-									text: mat.remark[1],
-									dataIndex: mat.remark[0],
+									text: 'примечание',
+									dataIndex: 'remark',
 									editor: {xtype: 'textfield'},
 									flex: 2
 								}

@@ -5,7 +5,7 @@
 Ext.define('qqext.view.StyledPanel', {
 	extend: 'qqext.cmp.Panel',
 	border: true,
-        cls:'panel_style'
+	cls: 'panel_style'
 });
 
 

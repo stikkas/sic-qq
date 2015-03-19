@@ -107,7 +107,7 @@ public class StatQuery1 {
 		cal.add(Calendar.DAY_OF_YEAR, 1);
 		end = cal.getTime();
 		Query query = em.createQuery("SELECT q.questionType, q.execOrg, q.litera FROM Question q "
-				+ "WHERE q.regDate BETWEEN :start AND :end")
+				+ "WHERE trunc(q.regDate) BETWEEN trunc(:start) AND trunc(:end)")
 				.setParameter("start", start, TemporalType.DATE)
 				.setParameter("end", end, TemporalType.DATE);
 
@@ -139,7 +139,7 @@ public class StatQuery1 {
 		}
 
 		query = em.createQuery("SELECT q.questionType, q.litera, q.execOrg, q.motivRefuse, q.replyRes "
-				+ "FROM Question q WHERE q.status = :status AND q.execDate BETWEEN :start AND :end")
+				+ "FROM Question q WHERE q.status = :status AND trunc(q.execDate) BETWEEN trunc(:start) AND trunc(:end)")
 				.setParameter("status", descriptorIds.get(complited))
 				.setParameter("start", start, TemporalType.DATE)
 				.setParameter("end", end, TemporalType.DATE);

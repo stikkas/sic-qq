@@ -37,7 +37,7 @@ Ext.define('qqext.view.reg.VRegForm', {
 			ns.Menu.setEditMenu(me._idx);
 			if (ns.creq.q === null) {
 				// Значит событие случилось по нажатию на кнопку "Добавить"
-				me.clear();
+				me.clear(true);
 				model = ns.creq.q = Ext.create('qqext.model.Question');
 				//Кнопки "Редактировать" "Печать" и "Удалить"
 				me._disableButtons(true, 0, 2, 3);
@@ -65,7 +65,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 				me._disableButtons(!(hasRegRule && wantedStatus && belongToCreator ||
 						(!wantedStatus && ns.visor)), 0); // Редактировать
 				me._disableButtons(!(hasRegRule && !wantedStatus && belongToCreator), 2); // Печать
-
 				me.setViewOnly(true);
 				me.loadRecord();
 				ns.initRequired(me);
@@ -347,13 +346,15 @@ Ext.define('qqext.view.reg.VRegForm', {
 	/**
 	 * Приводит форму к первоначальному состоянию,
 	 * без данных
+	 * @param {Boolean} status сбрасывать или нет статуc
 	 */
-	clear: function () {
+	clear: function (status) {
 		var me = this;
 		me.reset();
 		me.target.hide();
 		me.applicant.appType.setValue(null);
-		qqext.statusPanel.setStatus('');
+		if (status) 
+			qqext.statusPanel.setStatus('');
 //		me.doLayout();
 	},
 	/**

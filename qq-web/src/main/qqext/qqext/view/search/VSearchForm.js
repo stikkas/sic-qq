@@ -26,51 +26,73 @@ Ext.define('qqext.view.search.VSearchForm', {
 		}
 	},
 	initComponent: function () {
-		var me = this;
+		var me = this,
+				onlyExecutor,
+				ns = qqext,
+				create = Ext.create;
+		me._fltrs = []; // Фильтры для поиска
 		Ext.applyIf(me, {
 			items: [
-				me._form = Ext.create('VSearchParams'),
-				me._grid = Ext.create('VSearchResult')
+				me._form = create('VSearchParams'),
+				me._grid = create('VSearchResult')
 			]
 		});
 		me.callParent();
-		if (!qqext.isSIC) {
-			var combo = me._cmb = me._form.items.getAt(0);
-			combo.setValue(me._org = qqext.orgId);
-			combo.hide();
+		// Флаг определяющий был ли произведен поиск.
+		// когда поменялась информация по какому-нибудь запросу
+		// если этот флаг установлен, т.е. был поиск, то следует обновить 
+		// результаты поиска иначе ничего не делать
+		me._inSearch = false;
+
+		// Если пользователь чистый исполнитель, то выводим запросы только назначеные ему
+		if (onlyExecutor = (ns.exec && !ns.coor && !ns.reg)) {
+			me._fltrs.push(create('Ext.util.Filter', {
+				property: 'executor',
+				value: ns.userId
+			}));
 		}
-		me._grid.store.getProxy().timeout = 120000;
+
+		me.store = me._grid.store;
+		me.store.addFilter(me._fltrs, false);
+	},
+	// Обновляет результаты поиска
+	reload: function () {
+		if (this._inSearch)
+			this._grid.store.reload();
 	},
 	/**
 	 * Очищает все поля формы
 	 * и результаты поиска. Приводит форму в первоначальное состояние.
 	 */
 	reset: function () {
-//		Ext.getStore('searchResults').loadData([], false);
 		var me = this;
-		me._grid.store.removeAll();
+		me._inSearch = false;
+		me.store.removeAll();
+		me.store.sorters.clear();
 		me._form.getForm().reset();
-		if (!qqext.isSIC)
-			me._cmb.setValue(me._org);
 		me._grid.dockedItems.getAt(2).onLoad();
 	},
 	/**
-	 * Запускает поиск по параметрам первого элемента контейнера
-	 * 'searchResult' store связан с сеткой для поиска {@link #qqext.view.search.VSearchResult},
-	 * так что при обновлении данных в хранилище (по вызову load) будут обновляться данные и
-	 * в сетке.
+	 * Запускает поиск по параметрам первого элемента контейнера.
+	 * Вызывается по кнопке "Поиск".
+	 * Загружает первую страницу.
 	 */
 	exec: function () {
-		var values = this._form.getValues(false, true),
-				ns = qqext;
-//		if (ns.isSIC)
-//			values.litera = ns.orgId;
-
-		if (ns.exec && !ns.coor && !ns.reg)
-			values.executor = ns.userId;
-
-		Ext.getStore('searchResults').loadPage(1, {
-			params: {q: Ext.encode(values)}
-		});
+		var me = this,
+				store = me.store,
+				values = me._form.getValues(false, true),
+				filters = [];
+		me._inSearch = true;
+		// Устанавливаем критерии поиска
+		for (var o in values) {
+			filters.push(Ext.create('Ext.util.Filter', {
+				property: o,
+				value: values[o]
+			}));
+		}
+		store.filters.clear();
+		filters = filters.concat(me._fltrs);
+		store.addFilter(filters, false);
+		store.loadPage(1);
 	}
 });

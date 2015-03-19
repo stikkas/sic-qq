@@ -88,26 +88,10 @@ Ext.define('qqext.view.journal.VJournalForm', {
 		store.loadPage(1);
 	},
 	/**
-	 * Запускает процесс поиска данных на сервере
-	 * Вызывается только при обновлении модели, программно (не по нажатия на кнопку)
-	 * Поэтому фильтры обновлять не нужно
+	 * Сейчас не используется, служит как заглушка на всякий случай
 	 */
 	exec: function () {
-		var store = this.getStore();
-		/*
-		this._fltrs.forEach(function (fltr) {
-			var exists = false;
-			store.filters.each(function (f) {
-				if (f.property === fltr.property) {
-					exists = true;
-					return false;
-				}
-			});
-			if (!exists)
-				store.addFilter(fltr);
-		});
-		*/
-		store.reload();
+		this.store.reload();
 	},
 	applyFilter: function () {
 		var me = this,
@@ -471,7 +455,6 @@ Ext.define('qqext.view.journal.VJournalForm', {
 		});
 		me.store = store;
 		me.callParent();
-		me.store.getProxy().timeout = 120000;
 		me.store.addFilter(me._fltrs, false);
 		me.store.sort([{property: 'regDate', direction: 'DESC'}]);
 	}

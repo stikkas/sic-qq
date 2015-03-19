@@ -3,8 +3,9 @@ package ru.insoft.archive.qq.dto;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
 import org.codehaus.jackson.map.MappingJsonFactory;
@@ -28,14 +29,22 @@ public class Filter {
 	/**
 	 * Список всех полей для поиска
 	 */
-	private List<Filter> filters;
+	private Set<Filter> filters;
 
 	/**
 	 * Строка для поиска. начинается с ' AND '
 	 */
 	private String condition;
 
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+	/**
+	 * Формат дат, которые получаем от ЖВК
+	 */
+	private static final SimpleDateFormat jvkDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+	/**
+	 * Формат дат, которые получаем от формы поиска (разные методы извлечения
+	 * данных)
+	 */
+	private static final SimpleDateFormat searchDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
 	/**
 	 * Исползутся для отдельного фильтра, предоставляющего один критерий
@@ -53,8 +62,24 @@ public class Filter {
 	 * Используется для созданияю объединяющего фильтра
 	 */
 	private Filter() {
-		filters = new ArrayList<>();
+		filters = new HashSet<>();
 		condition = "";
+	}
+
+	// Два фильтра с одинаковым названием поля считаются тождественными
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Filter) {
+			return Objects.equals(((Filter) obj).property, property);
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		hash = 67 * hash + java.util.Objects.hashCode(this.property);
+		return hash;
 	}
 
 	/**
@@ -75,6 +100,10 @@ public class Filter {
 			JsonToken current = parser.nextToken();
 			if (current == JsonToken.START_ARRAY) {
 				current = parser.nextToken(); // Должен начинаться объект
+				StringBuilder builder = new StringBuilder();
+				boolean startRegDate = false;
+				boolean endRegDate = false;
+
 				while (current != JsonToken.END_ARRAY) { // Перебираем все объекты пока не закончится массив или выпадет ошибка
 					if (current != JsonToken.START_OBJECT) { // Каждый заход цикла начинается с нового объекта
 						throw new RuntimeException("Неправильный формат данных");
@@ -101,23 +130,57 @@ public class Filter {
 								case "executor":
 								case "notiStat":
 								case "execOrg":
-									filter.condition += " AND j." + property + "Id = :" + property;
+								case "aplType":
+								case "aplCat":
+									builder.append(" AND j.").append(property)
+											.append("Id = :").append(property);
 									value = parser.getLongValue();
 									break;
 								case "regDate":
 								case "execDate":
 								case "planDate":
-									filter.condition += " AND trunc(j." + property + ") = trunc(:" + property + ")";
-									value = dateFormat.parse(parser.getText());
+									builder.append(" AND trunc(j.").append(property)
+											.append(") = trunc(:").append(property)
+											.append(")");
+//									filter.condition += " AND trunc(j." + property + ") = trunc(:" + property + ")";
+									value = jvkDateFormat.parse(parser.getText());
 									break;
 								case "otKogo":
-									filter.condition += " AND (lower(j.organization) like :"
-											+ property + " OR lower(j.famaly) like :" + property + ")";
+									builder.append(" AND (lower(j.organization) like :")
+											.append(property).append(" OR lower(j.famaly) like :")
+											.append(property).append(")");
+//									filter.condition += " AND (lower(j.organization) like :"
+//											+ property + " OR lower(j.famaly) like :" + property + ")";
 									value = "%" + parser.getText().toLowerCase() + "%";
 									break;
 								case "number":
 									addNumberProperty(filter, parser.getText());
 									added = true;
+									break;
+								case "content":
+								case "organization":
+								case "numIshodDoc":
+									builder.append(" AND lower(j.").append(property).append(") like :")
+											.append(property);
+									value = "%" + parser.getText().toLowerCase() + "%";
+									break;
+								case "naKogoLName":
+								case "naKogoFName":
+								case "naKogoMName":
+								case "lName":
+								case "fName":
+								case "mName":
+									builder.append(" AND lower(j.").append(property).append(") like :")
+											.append(property);
+									value = parser.getText().toLowerCase() + "%";
+									break;
+								case "regDateStart":
+									startRegDate = true;
+									value = searchDateFormat.parse(parser.getText());
+									break;
+								case "regDateEnd":
+									endRegDate = true;
+									value = searchDateFormat.parse(parser.getText());
 									break;
 								default:
 									throw new RuntimeException("Недопустимое значение критерия поиска: " + property);
@@ -136,8 +199,16 @@ public class Filter {
 					// Следующий объект или конец массива
 					current = parser.nextToken();
 				}
+				// если заданы интервалы даты регистрации
+				if (startRegDate && endRegDate) { 
+					builder.append(" AND (trunc(j.regDate) BETWEEN trunc(:regDateStart) AND trunc(:regDateEnd))");
+				} else if (startRegDate) {
+					builder.append(" AND trunc(j.regDate) >= trunc(:regDateStart)");
+				} else if (endRegDate) {
+					builder.append(" AND trunc(j.regDate) <= trunc(:regDateEnd)");
+				}
+				filter.condition += builder.toString();
 			}
-
 			return filter;
 		} catch (IOException | ParseException ex) {
 			throw new RuntimeException(ex.getMessage());
@@ -177,7 +248,7 @@ public class Filter {
 		return value;
 	}
 
-	public List<Filter> getFilters() {
+	public Set<Filter> getFilters() {
 		return filters;
 	}
 

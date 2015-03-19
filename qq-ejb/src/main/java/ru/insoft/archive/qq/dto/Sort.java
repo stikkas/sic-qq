@@ -15,7 +15,7 @@ public class Sort {
 
 	private static final Pattern pattern = Pattern.compile(
 			"^\\[\\{\"property\":\"(?<property>litera|number|regDate|planDate|otKogo|status|"
-			+ "executor|notiStat|execOrg|questionType|execDate)\",\"direction\":\""
+			+ "executor|notiStat|execOrg|questionType|execDate|content|replyResult)\",\"direction\":\""
 					+ "(?<direction>ASC|DESC)\"\\}\\]$");
 	/**
 	 * Поле, по которому сортируем
@@ -56,6 +56,7 @@ public class Sort {
 			String field = null;
 			switch (property) {
 				case "questionType":
+				case "replyResult":
 				case "executor":
 				case "status":
 				case "execOrg":
@@ -75,6 +76,7 @@ public class Sort {
 				case "regDate":
 				case "planDate":
 				case "execDate":
+				case "content":
 					field = "j." + property;
 			}
 

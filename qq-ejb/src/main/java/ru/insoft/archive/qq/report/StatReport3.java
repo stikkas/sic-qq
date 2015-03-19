@@ -29,6 +29,8 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import ru.insoft.archive.qq.ejb.DictCodes;
+import ru.insoft.archive.qq.ejb.Store;
 import ru.insoft.archive.qq.qualifier.TimesNewRoman;
 import ru.insoft.archive.qq.qualifier.TimesNewRomanBold;
 
@@ -50,19 +52,21 @@ public class StatReport3 {
 	@Inject
 	SimpleDateFormat sdf;
 
+	@Inject
+	Store store;
+
 	@PersistenceContext(unitName = "SicEntityManager")
 	private EntityManager em;
 
 	private static Font general;
 	private static Font generalBold;
-	private static Long sicId;
 	private static Map<Long, String> archives;
 
 	private static String[] tableHeaders = new String[]{
 		"№ п/п", "Дата регистра- ции", "Литера", "Номер запроса",
 		"ФИО / Организация заявителя"};
 
-	private static float[] cellWidths = new float[] {1f, 2f, 1.5f, 3f, 9f};
+	private static float[] cellWidths = new float[]{1f, 2f, 1.5f, 3f, 9f};
 
 	@PostConstruct
 	private void init() {
@@ -71,13 +75,6 @@ public class StatReport3 {
 		}
 		if (generalBold == null) {
 			generalBold = new Font(bfb, 12);
-		}
-		if (sicId == null) {
-			List<Long> ids = em.createQuery("SELECT d.id from DescriptorValue d "
-					+ "WHERE d.code = 'Q_VALUE_MEMBER_SIC'").getResultList();
-			if (!ids.isEmpty()) {
-				sicId = ids.get(0);
-			}
 		}
 		if (archives == null) {
 			archives = new HashMap<>();
@@ -172,6 +169,7 @@ public class StatReport3 {
 
 	/**
 	 * Создает ячейку таблицы с горизонтальным выравнивание по центру
+	 *
 	 * @param content содержимое для ячейки
 	 * @return ячейку
 	 */
@@ -180,7 +178,8 @@ public class StatReport3 {
 	}
 
 	/**
-	 * Создает ячейку таблицы 
+	 * Создает ячейку таблицы
+	 *
 	 * @param content содержимое для ячейки
 	 * @param alignment горизонтальное выравнивание текста в ячейке
 	 * @return ячейку
@@ -194,6 +193,7 @@ public class StatReport3 {
 		cell.setPaddingBottom(5);
 		return cell;
 	}
+
 	/**
 	 * Получает полное наименование архива
 	 *
@@ -225,22 +225,16 @@ public class StatReport3 {
 	 * @return список данных для заполнения таблицы
 	 */
 	private List<Result> getData(Date start, Date end, Long archiveId) {
-		// TODO разобраться почему не находятся данные для верхней границы, приходится искуственно 
-		// увеличивать диапазон на 1 день
-		Calendar cal = new GregorianCalendar();
-		cal.setTime(end);
-		cal.add(Calendar.DAY_OF_YEAR, 1);
-		end = cal.getTime();
-
+		// если использовать trunc то включаются обе границы
 		List<Object[]> objects = em.createQuery("SELECT q.regDate, "
 				+ "q.prefix, q.sufix, q.orgName, q.lName, "
 				+ "q.fName, q.mName FROM Question q WHERE "
-				+ "q.regDate BETWEEN :start AND :end AND q.execOrg = :archive AND q.litera = :litera"
+				+ "trunc(q.regDate) BETWEEN trunc(:start) AND trunc(:end) AND q.execOrg = :archive AND q.litera = :litera"
 				+ " ORDER BY q.regDate, q.prefix")
 				.setParameter("start", start)
 				.setParameter("end", end)
 				.setParameter("archive", archiveId)
-				.setParameter("litera", sicId)
+				.setParameter("litera", store.getIdByCode(DictCodes.Q_VALUE_MEMBER_SIC))
 				.getResultList();
 
 		List<Result> results = new ArrayList<>();
@@ -258,7 +252,7 @@ public class StatReport3 {
 
 		public Result(Object[] data) {
 			regDate = (Date) data[0];
-			number = (Long) data[1] + "/" + (Long) data[2];
+			number = (Long) data[1] + "/" + (Integer) data[2];
 			if (data[3] != null) {
 				fioOrgName = (String) data[3];
 			} else {

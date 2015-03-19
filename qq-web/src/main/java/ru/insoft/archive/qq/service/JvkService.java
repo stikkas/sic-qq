@@ -11,6 +11,7 @@ import ru.insoft.archive.qq.dao.JvkDao;
 import ru.insoft.archive.qq.dto.ArchiveJvkDto;
 import ru.insoft.archive.qq.dto.Filter;
 import ru.insoft.archive.qq.dto.PageDto;
+import ru.insoft.archive.qq.dto.SearchDto;
 import ru.insoft.archive.qq.dto.SicJvkDto;
 import ru.insoft.archive.qq.dto.Sort;
 
@@ -62,6 +63,25 @@ public class JvkService {
 			@QueryParam("limit") int limit, @QueryParam("sort") Sort sort,
 			@QueryParam("filter") Filter filter) {
 		return jd.getArchiveJvk(start, limit, sort, up.getOrganization(), filter);
+	}
+
+	/**
+	 * Возвращает список запросов по критериям поиска.
+	 * Это тотже самый жвк только вид сбоку. Так что я решил не заводить для него
+	 * отдельный сервис.
+	 *
+	 * @param start начальная запись
+	 * @param limit максимальное кол-во записей
+	 * @param sort параметры сортировки
+	 * @param filter ограницение поиска по критериям
+	 * @return найденные записи
+	 */
+	@GET
+	@Path("search")
+	public PageDto<SearchDto> search(@QueryParam("start") int start,
+			@QueryParam("limit") int limit, @QueryParam("sort") Sort sort,
+			@QueryParam("filter") Filter filter) {
+		return jd.search(start, limit, sort, filter, up.getOrganization());
 	}
 
 }

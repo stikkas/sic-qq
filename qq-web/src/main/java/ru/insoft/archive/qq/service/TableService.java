@@ -12,10 +12,10 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import org.codehaus.jackson.map.ObjectMapper;
 import ru.insoft.archive.qq.dao.TableDao;
+import ru.insoft.archive.qq.entity.TableEntity;
 
 /**
  * Общий сервис для табличных данных на вкладке "Исполнение запроса"
@@ -24,7 +24,7 @@ import ru.insoft.archive.qq.dao.TableDao;
  * @param <T> Тип сущности, с которой работает класс реализации
  */
 @Produces(MediaType.APPLICATION_JSON)
-public abstract class TableService<T> {
+public abstract class TableService<T extends TableEntity> {
 
 	protected abstract TableDao<T> getDao();
 

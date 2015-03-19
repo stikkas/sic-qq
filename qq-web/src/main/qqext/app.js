@@ -26,7 +26,7 @@ Ext.application({
 		'over.DatePicker',
 		'over.ComboBox'
 	],
-	controllers: ['qqext.controller.Main',
+	controllers: [
 		'qqext.controller.AttachedFiles'
 	],
 	launch: function () {
@@ -564,8 +564,8 @@ Ext.application({
 		 */
 		ns.updateInfo = function () {
 			if (ns.infoChanged) {
-				ns.jvkForm.exec();
-				ns.searchForm.exec();
+				ns.jvkForm.store.reload();
+				ns.searchForm.reload();
 				ns.infoChanged = false;
 			}
 		};
@@ -587,9 +587,8 @@ Ext.application({
 						ns.disableArticles(true, buttonNames.notify, buttonNames.trans, buttonNames.exec);
 						ns.turnOnArticles();
 						ns.Menu.setArticleMenu(1);
+						getButton(buttonNames.reg).fireEvent('click');
 						getButton(buttonNames.toSearch).form = form;
-//						 getButton(buttonNames.reg).fireEvent('click');
-						ns.setCurrentForm(3);
 						ns.statusPanel.setStatus(r.get('status'));
 					} else {
 						ns.showError("Ошибка загрузки данных", o.getError());

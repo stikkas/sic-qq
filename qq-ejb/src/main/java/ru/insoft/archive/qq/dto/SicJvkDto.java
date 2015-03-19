@@ -12,11 +12,10 @@ public class SicJvkDto extends JvkDto {
 	private String notiStat;
 	private String execOrg;
 
-	public SicJvkDto(Long id, String litera, String number, Date regDate, 
-			Date controlDate, Date planDate, String otKogo, String status, 
-			String executor, String notiStat, String execOrg) {
-		super(id, litera, number, regDate, controlDate, planDate, otKogo, 
-				status, executor);
+	public SicJvkDto(String notiStat, String execOrg, Date controlDate, 
+			Date planDate, String status, String executor, Long id, 
+			String litera, String number, Date regDate, String otKogo) {
+		super(controlDate, planDate, status, executor, id, litera, number, regDate, otKogo);
 		this.notiStat = notiStat;
 		this.execOrg = execOrg;
 	}

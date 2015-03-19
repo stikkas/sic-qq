@@ -1,6 +1,5 @@
 package ru.insoft.archive.qq.entity;
 
-import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,14 +28,14 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 })
 @Entity
 @Table(name = "QQ_USED_MATERIAL")
-public class UsedMaterial implements Serializable {
+public class UsedMaterial implements TableEntity {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(generator = "usedMatGen", strategy = GenerationType.SEQUENCE)
 	@SequenceGenerator(name = "usedMatGen", sequenceName = "SEQ_QQ_USED_MATERIAL",
-		allocationSize = 1)
+			allocationSize = 1)
 	@Column(name = "USED_MATERIAL_ID")
 	private Long id;
 
@@ -68,6 +67,7 @@ public class UsedMaterial implements Serializable {
 		this.id = id;
 	}
 
+	@Override
 	public Long getId() {
 		return id;
 	}
@@ -120,10 +120,10 @@ public class UsedMaterial implements Serializable {
 		return qid;
 	}
 
+	@Override
 	public void setQid(Long qid) {
 		this.qid = qid;
 	}
-
 
 	@Override
 	public int hashCode() {

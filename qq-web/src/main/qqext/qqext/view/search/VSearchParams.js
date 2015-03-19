@@ -18,15 +18,15 @@ Ext.define('qqext.view.search.VSearchParams', {
 				ns = qqext;
 		Ext.applyIf(this, {
 			items: [
-				createCmp('FComboBox', 'Архив исполнитель', ns.stIds.litera, 'archiveId',
-						{width: 650, labelWidth: 150}),
-				createCmp('FComboBox', 'Вид запроса', ns.stIds.queryType, 'queryTypeId',
+				createCmp('FComboBox', 'Архив исполнитель', ns.stIds.litera, 'execOrg',
+						{width: 650, labelWidth: 150, hidden: !ns.isSIC}), // Сервер отвечает чтобы отдавать СИЦу все а Архивам архивное
+				createCmp('FComboBox', 'Вид запроса', ns.stIds.queryType, 'questionType',
 						{width: 400, labelWidth: 150}),
-				createCmp('FTextField', 'Содержание запроса', 'queryContent',
+				createCmp('FTextField', 'Содержание запроса', 'content',
 						{width: 950, labelWidth: 150}),
-				createCmp('FComboBox', 'Тип заявителя', ns.stIds.apltype, 'applicantTypeId',
+				createCmp('FComboBox', 'Тип заявителя', ns.stIds.apltype, 'aplType',
 						{width: 400, labelWidth: 150}),
-				createCmp('FComboBox', 'Категория заявителя', ns.stIds.aplcat, 'applicantCategoryId',
+				createCmp('FComboBox', 'Категория заявителя', ns.stIds.aplcat, 'aplCat',
 						{width: 400, labelWidth: 150}),
 				createCmp('Ext.form.FieldContainer', {
 					fieldLabel: 'Дата регистрации',
@@ -39,11 +39,11 @@ Ext.define('qqext.view.search.VSearchParams', {
 								{width: 130, labelWidth: 25, cls: 'mar_t0'})
 					]}),
 				createCmp('FLabel', 'На кого запрос', {cls: 'three_hor_lbl'}),
-				createCmp('FioFieldContainer', 'reqLastName', 'reqFirstName', 'reqMiddleName'),
+				createCmp('FioFieldContainer', 'naKogoLName', 'naKogoFName', 'naKogoMName'),
 				createCmp('FLabel', 'Заявитель', {cls: 'three_hor_lbl'}),
-				createCmp('FioFieldContainer', 'applLastName', 'applFirstName', 'applMiddleName'),
+				createCmp('FioFieldContainer', 'lName', 'fName', 'mName'),
 				createCmp('FTextField', 'Организация', 'organization', {width: 913, labelWidth: 150}),
-				createCmp('FTextField', '№ исходящего документа заявителя', 'issueDocNum',
+				createCmp('FTextField', '№ исходящего документа заявителя', 'numIshodDoc',
 						{width: 500, labelWidth: 150})
 			]
 		});

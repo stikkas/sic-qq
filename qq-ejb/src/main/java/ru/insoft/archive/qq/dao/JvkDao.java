@@ -6,6 +6,7 @@ import javax.persistence.TypedQuery;
 import ru.insoft.archive.qq.dto.ArchiveJvkDto;
 import ru.insoft.archive.qq.dto.Filter;
 import ru.insoft.archive.qq.dto.PageDto;
+import ru.insoft.archive.qq.dto.SearchDto;
 import ru.insoft.archive.qq.dto.SicJvkDto;
 import ru.insoft.archive.qq.dto.Sort;
 import ru.insoft.archive.qq.ejb.DictCodes;
@@ -36,6 +37,22 @@ public class JvkDao extends AbstractDao {
 			+ "(j.literaId = :sic AND j.statusId != :onreg AND j.execOrgId = :orgId))";
 
 	/**
+	 * Одинаковая часть зароса для Поиска по архивам
+	 */
+	private static final String generalSearchArchive = " FROM Search j "
+			+ "LEFT OUTER JOIN j.questionType qt JOIN j.litera l "
+			+ "LEFT OUTER JOIN j.replyResult rt WHERE "
+			+ "(j.literaId = :orgId OR "
+			+ "(j.literaId = :sic AND j.statusId != :onreg AND j.execOrgId = :orgId))";
+	/**
+	 * Одинаковая часть зароса для Поиска по сиц
+	 */
+	private static final String generalSearchSic = " FROM Search j "
+			+ "LEFT OUTER JOIN j.questionType qt JOIN j.litera l "
+			+ "LEFT OUTER JOIN j.replyResult rt WHERE "
+			+ "(j.literaId = :sic OR (j.literaId != :sic AND j.statusId != :onreg))";
+
+	/**
 	 * Возвращает одну страницу ЖВК для СИЦ
 	 *
 	 * @param start начальная запись
@@ -49,13 +66,13 @@ public class JvkDao extends AbstractDao {
 		Long onregId = store.getIdByCode(DictCodes.Q_VALUE_QSTAT_ONREG);
 
 		String queryCount = "SELECT COUNT(j.id)" + generalSic;
-		String queryValues = "SELECT NEW ru.insoft.archive.qq.dto.SicJvkDto(j.id as id, "
+		String queryValues = "SELECT NEW ru.insoft.archive.qq.dto.SicJvkDto(n.fullValue as notiStat,"
+				+ "eo.shortValue as execOrg,j.controlDate,j.planDate,s.fullValue as status,"
+				+ "e.displayedName as executor,j.id as id,"
 				+ "l.shortValue as litera, CONCAT(CONCAT(j.numPrefix, '/'), j.numSufix), "
-				+ "j.regDate, j.controlDate, j.planDate, COALESCE(j.organization, "
+				+ "j.regDate,  COALESCE(j.organization, "
 				+ "CONCAT(CONCAT(CONCAT(CONCAT(NULLIF(j.famaly,''), ' '),NULLIF(j.name,'')), ' '),"
-				+ "NULLIF(j.otchestvo, ''))) as otKogo, s.fullValue as status, e.displayedName as executor, "
-				+ "n.fullValue as notiStat, "
-				+ "eo.shortValue as execOrg)" + generalSic;
+				+ "NULLIF(j.otchestvo, ''))) as otKogo)" + generalSic;
 
 		if (filter != null) {
 			String condition = filter.getCondition();
@@ -92,12 +109,12 @@ public class JvkDao extends AbstractDao {
 		Long onregId = store.getIdByCode(DictCodes.Q_VALUE_QSTAT_ONREG);
 
 		String queryCount = "SELECT COUNT(j.id)" + generalArchive;
-		String queryValues = "SELECT NEW ru.insoft.archive.qq.dto.ArchiveJvkDto(j.id as id, "
-				+ "l.shortValue as litera, CONCAT(CONCAT(j.numPrefix, '/'), j.numSufix), "
-				+ "j.regDate, j.controlDate, j.planDate, COALESCE(j.organization, "
+		String queryValues = "SELECT NEW ru.insoft.archive.qq.dto.ArchiveJvkDto(qt.shortValue as questionType,"
+				+ "j.execDate,j.controlDate,j.planDate,s.fullValue as status,e.displayedName as executor,"
+				+ "j.id as id,l.shortValue as litera, CONCAT(CONCAT(j.numPrefix, '/'), j.numSufix), "
+				+ "j.regDate,COALESCE(j.organization, "
 				+ "CONCAT(CONCAT(CONCAT(CONCAT(NULLIF(j.famaly,''), ' '), NULLIF(j.name,'')), ' '), "
-				+ "NULLIF(j.otchestvo, ''))) as otKogo, s.fullValue as status, e.displayedName as executor,"
-				+ "qt.shortValue as questionType, j.execDate)" + generalArchive;
+				+ "NULLIF(j.otchestvo, ''))) as otKogo)" + generalArchive;
 
 		if (filter != null) {
 			String condition = filter.getCondition();
@@ -115,6 +132,71 @@ public class JvkDao extends AbstractDao {
 				.setParameter("orgId", archiveId)
 				.setFirstResult(start).setMaxResults(limit);
 
+		applyFilter(countQ, valuesQ, filter);
+		return new PageDto<>(countQ.getSingleResult(), valuesQ.getResultList());
+	}
+
+	/**
+	 * Поиск записей по критерием. Он ничем не отличается от ЖВК, только
+	 * результатом выборки, поэтому этот метод здесь. Переименовывать классы и
+	 * методы не считаю необходимым.
+	 *
+	 * @param start начальная запись
+	 * @param limit максимальное число отдаваемых записей
+	 * @param sort параметры сортировки
+	 * @param filter критерии поиска (может быть null)
+	 * @param orgId идентификатор огранизации, запрашивающей поиск
+	 * @return массив записей для одной страницы
+	 */
+	public PageDto<SearchDto> search(int start, int limit, Sort sort, Filter filter,
+			Long orgId) {
+		Long sicId = store.getIdByCode(DictCodes.Q_VALUE_MEMBER_SIC);
+		Long onregId = store.getIdByCode(DictCodes.Q_VALUE_QSTAT_ONREG);
+
+		String queryCount = "SELECT COUNT(j.id)";
+		String queryValues = "SELECT NEW ru.insoft.archive.qq.dto.SearchDto("
+				+ "j.content, qt.shortValue as questionType, rt.fullValue as replyResult,"
+				+ "j.id as id,l.shortValue as litera, CONCAT(CONCAT(j.numPrefix, '/'), j.numSufix),"
+				+ "j.regDate,COALESCE(j.organization, CONCAT(CONCAT(CONCAT(CONCAT(NULLIF(j.lName,''), ' '), "
+				+ "NULLIF(j.fName,'')), ' '), NULLIF(j.mName, ''))) as otKogo)";
+
+		boolean isSic = orgId.equals(sicId);
+		if (isSic) {
+			queryCount += generalSearchSic;
+			queryValues += generalSearchSic;
+		} else {
+			queryCount += generalSearchArchive;
+			queryValues += generalSearchArchive;
+		}
+		if (filter != null) {
+			String condition = filter.getCondition();
+			queryCount += condition;
+			queryValues += condition;
+		}
+		TypedQuery<Long> countQ;
+		Query valuesQ;
+
+		if (isSic) {
+			countQ = em.createQuery(queryCount, Long.class)
+					.setParameter("sic", sicId)
+					.setParameter("onreg", onregId);
+
+			valuesQ = em.createQuery(queryValues + (sort == null ? "": sort))
+					.setParameter("sic", sicId)
+					.setParameter("onreg", onregId)
+					.setFirstResult(start).setMaxResults(limit);
+		} else {
+			countQ = em.createQuery(queryCount, Long.class)
+					.setParameter("sic", sicId)
+					.setParameter("onreg", onregId)
+					.setParameter("orgId", orgId);
+
+			valuesQ = em.createQuery(queryValues + (sort == null ? "": sort))
+					.setParameter("sic", sicId)
+					.setParameter("onreg", onregId)
+					.setParameter("orgId", orgId)
+					.setFirstResult(start).setMaxResults(limit);
+		}
 		applyFilter(countQ, valuesQ, filter);
 		return new PageDto<>(countQ.getSingleResult(), valuesQ.getResultList());
 	}

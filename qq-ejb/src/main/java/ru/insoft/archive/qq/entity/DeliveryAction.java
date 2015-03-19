@@ -1,6 +1,5 @@
 package ru.insoft.archive.qq.entity;
 
-import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,7 +27,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 			query = "DELETE FROM DeliveryAction d WHERE d.id in :ids")})
 @Entity
 @Table(name = "QQ_DELIVERY_ACTION")
-public class DeliveryAction implements Serializable {
+public class DeliveryAction implements TableEntity{
 
 	private static final long serialVersionUID = 1L;
 	@Id
@@ -54,6 +53,7 @@ public class DeliveryAction implements Serializable {
 		return qid;
 	}
 
+	@Override
 	public void setQid(Long qid) {
 		this.qid = qid;
 	}
@@ -65,6 +65,7 @@ public class DeliveryAction implements Serializable {
 		this.id = id;
 	}
 
+	@Override
 	public Long getId() {
 		return id;
 	}

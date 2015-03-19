@@ -34,7 +34,7 @@ Ext.define('qqext.view.reg.VApplicant', {
 			items: [
 				me.appType = createCmp('FComboBox', 'Тип заявителя', ns.stIds.apltype, 'applType', {
 					allowBlank: false,
-					width: 450,
+					width: 320,
 					labelWidth: 150,
 					listeners: {
 						change: function (cb, newv) {

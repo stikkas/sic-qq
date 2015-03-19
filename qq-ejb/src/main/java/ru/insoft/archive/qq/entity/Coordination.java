@@ -1,6 +1,5 @@
 package ru.insoft.archive.qq.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -32,7 +31,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 @Entity
 @Table(name = "QQ_COORDINATION")
 
-public class Coordination implements Serializable {
+public class Coordination implements TableEntity {
 
 	private static final long serialVersionUID = 1L;
 
@@ -63,6 +62,7 @@ public class Coordination implements Serializable {
 		this.id = id;
 	}
 
+	@Override
 	public Long getId() {
 		return id;
 	}
@@ -91,6 +91,7 @@ public class Coordination implements Serializable {
 		return qid;
 	}
 
+	@Override
 	public void setQid(Long qid) {
 		this.qid = qid;
 	}

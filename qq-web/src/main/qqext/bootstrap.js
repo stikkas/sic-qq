@@ -912,7 +912,6 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.cmp.Text": [],
   "qqext.cmp.TextArea": [],
   "qqext.controller.AttachedFiles": [],
-  "qqext.controller.Main": [],
   "qqext.factory.AttachedFiles": [],
   "qqext.factory.Base": [],
   "qqext.factory.Checkbox": [],
@@ -937,7 +936,8 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.model.Jvk": [],
   "qqext.model.Notification": [],
   "qqext.model.Question": [],
-  "qqext.model.SearchResultItem": [],
+  "qqext.model.Search": [],
+  "qqext.model.SearchJvk": [],
   "qqext.model.SendAction": [],
   "qqext.model.SicJvk": [],
   "qqext.model.Transmission": [],
@@ -945,13 +945,13 @@ Ext.ClassManager.addNameAlternateMappings({
   "qqext.proxy.Combo": [],
   "qqext.proxy.Table": [],
   "qqext.store.ArchiveJvk": [],
-  "qqext.store.CustomStore": [],
   "qqext.store.Dict": [],
   "qqext.store.DictSCV": [],
   "qqext.store.DictSV": [],
   "qqext.store.DictStore": [],
   "qqext.store.DictValuesStore": [],
   "qqext.store.Jvk": [],
+  "qqext.store.Search": [],
   "qqext.store.SicJvk": [],
   "qqext.view.MainPage": [],
   "qqext.view.StatusPanel": [],
@@ -2000,7 +2000,6 @@ Ext.ClassManager.addNameAliasMappings({
     "widget.textareafieldcmp"
   ],
   "qqext.controller.AttachedFiles": [],
-  "qqext.controller.Main": [],
   "qqext.factory.AttachedFiles": [
     "FAttachedFiles",
     "widget.attachedfiles"
@@ -2052,9 +2051,8 @@ Ext.ClassManager.addNameAliasMappings({
   "qqext.model.Jvk": [],
   "qqext.model.Notification": [],
   "qqext.model.Question": [],
-  "qqext.model.SearchResultItem": [
-    "SearchResultItemModel"
-  ],
+  "qqext.model.Search": [],
+  "qqext.model.SearchJvk": [],
   "qqext.model.SendAction": [],
   "qqext.model.SicJvk": [],
   "qqext.model.Transmission": [],
@@ -2066,7 +2064,6 @@ Ext.ClassManager.addNameAliasMappings({
     "proxy.table"
   ],
   "qqext.store.ArchiveJvk": [],
-  "qqext.store.CustomStore": [],
   "qqext.store.Dict": [],
   "qqext.store.DictSCV": [],
   "qqext.store.DictSV": [],
@@ -2077,6 +2074,7 @@ Ext.ClassManager.addNameAliasMappings({
     "DictValuesStore"
   ],
   "qqext.store.Jvk": [],
+  "qqext.store.Search": [],
   "qqext.store.SicJvk": [],
   "qqext.view.MainPage": [
     "MainPage"

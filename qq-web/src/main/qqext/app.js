@@ -34,20 +34,9 @@ Ext.application({
 		Ext.Ajax.request({
 			url: 'rest/userinfo',
 			success: function (response) {
-				// TODO В будущем, если расщепим storage и qq удалить сохранение в локальное хранилище
-				// Сейча здесь его не испльзуем, и объект user - тоже
 				var authRes = Ext.decode(response.responseText),
-						ns = qqext,
-						user = Ext.create('hawk_common.model.User'),
-						userStore = ns.userStore = Ext.create('hawk_common.store.UserLocalStorage');
+						ns = qqext;
 
-				user.set('id', 'current');
-				user.set('name', authRes.name);
-				user.set('access', authRes.access);
-				user.set('userId', authRes.userId);
-				user.set('organization', authRes.organization);
-
-				// Новые переменные в namespace qqext
 				ns.fio = authRes.name;
 				ns.userId = authRes.userId;
 				ns.orgId = authRes.organization;
@@ -58,9 +47,6 @@ Ext.application({
 				ns.visor = authRes.supervis;
 				ns.sicId = authRes.sicId;
 				ns.isSIC = authRes.sic;
-
-				userStore.add(user);
-				userStore.sync();
 
 				// загружаем справочники
 				me.initStores();
@@ -225,10 +211,6 @@ Ext.application({
 		/**
 		 * @property {qqext.view.exec.VExecForm} execForm
 		 * Форма исполнение запроса. Инициализируется в {@link qqext.view.MainPage#initComponent}.
-		 */
-		/**
-		 * @property {hawk_common.store.UserLocalStorage} userStore
-		 * Хранилище с правами пользователей. Иницализируется при старте приложения.
 		 */
 		/**
 		 * @property {Object} model
@@ -500,7 +482,6 @@ Ext.application({
 		 * @method forceQuit
 		 */
 		ns.forceQuit = function () {
-			ns.userStore.removeAll(true);
 			window.location = urls.welcome;
 		};
 		/**
@@ -508,8 +489,6 @@ Ext.application({
 		 * @method quitAction
 		 */
 		ns.quitAction = function () {
-			// молча, без выстерла событий, удаляем все данные из хранилища
-			ns.userStore.removeAll(true);
 			window.location = urls.logout;
 		};
 		/**

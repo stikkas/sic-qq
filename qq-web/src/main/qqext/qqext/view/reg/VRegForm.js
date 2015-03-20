@@ -37,7 +37,13 @@ Ext.define('qqext.view.reg.VRegForm', {
 			ns.Menu.setEditMenu(me._idx);
 			if (ns.creq.q === null) {
 				// Значит событие случилось по нажатию на кнопку "Добавить"
-				me.clear(true);
+				// Очищаем форму
+				me.items.each(function (form) {
+					form.reset();
+				});
+				// Сбрасываем статус
+				ns.statusPanel.setStatus('');
+
 				model = ns.creq.q = Ext.create('qqext.model.Question');
 				//Кнопки "Редактировать" "Печать" и "Удалить"
 				me._disableButtons(true, 0, 2, 3);
@@ -54,7 +60,11 @@ Ext.define('qqext.view.reg.VRegForm', {
 				me.query.pd.setViewOnly(true);
 			} else if (prev === ns.searchForm || prev === ns.jvkForm) {
 				// Значит пришли по двойному клику на существуещем запросе, (открыли существующий запрос)
-				me.clear();
+				// не ресетим всю форму, а только те элементы у которых есть слушатели change
+				me.applicant.appType.setValue(null);
+				me.query.vz.setValue(null);
+				me.inbox.executor.setValue(null);
+
 				model = ns.creq.q;
 				me._disableButtons(true, 1, 3, 4);
 
@@ -334,28 +344,6 @@ Ext.define('qqext.view.reg.VRegForm', {
 			return false;
 		}
 		return true;
-	},
-	/**
-	 * Сбрасывает все ошибки
-	 */
-	reset: function () {
-		this.items.each(function (form) {
-			form.reset();
-		});
-	},
-	/**
-	 * Приводит форму к первоначальному состоянию,
-	 * без данных
-	 * @param {Boolean} status сбрасывать или нет статуc
-	 */
-	clear: function (status) {
-		var me = this;
-		me.reset();
-		me.target.hide();
-		me.applicant.appType.setValue(null);
-		if (status) 
-			qqext.statusPanel.setStatus('');
-//		me.doLayout();
 	},
 	/**
 	 * Устанавливает плановую дату исполнения запроса.

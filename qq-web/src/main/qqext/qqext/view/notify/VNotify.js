@@ -149,7 +149,7 @@ Ext.define('qqext.view.notify.VNotify', {
 					labelWidth: 150
 				}),
 				createCmp('FComboBox', 'Способ передачи', stores.sendType, 'delType', {
-					width: 270,
+					width: 290,
 					labelWidth: 150
 				}),
 				me._idf = createCmp('FDateField', 'Дата выдачи/отправки документа', 'issueDate', {

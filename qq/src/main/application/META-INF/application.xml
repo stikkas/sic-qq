@@ -9,9 +9,6 @@
 		<ejb>qq-ejb-0.1.0-SNAPSHOT.jar</ejb>
 	</module>
 	<module>
-		<ejb>dialect-0.0.2-SNAPSHOT.jar</ejb>
-	</module>
-	<module>
 		<web>
 			<web-uri>qq-web-0.1.0-SNAPSHOT.war</web-uri>
 			<context-root>/qq-web</context-root>

@@ -13,7 +13,6 @@
 		<module>qq/</module>
 		<module>ext-commons/</module>
 		<module>core-model/</module>
-    <module>dialect</module>
   </modules>
 
 	<build>

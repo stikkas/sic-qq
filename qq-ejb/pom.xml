@@ -2,6 +2,12 @@
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<parent>
+		<groupId>ru.insoft.archive</groupId>
+		<artifactId>qq-parent</artifactId>
+		<version>0.1.0</version>
+	</parent>
+
 	<groupId>ru.insoft.archive</groupId>
 	<artifactId>qq-ejb</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
@@ -25,17 +31,12 @@
 			<artifactId>itext-pdfa</artifactId>
 			<version>5.5.3</version>
 		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.10</version>
-			<scope>test</scope>
-		</dependency>
 
 		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
-			<version>6.0</version>
+			<groupId>org.jboss.spec</groupId>
+			<artifactId>jboss-javaee-6.0</artifactId>
+			<version>1.0.0.Final</version>
+			<type>pom</type>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

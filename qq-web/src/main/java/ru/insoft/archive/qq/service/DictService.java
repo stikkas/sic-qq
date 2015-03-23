@@ -51,7 +51,7 @@ public class DictService {
 	@GET
 	@Path("litera")
 	public List<DictSVDto> getOrganizations() {
-		return up.isSic() ? dvd.getFullShortValues(DictCodes.ORG_STRUCTURE)
+		return up.isSic() ? dvd.getLiterasSic()
 				: dvd.getLiterasArchive(up.getOrganization());
 	}
 

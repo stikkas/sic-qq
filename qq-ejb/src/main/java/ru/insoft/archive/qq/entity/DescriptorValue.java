@@ -40,6 +40,11 @@ import javax.persistence.Table;
 			+ "FROM DescriptorValue d JOIN d.group g WHERE d.id in (:sic, :archive) "
 			+ "ORDER BY CASE WHEN g.alphabeticSort != 0 THEN d.fullValue "
 			+ "ELSE CONCAT(d.sortOrder,'') END"),
+	@NamedQuery(name = "DescriptorValue.literasSic",
+			query = "SELECT NEW ru.insoft.archive.qq.dto.DictSVDto(d.id, d.fullValue, d.shortValue) "
+			+ "FROM DescriptorValue d JOIN d.group g WHERE d.id = :sic OR d.parent = :sic "
+			+ "ORDER BY CASE WHEN g.alphabeticSort != 0 THEN d.fullValue "
+			+ "ELSE CONCAT(d.sortOrder,'') END"),
 	@NamedQuery(name = "DescriptorValue.fullCodeValue",
 			query = "SELECT NEW ru.insoft.archive.qq.dto.DictSVDto(d.id, d.fullValue, d.valueCode) "
 			+ "FROM DescriptorValue d JOIN d.group g WHERE d.groupId = :groupId "

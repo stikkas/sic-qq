@@ -26,6 +26,7 @@ public class DictDao extends AbstractDao {
 		return em.createNamedQuery("DescriptorValue.fullShortValues")
 				.setParameter("groupId", store.getIdByCode(groupCode)).getResultList();
 	}
+
 	/**
 	 * Возвращает значения id, полных, сокращенных значений и коды
 	 *
@@ -36,7 +37,6 @@ public class DictDao extends AbstractDao {
 		return em.createNamedQuery("DescriptorValue.fullShortCodeValues")
 				.setParameter("groupId", store.getIdByCode(groupCode)).getResultList();
 	}
-
 
 	/**
 	 * Возвращает значения id, полных и сокращенных значений организаций для
@@ -49,6 +49,17 @@ public class DictDao extends AbstractDao {
 		return em.createNamedQuery("DescriptorValue.literasArchive")
 				.setParameter("sic", store.getIdByCode(DictCodes.Q_VALUE_MEMBER_SIC))
 				.setParameter("archive", archiveId).getResultList();
+	}
+
+	/**
+	 * Возвращает значения id, полных и сокращенных значений организаций для СИЦ
+	 *
+	 * @return справочник с тремя полями
+	 */
+	public List<DictSVDto> getLiterasSic() {
+		return em.createNamedQuery("DescriptorValue.literasSic")
+				.setParameter("sic", store.getIdByCode(DictCodes.Q_VALUE_MEMBER_SIC))
+				.getResultList();
 	}
 
 	/**

@@ -160,14 +160,14 @@ public class Filter {
 								case "content":
 								case "organization":
 								case "numIshodDoc":
+								case "naKogoLName":
+								case "lName":
 									builder.append(" AND lower(j.").append(property).append(") like :")
 											.append(property);
 									value = "%" + parser.getText().toLowerCase() + "%";
 									break;
-								case "naKogoLName":
 								case "naKogoFName":
 								case "naKogoMName":
-								case "lName":
 								case "fName":
 								case "mName":
 									builder.append(" AND lower(j.").append(property).append(") like :")

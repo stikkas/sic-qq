@@ -201,11 +201,11 @@ public class Filter {
 				}
 				// если заданы интервалы даты регистрации
 				if (startRegDate && endRegDate) { 
-					builder.append(" AND (trunc(j.regDate) BETWEEN trunc(:regDateStart) AND trunc(:regDateEnd))");
+					builder.append(" AND trunc(j.regDate) BETWEEN :regDateStart AND :regDateEnd");
 				} else if (startRegDate) {
-					builder.append(" AND trunc(j.regDate) >= trunc(:regDateStart)");
+					builder.append(" AND j.regDate >= :regDateStart");
 				} else if (endRegDate) {
-					builder.append(" AND trunc(j.regDate) <= trunc(:regDateEnd)");
+					builder.append(" AND trunc(j.regDate) <= :regDateEnd");
 				}
 				filter.condition += builder.toString();
 			}

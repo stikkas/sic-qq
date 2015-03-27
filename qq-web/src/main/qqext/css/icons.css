@@ -110,8 +110,16 @@ div.x-form-spinner-up, div.x-form-spinner-down{
     background-size:100%;
     margin-top:10px;
     left: 0 !important;
-    margin-left: 670px !important;
+    margin-left: 640px !important;
 }
+/*
 .coexec input[name="coexecDate"]{
     width:110px !important;
+}
+*/
+.boss_exec_date {
+    margin-top: 6px !important;
+}
+.exec_date .x-form-trigger {
+	width: 16px;	
 }

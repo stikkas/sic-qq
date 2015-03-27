@@ -557,7 +557,7 @@ Ext.application({
 		 */
 		ns.openRequest = function (view, record) {
 			var form = ns.getCurrentForm();
-			form.getEl().mask("Выполниние");
+			form.getEl().mask("Выполнение");
 			ns.resetModel();
 			ns.model.Question.load(record.get('id'), {callback: function (r, o, s) {
 					form.unmask();

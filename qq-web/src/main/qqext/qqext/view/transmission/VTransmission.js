@@ -214,33 +214,29 @@ Ext.define('qqext.view.transmission.VTransmission', {
 				ns = qqext,
 				labels = ns.labels,
 				createCmp = Ext.create,
-				configForDate = {
-					labelAlign: 'right',
-					margin: '6 0 0 0'
-				},
-		menus = createCmp('HButtonMenu', [{
-				text: labels.edit,
-				action: ns.edit,
-				opts: {cls: 'edit_btn'}
-			}, {
-				text: labels.save,
-				action: save,
-				opts: {cls: 'save_btn'}
-			}, {
-				text: labels.remove,
-				action: remove,
-				opts: {cls: 'remove_btn'}
-			}, {
-				text: labels.register,
-				action: book,
-				opts: {cls: 'reg_btn'}
-			}],
-				'ToolButton', me);
+				menus = createCmp('HButtonMenu', [{
+						text: labels.edit,
+						action: ns.edit,
+						opts: {cls: 'edit_btn'}
+					}, {
+						text: labels.save,
+						action: save,
+						opts: {cls: 'save_btn'}
+					}, {
+						text: labels.remove,
+						action: remove,
+						opts: {cls: 'remove_btn'}
+					}, {
+						text: labels.register,
+						action: book,
+						opts: {cls: 'reg_btn'}
+					}],
+						'ToolButton', me);
 		Ext.applyIf(me, {
 			items: [
 				createCmp('FieldContainer', {
 					layout: 'hbox',
-					cls: 'right_date',
+//					cls: 'right_date',
 					items: [
 						me._be = createCmp('FComboBox', 'Ответственный за исполнение', ns.stIds.execs,
 								'bossExec', {
@@ -248,12 +244,17 @@ Ext.define('qqext.view.transmission.VTransmission', {
 									width: 450,
 									labelWidth: 150
 								}),
-						createCmp('FDateField', 'Дата', 'bossExecDate', configForDate)
+						createCmp('FDateField', 'Дата', 'bossExecDate', {
+							labelAlign: 'right',
+							width: 160,
+							labelWidth: 60,
+							cls: 'boss_exec_date exec_date'
+						})
 					]
 				}),
 				createCmp('FieldContainer', {
 					layout: 'hbox',
-					cls: 'right_date coexec',
+//					cls: 'right_date coexec',
 					items: [
 						me._ex = createCmp('FComboBox', 'ФИО исполнителя', ns.stIds.execs, 'executor', {
 							allowBlank: false,
@@ -272,8 +273,13 @@ Ext.define('qqext.view.transmission.VTransmission', {
 								}
 							}
 						}),
-						createCmp('FDateField', 'Дата', 'execDate',
-								configForDate),
+						createCmp('FDateField', 'Дата', 'execDate', {
+							labelAlign: 'right',
+							width: 160,
+							labelWidth: 60,
+							cls: 'exec_date'
+
+						}),
 						createCmp('Ext.button.Button', {
 							cls: 'add_btn exec_fld_cls',
 							handler: me.addExecutor,
@@ -359,7 +365,8 @@ Ext.define('qqext.view.transmission.VTransmission', {
 				cb, df,
 				configForDate = {
 					labelAlign: 'right',
-					margin: '6 0 0 0'
+					width: 160,
+					labelWidth: 60
 				};
 
 		if (assistant instanceof Ext.button.Button) {
@@ -369,7 +376,7 @@ Ext.define('qqext.view.transmission.VTransmission', {
 
 		var container = create('FieldContainer', {
 			layout: 'hbox',
-			cls: 'right_date coexec',
+//			cls: 'right_date coexec',
 			items: [
 				cb = create('FComboBox', 'Соисполнитель', store, 'coexec' + me._coex, {
 					width: 450,

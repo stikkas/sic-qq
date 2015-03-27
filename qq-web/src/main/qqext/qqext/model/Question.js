@@ -32,7 +32,8 @@ Ext.define('qqext.model.Question', {
 		// TODO: проверить работу без костыля, может уже зарасло
 		{name: 'planDate', type: 'date', convert: function (v) {
 				if (v)
-					return new Date(v.valueOf() + qqext.msPhour); // Костыль
+					return new Date(v);
+//					return new Date(v.valueOf() + qqext.msPhour); // Костыль
 			}},
 		// Содержание запроса
 		{name: 'content', type: 'string', defaultValue: null},

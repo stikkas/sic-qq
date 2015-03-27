@@ -342,13 +342,14 @@ textarea[disabled=""]{
 .small_lbl .x-form-item-label.x-form-item-label{
     width:5px !important;
 }
-
+/*
 .right_date .x-field-label-cell label.x-form-item-label-right{
     width: 60px !important;
 }
 .right_date .x-hbox-form-item[style*='left: 460px;']{
     width:150px !important;
 }
+*/
 /*стили "*" для обязательных полей*/
 /*.x-form-item-label{
     position:relative;              //для глобального выравнивания * по вертикали

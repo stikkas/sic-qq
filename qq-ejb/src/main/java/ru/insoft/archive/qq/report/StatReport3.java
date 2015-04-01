@@ -16,9 +16,7 @@ import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -149,22 +147,37 @@ public class StatReport3 {
 			doc.add(table);
 
 			p = new Paragraph("Руководитель СИЦ ФГА", general);
-
 			p.add(new Chunk(new VerticalPositionMark(), 240, false));
 			p.add(new Chunk("__________________________________", general));
 			p.add(new Chunk(" С.А. Лашкевич", general));
 			doc.add(p);
+			doc.add(createPodpis(340));
 
-			Chunk ck = new Chunk("(подпись)", general);
-			ck.setTextRise(6);
-			p = new Paragraph(ck);
-			p.setIndentationLeft(340);
+			p = new Paragraph("Приняла", general);
+			p.add(new Chunk(new VerticalPositionMark(), 240, false));
+			p.add(new Chunk("__________________________________", general));
 			doc.add(p);
+			doc.add(createPodpis(340));
 
 			doc.close();
 		} catch (DocumentException ex) {
 			Logger.getLogger(StatReport3.class.getName()).log(Level.SEVERE, null, ex);
 		}
+	}
+
+	/**
+	 * Создает '(подпись)' под чертой
+	 *
+	 * @param identation отступ от левой стороны
+	 * @return параграф
+	 */
+	private Paragraph createPodpis(int identation) {
+		Chunk ck = new Chunk("(подпись)", general);
+		ck.setTextRise(6);
+		Paragraph p = new Paragraph(ck);
+		p.setIndentationLeft(identation);
+		return p;
+
 	}
 
 	/**
@@ -225,11 +238,10 @@ public class StatReport3 {
 	 * @return список данных для заполнения таблицы
 	 */
 	private List<Result> getData(Date start, Date end, Long archiveId) {
-		// если использовать trunc то включаются обе границы
 		List<Object[]> objects = em.createQuery("SELECT q.regDate, "
 				+ "q.prefix, q.sufix, q.orgName, q.lName, "
 				+ "q.fName, q.mName FROM Question q WHERE "
-				+ "trunc(q.regDate) BETWEEN trunc(:start) AND trunc(:end) AND q.execOrg = :archive AND q.litera = :litera"
+				+ "trunc(q.regDate) BETWEEN trunc(:start) AND :end AND q.execOrg = :archive AND q.litera = :litera"
 				+ " ORDER BY q.regDate, q.prefix")
 				.setParameter("start", start)
 				.setParameter("end", end)

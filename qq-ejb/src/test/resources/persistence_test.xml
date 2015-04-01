@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="SicEntityManager" transaction-type="JTA">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<jta-data-source>java:jboss/datasources/TestDS</jta-data-source>
+		<!-- Корректный путь должен быть именно таким. Если меняются версии - править руками версию ramdoc-ear & core-model !-->
+		<!--    <jar-file>qq-0.0.1-SNAPSHOT.ear/lib/core-model-0.1.2.jar</jar-file>
+		<jar-file>qq-0.0.1-SNAPSHOT.ear/qq-ejb-0.0.1-SNAPSHOT.jar</jar-file> -->
+		<exclude-unlisted-classes>false</exclude-unlisted-classes>
+		<properties>
+			<property name="hibernate.jdbc.batch_size" value="20"/>
+			<property name="hibernate.show_sql" value="true"/>
+			<property name="hibernate.format_sql" value="true"/>
+			<property name="hibernate.use_sql_comments" value="true"/>
+			<property name="hibernate.cache.use_query_cache" value="false"/>
+			<property name="hibernate.cache.use_second_level_cache" value="false"/>
+			<property name="hibernate.generate_statistics" value="false"/>
+			<property name="hibernate.current_session_context_class" value="thread"/>
+			<property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+			<property name="javax.persistence.schema-generation.create-source" value="script-then-metadata"/>
+			<property name="javax.persistence.schema-generation.scripts.create-target" value="test_scheme.sql"/>
+			<property name="javax.persistence.sql-load-script-source" value="test_data.sql"/>
+		</properties>
+	</persistence-unit>
+</persistence>

@@ -1,5 +1,10 @@
 package ru.insoft.archive.qq.dao;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import javax.annotation.PostConstruct;
+import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -20,21 +25,32 @@ import ru.insoft.archive.qq.ejb.DictCodes;
 public class JvkDao extends AbstractDao {
 
 	/**
-	 * Одинаковая часть зароса для СИЦ
+	 * Крайняя нижняя дата для ЖВК
+	 */
+	private Date bottomRegDate;
+
+	/**
+	 * Одинаковая часть ограничения по дате регистрации
+	 */
+	private static final String edgeDateConstrain = " AND (j.regDate > :edgeDate OR j.regDate IS NULL))";
+	/**
+	 * Одинаковая часть зароса ЖВК для СИЦ
 	 */
 	// Внешние JOIN используется для полей, которые могуть быть пустыми
 	private static final String generalSic = " FROM SicJvk j LEFT OUTER JOIN "
 			+ "j.executor e LEFT OUTER JOIN j.notificationStatus n "
 			+ "JOIN j.litera l LEFT OUTER JOIN j.execOrganization eo JOIN j.status s WHERE "
-			+ "(j.literaId = :sic OR (j.literaId != :sic AND j.statusId != :onreg))";
+			+ "((j.literaId = :sic OR (j.literaId != :sic AND j.statusId != :onreg))"
+			+ edgeDateConstrain;
 
 	/**
-	 * Одинаковая часть зароса для Архивов
+	 * Одинаковая часть зароса ЖВК для Архивов
 	 */
 	private static final String generalArchive = " FROM ArchiveJvk j LEFT OUTER JOIN "
 			+ "j.executor e LEFT OUTER JOIN j.questionType qt JOIN j.litera l JOIN j.status s WHERE "
-			+ "(j.literaId = :orgId OR "
-			+ "(j.literaId = :sic AND j.statusId != :onreg AND j.execOrgId = :orgId))";
+			+ "((j.literaId = :orgId OR "
+			+ "(j.literaId = :sic AND j.statusId != :onreg AND j.execOrgId = :orgId))"
+			+ edgeDateConstrain;
 
 	/**
 	 * Одинаковая часть зароса для Поиска по архивам
@@ -82,11 +98,13 @@ public class JvkDao extends AbstractDao {
 
 		TypedQuery<Long> countQ = em.createQuery(queryCount, Long.class)
 				.setParameter("sic", sicId)
-				.setParameter("onreg", onregId);
+				.setParameter("onreg", onregId)
+				.setParameter("edgeDate", bottomRegDate);
 
 		Query valuesQ = em.createQuery(queryValues + sort)
 				.setParameter("sic", sicId)
 				.setParameter("onreg", onregId)
+				.setParameter("edgeDate", bottomRegDate)
 				.setFirstResult(start).setMaxResults(limit);
 
 		applyFilter(countQ, valuesQ, filter);
@@ -124,11 +142,13 @@ public class JvkDao extends AbstractDao {
 		TypedQuery<Long> countQ = em.createQuery(queryCount, Long.class)
 				.setParameter("sic", sicId)
 				.setParameter("onreg", onregId)
+				.setParameter("edgeDate", bottomRegDate)
 				.setParameter("orgId", archiveId);
 
 		Query valuesQ = em.createQuery(queryValues + sort)
 				.setParameter("sic", sicId)
 				.setParameter("onreg", onregId)
+				.setParameter("edgeDate", bottomRegDate)
 				.setParameter("orgId", archiveId)
 				.setFirstResult(start).setMaxResults(limit);
 
@@ -181,7 +201,7 @@ public class JvkDao extends AbstractDao {
 					.setParameter("sic", sicId)
 					.setParameter("onreg", onregId);
 
-			valuesQ = em.createQuery(queryValues + (sort == null ? "": sort))
+			valuesQ = em.createQuery(queryValues + (sort == null ? "" : sort))
 					.setParameter("sic", sicId)
 					.setParameter("onreg", onregId)
 					.setFirstResult(start).setMaxResults(limit);
@@ -191,7 +211,7 @@ public class JvkDao extends AbstractDao {
 					.setParameter("onreg", onregId)
 					.setParameter("orgId", orgId);
 
-			valuesQ = em.createQuery(queryValues + (sort == null ? "": sort))
+			valuesQ = em.createQuery(queryValues + (sort == null ? "" : sort))
 					.setParameter("sic", sicId)
 					.setParameter("onreg", onregId)
 					.setParameter("orgId", orgId)
@@ -213,5 +233,21 @@ public class JvkDao extends AbstractDao {
 				values.setParameter(prop, val);
 			}
 		}
+	}
+
+	/**
+	 * Устанавливает крайнюю нижнюю дату для ЖВК
+	 */
+	@Schedule(dayOfMonth = "1")
+	@PostConstruct
+	private void setEdgeDate() {
+		Calendar now = new GregorianCalendar();
+		if (now.get(Calendar.DAY_OF_MONTH) != 1) {
+			// Ситуация при создании бина
+			now.set(Calendar.DAY_OF_MONTH, 1);
+		}
+		now.add(Calendar.MONTH, -11);
+		now.add(Calendar.DAY_OF_MONTH, -1); // Опускаемся еще на один день, т.к. ищем по > а не по >=
+		bottomRegDate = now.getTime();
 	}
 }

@@ -73,7 +73,9 @@ public class NotificationService {
 		String dir = Paths.get(up.getQqPath(), up.getNotiFilesPath(), id.toString()).toString();
 
 		af.removeFiles(params.get("deletedFiles"), dir);
-		af.createFiles(files, dir, DictCodes.Q_VALUE_FILE_TYPE_INFO, id);
+		if (!files.isEmpty()) {
+			af.createFiles(files, dir, DictCodes.Q_VALUE_FILE_TYPE_INFO, id);
+		}
 
 		// Возвращаем сущность запроса вместе с файлами
 		return new SubmitAnswer<>(true, nd.update(n));
@@ -88,7 +90,7 @@ public class NotificationService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@DELETE
 	public void remove(@PathParam("id") Long id) {
-		nd.remove(id); 
+		nd.remove(id);
 		af.removeDir(Paths.get(up.getQqPath(), up.getNotiFilesPath(), id.toString()));
 	}
 }

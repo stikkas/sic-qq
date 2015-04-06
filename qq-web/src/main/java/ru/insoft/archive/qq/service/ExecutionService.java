@@ -73,15 +73,17 @@ public class ExecutionService {
 		String dir = Paths.get(up.getQqPath(), up.getReplyFilesPath(), id.toString()).toString();
 
 		af.removeFiles(params.get("deletedFiles"), dir);
-		af.createFiles(files, dir, DictCodes.Q_VALUE_FILE_TYPE_ANSWER, id);
+		if (!files.isEmpty()) {
+			af.createFiles(files, dir, DictCodes.Q_VALUE_FILE_TYPE_ANSWER, id);
+		}
 
 		// Возвращаем сущность запроса вместе с файлами
 		return new SubmitAnswer<>(true, ed.update(e));
 	}
 
 	/**
-	 * Удаляет информацию о исполнении запроса с указанным id.
-	 * Все связанные сущности удаляются автоматом.
+	 * Удаляет информацию о исполнении запроса с указанным id. Все связанные
+	 * сущности удаляются автоматом.
 	 *
 	 * @param id идентификатор уведомления для удаления
 	 */

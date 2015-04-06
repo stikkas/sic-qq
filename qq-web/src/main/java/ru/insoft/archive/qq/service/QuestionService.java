@@ -78,9 +78,11 @@ public class QuestionService {
 		}
 		q = qd.create(q);
 		id = q.getId();
-		// Создаем файлы и заносим информацию в базу
-		af.createFiles(files, Paths.get(up.getQqPath(), up.getApplicantFilesPath(), id.toString()).toString(),
-				DictCodes.Q_VALUE_FILE_TYPE_APP_DOCS, id);
+		if (!files.isEmpty()) {
+			// Создаем файлы и заносим информацию в базу
+			af.createFiles(files, Paths.get(up.getQqPath(), up.getApplicantFilesPath(), id.toString()).toString(),
+					DictCodes.Q_VALUE_FILE_TYPE_APP_DOCS, id);
+		}
 
 		// Возвращаем сущность запроса вместе с файлами
 		return new SubmitAnswer<>(true, qd.find(id));
@@ -116,7 +118,9 @@ public class QuestionService {
 		String dir = Paths.get(up.getQqPath(), up.getApplicantFilesPath(), id.toString()).toString();
 
 		af.removeFiles(deletedFiles, dir);
-		af.createFiles(files, dir, DictCodes.Q_VALUE_FILE_TYPE_APP_DOCS, id);
+		if (!files.isEmpty()) {
+			af.createFiles(files, dir, DictCodes.Q_VALUE_FILE_TYPE_APP_DOCS, id);
+		}
 
 		// Возвращаем сущность запроса вместе с файлами
 		return new SubmitAnswer<>(true, qd.update(question));

@@ -2,6 +2,7 @@ package ru.insoft.archive.qq.service;
 
 import javax.inject.Inject;
 import javax.ws.rs.Path;
+import org.codehaus.jackson.map.ObjectMapper;
 import ru.insoft.archive.qq.dao.TableDao;
 import ru.insoft.archive.qq.entity.Coordination;
 
@@ -27,4 +28,8 @@ public class CoordinationService extends TableService<Coordination> {
 		return Coordination[].class;
 	}
 
+	@Inject
+	protected void setMapper(ObjectMapper om) {
+		this.om = om;
+	}
 }

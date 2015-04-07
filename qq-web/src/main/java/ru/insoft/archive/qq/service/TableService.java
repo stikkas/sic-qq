@@ -30,6 +30,8 @@ public abstract class TableService<T extends TableEntity> {
 
 	protected abstract Class<T[]> getArrayClass();
 
+	protected ObjectMapper om;
+
 	@GET
 	@Path("{id}")
 	public List<T> get(@PathParam("id") Long questionId) {
@@ -42,7 +44,7 @@ public abstract class TableService<T extends TableEntity> {
 	public List<T> update(@PathParam("id") Long questionId,
 			@FormParam("data") String data) {
 		try {
-			return getDao().update(Arrays.asList(new ObjectMapper().readValue(data, getArrayClass())), questionId);
+			return getDao().update(Arrays.asList(om.readValue(data, getArrayClass())), questionId);
 		} catch (IOException ex) {
 			Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
 			throw new RuntimeException("Неправильный формат данных");

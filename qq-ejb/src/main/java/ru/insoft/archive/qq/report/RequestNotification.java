@@ -191,9 +191,19 @@ public class RequestNotification {
 			p = new Paragraph();
 			p.setIndentationLeft(30);
 			p.setSpacingBefore(80);
-			p.add(new Chunk("Руководитель Центра", general));
-			p.add(new Chunk(new VerticalPositionMark(), 375, false));
-			p.add(new Chunk("С.А. Лашкевич", general));
+			p.add(new Chunk("Специалист Центра", general));
+			p.add(new Chunk(" ____________________________ ( ____________________ )", general));
+			doc.add(p);
+
+			Chunk ck = new Chunk("(подпись)", general);
+			ck.setTextRise(6);
+			p = new Paragraph(ck);
+			p.setIndentationLeft(225);
+			p.add(new Chunk(new VerticalPositionMark(), 165, false));
+			ck = new Chunk("(Ф.И.О.)", general);
+			ck.setTextRise(6);
+			p.add(ck);
+
 			doc.add(p);
 			doc.close();
 		} catch (DocumentException ex) {

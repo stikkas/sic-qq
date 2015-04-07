@@ -71,6 +71,8 @@ public class QuestionService {
 		af.parseRequest(req, params, files);
 
 		Question q = af.getEntity(params.get("model"), Question.class);
+		System.out.println("My time is: " + q.getRegDate());
+		System.out.println("My plan time is: " + q.getPlanDate());
 		Long id = q.getId();
 
 		if (id != null) {

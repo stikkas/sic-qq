@@ -1,13 +1,10 @@
 package ru.insoft.archive.qq.service.ejb;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.nio.file.CopyOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,10 +12,13 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -41,6 +41,9 @@ import ru.insoft.archive.qq.dao.AttachedFileDao;
 public class AttachedFileBean {
 
 	private static Logger logger;
+
+	@Inject
+	private ObjectMapper om;
 
 	@PostConstruct
 	private void init() {
@@ -134,7 +137,7 @@ public class AttachedFileBean {
 	 */
 	public void removeFiles(String jsonArrayFiles, String dir) {
 		try {
-			String[][] files = new ObjectMapper().readValue(jsonArrayFiles, String[][].class);
+			String[][] files = om.readValue(jsonArrayFiles, String[][].class);
 			if (files.length > 0) {
 				Set<Long> ids = new HashSet<>(files.length);
 				for (String[] file : files) {
@@ -159,7 +162,7 @@ public class AttachedFileBean {
 	 */
 	public <T> T getEntity(String input, Class<T> type) {
 		try {
-			return new ObjectMapper().readValue(input, type);
+			return om.readValue(input, type);
 		} catch (IOException ex) {
 			logger.log(Level.SEVERE, null, ex);
 			throw new RuntimeException("Неправильный формат сущности");

@@ -32,6 +32,9 @@ public class TransmissionService {
 	@Inject
 	TransmissionDao td;
 
+	@Inject
+	ObjectMapper om;
+
 	@GET
 	@Path("{id}")
 	public Transmission getTransmission(@PathParam("id") Long id) {
@@ -51,7 +54,7 @@ public class TransmissionService {
 	public Transmission updateTransmission(Transmission entity,
 			@QueryParam("assistants") String assistants) {
 		try {
-			entity.setAssistants(Arrays.asList(new ObjectMapper().readValue(assistants, Assistant[].class)));
+			entity.setAssistants(Arrays.asList(om.readValue(assistants, Assistant[].class)));
 			return td.update(entity);
 		} catch (IOException ex) {
 			Logger.getLogger(TransmissionService.class.getName()).log(Level.SEVERE, null, ex);

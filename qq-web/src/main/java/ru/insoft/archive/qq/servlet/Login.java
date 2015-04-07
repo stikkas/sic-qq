@@ -25,6 +25,9 @@ public class Login extends HttpServlet {
 	@Inject
 	UserProfile up;
 
+	@Inject
+	ObjectMapper om;
+
 	/**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
 	 * methods.
@@ -48,7 +51,7 @@ public class Login extends HttpServlet {
 
 		response.setContentType(MediaType.APPLICATION_JSON);
 		try (PrintWriter out = response.getWriter()) {
-			new ObjectMapper().writeValue(out, answer);
+			om.writeValue(out, answer);
 		}
 		// Вызываем чтобы иницилизировать bean перед тем как пользователь к нему обратится
 		if (answer.isResult()) {

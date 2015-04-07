@@ -2,6 +2,7 @@ package ru.insoft.archive.qq.service;
 
 import javax.inject.Inject;
 import javax.ws.rs.Path;
+import org.codehaus.jackson.map.ObjectMapper;
 import ru.insoft.archive.qq.dao.TableDao;
 import ru.insoft.archive.qq.entity.DeliveryAction;
 
@@ -27,4 +28,9 @@ public class DeliveryActionService extends TableService<DeliveryAction>{
 		return DeliveryAction[].class;
 	}
 
+	// В абстрактном классе Inject не работает.
+	@Inject
+	protected void setMapper(ObjectMapper om) {
+		this.om = om;
+	}
 }

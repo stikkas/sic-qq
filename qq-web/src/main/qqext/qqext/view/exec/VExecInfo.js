@@ -52,7 +52,7 @@ Ext.define('qqext.view.exec.VExecInfo', {
 				}),
 				me._rf = createCmp('FTextArea', '', 'refer', {allowBlank: true, hidden: true}),
 				createCmp('FComboBox', 'Тематика ответа', ns.stIds.tematic, 'replyTema', {
-					editable: false, width: 400}),
+					editable: false, width: 450}),
 				createCmp('FComboBox', 'Категория сложности', ns.stIds.difcat, 'difCat',
 						{width: 200, editable: false, allowBlank: true})
 			]

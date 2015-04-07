@@ -37,7 +37,7 @@ Ext.define('qqext.view.reg.VInboxDoc', {
 //							maskRe: /\d/,
 							viewOnly: true,
 							labelAlign: 'right',
-							width: 245,
+							width: 252,
 							labelWidth: 200,
 							cls: 'two_col_fld'
 						}),

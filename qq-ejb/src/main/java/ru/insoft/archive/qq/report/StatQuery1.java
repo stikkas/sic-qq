@@ -102,12 +102,8 @@ public class StatQuery1 {
 	}
 
 	public Map<String, List<Stat>> collect(Date start, Date end) {
-		Calendar cal = new GregorianCalendar();
-		cal.setTime(end);
-		cal.add(Calendar.DAY_OF_YEAR, 1);
-		end = cal.getTime();
 		Query query = em.createQuery("SELECT q.questionType, q.execOrg, q.litera FROM Question q "
-				+ "WHERE trunc(q.regDate) BETWEEN trunc(:start) AND trunc(:end)")
+				+ "WHERE trunc(q.regDate) BETWEEN trunc(:start) AND :end")
 				.setParameter("start", start, TemporalType.DATE)
 				.setParameter("end", end, TemporalType.DATE);
 
@@ -139,7 +135,7 @@ public class StatQuery1 {
 		}
 
 		query = em.createQuery("SELECT q.questionType, q.litera, q.execOrg, q.motivRefuse, q.replyRes "
-				+ "FROM Question q WHERE q.status = :status AND trunc(q.execDate) BETWEEN trunc(:start) AND trunc(:end)")
+				+ "FROM Question q WHERE q.status = :status AND trunc(q.execDate) BETWEEN trunc(:start) AND :end")
 				.setParameter("status", descriptorIds.get(complited))
 				.setParameter("start", start, TemporalType.DATE)
 				.setParameter("end", end, TemporalType.DATE);
